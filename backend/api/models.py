@@ -53,7 +53,7 @@ class Loan(db.Model):
     installment_freq_type = db.column(db.String, nullable=False)
     amortization_type = db.column(db.String, nullable=False)
     interest_freq_type = db.column(db.String, nullable=False)
-    interest_payment = db.column(db.ype - String, nullable=False)
+    interest_payment = db.column(db.String, nullable=False)
     interest_accrue_type = db.column(db.String, nullable=False)
     loan_amount = db.column(db.Float, nullable=False)
     installment = db.column(db.Float, nullable=False)
