@@ -5,17 +5,11 @@ import './../styles/app.css'
 class Dropdown extends Component {
   // Dropdown title
   state = {
-    value: 'Select an Option'
+    value: this.props.title
   }
 
   // Dropdown menu options
   dropdownItems = this.props.items
-  // [
-  //   { id: '1', value: 'hello' },
-  //   { id: '2', value: 'awesome' },
-  //   { id: '3', value: 'cool' },
-  //   { id: '4', value: 'dropdown' }
-  // ]
 
   render() {
     return (
