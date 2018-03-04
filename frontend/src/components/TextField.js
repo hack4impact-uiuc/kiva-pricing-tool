@@ -12,14 +12,17 @@ class TextField extends Component {
         input_type = PropTypes.string
     }
 	*/
-  state = {
-    valid: true
-  }
-  handleChange(event) {
-	  //var input = document.getElementById(this.props.text);
-	  var input = 3;
-	  if (typeof input == 'number') {
-		  var error = "not accurate type";
+	constructor(props) {
+		super(props);
+		this.state = {valid: true};
+	}
+
+  handleChange(input, event) {
+	  var error = "not accurate type";
+	  if (!isNaN(input)) {
+		  return error;
+	  }else{
+		  return null;
 	  }
   }
   
@@ -28,14 +31,12 @@ class TextField extends Component {
 		var error = this.props.error_message;
 	 }
     return (
-      <div>
+      <div id = "className">
 					<input class="form-control input-sm" type={this.props.input_type} id={this.props.text}
-                    placeholder={this.props.hint} onChange={this.handleChange} required autofocus /> <br/>
-					<p>{error}</p>
+                    placeholder={this.props.hint} onChange={(e) => this.handleChange(document.getElementById(this.props.text), e)} required autofocus /> <br/>
+					<p>{this.state.error_message}</p>
 	   </div>
 	)
   }
 }
 export default TextField
-
-
