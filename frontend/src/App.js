@@ -19,7 +19,7 @@ class App extends Component {
         </Navbar>
         <Jumbotron className="banner">
           <Grid>
-            <h1>Hola</h1>
+            <h1>Kiva TextField</h1>
             <TextField text = "fname" hint="Enter First Name" />
           </Grid>
         </Jumbotron>
