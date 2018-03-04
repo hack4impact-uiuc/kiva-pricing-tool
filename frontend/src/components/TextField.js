@@ -28,12 +28,12 @@ class TextField extends Component {
 	if (!this.state.valid) {
 		var error = this.props.error_message;
 	}
-    return (
-      <div id = "className">
-		<input class="form-control input-sm" type={this.props.input_type} id={this.props.text} placeholder={this.props.hint} onChange={this.handleChange.bind(this)} required autofocus /> <br/>
-		<p>{this.state.error_message}</p>
-	</div>
-	)
+ 	   return (
+      		<div id = "className">
+			<input class="form-control input-sm" type={this.props.input_type} id={this.props.text} placeholder={this.props.hint} onChange={this.handleChange.bind(this)} required autofocus /> <br/>
+			<p>{this.state.error_message}</p>
+		</div>
+	   )
   }
 }
 export default TextField
