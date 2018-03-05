@@ -10,7 +10,7 @@ class TextField extends Component {
 
   handleChange(e) {
 	  var value = e.target.value;
-	  var input = string.split('');
+	  var input = value.split('');
 	  var foundError = false;
 	  
 	  if (this.props.typeVal == "String" || this.props.typeVal == "string") {
