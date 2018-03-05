@@ -47,26 +47,13 @@ class TextField extends Component {
 			}
 		}
 		
-		/*
-		if (foundError = false) {
-			var inputString;
-			for (var i = 0; i < input.length; i++) {
-					inputString += input[i];
-			}
-			var remainder = inputString & 1;
-			if (remainder > 1) {
-				foundError = true;
-			}
-		}
-		*/
-		
 		if (foundError) {
-			this.setState({error_message: "error in input: should be a number"});
+			this.setState({error_message: "error in input: should be a decimal number"});
 		}
-	  }
 	 
-	  if (input == "") {
+		if (input == "") {
 		  this.setState({error_message: ""});
+		}
 	  }
    }
   
@@ -75,9 +62,9 @@ class TextField extends Component {
 		var error = this.state.error_message;
 	}
     return (
-      	<div id = "className">
+	<div id = "className">
 		<input class="form-control input-sm" type={this.props.input_type} id={this.props.text}
-                    placeholder={this.props.hint} onChange={(event) => this.handleChange(event)} required autofocus /> <br/>
+                  placeholder={this.props.hint} onChange={(event) => this.handleChange(event)} required autofocus /> <br/>
 		<p>{this.state.error_message}</p>
 	</div>
 	)
