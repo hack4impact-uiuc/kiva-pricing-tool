@@ -9,7 +9,8 @@ class TextField extends Component {
 	}
 
   handleChange(e) {
-	  var input = e.target.value.split('');
+	  var value = e.target.value;
+	  var input = string.split('');
 	  var foundError = false;
 	  
 	  if (this.props.typeVal == "String" || this.props.typeVal == "string") {
@@ -27,7 +28,7 @@ class TextField extends Component {
 	  
 	  if (this.props.typeVal == "Int" || this.props.typeVal == "int") {
 		for (var i = 0; i < input.length; i++) {
-			if (isNaN(input[i]) && input[i] != " ") {
+			if (isNaN(input[i])) {
 				foundError = true;
 			}else{
 				this.setState({error_message: ""});
@@ -40,29 +41,25 @@ class TextField extends Component {
 	  
 	  if (this.props.typeVal == "Float" || this.props.typeVal == "float") {
 		for (var i = 0; i < input.length; i++) {
-			if (isNaN(input[i]) && input[i] != " ") {
+			if (isNaN(input[i]) && input[i] != ".") {
 				 foundError = true;
 			}else{
 				this.setState({error_message: ""});
 			}
 		}
 		
-		/*
-		if (foundError === false) {
-			if (e.target.value.includes('d')) {
-				this.setState({error_message: "error in input: should be a decimal number"});
-			}
+		if (value.includes(".") === false) {
+			foundError = true;
 		}
-		*/
 		
 		if (foundError) {
 			this.setState({error_message: "error in input: should be a decimal number"});
 		}
-	 
-		if (input == "") {
-		  this.setState({error_message: ""});
-		}
 	  }
+	  
+	if (input == "") {
+		this.setState({error_message: ""});
+	}
    }
   
   render() {
@@ -70,7 +67,7 @@ class TextField extends Component {
 		var error = this.state.error_message;
 	}
     return (
-	<div id = "className">
+      	<div id = "className">
 		<input class="form-control input-sm" type={this.props.input_type} id={this.props.text}
                     placeholder={this.props.hint} onChange={(event) => this.handleChange(event)} required autofocus /> <br/>
 		<p>{this.state.error_message}</p>
