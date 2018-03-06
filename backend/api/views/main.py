@@ -20,8 +20,10 @@ def index():
 #     except Exception as ex:
 #         return create_response(data={}, status=400, message=str(ex
 
-
-@app.route('/endpoint1')
+CALCULATE_URL = 'endpoint1'
+INFO_INPUT_URL = 'endpoint2'
+SAVE_LOAN_URL = 'endpoint3'
+@app.route(CALCULATE_URL)
 def cal_apr():
     args = request.args
     payload = {}
@@ -31,30 +33,42 @@ def cal_apr():
         return create_response(data={'apr':apr}, status=200)
     except:
         #TODO status code not sure 
-        create_response({}, status=404, message='missing components for calculating apr rate')
+        create_response({}, status=400, message='missing components for calculating apr rate')
 
 
 def cal_apr_helper(var1, var2, var3, var4):
     pass
 
 # for check version number
-@app.route('/endpoint2')
+"""
+    assume a query_type argument to specify what to get
+"""
+@app.route(INFO_INPUT_URL)
 def get_version():
     args = request.args
     try:
-        theme = args['theme']
-        partner_name = args['partner_name']
-        product = args['product']
-        #TODO: result = query method by model.py
+        if args['query_type'] == 'theme_list':
+            #TODO query database for theme list
+        elif args['query_type'] == 'parter_list':
+            #TODO query database for parter_list
+        elif args['query_type'] == 'version_num':
+            theme = args['theme']
+            partner_name = args['partner_name']
+            product = args['product']
 
-        if result is None:
-            return create_response({version:1}, status=200)
+            #TODO: result = query method by model.py
+            if result is None:
+                return create_response({version:1}, status=200)
+            else:
+                return create_response({version:result+1}, status=200)
         else:
-            return create_response({version:result+1}, status=200)
+            # should never happen
+            return create_response({}, status=400, message='wrong query_type argument')
     except:
-        return create_response({}, status=404, message='missing components for creating new loan')
+        return create_response({}, status=400, message='missing arguments for GET')
 
-@app.route('/endpoint3', method=['POST'])
+
+@app.route(SAVE_LOAN_URL, method=['POST'])
 def save_loan():
     request_json = request.get_json()
     payload = {}
@@ -64,6 +78,6 @@ def save_loan():
         #TODO: query database to save loan
         return create_response(payload, status=201)
     except:
-        return create_response(payload, status=422, message='missing components for creating new loan')
+        return create_response(payload, status=422, message='missing compoonents for save new loan')
 
 
