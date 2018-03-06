@@ -26,7 +26,7 @@ class TextField extends Component {
 				this.setState({error_message: "error in input: should be a word"});
 			}
 		}else{
-			foundError = true;
+			this.setState({error_message: "error in input"});
 		}
 	  }
 	  
@@ -43,7 +43,7 @@ class TextField extends Component {
 			  this.setState({error_message: "error in input: should be a number"});
 			}
 		}else{
-			foundError = true;
+			this.setState({error_message: "error in input"});
 		}
 	  }	  
 	  
@@ -65,7 +65,7 @@ class TextField extends Component {
 				this.setState({error_message: "error in input: should be a decimal number"});
 			}
 		}else{
-			foundError = true;
+			this.setState({error_message: "error in input"});
 		}
 	  }
 	  
