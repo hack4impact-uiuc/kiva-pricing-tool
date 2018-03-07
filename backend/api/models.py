@@ -9,11 +9,15 @@ class Partner(db.Model):
     __tablename__ = "partner"
 
     partner_name = db.Column(db.String, unique=True, primary_key=True)
+    last_modified = db.Column(db.Date, nullable=False)
+
+
 
     def __init__(self, data):
-        if 'partner_name' not in data:
+        if not all(x in data for x in ['partner_name','last_modified']):
             return #handle error
         self.partner_name = data.partner_name
+        self.last_modified = data.last_modified
 
 
     def __repr__(self):
@@ -24,12 +28,14 @@ class Theme(db.Model):
     __tablename__ = "theme"
 
     loan_theme = db.Column(db.String, unique=True, primary_key=True)
+    last_modified = db.Column(db.Date, nullable=False)
+
 
     def __init__(self, data):
-        if 'loan_theme' not in data:
+        if not all(x in data for x in ['loan_theme','last_modified']):
             return #handle error
         self.loan_theme = data.loan_theme
-
+        self.last_modified = data.last_modified
 
 
     def __repr__(self):
@@ -50,11 +56,11 @@ class Loan(db.Model):
     update_name = db.Column(db.String, nullable=False)
     nominal_apr = db.Column(db.Float, nullable=False)
 
-    installment_freq_type = db.column(db.String, nullable=False)
-    amortization_type = db.column(db.String, nullable=False)
-    interest_freq_type = db.column(db.String, nullable=False)
+    installment_time_period = db.column(db.String, nullable=False)
+    repayment_type = db.column(db.String, nullable=False)
+    interest_time_period = db.column(db.String, nullable=False)
     interest_payment = db.column(db.String, nullable=False)
-    interest_accrue_type = db.column(db.String, nullable=False)
+    interest_calculation_type = db.column(db.String, nullable=False)
     loan_amount = db.column(db.Float, nullable=False)
     installment = db.column(db.Float, nullable=False)
     nominal_interest_rate = db.column(db.Float, nullable=False)
@@ -80,8 +86,8 @@ class Loan(db.Model):
 
 
     def __init__(self, data):
-        if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','start_date','update_date','start_name','update_name','nominal_apr','installment_freq_type'
-                                        ,'amortization_type','interest_freq_type','interest_payment','interest_accrue_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
+        if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','start_date','update_date','start_name','update_name','nominal_apr','installment_time_period'
+                                        ,'repayment_type','interest_time_period','interest_payment','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
                                         ,'grace_period_interest_pay','grace_period_interest_calculate','grace_period_balloon','fee_percent_upfront','fee_percent_ongoing','fee_fixed_upfront'
                                         ,'fee_fixed_ongoing','insurance_percent_upfront','insurance_percent_ongoing','insurance_fixed_upfront','insurance_fixed_ongoing','tax_percent_fees'
                                         ,'tax_percent_interest','security_deposit_percent_upfront','security_deposit_percent_ongoing','security_deposit_fixed_upfront','security_deposit_fixed_ongoing'
@@ -98,11 +104,11 @@ class Loan(db.Model):
         self.start_name = data.start_name
         self.update_name = data.update_name
         self.nominal_apr = data.nominal_apr
-        self.installment_freq_type = data.installment_freq_type
-        self.amortization_type = data.amortization_type
-        self.interest_freq_type = data.interest_freq_type
+        self.installment_time_period = data.installment_time_period
+        self.repayment_type = data.repayment_type
+        self.interest_time_period = data.interest_time_period
         self.interest_payment = data.interest_payment
-        self.interest_accrue_type = data.interest_accrue_type
+        self.interest_calculation_type = data.interest_calculation_type
         self.loan_amount = data.loan_amount
         self.installment = data.installment
         self.nominal_interest_rate = data.nominal_interest_rate
