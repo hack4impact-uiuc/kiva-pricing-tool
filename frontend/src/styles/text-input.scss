@@ -1,0 +1,13 @@
+$color-text: #333;
+.text-input {
+        padding: 200px;
+        margin: 200px;
+        color: $color-text;
+}
+.space {
+        padding-left: 10px;
+}
+/* New way of prioritization */
+#bootstrap-overrides form { /* 100+1=101 priority score, yay! */
+  margin: 20px
+}

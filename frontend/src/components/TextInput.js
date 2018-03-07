@@ -1,8 +1,11 @@
 // @flow
 import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import {
   Form,
   Grid,
+  Col,
   Jumbotron,
   PageHeader,
   FormGroup,
@@ -11,7 +14,7 @@ import {
   HelpBlock
 } from 'react-bootstrap'
 //import Bootstrap from 'react-bootstrap'
-import './../styles/app.css'
+import './../styles/text-input.css'
 
 class TextInput extends Component {
   constructor(props) {
@@ -35,18 +38,19 @@ class TextInput extends Component {
 
   render() {
     return (
-      <FormGroup controlId="formBasicText">
-        <ControlLabel>{this.props.title}</ControlLabel>
-        <FormControl
-          type="text"
-          value={this.state.value}
-          placeholder={this.props.info}
-          onChange={this.handleChange}
-          bsSize="small"
-        />
-        {'  '}
-        <FormControl.Feedback />
-      </FormGroup>
+      <span className="space">
+        <FormGroup controlId="formBasicText">
+          <ControlLabel>{this.props.title}</ControlLabel>
+          <FormControl
+            type="text"
+            value={this.state.value}
+            placeholder={this.props.info}
+            onChange={this.handleChange}
+            bsSize="small"
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+      </span>
     )
   }
 }

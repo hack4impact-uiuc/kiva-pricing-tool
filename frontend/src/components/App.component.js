@@ -5,7 +5,7 @@ import { Dropdown, StuffList } from './'
 import { TextInput } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
-import './../styles/app.css'
+import './../styles/app.scss'
 
 class App extends Component<void> {
   render() {
@@ -15,8 +15,8 @@ class App extends Component<void> {
           <PageHeader>
             <small>User Information</small>
           </PageHeader>
-          <Form inline>
-            <TextInput title="First Name" info="ex. John" margin="200000" />
+          <Form horizontal>
+            <TextInput title="First Name" info="ex. John" />
             <TextInput title="Last Name" info="ex. Smith" />
           </Form>
 
