@@ -2,7 +2,7 @@
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { Dropdown, StuffList, Button } from './'
-import { TextInput } from './'
+import { TextField } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
@@ -12,17 +12,17 @@ class App extends Component<void> {
     return (
       <Jumbotron className="banner">
         <Grid>
-          <PageHeader>User Information</PageHeader>
+          <PageHeader>User hintrmation</PageHeader>
           <Form inline>
-            <TextInput title="First Name" info="ex. John" />
-            <TextInput title="Last Name" info="ex. Smith" />
+            <TextField id="First Name" hint="ex. John" typeVal="String" />
+            <TextField id="Last Name" hint="ex. Smith" typeVal="String" />
           </Form>
 
           <PageHeader>Basic Loan Conditions</PageHeader>
 
           <Form inline>
             <Dropdown
-              title="Amortization:"
+              id="Amortization:"
               items={[
                 { id: '1', value: 'Equal Principal Payments' },
                 { id: '2', value: 'Equal Installments' },
@@ -30,7 +30,7 @@ class App extends Component<void> {
               ]}
             />
             <Dropdown
-              title="Interest:"
+              id="Interest:"
               items={[
                 { id: '1', value: 'Multiple Installments' },
                 { id: '2', value: 'Single End-Term Payments' }
@@ -40,13 +40,13 @@ class App extends Component<void> {
 
           <br />
           <Form inline>
-            <TextInput title="Loan Amount" info="ex. 5000" />
-            <TextInput title="Number of Terms" info="ex. 12" />
+            <TextField id="Loan Amount" hint="ex. 5000" typeVal="float" />
+            <TextField id="Number of Terms" hint="ex. 12" typeVal="int" />
           </Form>
 
           <Form inline>
             <Dropdown
-              title="Term Length:"
+              id="Term Length:"
               items={[
                 { id: '1', value: 'Per Day' },
                 { id: '7', value: 'Per Week' },
@@ -60,7 +60,7 @@ class App extends Component<void> {
               ]}
             />
             <Dropdown
-              title="Nominal Interest Rate:"
+              id="Nominal Interest Rate:"
               items={[
                 { id: '1', value: 'Per Day' },
                 { id: '7', value: 'Per Week' },
@@ -79,10 +79,10 @@ class App extends Component<void> {
             <small> Grace or Prepay </small>
           </h2>
           <Form inline>
-            <TextInput title="Capital" info="ex. x" />
-            <TextInput title="Int Pmt" info="ex. x" />
-            <TextInput title="Int Calc" info="ex. x" />
-            <TextInput title="Balloon" info="ex. x" />
+            <TextField id="Capital" hint="ex. x" typeVal="float" />
+            <TextField id="Int Pmt" hint="ex. x" typeVal="float" />
+            <TextField id="Int Calc" hint="ex. x" typeVal="float" />
+            <TextField id="Balloon" hint="ex. x" typeVal="float" />
           </Form>
 
           <PageHeader>Fees and Taxes</PageHeader>
@@ -92,10 +92,10 @@ class App extends Component<void> {
           </h2>
 
           <Form inline>
-            <TextInput title="Fee%" info="Upfront" />
-            <TextInput title="Fee%" info="Ongoing" />
-            <TextInput title="Fee (fixed amt)" info="Upfront" />
-            <TextInput title="Fee (fixed amt)" info="Ongoing" />
+            <TextField id="Fee%" hint="Upfront" typeVal="float" />
+            <TextField id="Fee%" hint="Ongoing" typeVal="float" />
+            <TextField id="Fee (fixed amt)" hint="Upfront" typeVal="float" />
+            <TextField id="Fee (fixed amt)" hint="Ongoing" typeVal="float" />
           </Form>
 
           <h2>
@@ -103,27 +103,43 @@ class App extends Component<void> {
           </h2>
 
           <Form inline>
-            <TextInput title="Value Added Tax % on Fees" />
-            <TextInput title="Value Added Tax % on Interest" />
+            <TextField id="Value Added Tax % on Fees" typeVal="float" />
+            <TextField id="Value Added Tax % on Interest" typeVal="float" />
           </Form>
 
           <PageHeader>Insurance</PageHeader>
 
           <Form inline>
-            <TextInput title="Insurance %" info="Upfront" />
-            <TextInput title="Insurance %" info="Ongoing" />
-            <TextInput title="Insurance (fixed amt)" info="Upfront" />
-            <TextInput title="Insurance (fixed amt)" info="Ongoing" />
+            <TextField id="Insurance %" hint="Upfront" typeVal="float" />
+            <TextField id="Insurance %" hint="Ongoing" typeVal="float" />
+            <TextField
+              id="Insurance (fixed amt)"
+              hint="Upfront"
+              typeVal="float"
+            />
+            <TextField
+              id="Insurance (fixed amt)"
+              hint="Ongoing"
+              typeVal="float"
+            />
           </Form>
 
           <PageHeader>Security Deposit</PageHeader>
 
           <Form inline>
-            <TextInput title="Security Deposit %" info="Upfront" />
-            <TextInput title="Security Deposit %" info="Ongoing" />
-            <TextInput title="Security Deposit (fixed amt)" info="Upfront" />
-            <TextInput title="Security Deposit (fixed amt)" info="Ongoing" />
-            <TextInput title="Interest Paid on Deposit" />
+            <TextField id="Security Deposit %" hint="Upfront" typeVal="float" />
+            <TextField id="Security Deposit %" hint="Ongoing" typeVal="float" />
+            <TextField
+              id="Security Deposit (fixed amt)"
+              hint="Upfront"
+              typeVal="float"
+            />
+            <TextField
+              id="Security Deposit (fixed amt)"
+              hint="Ongoing"
+              typeVal="float"
+            />
+            <TextField id="Interest Paid on Deposit" typeVal="float" />
           </Form>
 
           <Button name="Back" />
