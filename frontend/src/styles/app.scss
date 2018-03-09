@@ -3,3 +3,23 @@ $color-text: #333;
 .banner {
   color: $color-text;
 }
+
+// .pageheader-custom {
+//   .header {
+//     padding: 0px;
+//     color: $color-text;
+//     font-size: 20px !important;
+//   }
+// }
+// .page-header > .h1 {
+//   padding: 0px;
+//     color: $color-text;
+//     font-size: 20px !important;
+// }
+
+#bootstrap-overrides page-header {
+    padding: 0px;
+    margin: 0px;
+    color: $color-text;
+    font-size: 20px !important;
+}

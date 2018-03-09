@@ -1,0 +1,14 @@
+.large-text-input-container {
+    max-width:500px;
+    display:inline-block;
+}
+
+.large-text-input {
+    // border-bottom: 4px solid black
+    display: block;
+    border-width: 0 0 4px 0;
+    border-style: solid;
+    border-color: black;
+    min-width:100px;
+    font-size: 20px;
+}
