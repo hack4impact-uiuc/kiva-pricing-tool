@@ -20,6 +20,8 @@ class Partner(db.Model):
         self.partner_name = data['partner_name']
         self.last_modified = datetime.datetime.now()
 
+    def update(self):
+        self.last_modified = datetime.datetime.now()
 
     def __repr__(self):
         return '<partner {}>'.format(self.partner_name)
@@ -38,6 +40,8 @@ class Theme(db.Model):
         self.loan_theme = data['loan_theme']
         self.last_modified = datetime.datetime.now()
 
+    def update(self):
+        self.last_modified = datetime.datetime.now()
 
     def __repr__(self):
         return '<theme {}>'.format(self.loan_theme)
@@ -87,7 +91,7 @@ class Loan(db.Model):
 
 
     def __init__(self, data):
-        if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','start_date','update_date','start_name','update_name','nominal_apr','installment_time_period'
+        if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','start_name','update_name','nominal_apr','installment_time_period'
                                         ,'repayment_type','interest_time_period','interest_payment','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
                                         ,'grace_period_interest_pay','grace_period_interest_calculate','grace_period_balloon','fee_percent_upfront','fee_percent_ongoing','fee_fixed_upfront'
                                         ,'fee_fixed_ongoing','insurance_percent_upfront','insurance_percent_ongoing','insurance_fixed_upfront','insurance_fixed_ongoing','tax_percent_fees'
@@ -100,8 +104,8 @@ class Loan(db.Model):
         self.loan_theme = data['loan_theme']
         self.product_type = data['product_type']
         self.version_num = data['version_num']
-        self.start_date = data['start_date']
-        self.update_date = data['update_date']
+        self.start_date = datetime.datetime.now()
+        self.update_date = datetime.datetime.now()
         self.start_name = data['start_name']
         self.update_name = data['update_name']
         self.nominal_apr = data['nominal_apr']
@@ -132,6 +136,9 @@ class Loan(db.Model):
         self.security_deposit_fixed_upfront = data['security_deposit_fixed_upfront']
         self.security_deposit_fixed_ongoing = data['security_deposit_fixed_ongoing']
         self.interest_paid_on_deposit_percent = data['interest_paid_on_deposit_percent']
+
+    def update(self):
+        self.update_date = datetime.datetime.now()
 
     def __repr__(self):
         return '<loan {}>'.format(self.id)
