@@ -24,9 +24,9 @@ class App extends Component<void> {
             <Dropdown
               title="Amortization:"
               items={[
-                { id: '1', value: 'Equal Principal Payments' },
-                { id: '2', value: 'Equal Installments' },
-                { id: '3', value: 'Single end-term principal payment' }
+                { id: 1, value: 'Equal Principal Payments' },
+                { id: 2, value: 'Equal Installments' },
+                { id: 3, value: 'Single end-term principal payment' }
               ]}
             />
             <Dropdown
@@ -41,14 +41,8 @@ class App extends Component<void> {
           <br />
           <Form inline>
             <TextInput title="Loan Amount" info="ex. 5000" />
-            {'     '}
-
             <TextInput title="Number of Terms" info="ex. 12" />
           </Form>
-          <h2>
-            {' '}
-            <small> </small>{' '}
-          </h2>
 
           <Form inline>
             <Dropdown
@@ -82,8 +76,7 @@ class App extends Component<void> {
           </Form>
 
           <h2>
-            {' '}
-            <small> Grace or Prepay </small>{' '}
+            <small> Grace or Prepay </small>
           </h2>
           <Form inline>
             <TextInput title="Capital" info="ex. x" />
@@ -95,8 +88,7 @@ class App extends Component<void> {
           <PageHeader>Fees and Taxes</PageHeader>
 
           <h2>
-            {' '}
-            <small> Fees </small>{' '}
+            <small> Fees </small>
           </h2>
 
           <Form inline>
@@ -107,8 +99,7 @@ class App extends Component<void> {
           </Form>
 
           <h2>
-            {' '}
-            <small> Taxes </small>{' '}
+            <small> Taxes </small>
           </h2>
 
           <Form inline>
