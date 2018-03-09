@@ -1,6 +1,7 @@
 from api import db
 from sqlalchemy.dialects.postgresql import JSON
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 # db = SQLAlchemy()
 
@@ -14,14 +15,14 @@ class Partner(db.Model):
 
 
     def __init__(self, data):
-        if not all(x in data for x in ['partner_name','last_modified']):
+        if not all(x in data for x in ['partner_name']):
             return #handle error
-        self.partner_name = data.partner_name
-        self.last_modified = data.last_modified
+        self.partner_name = data['partner_name']
+        self.last_modified = datetime.datetime.now()
 
 
     def __repr__(self):
-        return '<partner {}>'.format(self.id)
+        return '<partner {}>'.format(self.partner_name)
 
 class Theme(db.Model):
     """Theme"""
@@ -32,14 +33,14 @@ class Theme(db.Model):
 
 
     def __init__(self, data):
-        if not all(x in data for x in ['loan_theme','last_modified']):
+        if not all(x in data for x in ['loan_theme']):
             return #handle error
-        self.loan_theme = data.loan_theme
-        self.last_modified = data.last_modified
+        self.loan_theme = data['loan_theme']
+        self.last_modified = datetime.datetime.now()
 
 
     def __repr__(self):
-        return '<theme {}>'.format(self.id)
+        return '<theme {}>'.format(self.loan_theme)
 
 class Loan(db.Model):
     """Loan"""
@@ -62,7 +63,7 @@ class Loan(db.Model):
     interest_payment = db.Column(db.String, nullable=False)
     interest_calculation_type = db.Column(db.String, nullable=False)
     loan_amount = db.Column(db.Float, nullable=False)
-    installment = db.Column(db.Float, nullable=False)
+    installment = db.Column(db.Integer, nullable=False)
     nominal_interest_rate = db.Column(db.Float, nullable=False)
     grace_period_principal = db.Column(db.Integer, nullable=False)
     grace_period_interest_pay = db.Column(db.Integer, nullable=False)
@@ -95,42 +96,42 @@ class Loan(db.Model):
             return #handle error
 
         self.id = data.id
-        self.partner_name = data.partner_name
-        self.loan_theme = data.loan_theme
-        self.product_type = data.product_type
-        self.version_num = data.version_num
-        self.start_date = data.start_date
-        self.update_date = data.update_date
-        self.start_name = data.start_name
-        self.update_name = data.update_name
-        self.nominal_apr = data.nominal_apr
-        self.installment_time_period = data.installment_time_period
-        self.repayment_type = data.repayment_type
-        self.interest_time_period = data.interest_time_period
-        self.interest_payment = data.interest_payment
-        self.interest_calculation_type = data.interest_calculation_type
-        self.loan_amount = data.loan_amount
-        self.installment = data.installment
-        self.nominal_interest_rate = data.nominal_interest_rate
-        self.grace_period_principal = data.grace_period_principal
-        self.grace_period_interest_pay = data.grace_period_interest_pay
-        self.grace_period_interest_calculate = data.grace_period_interest_calculate
-        self.grace_period_balloon = data.grace_period_balloon
-        self.fee_percent_upfront = data.fee_percent_upfront
-        self.fee_percent_ongoing = data.fee_percent_ongoing
-        self.fee_fixed_upfront = data.fee_fixed_upfront
-        self.fee_fixed_ongoing = data.fee_fixed_ongoing
-        self.insurance_percent_upfront = data.insurance_percent_upfront
-        self.insurance_percent_ongoing = data.insurance_percent_ongoing
-        self.insurance_fixed_upfront = data.insurance_fixed_upfront
-        self.insurance_fixed_ongoing = data.insurance_fixed_ongoing
-        self.tax_percent_fees = data.tax_percent_fees
-        self.tax_percent_interest = data.tax_percent_interest
-        self.security_deposit_percent_upfront = data.security_deposit_percent_upfront
-        self.security_deposit_percent_ongoing = data.security_deposit_percent_ongoing
-        self.security_deposit_fixed_upfront = data.security_deposit_fixed_upfront
-        self.security_deposit_fixed_ongoing = data.security_deposit_fixed_ongoing
-        self.interest_paid_on_deposit_percent = data.interest_paid_on_deposit_percent
+        self.partner_name = data['partner_name']
+        self.loan_theme = data['loan_theme']
+        self.product_type = data['product_type']
+        self.version_num = data['version_num']
+        self.start_date = data['start_date']
+        self.update_date = data['update_date']
+        self.start_name = data['start_name']
+        self.update_name = data['update_name']
+        self.nominal_apr = data['nominal_apr']
+        self.installment_time_period = data['installment_time_period']
+        self.repayment_type = data['repayment_type']
+        self.interest_time_period = data['interest_time_period']
+        self.interest_payment = data['interest_payment']
+        self.interest_calculation_type = data['interest_calculation_type']
+        self.loan_amount = data['loan_amount']
+        self.installment = data['installment']
+        self.nominal_interest_rate = data['nominal_interest_rate']
+        self.grace_period_principal = data['grace_period_principal']
+        self.grace_period_interest_pay = data['grace_period_interest_pay']
+        self.grace_period_interest_calculate = data['grace_period_interest_calculate']
+        self.grace_period_balloon = data['grace_period_balloon']
+        self.fee_percent_upfront = data['fee_percent_upfront']
+        self.fee_percent_ongoing = data['fee_percent_ongoing']
+        self.fee_fixed_upfront = data['fee_fixed_upfront']
+        self.fee_fixed_ongoing = data['fee_fixed_ongoing']
+        self.insurance_percent_upfront = data['insurance_percent_upfront']
+        self.insurance_percent_ongoing = data['insurance_percent_ongoing']
+        self.insurance_fixed_upfront = data['insurance_fixed_upfront']
+        self.insurance_fixed_ongoing = data['insurance_fixed_ongoing']
+        self.tax_percent_fees = data['tax_percent_fees']
+        self.tax_percent_interest = data['tax_percent_interest']
+        self.security_deposit_percent_upfront = data['security_deposit_percent_upfront']
+        self.security_deposit_percent_ongoing = data['security_deposit_percent_ongoing']
+        self.security_deposit_fixed_upfront = data['security_deposit_fixed_upfront']
+        self.security_deposit_fixed_ongoing = data['security_deposit_fixed_ongoing']
+        self.interest_paid_on_deposit_percent = data['interest_paid_on_deposit_percent']
 
     def __repr__(self):
         return '<loan {}>'.format(self.id)
@@ -155,16 +156,16 @@ class RepaymentSchedule(db.Model):
         if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','payment_due_date','days','amount_due','principal_payment','interest',
                                         'fees','insurance','taxes','security_deposit']):
             return #handle error
-        self.id = data.id
-        self.payment_due_date = data.payment_due_date
-        self.days = data.days
-        self.amount_due = data.amount_due
-        self.principal_payment = data.principal_payment
-        self.interest = data.interest
-        self.fees = data.fees
-        self.insurance = data.insurance
-        self.taxes = data.taxes
-        self.security_deposit = data.security_deposit
+        self.id = data['id']
+        self.payment_due_date = data['payment_due_date']
+        self.days = data['days']
+        self.amount_due = data['amount_due']
+        self.principal_payment = data['principal_payment']
+        self.interest = data['interest']
+        self.fees = data['fees']
+        self.insurance = data['insurance']
+        self.taxes = data['taxes']
+        self.security_deposit = data['security_deposit']
 
     def __repr__(self):
         return '<repayment {}>'.format(self.id)
