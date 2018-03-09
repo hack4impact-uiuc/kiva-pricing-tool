@@ -18,7 +18,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 ## Frontend Resources
 
 **Redux Resources**
-* **What is Redux**
+* What is Redux
     * Redux is a tool for managing application state.
 * [Basic Intro Video to Redux Components](https://www.youtube.com/watch?v=DiLVAXlVYR0)
 * [More on the Different Parts of Redux](https://redux.js.org/#the-gist)
@@ -26,17 +26,17 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 * [Quick Guide to Redux](https://medium.freecodecamp.org/a-quick-guide-to-redux-for-beginners-971d18c0509b)
 
 **Implementing Visualizations into React**
-* **What is d3.js?**
+* What is d3.js?
     * d3 stands for data driven documents and it is a JavaScript Library that enables us to create interactive visualizations by manipulating data-driven documents.
 * [A Good Article on D3](https://medium.com/@enjalot/the-hitchhikers-guide-to-d3-js-a8552174733a)
 * [React and D3](https://github.com/hshoff/vx)
 
 **Making AJAX requests and using Axios**
-* **What is an AJAX request?**
+* What is an AJAX request?
     * AJAX stands for Asynchronous JavaScript And XML and it enables us to send and get information to the server asynchronously.
-* **What is axios?**
+* What is axios?
     * Axios is a Javascript library used to make http requests from node.js/XMLHttpRequests from the browser and it supports the Promise API.
-* **What are promises?**
+* What are promises?
     * Promise are software abstraction used to overcome issues with multiple callbacks and provide better way to manage success and error conditions.
         * This means that there are no more nested callback 
     * The point of promises is to give us back functional composition and error bubbling in the async world
