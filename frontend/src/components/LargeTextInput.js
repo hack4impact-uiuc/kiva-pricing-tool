@@ -9,9 +9,7 @@ class LargeTextInput extends Component {
           title="My tip"
           className="large-text-input"
           contenteditable="true"
-        >
-          {' '}
-        </span>
+        />
       </div>
     )
   }

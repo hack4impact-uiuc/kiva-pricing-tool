@@ -32,7 +32,8 @@ class TextInput extends Component {
     const name = target.name
 
     this.setState({
-      [name]: value
+      [name]: value,
+      value: event.target.value
     })
   }
 
