@@ -8,7 +8,7 @@ import StuffList from './StuffList.container'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'
-import TextInput from './TextInput.js'
+import TextField from './TextField.js'
 import { BrowserRouter } from 'react-router-dom'
 
 export {
@@ -19,5 +19,5 @@ export {
   Button,
   LargeTextInput,
   Dropdown,
-  TextInput
+  TextField
 }
