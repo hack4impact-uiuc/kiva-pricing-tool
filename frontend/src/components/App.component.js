@@ -24,9 +24,9 @@ class App extends Component<void> {
             <Dropdown
               title="Amortization:"
               items={[
-                { id: 1, value: 'Equal Principal Payments' },
-                { id: 2, value: 'Equal Installments' },
-                { id: 3, value: 'Single end-term principal payment' }
+                { id: '1', value: 'Equal Principal Payments' },
+                { id: '2', value: 'Equal Installments' },
+                { id: '3', value: 'Single end-term principal payment' }
               ]}
             />
             <Dropdown
