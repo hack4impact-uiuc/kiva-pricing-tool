@@ -99,7 +99,7 @@ class Loan(db.Model):
                                         ,'interest_paid_on_deposit_percent']):
             return #handle error
 
-        self.id = data.id
+        self.id = data['partner_name'] + "_" + data['loan_theme'] + "_" + data['product_type'] + "_" + str(data['version_num'])
         self.partner_name = data['partner_name']
         self.loan_theme = data['loan_theme']
         self.product_type = data['product_type']
