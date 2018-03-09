@@ -103,7 +103,6 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 ```
 
 **How to Download CSV from Database**
-* 
 ```python
     import csv
 
