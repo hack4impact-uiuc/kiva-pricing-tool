@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Navbar, Jumbotron } from 'react-bootstrap'
 import './styles/app.css'
-import TextField from './Components/TextField'
+// import TextField from './Components/TextField'
 
 class App extends Component {
   render() {
@@ -20,7 +20,6 @@ class App extends Component {
         <Jumbotron className="banner">
           <Grid>
             <h1>Kiva TextField</h1>
-            <TextField text = "fname" hint="Enter First Name" />
           </Grid>
         </Jumbotron>
       </div>
