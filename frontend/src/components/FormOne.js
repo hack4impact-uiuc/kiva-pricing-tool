@@ -8,6 +8,17 @@ import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
 
 class FormOne extends Component<void> {
+  // sendFormData() {
+  //   var axios = require('axios');
+  //   axios.get('http://jsonplaceholder.typicode.com/todos')
+  //   .then(function (response) {
+  //     resultElement.innerHTML = generateSuccessHTMLOutput(response);
+  //   })
+  //   .catch(function (error) {
+  //     resultElement.innerHTML = generateErrorHTMLOutput(error);
+  //   });
+  // }
+
   render() {
     return (
       <Jumbotron className="banner">
@@ -19,6 +30,7 @@ class FormOne extends Component<void> {
               hint="ex. John"
               typeVal="String"
               limit="100"
+              // value={this.state.TextFieldValue}
             />
             <TextField
               id="Last Name"
@@ -208,8 +220,8 @@ class FormOne extends Component<void> {
             />
           </Form>
 
-          <Button name="Back" />
-          <Button name="Next" />
+          <Button name="Back" url="" />
+          <Button name="Next" url="colors" />
         </Grid>
       </Jumbotron>
     )
