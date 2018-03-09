@@ -1,7 +1,7 @@
 // @flow
-import React, { Component } from 'react'
+import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, StuffList } from './'
+import { Dropdown, StuffList, Button } from './'
 import { TextInput } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
@@ -12,17 +12,13 @@ class App extends Component<void> {
     return (
       <Jumbotron className="banner">
         <Grid>
-          <PageHeader>
-            <small>User Information</small>
-          </PageHeader>
-          <Form horizontal>
+          <PageHeader>User Information</PageHeader>
+          <Form inline>
             <TextInput title="First Name" info="ex. John" />
             <TextInput title="Last Name" info="ex. Smith" />
           </Form>
 
-          <PageHeader>
-            <small>Basic Loan Conditions</small>
-          </PageHeader>
+          <PageHeader>Basic Loan Conditions</PageHeader>
 
           <Form inline>
             <Dropdown
@@ -95,6 +91,52 @@ class App extends Component<void> {
             <TextInput title="Int Calc" info="ex. x" />
             <TextInput title="Balloon" info="ex. x" />
           </Form>
+
+          <PageHeader>Fees and Taxes</PageHeader>
+
+          <h2>
+            {' '}
+            <small> Fees </small>{' '}
+          </h2>
+
+          <Form inline>
+            <TextInput title="Fee%" info="Upfront" />
+            <TextInput title="Fee%" info="Ongoing" />
+            <TextInput title="Fee (fixed amt)" info="Upfront" />
+            <TextInput title="Fee (fixed amt)" info="Ongoing" />
+          </Form>
+
+          <h2>
+            {' '}
+            <small> Taxes </small>{' '}
+          </h2>
+
+          <Form inline>
+            <TextInput title="Value Added Tax % on Fees" />
+            <TextInput title="Value Added Tax % on Interest" />
+          </Form>
+
+          <PageHeader>Insurance</PageHeader>
+
+          <Form inline>
+            <TextInput title="Insurance %" info="Upfront" />
+            <TextInput title="Insurance %" info="Ongoing" />
+            <TextInput title="Insurance (fixed amt)" info="Upfront" />
+            <TextInput title="Insurance (fixed amt)" info="Ongoing" />
+          </Form>
+
+          <PageHeader>Security Deposit</PageHeader>
+
+          <Form inline>
+            <TextInput title="Security Deposit %" info="Upfront" />
+            <TextInput title="Security Deposit %" info="Ongoing" />
+            <TextInput title="Security Deposit (fixed amt)" info="Upfront" />
+            <TextInput title="Security Deposit (fixed amt)" info="Ongoing" />
+            <TextInput title="Interest Paid on Deposit" />
+          </Form>
+
+          <Button name="Back" />
+          <Button name="Next" />
         </Grid>
       </Jumbotron>
     )

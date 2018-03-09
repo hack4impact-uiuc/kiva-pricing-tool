@@ -1,7 +1,7 @@
 $color-text: #333;
 .text-input {
-        padding: 200px;
-        margin: 200px;
+        padding: 20px;
+        margin: 20px;
         color: $color-text;
 }
 .space {
@@ -9,5 +9,5 @@ $color-text: #333;
 }
 /* New way of prioritization */
 #bootstrap-overrides form { /* 100+1=101 priority score, yay! */
-  margin: 20px
+  margin-right: 20px
 }

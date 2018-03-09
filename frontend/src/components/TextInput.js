@@ -41,13 +41,15 @@ class TextInput extends Component {
       <span className="space">
         <FormGroup controlId="formBasicText">
           <ControlLabel>{this.props.title}</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.value}
-            placeholder={this.props.info}
-            onChange={this.handleChange}
-            bsSize="small"
-          />
+          <span className="space">
+            <FormControl
+              type="text"
+              value={this.state.value}
+              placeholder={this.props.info}
+              onChange={this.handleChange}
+              bsSize="small"
+            />
+          </span>
           <FormControl.Feedback />
         </FormGroup>
       </span>
