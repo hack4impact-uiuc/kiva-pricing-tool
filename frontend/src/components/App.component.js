@@ -5,6 +5,7 @@ import { Grid, Jumbotron } from 'react-bootstrap'
 import { StuffList } from './'
 import './../styles/app.css'
 import FormOne from './FormOne'
+import APRRateDisplay from './APRRateDisplay'
 
 class App extends Component<void> {
   render() {

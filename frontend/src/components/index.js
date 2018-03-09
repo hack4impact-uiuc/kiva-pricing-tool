@@ -10,6 +10,7 @@ import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'
 import TextField from './TextField.js'
 import FormOne from './FormOne.js'
+import APRRateDisplay from './APRRateDisplay.js'
 import { BrowserRouter } from 'react-router-dom'
 
 export {
@@ -21,5 +22,6 @@ export {
   LargeTextInput,
   Dropdown,
   TextField,
-  FormOne
+  FormOne,
+  APRRateDisplay
 }

@@ -9,7 +9,7 @@ import { Route } from 'react-router'
 import { ConnectedRouter } from 'react-router-redux'
 
 import configureStore, { history } from './store/configureStore'
-import { App, Colors, Navbar } from './components'
+import { App, Colors, Navbar, APRRateDisplay } from './components'
 import registerServiceWorker from './registerServiceWorker'
 import './styles/index.css'
 
@@ -22,6 +22,7 @@ ReactDOM.render(
         <Navbar />
         <Route exact path="/" component={App} />
         <Route path="/colors" component={Colors} />
+        <Route path="/apr" component={APRRateDisplay} />
       </div>
     </ConnectedRouter>
   </Provider>,
