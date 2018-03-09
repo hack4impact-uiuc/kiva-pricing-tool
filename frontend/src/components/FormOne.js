@@ -14,8 +14,18 @@ class FormOne extends Component<void> {
         <Grid>
           <PageHeader>User Information</PageHeader>
           <Form inline>
-            <TextField id="First Name" hint="ex. John" typeVal="String" />
-            <TextField id="Last Name" hint="ex. Smith" typeVal="String" />
+            <TextField
+              id="First Name"
+              hint="ex. John"
+              typeVal="String"
+              limit="100"
+            />
+            <TextField
+              id="Last Name"
+              hint="ex. Smith"
+              typeVal="String"
+              limit="100"
+            />
           </Form>
 
           <PageHeader>Basic Loan Conditions</PageHeader>
@@ -40,8 +50,18 @@ class FormOne extends Component<void> {
 
           <br />
           <Form inline>
-            <TextField id="Loan Amount" hint="ex. 5000" typeVal="float" />
-            <TextField id="Number of Terms" hint="ex. 12" typeVal="int" />
+            <TextField
+              id="Loan Amount"
+              hint="ex. 5000"
+              typeVal="float"
+              limit="900000000"
+            />
+            <TextField
+              id="Number of Terms"
+              hint="ex. 12"
+              typeVal="int"
+              limit="180"
+            />
           </Form>
 
           <Form inline>
@@ -79,10 +99,10 @@ class FormOne extends Component<void> {
             <small> Grace or Prepay </small>
           </h2>
           <Form inline>
-            <TextField id="Capital" hint="ex. x" typeVal="float" />
-            <TextField id="Int Pmt" hint="ex. x" typeVal="float" />
-            <TextField id="Int Calc" hint="ex. x" typeVal="float" />
-            <TextField id="Balloon" hint="ex. x" typeVal="float" />
+            <TextField id="Capital" hint="ex. x" typeVal="float" limit="180" />
+            <TextField id="Int Pmt" hint="ex. x" typeVal="float" limit="180" />
+            <TextField id="Int Calc" hint="ex. x" typeVal="float" limit="180" />
+            <TextField id="Balloon" hint="ex. x" typeVal="float" limit="180" />
           </Form>
 
           <PageHeader>Fees and Taxes</PageHeader>
@@ -92,10 +112,20 @@ class FormOne extends Component<void> {
           </h2>
 
           <Form inline>
-            <TextField id="Fee%" hint="Upfront" typeVal="float" />
-            <TextField id="Fee%" hint="Ongoing" typeVal="float" />
-            <TextField id="Fee (fixed amt)" hint="Upfront" typeVal="float" />
-            <TextField id="Fee (fixed amt)" hint="Ongoing" typeVal="float" />
+            <TextField id="Fee%" hint="Upfront" typeVal="float" limit="180" />
+            <TextField id="Fee%" hint="Ongoing" typeVal="float" limit="180" />
+            <TextField
+              id="Fee (fixed amt)"
+              hint="Upfront"
+              typeVal="float"
+              limit="100000000"
+            />
+            <TextField
+              id="Fee (fixed amt)"
+              hint="Ongoing"
+              typeVal="float"
+              limit="100000000"
+            />
           </Form>
 
           <h2>
@@ -103,43 +133,79 @@ class FormOne extends Component<void> {
           </h2>
 
           <Form inline>
-            <TextField id="Value Added Tax % on Fees" typeVal="float" />
-            <TextField id="Value Added Tax % on Interest" typeVal="float" />
+            <TextField
+              id="Value Added Tax % on Fees"
+              typeVal="float"
+              limit="100"
+            />
+            <TextField
+              id="Value Added Tax % on Interest"
+              typeVal="float"
+              limit="100"
+            />
           </Form>
 
           <PageHeader>Insurance</PageHeader>
 
           <Form inline>
-            <TextField id="Insurance %" hint="Upfront" typeVal="float" />
-            <TextField id="Insurance %" hint="Ongoing" typeVal="float" />
+            <TextField
+              id="Insurance %"
+              hint="Upfront"
+              typeVal="float"
+              limit="100"
+            />
+            <TextField
+              id="Insurance %"
+              hint="Ongoing"
+              typeVal="float"
+              limit="100"
+            />
             <TextField
               id="Insurance (fixed amt)"
               hint="Upfront"
               typeVal="float"
+              limit="900000000"
             />
             <TextField
               id="Insurance (fixed amt)"
               hint="Ongoing"
               typeVal="float"
+              limit="900000000"
             />
           </Form>
 
           <PageHeader>Security Deposit</PageHeader>
 
           <Form inline>
-            <TextField id="Security Deposit %" hint="Upfront" typeVal="float" />
-            <TextField id="Security Deposit %" hint="Ongoing" typeVal="float" />
+            <TextField
+              id="Security Deposit %"
+              hint="Upfront"
+              typeVal="float"
+              limit="100"
+            />
+            <TextField
+              id="Security Deposit %"
+              hint="Ongoing"
+              typeVal="float"
+              limit="100"
+            />
             <TextField
               id="Security Deposit (fixed amt)"
               hint="Upfront"
               typeVal="float"
+              limit="900000000"
             />
             <TextField
               id="Security Deposit (fixed amt)"
               hint="Ongoing"
               typeVal="float"
+              limit="900000000"
             />
-            <TextField id="Interest Paid on Deposit" typeVal="float" />
+            <TextField
+              id="Interest Paid on Deposit"
+              typeVal="float"
+              limit="900000000"
+            />
           </Form>
 
           <Button name="Back" />
