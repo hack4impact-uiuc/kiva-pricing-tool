@@ -17,6 +17,22 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 
 ## Frontend Resources
 
+**React Router**
+* What is React Router
+    * Different parts that make up react router that we will probably be using: 
+        * Route: IMPORTANT! renders a specific UI when a location matches the route’s path.
+        * Link: helps us navigate within our application
+        * Router: The common low-level interface for all router components
+            * Types of Routers
+                * Browser Router
+                * Hash Router 
+                * Memory Router
+                * Native Router
+                * Static Router
+        * Redirect: used to navigate to new location
+
+* [React Router Docs](https://reacttraining.com/react-router/web/guides/philosophy)
+
 **Redux Resources**
 * What is Redux
     * Redux is a tool for managing application state.
@@ -50,6 +66,54 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 
 ## Backend Resources
 [Database Schema](https://docs.google.com/document/d/1qriyM0TZ51yHTynVHcDXwpPW9GKJDdjv6Nk0JDInJho/edit?usp=sharing)
+
+**SQL Alchemy**
+* What is SQL Alchemy?
+    * SQL Alchemy is an Object Relational Mapper that allows you to access and manipulate the database with python.
+
+**Jsonify** 
+* Jsonify returns a flask response object that already has the appropriate content-type header 'application/json' for use with json responses
+
+**JSON to SQL**
+* [Article on JSON extensions for SQLAlchemy](https://www.compose.com/articles/using-json-extensions-in-postgresql-from-python-2/)
+
+**Converting Info from Server to JSON**
+* What is Serialization?
+    * Serialization is the process of converting the state information of an object instance into a binary or textual form to persist into storage medium or transported over a network.
+* Converting time into JSON
+```python
+    def datetime_to_string(value):
+       if value is None:
+           return None
+       return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
+```
+* Serializing for JSON
+```python
+    def serialize(self):
+       return {
+           'id': self.id,
+           'modified_at': dump_datetime(self.modified_at),
+           'objects'  : self.serialize_objects #when u have many-to-many relations
+       }
+
+    def serialize_objects(self):
+       return [ item.serialize for item in self.objects]
+       
+    return jsonify(json_list=[i.serialize for i in qryresult.all()])
+```
+
+**How to Download CSV from Database**
+* 
+```python
+    import csv
+
+    outfile = open('mydump.csv', 'wb')
+    outcsv = csv.writer(outfile)
+    records = session.query(MyModel).all()
+    [outcsv.writerow([getattr(curr, column.name) for column in MyTable.__mapper__.columns]) for curr in records]
+    # or maybe use outcsv.writerows(records)
+    outfile.close()
+```
 
 
 
