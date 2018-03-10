@@ -1,6 +1,6 @@
-import React, { Component } from 'react'	
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import Bootstrap from 'react-bootstrap'
+import axios from 'axios'
 
 class TextField extends Component {
 	constructor(props) {
@@ -8,6 +8,7 @@ class TextField extends Component {
 		this.state = {valid: true, id: this.props.text, error_message: "", type: this.props.typeVal};
 	}
 
+	
   handleChange(e) {
 	var value = e.target.value;
 	var input = value.split('');
@@ -80,11 +81,11 @@ class TextField extends Component {
 		var error = this.state.error_message;
 	}
     return (
-      <div id = "className">
-	<input class="form-control input-sm" type={this.props.input_type} id={this.props.text}
+      	<div id = "className">
+		<input class="form-control input-sm" type={this.props.input_type} id={this.props.text}
                     placeholder={this.props.hint} onChange={(event) => this.handleChange(event)} required autofocus /> <br/>
-	<p>{this.state.error_message}</p>
-      </div>
+		<p>{this.state.error_message}</p>
+	</div>
 	)
   }
 }
