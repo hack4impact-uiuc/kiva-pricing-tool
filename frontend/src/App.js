@@ -23,12 +23,12 @@ class App extends Component {
         </Navbar>
         <Jumbotron className="banner">
           <Grid>
-			<div class = "col-lg-9">
-            <h1>Kiva TextField</h1>
-            <TextField text = "fname" hint="Enter Some Details" typeVal="Int" limit={100} />
-			<NewLoan label = "mfi" list = {mfiList} hint = "Select MFI Partner"/>
-			<NewLoan label = "loan" list = {loanList} hint = "Select Loan Type"/>
-			</div>
+		<div class = "col-lg-9">
+           	 <h1>Kiva TextField</h1>
+            	<TextField text = "fname" hint="Enter Some Details" typeVal="Int" limit={100} />
+		<NewLoan label = "mfi" list = {mfiList} hint = "Select MFI Partner"/>
+		<NewLoan label = "loan" list = {loanList} hint = "Select Loan Type"/>
+		</div>
           </Grid>
         </Jumbotron>
       </div>
