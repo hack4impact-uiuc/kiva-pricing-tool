@@ -7,17 +7,6 @@ import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
 
 class FormOne extends Component<void> {
-  // sendFormData() {
-  //   var axios = require('axios');
-  //   axios.get('http://jsonplaceholder.typicode.com/todos')
-  //   .then(function (response) {
-  //     resultElement.innerHTML = generateSuccessHTMLOutput(response);
-  //   })
-  //   .catch(function (error) {
-  //     resultElement.innerHTML = generateErrorHTMLOutput(error);
-  //   });
-  // }
-
   render() {
     return (
       <Jumbotron className="banner">
