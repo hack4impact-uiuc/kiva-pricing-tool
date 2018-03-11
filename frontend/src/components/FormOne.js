@@ -10,60 +10,57 @@ import './../styles/app.scss'
 class FormOne extends Component<void> {
   constructor(props) {
     super()
-    this.state = {
-      startName: '',
-      repaymentType: ''
-    }
-
-    // this.setAuthorState = this.setAuthorState.bind(this);
-  }
-
-  updateStartName = e => {
-    this.setState({
-      startName: e.target.value
-    })
-    console.log(e.target.value)
+    // this.state = {
+    //   startName: 'AAAaAAaAa',
+    //   repaymentType: ''
+    // }
   }
 
   postData() {
+    // console.log(this.refs.firstName.props.id)
+    console.log(this.refs.firstName.state.textBody)
     let data = {
-      start_name: this.refs.firstName.value,
-      // start_name: this.state.startName.value,
-      installment_time_period: this.refs.installment_time_period.value,
-      repayment_type: this.refs.repaymentType.value,
-      interest_time_period: this.refs.interest_time_period.value,
-      interest_payment_type: this.refs.interest_payment_type.value,
-      interest_calculation_type: this.refs.interest_calculation_type.value,
-      loan_amount: this.refs.loan_amount.value,
-      installment: this.refs.installment.value,
-      nominal_interest_rate: this.refs.nominal_interest_rate.value,
-      grace_period_principal: this.refs.grace_period_principal.value,
-      grace_period_interest_pay: this.refs.grace_period_interest_pay.value,
+      start_name: this.refs.firstName.state.textBody,
+      installment_time_period: this.refs.installment_time_period.state.textBody,
+      repayment_type: this.refs.repaymentType.state.textBody,
+      interest_time_period: this.refs.interest_time_period.state.textBody,
+      interest_payment_type: this.refs.interest_payment_type.state.textBody,
+      interest_calculation_type: this.refs.interest_calculation_type.state
+        .textBody,
+      loan_amount: this.refs.loan_amount.state.textBody,
+      installment: this.refs.installment.state.textBody,
+      nominal_interest_rate: this.refs.nominal_interest_rate.state.textBody,
+      grace_period_principal: this.refs.grace_period_principal.state.textBody,
+      grace_period_interest_pay: this.refs.grace_period_interest_pay.state
+        .textBody,
       grace_period_interest_calculate: this.refs.grace_period_interest_calculate
-        .value,
-      grace_period_balloon: this.refs.grace_period_balloon.value,
-      fee_percent_upfront: this.refs.fee_percent_upfront.value,
-      fee_percent_ongoing: this.refs.fee_percent_ongoing.value,
-      fee_fixed_upfront: this.refs.fee_fixed_upfront.value,
-      fee_fixed_ongoing: this.refs.fee_fixed_ongoing.value,
-      tax_percent_fees: this.refs.tax_percent_fees.value,
-      tax_percent_interest: this.refs.tax_percent_interest.value,
-      insurance_percent_upfront: this.refs.insurance_percent_upfront.value,
-      insurance_percent_ongoing: this.refs.insurance_percent_ongoing.value,
-      insurance_fixed_upfront: this.refs.insurance_fixed_upfront.value,
-      insurance_fixed_ongoing: this.refs.insurance_fixed_ongoing.value,
+        .state.textBody,
+      grace_period_balloon: this.refs.grace_period_balloon.state.textBody,
+      fee_percent_upfront: this.refs.fee_percent_upfront.state.textBody,
+      fee_percent_ongoing: this.refs.fee_percent_ongoing.state.textBody,
+      fee_fixed_upfront: this.refs.fee_fixed_upfront.state.textBody,
+      fee_fixed_ongoing: this.refs.fee_fixed_ongoing.state.textBody,
+      tax_percent_fees: this.refs.tax_percent_fees.state.textBody,
+      tax_percent_interest: this.refs.tax_percent_interest.state.textBody,
+      insurance_percent_upfront: this.refs.insurance_percent_upfront.state
+        .textBody,
+      insurance_percent_ongoing: this.refs.insurance_percent_ongoing.state
+        .textBody,
+      insurance_fixed_upfront: this.refs.insurance_fixed_upfront.state.textBody,
+      insurance_fixed_ongoing: this.refs.insurance_fixed_ongoing.state.textBody,
       security_deposit_percent_upfront: this.refs
-        .security_deposit_percent_upfront.value,
+        .security_deposit_percent_upfront.state.textBody,
       security_deposit_percent_ongoing: this.refs
-        .security_deposit_percent_ongoing.value,
+        .security_deposit_percent_ongoing.state.textBody,
       security_deposit_fixed_upfront: this.refs.security_deposit_fixed_upfront
-        .value,
+        .state.textBody,
       security_deposit_fixed_ongoing: this.refs.security_deposit_fixed_ongoing
-        .value,
+        .state.textBody,
       interest_paid_on_deposit_percent: this.refs
-        .interest_paid_on_deposit_percent.value
+        .interest_paid_on_deposit_percent.state.textBody
     }
 
+    // console.log("help me please i am dying")
     axios
       .post('http://127.0.0.1:3453/calculateAPR', data)
       .then(function(response) {
@@ -71,7 +68,7 @@ class FormOne extends Component<void> {
         // console.log(this.refs.firstName.value)
       })
       .catch(function(error) {
-        console.log(error + data.start_name)
+        console.log(error + ' hello? ' + data.start_name)
       })
   }
 
@@ -87,8 +84,8 @@ class FormOne extends Component<void> {
               typeVal="String"
               limit="100"
               ref="firstName"
-              value={this.state.startName}
-              onChange={e => this.updateStartName(e)}
+              // value={this.state.startName}
+              // onChange={e => this.updateStartName(e)}
             />
             <TextField
               id="Last Name"

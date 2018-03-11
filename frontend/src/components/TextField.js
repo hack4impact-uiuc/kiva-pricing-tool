@@ -9,18 +9,19 @@ class TextField extends Component {
       valid: true,
       id: this.props.text,
       error_message: '',
-      type: this.props.typeVal
+      type: this.props.typeVal,
+      textBody: ''
     }
   }
 
   handleChange(e) {
-    var value = e.target.value
-    var input = value.split('')
-    var foundError = false
+    let value = e.target.value
+    let input = value.split('')
+    let foundError = false
 
     if (this.props.typeVal == 'String' || this.props.typeVal == 'string') {
       if (value.length <= this.props.limit) {
-        for (var i = 0; i < input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
           if (!isNaN(input[i]) && input[i] != ' ') {
             foundError = true
           } else {
@@ -37,7 +38,7 @@ class TextField extends Component {
 
     if (this.props.typeVal == 'Int' || this.props.typeVal == 'int') {
       if (value <= this.props.limit) {
-        for (var i = 0; i < input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
           if (isNaN(input[i])) {
             foundError = true
           } else {
@@ -54,7 +55,7 @@ class TextField extends Component {
 
     if (this.props.typeVal == 'Float' || this.props.typeVal == 'float') {
       if (value <= this.props.limit) {
-        for (var i = 0; i < input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
           if (isNaN(input[i]) && input[i] != '.') {
             foundError = true
           } else {
@@ -77,19 +78,23 @@ class TextField extends Component {
     }
 
     if (input == '') {
-      this.setState({ error_message: '' })
+      this.setState({
+        error_message: ''
+      })
     }
+
+    this.setState({ textBody: value })
   }
 
   render() {
     if (!this.state.valid) {
-      var error = this.state.error_message
+      let error = this.state.error_message
     }
     return (
       <div id="className">
         {this.props.id}:
         <input
-          class="form-control input-sm"
+          className="form-control input-sm"
           type={this.props.input_type}
           id={this.props.text}
           placeholder={this.props.hint}
