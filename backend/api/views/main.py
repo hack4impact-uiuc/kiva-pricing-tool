@@ -105,11 +105,13 @@ def save_loan():
             'security_deposit_fixed_ongoing' : request_json['security_deposit_fixed_ongoing'],
             'interest_paid_on_deposit_percent' : request_json['interest_paid_on_deposit_percent']
         }
-        
+    except:
+        return create_response(status=422, message='missing compoonents for save new loan')
+    try:
         db.session.add(Loan(newrow))
         db.session.commit()
         return create_response(status=201)
     except:
-        return create_response(status=422, message='missing compoonents for save new loan')
+        return create_response(status=422, message='Loan with this version already exists')
 
 
