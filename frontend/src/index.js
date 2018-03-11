@@ -22,7 +22,7 @@ ReactDOM.render(
         <Navbar />
         <Route exact path="/" component={App} />
         <Route path="/colors" component={Colors} />
-        <Route path="/apr" component={APRRateDisplay} />
+        <Route path="/output" component={APRRateDisplay} />
       </div>
     </ConnectedRouter>
   </Provider>,
