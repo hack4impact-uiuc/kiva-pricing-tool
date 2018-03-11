@@ -16,6 +16,12 @@ class FormOne extends Component<void> {
     }
   }
 
+  updateStartName(e) {
+    this.setState({
+      startName: e.target.value
+    })
+    console.log(e.target.value)
+  }
   render() {
     return (
       <Jumbotron className="banner">
@@ -28,11 +34,7 @@ class FormOne extends Component<void> {
               typeVal="String"
               limit="100"
               value={this.state.startName}
-              onChange={e => {
-                this.setState({
-                  startName: e.target.value
-                })
-              }}
+              onChange={e => this.updateStartName(e)}
             />
             <TextField
               id="Last Name"
