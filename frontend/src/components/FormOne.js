@@ -14,14 +14,67 @@ class FormOne extends Component<void> {
       startName: '',
       repaymentType: ''
     }
+
+    // this.setAuthorState = this.setAuthorState.bind(this);
   }
 
-  updateStartName(e) {
+  updateStartName = e => {
     this.setState({
       startName: e.target.value
     })
     console.log(e.target.value)
   }
+
+  postData() {
+    let data = {
+      start_name: this.refs.firstName.value,
+      // start_name: this.state.startName.value,
+      installment_time_period: this.refs.installment_time_period.value,
+      repayment_type: this.refs.repaymentType.value,
+      interest_time_period: this.refs.interest_time_period.value,
+      interest_payment_type: this.refs.interest_payment_type.value,
+      interest_calculation_type: this.refs.interest_calculation_type.value,
+      loan_amount: this.refs.loan_amount.value,
+      installment: this.refs.installment.value,
+      nominal_interest_rate: this.refs.nominal_interest_rate.value,
+      grace_period_principal: this.refs.grace_period_principal.value,
+      grace_period_interest_pay: this.refs.grace_period_interest_pay.value,
+      grace_period_interest_calculate: this.refs.grace_period_interest_calculate
+        .value,
+      grace_period_balloon: this.refs.grace_period_balloon.value,
+      fee_percent_upfront: this.refs.fee_percent_upfront.value,
+      fee_percent_ongoing: this.refs.fee_percent_ongoing.value,
+      fee_fixed_upfront: this.refs.fee_fixed_upfront.value,
+      fee_fixed_ongoing: this.refs.fee_fixed_ongoing.value,
+      tax_percent_fees: this.refs.tax_percent_fees.value,
+      tax_percent_interest: this.refs.tax_percent_interest.value,
+      insurance_percent_upfront: this.refs.insurance_percent_upfront.value,
+      insurance_percent_ongoing: this.refs.insurance_percent_ongoing.value,
+      insurance_fixed_upfront: this.refs.insurance_fixed_upfront.value,
+      insurance_fixed_ongoing: this.refs.insurance_fixed_ongoing.value,
+      security_deposit_percent_upfront: this.refs
+        .security_deposit_percent_upfront.value,
+      security_deposit_percent_ongoing: this.refs
+        .security_deposit_percent_ongoing.value,
+      security_deposit_fixed_upfront: this.refs.security_deposit_fixed_upfront
+        .value,
+      security_deposit_fixed_ongoing: this.refs.security_deposit_fixed_ongoing
+        .value,
+      interest_paid_on_deposit_percent: this.refs
+        .interest_paid_on_deposit_percent.value
+    }
+
+    axios
+      .post('http://127.0.0.1:3453/calculateAPR', data)
+      .then(function(response) {
+        console.log(response + this.refs.firstName.value)
+        // console.log(this.refs.firstName.value)
+      })
+      .catch(function(error) {
+        console.log(error + data.start_name)
+      })
+  }
+
   render() {
     return (
       <Jumbotron className="banner">
@@ -33,6 +86,7 @@ class FormOne extends Component<void> {
               hint="ex. John"
               typeVal="String"
               limit="100"
+              ref="firstName"
               value={this.state.startName}
               onChange={e => this.updateStartName(e)}
             />
@@ -55,7 +109,8 @@ class FormOne extends Component<void> {
                 { id: '2', value: 'Equal Installments' },
                 { id: '3', value: 'Single end-term principal payment' }
               ]}
-              ref={repaymentType => (this.repaymentType = repaymentType)}
+              // ref={repaymentType => (this.repaymentType = repaymentType)}
+              ref="repaymentType"
             />
             <Dropdown
               title="Interest Payment:"
@@ -300,60 +355,8 @@ class FormOne extends Component<void> {
           <Button
             name="Next"
             url="output"
-            onClickHandler={() => {
-              axios
-                .post('http://127.0.0.1:3453/calculateAPR', {
-                  // start_name: this.refs.firstName.value,
-                  start_name: this.state.startName.value,
-                  installment_time_period: this.refs.installment_time_period
-                    .value,
-                  repayment_type: this.state.repaymentType.value,
-                  interest_time_period: this.refs.interest_time_period.value,
-                  interest_payment_type: this.refs.interest_payment_type.value,
-                  interest_calculation_type: this.refs.interest_calculation_type
-                    .value,
-                  loan_amount: this.refs.loan_amount.value,
-                  installment: this.refs.installment.value,
-                  nominal_interest_rate: this.refs.nominal_interest_rate.value,
-                  grace_period_principal: this.refs.grace_period_principal
-                    .value,
-                  grace_period_interest_pay: this.refs.grace_period_interest_pay
-                    .value,
-                  grace_period_interest_calculate: this.refs
-                    .grace_period_interest_calculate.value,
-                  grace_period_balloon: this.refs.grace_period_balloon.value,
-                  fee_percent_upfront: this.refs.fee_percent_upfront.value,
-                  fee_percent_ongoing: this.refs.fee_percent_ongoing.value,
-                  fee_fixed_upfront: this.refs.fee_fixed_upfront.value,
-                  fee_fixed_ongoing: this.refs.fee_fixed_ongoing.value,
-                  tax_percent_fees: this.refs.tax_percent_fees.value,
-                  tax_percent_interest: this.refs.tax_percent_interest.value,
-                  insurance_percent_upfront: this.refs.insurance_percent_upfront
-                    .value,
-                  insurance_percent_ongoing: this.refs.insurance_percent_ongoing
-                    .value,
-                  insurance_fixed_upfront: this.refs.insurance_fixed_upfront
-                    .value,
-                  insurance_fixed_ongoing: this.refs.insurance_fixed_ongoing
-                    .value,
-                  security_deposit_percent_upfront: this.refs
-                    .security_deposit_percent_upfront.value,
-                  security_deposit_percent_ongoing: this.refs
-                    .security_deposit_percent_ongoing.value,
-                  security_deposit_fixed_upfront: this.refs
-                    .security_deposit_fixed_upfront.value,
-                  security_deposit_fixed_ongoing: this.refs
-                    .security_deposit_fixed_ongoing.value,
-                  interest_paid_on_deposit_percent: this.refs
-                    .interest_paid_on_deposit_percent.value
-                })
-                .then(function(response) {
-                  console.log(response + this.refs.firstName.value)
-                  console.log(this.refs.firstName.value)
-                })
-                .catch(function(error) {
-                  console.log(error + this.state.startName.value)
-                })
+            onClickHandler={e => {
+              this.postData()
             }}
           />
         </Grid>
