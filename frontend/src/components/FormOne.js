@@ -287,7 +287,7 @@ class FormOne extends Component<void> {
             url="output"
             onClickHandler={() => {
               axios
-                .post('/formOne', {
+                .post('https://127.0.0.1:3453/calculateAPR', {
                   start_name: this.refs.firstName.value,
                   installment_time_period: this.refs.installment_time_period
                     .value,
