@@ -74,11 +74,14 @@ def cal_apr_helper(input_json):
         interest_paid_on_deposit_percent = input_json['interest_paid_on_deposit_percent'] / 100
 
 
-        period_dict = {'days':0, 'weeks':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'months':5, 'quarters':6, 'half-years':7, 'years':8}
-        installments_arr = np.array([1, 7, 14, 15, 28, 30, 90, 180, 360])
+        installments_period_dict = {'days':0, 'weeks':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'months':5, 'quarters':6, 'half-years':7, 'years':8}
+        interest_period_dict = {'day':0, 'week':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'month':5, 'quarter':6, 'half-year':7, 'year':8}
+
         periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
+
+        installments_arr = 1/ (periods_per_year / 12)
         nominal_arr = 1 / installments_arr
-        scaled_interest = nominal_interest_rate*installments_arr[period_dict[installment_time_period]] * nominal_arr[period_dict[installment_time_period]]
+        scaled_interest = nominal_interest_rate*installments_arr[installments_period_dict[installment_time_period]] * nominal_arr[interest_period_dict[interest_time_period]]
         
         monthly_payment = loan_amount / (((1+scaled_interest)**installment -1) / (scaled_interest * (1+scaled_interest)**installment))
 
@@ -127,7 +130,7 @@ def cal_apr_helper(input_json):
         security_deposit = np.zeros(installment + 1)
         security_deposit[0] = security_deposit_percent_upfront * balance_arr[0] + security_deposit_fixed_upfront
         security_deposit[1:] = principal_paid_arr[1:] * security_deposit_percent_ongoing + security_deposit_fixed_ongoing
-        security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[period_dict[installment_time_period]]
+        security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[installments_period_dict[installment_time_period]]
         security_deposit_interest_paid = np.zeros(installment + 1)
         for idx in range(1, len(security_deposit)):
             security_deposit_interest_paid[idx] = (np.sum(security_deposit[:idx]) + np.sum(security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
@@ -141,7 +144,7 @@ def cal_apr_helper(input_json):
         result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + principal_paid_arr + security_deposit) 
         result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
-        return np.irr(result)
+        return np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]]
     except:
         #TODO status code not sure 
         return None

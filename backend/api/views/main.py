@@ -62,6 +62,7 @@ def get_partner_theme_list():
     return create_response(data=data, status=200)
 
 
+
 @app.route(SAVE_LOAN_URL, methods=['POST'])
 def save_loan():
     request_json = request.get_json()
