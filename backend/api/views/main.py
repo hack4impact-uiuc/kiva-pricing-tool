@@ -23,7 +23,7 @@ def index():
 CALCULATE_URL = '/endpoint1'
 INFO_INPUT_URL = '/endpoint2'
 SAVE_LOAN_URL = '/endpoint3'
-@app.route(CALCULATE_URL)
+@app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
     input_json = request.get_json()
     args = request.args
@@ -39,25 +39,25 @@ def cal_apr():
     assume a query_type argument to specify what to get
 """
 @app.route(INFO_INPUT_URL)
-def get_version():
+def get_info():
     args = request.args
+    # return create_response({'ret':args}, status=200)
     try:
-        if args['query_type'] == 'theme_list':
-            #TODO query database for theme list
-            return
-        elif args['query_type'] == 'parter_list':
-            #TODO query database for parter_list
-            return
+        if args['query_type'] == 'theme_partner_list':
+            #TODO query database for parter_list and theme
+            themes = Theme.query.all()
+            partners = Partner.query.all()
+            data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}
+            return create_response(data=data, status=200)
         elif args['query_type'] == 'version_num':
             theme = args['theme']
             partner_name = args['partner_name']
             product = args['product']
 
             #TODO: result = query method by model.py
-            if result is None:
-                return create_response({version:1}, status=200)
-            else:
-                return create_response({version:result+1}, status=200)
+            loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product).all()
+            num = 1 + len(loans)    
+            return create_response({'version':num}, status=200)
         else:
             # should never happen
             return create_response({}, status=400, message='wrong query_type argument')
