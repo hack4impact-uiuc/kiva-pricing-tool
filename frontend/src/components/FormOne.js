@@ -34,7 +34,7 @@ class FormOne extends Component<void> {
 
           <Form inline>
             <Dropdown
-              title="Amortization:"
+              title="Repayment Type:"
               items={[
                 { id: '1', value: 'Equal Principal Payments' },
                 { id: '2', value: 'Equal Installments' },
@@ -43,7 +43,7 @@ class FormOne extends Component<void> {
               ref="repayment_type"
             />
             <Dropdown
-              title="Interest:"
+              title="Interest Payment:"
               items={[
                 { id: '1', value: 'Multiple Installments' },
                 { id: '2', value: 'Single End-Term Payments' }
@@ -88,32 +88,32 @@ class FormOne extends Component<void> {
 
           <Form inline>
             <Dropdown
-              title="Term Length:"
+              title="Time Period:"
               items={[
-                { id: '1', value: 'Per Day' },
-                { id: '7', value: 'Per Week' },
-                { id: '14', value: 'Per 2 Week Period' },
-                { id: '15', value: 'Per 15 Day Period' },
-                { id: '28', value: 'Per 4 Week Period' },
-                { id: '30', value: 'Per Month' },
-                { id: '90', value: 'Per Quarter' },
-                { id: '180', value: 'Per Half Year' },
-                { id: '365', value: 'Per Year' }
+                { id: '1', value: 'days' },
+                { id: '7', value: 'weeks' },
+                { id: '14', value: 'two-weeks' },
+                { id: '15', value: '15 days' },
+                { id: '28', value: '4 weeks' },
+                { id: '30', value: 'months' },
+                { id: '90', value: 'quarters' },
+                { id: '180', value: 'half-years' },
+                { id: '365', value: 'years' }
               ]}
               ref="installment_time_period"
             />
             <Dropdown
-              title="Nominal Interest Rate:"
+              title="Time Period:"
               items={[
-                { id: '1', value: 'Per Day' },
-                { id: '7', value: 'Per Week' },
-                { id: '14', value: 'Per 2 Week Period' },
-                { id: '15', value: 'Per 15 Day Period' },
-                { id: '28', value: 'Per 4 Week Period' },
-                { id: '30', value: 'Per Month' },
-                { id: '90', value: 'Per Quarter' },
-                { id: '180', value: 'Per Half Year' },
-                { id: '365', value: 'Per Year' }
+                { id: '1', value: 'days' },
+                { id: '7', value: 'weeks' },
+                { id: '14', value: 'two-weeks' },
+                { id: '15', value: '15 days' },
+                { id: '28', value: '4 weeks' },
+                { id: '30', value: 'months' },
+                { id: '90', value: 'quarters' },
+                { id: '180', value: 'half-years' },
+                { id: '365', value: 'years' }
               ]}
               ref="interest_time_period"
             />
