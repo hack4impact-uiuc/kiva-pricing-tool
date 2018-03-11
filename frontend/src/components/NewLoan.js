@@ -24,10 +24,6 @@ class NewLoan extends Component {
 		  .then(function (response) {
 			  console.log(response);
 		  });
-		axios.get('./loan.json')
-		  .then(function (response) {
-			  console.log(response);
-		  });
 	}
 	
 	render() {
