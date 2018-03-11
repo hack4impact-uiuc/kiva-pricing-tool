@@ -40,7 +40,7 @@ def cal_apr():
     assume a query_type argument to specify what to get
 """
 @app.route(GET_VERSION_NUM)
-def get_info():
+def get_version_num():
     args = request.args
     try:
         theme = args['theme']
@@ -55,7 +55,7 @@ def get_info():
 # grabbing MFI Partner and Loan Theme 
 
 @app.route(GET_LISTS)
-def get_info():
+def get_partner_theme_list():
     themes = Theme.query.all()
     partners = Partner.query.all()
     data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}
