@@ -1,8 +1,7 @@
-from api import app
-from flask import Blueprint, request
+from api import app, db
+from flask import Blueprint, request, jsonify
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
-from flask import jsonify
 from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper
 import numpy as np
 
@@ -69,13 +68,48 @@ def get_info():
 @app.route(SAVE_LOAN_URL, methods=['POST'])
 def save_loan():
     request_json = request.get_json()
-    payload = {}
     try:
-        # get all variables in the form
-
-        #TODO: query database to save loan
-        return create_response(payload, status=201)
+        newrow = {
+            'partner_name' : request_json['partner_name'],
+            'loan_theme' : request_json['loan_theme'],
+            'product_type' : request_json['product_type'],
+            'version_num' : request_json['version_num'],
+            'start_name' : request_json['start_name'],
+            'update_name' : request_json['update_name'],
+            'nominal_apr' : request_json['nominal_apr'],
+            'installment_time_period' : request_json['installment_time_period'],
+            'repayment_type' : request_json['repayment_type'],
+            'interest_time_period' : request_json['interest_time_period'],
+            'interest_payment' : request_json['interest_payment'],
+            'interest_calculation_type' : request_json['interest_calculation_type'],
+            'loan_amount' : request_json['loan_amount'],
+            'installment' : request_json['installment'],
+            'nominal_interest_rate' : request_json['nominal_interest_rate'],
+            'grace_period_principal' : request_json['grace_period_principal'],
+            'grace_period_interest_pay' : request_json['grace_period_interest_pay'],
+            'grace_period_interest_calculate' : request_json['grace_period_interest_calculate'],
+            'grace_period_balloon' : request_json['grace_period_balloon'],
+            'fee_percent_upfront' : request_json['fee_percent_upfront'],
+            'fee_percent_ongoing' : request_json['fee_percent_ongoing'],
+            'fee_fixed_upfront' : request_json['fee_fixed_upfront'],
+            'fee_fixed_ongoing' : request_json['fee_fixed_ongoing'],
+            'insurance_percent_upfront' : request_json['insurance_percent_upfront'],
+            'insurance_percent_ongoing' : request_json['insurance_percent_ongoing'],
+            'insurance_fixed_upfront' : request_json['insurance_fixed_upfront'],
+            'insurance_fixed_ongoing' : request_json['insurance_fixed_ongoing'],
+            'tax_percent_fees' : request_json['tax_percent_fees'],
+            'tax_percent_interest' : request_json['tax_percent_interest'],
+            'security_deposit_percent_upfront' : request_json['security_deposit_percent_upfront'],
+            'security_deposit_percent_ongoing' : request_json['security_deposit_percent_ongoing'],
+            'security_deposit_fixed_upfront' : request_json['security_deposit_fixed_upfront'],
+            'security_deposit_fixed_ongoing' : request_json['security_deposit_fixed_ongoing'],
+            'interest_paid_on_deposit_percent' : request_json['interest_paid_on_deposit_percent']
+        }
+        
+        db.session.add(Loan(newrow))
+        db.session.commit()
+        return create_response(status=201)
     except:
-        return create_response(payload, status=422, message='missing compoonents for save new loan')
+        return create_response(status=422, message='missing compoonents for save new loan')
 
 
