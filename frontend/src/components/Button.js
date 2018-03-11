@@ -12,6 +12,7 @@ class Button extends Component {
             className="button"
             type="button"
             onClick={() => {
+              this.props.onClickHandler()
               history.push('/' + this.props.url)
             }}
             disabled={this.props.disable}
