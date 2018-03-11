@@ -22,7 +22,7 @@ ReactDOM.render(
         <Route exact path="/" component={App} />
         <Route path="/colors" component={Colors} />
         <Route path="/output" component={APRRateDisplay} />
-		<Route path="/form1" component={FormOne} />
+	<Route path="/form1" component={FormOne} />
       </div>
     </ConnectedRouter>
   </Provider>,
