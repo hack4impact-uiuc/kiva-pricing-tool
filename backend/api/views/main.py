@@ -67,6 +67,7 @@ def get_version():
 
 @app.route(SAVE_LOAN_URL, methods=['POST'])
 def save_loan():
+    """Save a new loan to the database, attempts to get all form data and use loan's __init__ to add"""
     request_json = request.get_json()
     try:
         newrow = {
