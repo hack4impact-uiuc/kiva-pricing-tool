@@ -8,6 +8,13 @@ import axios from 'axios'
 import './../styles/app.scss'
 
 class FormOne extends Component<void> {
+  constructor(props) {
+    super()
+    this.state = {
+      startName: '',
+      repaymentType: ''
+    }
+  }
   render() {
     return (
       <Jumbotron className="banner">
@@ -19,7 +26,7 @@ class FormOne extends Component<void> {
               hint="ex. John"
               typeVal="String"
               limit="100"
-              ref="firstName"
+              value={this.state.startName}
             />
             <TextField
               id="Last Name"
@@ -40,7 +47,7 @@ class FormOne extends Component<void> {
                 { id: '2', value: 'Equal Installments' },
                 { id: '3', value: 'Single end-term principal payment' }
               ]}
-              ref="repayment_type"
+              ref={repaymentType => (this.repaymentType = repaymentType)}
             />
             <Dropdown
               title="Interest Payment:"
@@ -287,11 +294,12 @@ class FormOne extends Component<void> {
             url="output"
             onClickHandler={() => {
               axios
-                .post('https://127.0.0.1:3453/calculateAPR', {
-                  start_name: this.refs.firstName.value,
+                .post('http://127.0.0.1:3453/calculateAPR', {
+                  // start_name: this.refs.firstName.value,
+                  start_name: this.state.startName.value,
                   installment_time_period: this.refs.installment_time_period
                     .value,
-                  repayment_type: this.refs.repayment_type.value,
+                  repayment_type: this.state.repaymentType.value,
                   interest_time_period: this.refs.interest_time_period.value,
                   interest_payment_type: this.refs.interest_payment_type.value,
                   interest_calculation_type: this.refs.interest_calculation_type
@@ -332,10 +340,11 @@ class FormOne extends Component<void> {
                     .interest_paid_on_deposit_percent.value
                 })
                 .then(function(response) {
-                  console.log(response)
+                  console.log(response + this.refs.firstName.value)
+                  console.log(this.refs.firstName.value)
                 })
                 .catch(function(error) {
-                  console.log(error)
+                  console.log(error + this.state.startName.value)
                 })
             }}
           />

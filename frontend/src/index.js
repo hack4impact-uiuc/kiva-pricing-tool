@@ -1,7 +1,7 @@
 // @flow
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-theme.css'
-
+import App from './App'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -9,10 +9,9 @@ import { Route } from 'react-router'
 import { ConnectedRouter } from 'react-router-redux'
 
 import configureStore, { history } from './store/configureStore'
-import { App, Colors, Navbar, APRRateDisplay } from './components'
+import { Colors, Navbar, APRRateDisplay, FormOne } from './components'
 import registerServiceWorker from './registerServiceWorker'
 import './styles/index.css'
-
 const store = configureStore()
 
 ReactDOM.render(
@@ -23,6 +22,7 @@ ReactDOM.render(
         <Route exact path="/" component={App} />
         <Route path="/colors" component={Colors} />
         <Route path="/output" component={APRRateDisplay} />
+        <Route path="/form1" component={FormOne} />
       </div>
     </ConnectedRouter>
   </Provider>,

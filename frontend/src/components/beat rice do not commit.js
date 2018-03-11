@@ -9,10 +9,10 @@ import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 import APRRateDisplay from './APRRateDisplay'
 
-class App extends Component<void> {
+class beatirce extends Component<void> {
   render() {
     return <FormOne />
   }
 }
 
-export default App
+export default beatirce

@@ -1,5 +1,5 @@
 // @flow
-import App from './App.component'
+import App from '../App'
 import Navbar from './Navbar.component'
 import Bootstrap from 'react-bootstrap'
 
