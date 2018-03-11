@@ -63,9 +63,9 @@ class TextField extends Component {
           }
         }
 
-        if (value.includes('.') === false) {
-          foundError = true
-        }
+        // if (value.includes('.') === false) {
+        //   foundError = true
+        // }
 
         if (foundError) {
           this.setState({

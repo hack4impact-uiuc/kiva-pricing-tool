@@ -18,7 +18,7 @@ class FormOne extends Component<void> {
 
   postData() {
     // console.log(this.refs.firstName.props.id)
-    console.log(this.refs.firstName.state.textBody)
+    console.log(data)
     let data = {
       start_name: this.refs.firstName.state.textBody,
       installment_time_period: this.refs.installment_time_period.state.textBody,
