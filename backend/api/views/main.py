@@ -20,9 +20,10 @@ def index():
 #     except Exception as ex:
 #         return create_response(data={}, status=400, message=str(ex
 
-CALCULATE_URL = '/endpoint1'
-INFO_INPUT_URL = '/endpoint2'
-SAVE_LOAN_URL = '/endpoint3'
+CALCULATE_URL = '/calculateAPR'
+GET_VERSION_NUM = '/getVersionNum'
+GET_LISTS = '/partnerThemeLists'
+SAVE_LOAN_URL = '/saveNewLoan'
 @app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
     input_json = request.get_json()
@@ -38,31 +39,27 @@ def cal_apr():
 """
     assume a query_type argument to specify what to get
 """
-@app.route(INFO_INPUT_URL)
+@app.route(GET_VERSION_NUM)
 def get_info():
     args = request.args
-    # return create_response({'ret':args}, status=200)
     try:
-        if args['query_type'] == 'theme_partner_list':
-            #TODO query database for parter_list and theme
-            themes = Theme.query.all()
-            partners = Partner.query.all()
-            data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}
-            return create_response(data=data, status=200)
-        elif args['query_type'] == 'version_num':
-            theme = args['theme']
-            partner_name = args['partner_name']
-            product = args['product']
-
-            #TODO: result = query method by model.py
-            loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product).all()
-            num = 1 + len(loans)    
-            return create_response({'version':num}, status=200)
-        else:
-            # should never happen
-            return create_response({}, status=400, message='wrong query_type argument')
+        theme = args['theme']
+        partner_name = args['partner_name']
+        product = args['product']
+        loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product).all()
+        num = 1 + len(loans)    
+        return create_response({'version':num}, status=200)
     except:
         return create_response({}, status=400, message='missing arguments for GET')
+
+# grabbing MFI Partner and Loan Theme 
+
+@app.route(GET_LISTS)
+def get_info():
+    themes = Theme.query.all()
+    partners = Partner.query.all()
+    data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}
+    return create_response(data=data, status=200)
 
 
 @app.route(SAVE_LOAN_URL, methods=['POST'])
