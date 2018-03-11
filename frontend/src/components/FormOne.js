@@ -17,16 +17,15 @@ class FormOne extends Component<void> {
   }
 
   postData() {
-    // console.log(this.refs.firstName.props.id)
-    console.log(data)
+    // console.log(this.refs.firstName.props.id
     let data = {
       start_name: this.refs.firstName.state.textBody,
-      installment_time_period: this.refs.installment_time_period.state.textBody,
-      repayment_type: this.refs.repaymentType.state.textBody,
-      interest_time_period: this.refs.interest_time_period.state.textBody,
-      interest_payment_type: this.refs.interest_payment_type.state.textBody,
+      installment_time_period: this.refs.installment_time_period.state.value,
+      repayment_type: this.refs.repaymentType.state.value,
+      interest_time_period: this.refs.interest_time_period.state.value,
+      interest_payment_type: this.refs.interest_payment_type.state.value,
       interest_calculation_type: this.refs.interest_calculation_type.state
-        .textBody,
+        .value,
       loan_amount: this.refs.loan_amount.state.textBody,
       installment: this.refs.installment.state.textBody,
       nominal_interest_rate: this.refs.nominal_interest_rate.state.textBody,
@@ -59,7 +58,7 @@ class FormOne extends Component<void> {
       interest_paid_on_deposit_percent: this.refs
         .interest_paid_on_deposit_percent.state.textBody
     }
-
+    console.log(data)
     // console.log("help me please i am dying")
     axios
       .post('http://127.0.0.1:3453/calculateAPR', data)
