@@ -58,13 +58,16 @@ security_deposit_fixed_upfront = 10
 security_deposit_fixed_ongoing = 10
 interest_paid_on_deposit_percent = 0.1
 interest_calculation_type = 'declining balance'
-repayment_type = 'single end-term principal payment'
-
-installments_arr = np.array([1, 7, 14, 15, 28, 30, 90, 180, 360])
+repayment_type = 'equal principal payments'
 periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
 
+
+
+# installments_arr = np.array([1, 7, 14, 15, 28, 30, 90, 180, 360])
+installments_arr = 1/ (periods_per_year / 12)
 nominal_arr = 1 / installments_arr
-scaled_interest = nominal_interest_rate*installments_arr[5] * nominal_arr[5]
+
+scaled_interest = nominal_interest_rate*installments_arr[4] * nominal_arr[3]
 # scaled_interest = round_float(scaled_interest, 4)
 # amortization
 monthly_payment = loan_amount / (((1+scaled_interest)**installment -1) / (scaled_interest * (1+scaled_interest)**installment))
@@ -120,7 +123,7 @@ insurance_paid[-1] = 0
 security_deposit = np.zeros(installment + 1)
 security_deposit[0] = security_deposit_percent_upfront * balance_arr[0] + security_deposit_fixed_upfront
 security_deposit[1:] = principal_paid_arr[1:] * security_deposit_percent_ongoing + security_deposit_fixed_ongoing
-security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[5]
+security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[4]
 security_deposit_interest_paid = np.zeros(installment + 1)
 for idx in range(1, len(security_deposit)):
     security_deposit_interest_paid[idx] = (np.sum(security_deposit[:idx]) + np.sum(security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
@@ -141,7 +144,7 @@ result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + princip
 result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
 print (result)
-print (np.irr(result))
+print (np.irr(result) * periods_per_year[4])
 print ('------------')
 print (monthly_payment)
 print ('\nbalance\n')

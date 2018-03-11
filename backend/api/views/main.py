@@ -62,6 +62,7 @@ def get_partner_theme_list():
     return create_response(data=data, status=200)
 
 
+
 @app.route(SAVE_LOAN_URL, methods=['POST'])
 def save_loan():
     """Save a new loan to the database, attempts to get all form data and use loan's __init__ to add"""
