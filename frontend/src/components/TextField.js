@@ -9,88 +9,56 @@ class TextField extends Component {
       valid: true,
       id: this.props.text,
       error_message: '',
-      type: this.props.typeVal
+      type: this.props.typeVal,
+      textBody: ''
     }
   }
 
-	
   handleChange(e) {
-    var value = e.target.value
-    var input = value.split('')
-    var foundError = false
-
-    if (this.props.typeVal == 'String' || this.props.typeVal == 'string') {
-      if (value.length <= this.props.limit) {
-        for (var i = 0; i < input.length; i++) {
-          if (!isNaN(input[i]) && input[i] != ' ') {
-            foundError = true
-          } else {
-            this.setState({ error_message: '' })
-          }
-        }
-        if (foundError) {
-          this.setState({ error_message: 'error in input: should be a word' })
-        }
+    let value = e.target.value
+    if (this.props.typeVal.toLowerCase() == 'int') {
+      let tryInt = parseInt(value)
+      if (isNaN(tryInt)) {
+        this.setState({ error_message: 'error in input: should be an integer' })
       } else {
-        this.setState({ error_message: 'error in input' })
+        this.setState({ error_message: '' })
       }
     }
 
-    if (this.props.typeVal == 'Int' || this.props.typeVal == 'int') {
-      if (value <= this.props.limit) {
-        for (var i = 0; i < input.length; i++) {
-          if (isNaN(input[i])) {
-            foundError = true
-          } else {
-            this.setState({ error_message: '' })
-          }
-        }
-        if (foundError) {
-          this.setState({ error_message: 'error in input: should be a number' })
-        }
+    if (this.props.typeVal.toLowerCase() == 'float') {
+      let tryFloat = parseFloat(value)
+      if (isNaN(tryFloat)) {
+        this.setState({ error_message: 'error in input: should be a decimal' })
       } else {
-        this.setState({ error_message: 'error in input' })
+        this.setState({ error_message: '' })
       }
     }
 
-    if (this.props.typeVal == 'Float' || this.props.typeVal == 'float') {
-      if (value <= this.props.limit) {
-        for (var i = 0; i < input.length; i++) {
-          if (isNaN(input[i]) && input[i] != '.') {
-            foundError = true
-          } else {
-            this.setState({ error_message: '' })
-          }
-        }
-
-        if (value.includes('.') === false) {
-          foundError = true
-        }
-
-        if (foundError) {
-          this.setState({
-            error_message: 'error in input: should be a decimal number'
-          })
-        }
+    if (this.props.typeVal.toLowerCase() == 'string') {
+      let tryString = /^[a-zA-Z]+$/.test(value)
+      if (!tryString) {
+        this.setState({
+          error_message: 'error in input: should only have letters'
+        })
       } else {
-        this.setState({ error_message: 'error in input' })
+        this.setState({ error_message: '' })
       }
     }
-
-    if (input == '') {
+    if (value == '') {
       this.setState({ error_message: '' })
     }
+    this.setState({ textBody: value })
   }
 
   render() {
     if (!this.state.valid) {
-      var error = this.state.error_message
+      let error = this.state.error_message
     }
     return (
       <div id="className">
         {this.props.id}:
         <input
-          class="form-control input-sm"
+          className="form-control input-sm"
           type={this.props.input_type}
           id={this.props.text}
           placeholder={this.props.hint}
