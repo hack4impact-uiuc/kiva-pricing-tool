@@ -26,6 +26,9 @@ GET_LISTS = '/partnerThemeLists'
 SAVE_LOAN_URL = '/saveNewLoan'
 @app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
+    """
+        calculate and send a response with APR
+    """
     input_json = request.get_json()
     args = request.args
     payload = {}
@@ -35,12 +38,12 @@ def cal_apr():
     else:
         return create_response(data={'apr':apr}, status=200)
 
-# for check version number
-"""
-    assume a query_type argument to specify what to get
-"""
+
 @app.route(GET_VERSION_NUM)
 def get_version_num():
+    """
+        sending a response with the cersoin number
+    """
     args = request.args
     try:
         theme = args['theme']
@@ -52,10 +55,12 @@ def get_version_num():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
-# grabbing MFI Partner and Loan Theme 
 
 @app.route(GET_LISTS)
 def get_partner_theme_list():
+    """
+        grabbing MFI Partner and Loan Theme 
+    """
     themes = Theme.query.all()
     partners = Partner.query.all()
     data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}

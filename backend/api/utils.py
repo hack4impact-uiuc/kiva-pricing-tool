@@ -1,5 +1,6 @@
 import json
 from flask import jsonify
+import numpy as np
 
 def create_response(data={}, status=200, message=''):
     """
@@ -50,36 +51,34 @@ def cal_apr_helper(input_json):
         interest_time_period = input_json['interest_time_period']
         interest_payment_type = input_json['interest_payment_type']
         interest_calculation_type = input_json['interest_calculation_type']
-        loan_amount = input_json['loan_amount']
-        installment = input_json['installment']
-        nominal_interest_rate = input_json['nominal_interest_rate'] / 100
-        grace_period_principal = input_json['grace_period_principal']
-        grace_period_interest_pay = input_json['grace_period_interest_pay']
-        grace_period_interest_calculate = input_json['grace_period_interest_calculate']
-        grace_period_balloon = input_json['grace_period_balloon']
-        fee_percent_upfront = input_json['fee_percent_upfront'] / 100
-        fee_percent_ongoing = input_json['fee_percent_ongoing'] / 100
-        fee_fixed_upfront = input_json['fee_fixed_upfront'] 
-        fee_fixed_ongoing = input_json['fee_fixed_ongoing']
-        insurance_percent_upfront = input_json['insurance_percent_upfront'] / 100
-        insurance_percent_ongoing = input_json['insurance_percent_ongoing'] / 100
-        insurance_fixed_upfront = input_json['insurance_fixed_upfront']
-        insurance_fixed_ongoing  = input_json['insurance_fixed_ongoing']
-        tax_percent_fees = input_json['tax_percent_fees'] / 100
-        tax_percent_interest = input_json['tax_percent_interest'] / 100
-        security_deposit_percent_upfront = input_json['security_deposit_percent_upfront'] / 100
-        security_deposit_percent_ongoing = input_json['security_deposit_percent_ongoing'] / 100
-        security_deposit_fixed_upfront = input_json['security_deposit_fixed_upfront']
-        security_deposit_fixed_ongoing = input_json['security_deposit_fixed_ongoing']
-        interest_paid_on_deposit_percent = input_json['interest_paid_on_deposit_percent'] / 100
-
-
+        loan_amount = float(input_json['loan_amount'])
+        installment = int(input_json['installment'])
+        nominal_interest_rate = float(input_json['nominal_interest_rate']) / 100
+        grace_period_principal = int(input_json['grace_period_principal'])
+        grace_period_interest_pay = int(input_json['grace_period_interest_pay'])
+        grace_period_interest_calculate = int(input_json['grace_period_interest_calculate'])
+        grace_period_balloon = int(input_json['grace_period_balloon'])
+        fee_percent_upfront = float(input_json['fee_percent_upfront']) / 100
+        fee_percent_ongoing = float(input_json['fee_percent_ongoing']) / 100
+        fee_fixed_upfront = float(input_json['fee_fixed_upfront'])
+        fee_fixed_ongoing = float(input_json['fee_fixed_ongoing'])
+        insurance_percent_upfront = float(input_json['insurance_percent_upfront']) / 100
+        insurance_percent_ongoing = float(input_json['insurance_percent_ongoing']) / 100
+        insurance_fixed_upfront = float(input_json['insurance_fixed_upfront'])
+        insurance_fixed_ongoing  = float(input_json['insurance_fixed_ongoing'])
+        tax_percent_fees = float(input_json['tax_percent_fees']) / 100
+        tax_percent_interest = float(input_json['tax_percent_interest']) / 100
+        security_deposit_percent_upfront = float(input_json['security_deposit_percent_upfront'])/ 100
+        security_deposit_percent_ongoing = float(input_json['security_deposit_percent_ongoing'])/ 100
+        security_deposit_fixed_upfront = float(input_json['security_deposit_fixed_upfront'])
+        security_deposit_fixed_ongoing = float(input_json['security_deposit_fixed_ongoing'])
+        interest_paid_on_deposit_percent = float(input_json['interest_paid_on_deposit_percent'])/ 100
+        
         period_dict = {'days':0, 'weeks':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'months':5, 'quarters':6, 'half-years':7, 'years':8}
         installments_arr = np.array([1, 7, 14, 15, 28, 30, 90, 180, 360])
         periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
         nominal_arr = 1 / installments_arr
         scaled_interest = nominal_interest_rate*installments_arr[period_dict[installment_time_period]] * nominal_arr[period_dict[installment_time_period]]
-        
         monthly_payment = loan_amount / (((1+scaled_interest)**installment -1) / (scaled_interest * (1+scaled_interest)**installment))
 
         principal_paid_arr = np.zeros(installment + 1)
@@ -108,6 +107,7 @@ def cal_apr_helper(input_json):
             elif repayment_type == 'equal principal payments':
                 principal_paid_arr[idx] = loan_amount / installment
 
+
         if repayment_type == 'single end-term principal payment':
             balance_arr[-1] = 0
             principal_paid_arr[-1] = loan_amount
@@ -129,6 +129,7 @@ def cal_apr_helper(input_json):
         security_deposit[1:] = principal_paid_arr[1:] * security_deposit_percent_ongoing + security_deposit_fixed_ongoing
         security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[period_dict[installment_time_period]]
         security_deposit_interest_paid = np.zeros(installment + 1)
+
         for idx in range(1, len(security_deposit)):
             security_deposit_interest_paid[idx] = (np.sum(security_deposit[:idx]) + np.sum(security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
 
@@ -140,8 +141,8 @@ def cal_apr_helper(input_json):
         result[0] = loan_amount
         result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + principal_paid_arr + security_deposit) 
         result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
-
-        return np.irr(result)
+        
+        return (np.irr(result) *periods_per_year[1]*100)
     except:
         #TODO status code not sure 
         return None

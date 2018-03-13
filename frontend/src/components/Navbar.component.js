@@ -9,7 +9,7 @@ export default function Navbar() {
       <Grid>
         <BootstrapNavbar.Header>
           <BootstrapNavbar.Brand>
-            <Link to="/">Hi</Link>
+            <Link to="/">APR Pricing Tool</Link>
           </BootstrapNavbar.Brand>
           <BootstrapNavbar.Toggle />
         </BootstrapNavbar.Header>

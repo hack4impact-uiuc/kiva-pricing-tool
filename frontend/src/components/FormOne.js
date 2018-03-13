@@ -9,11 +9,10 @@ import './../styles/app.scss'
 
 class FormOne extends Component<void> {
   constructor(props) {
-    super()
-    // this.state = {
-    //   startName: 'AAAaAAaAa',
-    //   repaymentType: ''
-    // }
+    super(props)
+    this.state = {
+      aprRate: ''
+    }
   }
 
   postData() {
@@ -59,305 +58,348 @@ class FormOne extends Component<void> {
         .interest_paid_on_deposit_percent.state.textBody
     }
     console.log(data)
-    // console.log("help me please i am dying")
     axios
       .post('http://127.0.0.1:3453/calculateAPR', data)
-      .then(function(response) {
-        console.log(response + this.refs.firstName.value)
-        // console.log(this.refs.firstName.value)
+      .then(response => {
+        console.log(response)
+        const apr = response.data.result.apr
+        this.setState({ aprRate: apr })
+        console.log(response.data.result.apr)
       })
       .catch(function(error) {
-        console.log(error + ' hello? ' + data.start_name)
+        console.log(
+          error + ' there was an error with the request' + data.start_name
+        )
       })
   }
 
+  getAPRRate() {
+    return this.state.aprRate
+  }
+
+  changeContent() {
+    this.setState({ aprRate: '' })
+  }
+
   render() {
-    return (
-      <Jumbotron className="banner">
-        <Grid>
-          <PageHeader>User Information</PageHeader>
-          <Form inline>
-            <TextField
-              id="First Name"
-              hint="ex. John"
-              typeVal="String"
-              limit="100"
-              ref="firstName"
-              // value={this.state.startName}
-              // onChange={e => this.updateStartName(e)}
-            />
-            <TextField
-              id="Last Name"
-              hint="ex. Smith"
-              typeVal="String"
-              limit="100"
-              ref="lastName"
-            />
-          </Form>
+    //will have to render like this until we incorporate redux
+    if (!this.state.aprRate) {
+      return (
+        <Jumbotron className="banner">
+          <Grid>
+            <PageHeader>User Information</PageHeader>
+            <Form inline>
+              <TextField
+                id="First Name"
+                hint="ex. John"
+                typeVal="String"
+                limit="100"
+                ref="firstName"
+              />
+              <TextField
+                id="Last Name"
+                hint="ex. Smith"
+                typeVal="String"
+                limit="100"
+                ref="lastName"
+              />
+            </Form>
 
-          <PageHeader>Basic Loan Conditions</PageHeader>
+            <PageHeader>Basic Loan Conditions</PageHeader>
 
-          <Form inline>
-            <Dropdown
-              title="Repayment Type:"
-              items={[
-                { id: '1', value: 'Equal Principal Payments' },
-                { id: '2', value: 'Equal Installments' },
-                { id: '3', value: 'Single end-term principal payment' }
-              ]}
-              // ref={repaymentType => (this.repaymentType = repaymentType)}
-              ref="repaymentType"
-            />
-            <Dropdown
-              title="Interest Payment:"
-              items={[
-                { id: '1', value: 'Multiple Installments' },
-                { id: '2', value: 'Single End-Term Payments' }
-              ]}
-              ref="interest_payment_type"
-            />
-            <Dropdown
-              title="Interest Calculation:"
-              items={[
-                { id: '1', value: 'Initial Amount' },
-                { id: '2', value: 'Flat' },
-                { id: '2', value: 'Declining Balance' }
-              ]}
-              ref="interest_calculation_type"
-            />
-          </Form>
+            <Form inline>
+              <Dropdown
+                title="Repayment Type:"
+                items={[
+                  //must match backend! IMPORTANT
+                  { id: '1', value: 'equal principal payments' },
+                  { id: '2', value: 'equal installments (amortized)' },
+                  { id: '3', value: 'single end-term principal payment' }
+                ]}
+                ref="repaymentType"
+              />
+              <Dropdown
+                title="Interest Payment:"
+                items={[
+                  { id: '1', value: 'Multiple Installments' },
+                  { id: '2', value: 'Single End-Term Payments' }
+                ]}
+                ref="interest_payment_type"
+              />
+              <Dropdown
+                title="Interest Calculation:"
+                items={[
+                  { id: '1', value: 'initial amount or flat' },
+                  // { id: '2', value: 'Flat' },
+                  { id: '2', value: 'declining balance' }
+                ]}
+                ref="interest_calculation_type"
+              />
+            </Form>
 
-          <br />
-          <Form inline>
-            <TextField
-              id="Loan Amount"
-              hint="ex. 5000"
-              typeVal="float"
-              limit="900000000"
-              ref="loan_amount"
-            />
-            <TextField
-              id="Number of Terms"
-              hint="ex. 12"
-              typeVal="int"
-              limit="180"
-              ref="installment"
-            />
-            <TextField
-              id="Nominal Interest Rate"
-              hint="ex. 12"
-              typeVal="int"
-              limit="100"
-              ref="nominal_interest_rate"
-            />
-          </Form>
+            <br />
+            <Form inline>
+              <TextField
+                id="Loan Amount"
+                hint="ex. 5000"
+                typeVal="float"
+                limit="900000000"
+                ref="loan_amount"
+              />
+              <TextField
+                id="Number of Terms"
+                hint="ex. 12"
+                typeVal="int"
+                limit="180"
+                ref="installment"
+              />
+              <TextField
+                id="Nominal Interest Rate"
+                hint="ex. 12"
+                typeVal="int"
+                limit="100"
+                ref="nominal_interest_rate"
+              />
+            </Form>
 
-          <Form inline>
-            <Dropdown
-              title="Time Period:"
-              items={[
-                { id: '1', value: 'days' },
-                { id: '7', value: 'weeks' },
-                { id: '14', value: 'two-weeks' },
-                { id: '15', value: '15 days' },
-                { id: '28', value: '4 weeks' },
-                { id: '30', value: 'months' },
-                { id: '90', value: 'quarters' },
-                { id: '180', value: 'half-years' },
-                { id: '365', value: 'years' }
-              ]}
-              ref="installment_time_period"
-            />
-            <Dropdown
-              title="Time Period:"
-              items={[
-                { id: '1', value: 'days' },
-                { id: '7', value: 'weeks' },
-                { id: '14', value: 'two-weeks' },
-                { id: '15', value: '15 days' },
-                { id: '28', value: '4 weeks' },
-                { id: '30', value: 'months' },
-                { id: '90', value: 'quarters' },
-                { id: '180', value: 'half-years' },
-                { id: '365', value: 'years' }
-              ]}
-              ref="interest_time_period"
-            />
-          </Form>
+            <Form inline>
+              <Dropdown
+                title="Time Period:"
+                items={[
+                  { id: '1', value: 'days' },
+                  { id: '7', value: 'weeks' },
+                  { id: '14', value: 'two-weeks' },
+                  { id: '15', value: '15 days' },
+                  { id: '28', value: '4 weeks' },
+                  { id: '30', value: 'months' },
+                  { id: '90', value: 'quarters' },
+                  { id: '180', value: 'half-years' },
+                  { id: '365', value: 'years' }
+                ]}
+                ref="installment_time_period"
+              />
+              <Dropdown
+                title="Time Period:"
+                items={[
+                  { id: '1', value: 'days' },
+                  { id: '7', value: 'weeks' },
+                  { id: '14', value: 'two-weeks' },
+                  { id: '15', value: '15 days' },
+                  { id: '28', value: '4 weeks' },
+                  { id: '30', value: 'months' },
+                  { id: '90', value: 'quarters' },
+                  { id: '180', value: 'half-years' },
+                  { id: '365', value: 'years' }
+                ]}
+                ref="interest_time_period"
+              />
+            </Form>
 
-          <h2>
-            <small> Grace or Prepay </small>
-          </h2>
-          <Form inline>
-            <TextField
-              id="Capital"
-              hint="ex. x"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_principal"
-            />
-            <TextField
-              id="Int Pmt"
-              hint="ex. x"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_interest_pay"
-            />
-            <TextField
-              id="Int Calc"
-              hint="ex. x"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_interest_calculate"
-            />
-            <TextField
-              id="Balloon"
-              hint="ex. x"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_balloon"
-            />
-          </Form>
+            <h2>
+              <small> Grace or Prepay </small>
+            </h2>
+            <Form inline>
+              <TextField
+                id="Capital"
+                hint="ex. 1"
+                typeVal="float"
+                limit="180"
+                ref="grace_period_principal"
+              />
+              <TextField
+                id="Int Pmt"
+                hint="ex. 1"
+                typeVal="float"
+                limit="180"
+                ref="grace_period_interest_pay"
+              />
+              <TextField
+                id="Int Calc"
+                hint="ex. 1"
+                typeVal="float"
+                limit="180"
+                ref="grace_period_interest_calculate"
+              />
+              <TextField
+                id="Balloon"
+                hint="ex. 1"
+                typeVal="float"
+                limit="180"
+                ref="grace_period_balloon"
+              />
+            </Form>
 
-          <PageHeader>Fees and Taxes</PageHeader>
+            <PageHeader>Fees and Taxes</PageHeader>
 
-          <h2>
-            <small> Fees </small>
-          </h2>
+            <h2>
+              <small> Fees </small>
+            </h2>
 
-          <Form inline>
-            <TextField
-              id="Fee%"
-              hint="Upfront"
-              typeVal="float"
-              limit="180"
-              ref="fee_percent_upfront"
-            />
-            <TextField
-              id="Fee%"
-              hint="Ongoing"
-              typeVal="float"
-              limit="180"
-              ref="fee_percent_ongoing"
-            />
-            <TextField
-              id="Fee (fixed amt)"
-              hint="Upfront"
-              typeVal="float"
-              limit="100000000"
-              ref="fee_fixed_upfront"
-            />
-            <TextField
-              id="Fee (fixed amt)"
-              hint="Ongoing"
-              typeVal="float"
-              limit="100000000"
-              ref="fee_fixed_ongoing"
-            />
-          </Form>
+            <Form inline>
+              <TextField
+                id="Fee%"
+                hint="Upfront"
+                typeVal="float"
+                limit="180"
+                ref="fee_percent_upfront"
+              />
+              <TextField
+                id="Fee%"
+                hint="Ongoing"
+                typeVal="float"
+                limit="180"
+                ref="fee_percent_ongoing"
+              />
+              <TextField
+                id="Fee (fixed amt)"
+                hint="Upfront"
+                typeVal="float"
+                limit="100000000"
+                ref="fee_fixed_upfront"
+              />
+              <TextField
+                id="Fee (fixed amt)"
+                hint="Ongoing"
+                typeVal="float"
+                limit="100000000"
+                ref="fee_fixed_ongoing"
+              />
+            </Form>
 
-          <h2>
-            <small> Taxes </small>
-          </h2>
+            <h2>
+              <small> Taxes </small>
+            </h2>
 
-          <Form inline>
-            <TextField
-              id="Value Added Tax % on Fees"
-              typeVal="float"
-              limit="100"
-              ref="tax_percent_fees"
-            />
-            <TextField
-              id="Value Added Tax % on Interest"
-              typeVal="float"
-              limit="100"
-              ref="tax_percent_interest"
-            />
-          </Form>
+            <Form inline>
+              <TextField
+                id="Value Added Tax % on Fees"
+                typeVal="float"
+                limit="100"
+                ref="tax_percent_fees"
+              />
+              <TextField
+                id="Value Added Tax % on Interest"
+                typeVal="float"
+                limit="100"
+                ref="tax_percent_interest"
+              />
+            </Form>
 
-          <PageHeader>Insurance</PageHeader>
+            <PageHeader>Insurance</PageHeader>
 
-          <Form inline>
-            <TextField
-              id="Insurance %"
-              hint="Upfront"
-              typeVal="float"
-              limit="100"
-              ref="insurance_percent_upfront"
-            />
-            <TextField
-              id="Insurance %"
-              hint="Ongoing"
-              typeVal="float"
-              limit="100"
-              ref="insurance_percent_ongoing"
-            />
-            <TextField
-              id="Insurance (fixed amt)"
-              hint="Upfront"
-              typeVal="float"
-              limit="900000000"
-              ref="insurance_fixed_upfront"
-            />
-            <TextField
-              id="Insurance (fixed amt)"
-              hint="Ongoing"
-              typeVal="float"
-              limit="900000000"
-              ref="insurance_fixed_ongoing"
-            />
-          </Form>
+            <Form inline>
+              <TextField
+                id="Insurance %"
+                hint="Upfront"
+                typeVal="float"
+                limit="100"
+                ref="insurance_percent_upfront"
+              />
+              <TextField
+                id="Insurance %"
+                hint="Ongoing"
+                typeVal="float"
+                limit="100"
+                ref="insurance_percent_ongoing"
+              />
+              <TextField
+                id="Insurance (fixed amt)"
+                hint="Upfront"
+                typeVal="float"
+                limit="900000000"
+                ref="insurance_fixed_upfront"
+              />
+              <TextField
+                id="Insurance (fixed amt)"
+                hint="Ongoing"
+                typeVal="float"
+                limit="900000000"
+                ref="insurance_fixed_ongoing"
+              />
+            </Form>
 
-          <PageHeader>Security Deposit</PageHeader>
+            <PageHeader>Security Deposit</PageHeader>
 
-          <Form inline>
-            <TextField
-              id="Security Deposit %"
-              hint="Upfront"
-              typeVal="float"
-              limit="100"
-              ref="security_deposit_percent_upfront"
-            />
-            <TextField
-              id="Security Deposit %"
-              hint="Ongoing"
-              typeVal="float"
-              limit="100"
-              ref="security_deposit_percent_ongoing"
-            />
-            <TextField
-              id="Security Deposit (fixed amt)"
-              hint="Upfront"
-              typeVal="float"
-              limit="900000000"
-              ref="security_deposit_fixed_upfront"
-            />
-            <TextField
-              id="Security Deposit (fixed amt)"
-              hint="Ongoing"
-              typeVal="float"
-              limit="900000000"
-              ref="security_deposit_fixed_ongoing"
-            />
-            <TextField
-              id="Interest Paid on Deposit"
-              typeVal="float"
-              limit="900000000"
-              ref="interest_paid_on_deposit_percent"
-            />
-          </Form>
+            <Form inline>
+              <TextField
+                id="Security Deposit %"
+                hint="Upfront"
+                typeVal="float"
+                limit="100"
+                ref="security_deposit_percent_upfront"
+              />
+              <TextField
+                id="Security Deposit %"
+                hint="Ongoing"
+                typeVal="float"
+                limit="100"
+                ref="security_deposit_percent_ongoing"
+              />
+              <TextField
+                id="Security Deposit (fixed amt)"
+                hint="Upfront"
+                typeVal="float"
+                limit="900000000"
+                ref="security_deposit_fixed_upfront"
+              />
+              <TextField
+                id="Security Deposit (fixed amt)"
+                hint="Ongoing"
+                typeVal="float"
+                limit="900000000"
+                ref="security_deposit_fixed_ongoing"
+              />
+              <TextField
+                id="Interest Paid on Deposit"
+                typeVal="float"
+                limit="900000000"
+                ref="interest_paid_on_deposit_percent"
+              />
+            </Form>
 
-          <Button name="Back" url="" onClickHandler={() => {}} />
-          <Button
-            name="Next"
-            url="output"
-            onClickHandler={e => {
-              this.postData()
-            }}
-          />
-        </Grid>
-      </Jumbotron>
-    )
+            <Button name="Back" url="" onClickHandler={() => {}} />
+            <button
+              onClick={e => {
+                this.postData()
+              }}
+            >
+              Next
+            </button>
+            {/* <Button
+              name="Next"
+              url="output"
+              aprRate ={ e => {
+                this.getAPRRate()
+              }}
+              onClickHandler={e => {
+                this.postData()
+              }}
+            /> */}
+          </Grid>
+        </Jumbotron>
+      )
+    } else {
+      return (
+        <Jumbotron className="banner">
+          <Grid>
+            <PageHeader> APR Rate: {this.state.aprRate}%</PageHeader>
+            <Button
+              name="Back"
+              url="form1"
+              onClickHandler={e => {
+                this.changeContent()
+              }}
+            />
+            <Button
+              name="Save Loan"
+              onClickHandler={() => {
+                alert('Are you sure you want to save loan?')
+              }}
+            />
+          </Grid>
+        </Jumbotron>
+      )
+    }
   }
 }
 

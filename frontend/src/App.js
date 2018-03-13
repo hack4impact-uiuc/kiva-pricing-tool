@@ -537,16 +537,6 @@ class App extends Component {
     ]
     return (
       <div>
-        <Navbar inverse fixedTop>
-          <Grid>
-            <Navbar.Header>
-              <Navbar.Brand>
-                <a href="/">Hi</a>
-              </Navbar.Brand>
-              <Navbar.Toggle />
-            </Navbar.Header>
-          </Grid>
-        </Navbar>
         <Jumbotron className="banner">
           <Grid>
             <h1>Kiva TextField</h1>
@@ -562,8 +552,9 @@ class App extends Component {
                 hint="Select Loan Type"
               />
               <TextField
+                id="Loan Product"
                 text="fname"
-                hint="Loan Product"
+                hint="i.e: small loan"
                 typeVal="String"
                 limit={100}
               />
