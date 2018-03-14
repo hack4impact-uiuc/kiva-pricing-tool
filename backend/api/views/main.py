@@ -1,5 +1,5 @@
 from api import app, db
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
 from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper
@@ -24,6 +24,7 @@ CALCULATE_URL = '/calculateAPR'
 GET_VERSION_NUM = '/getVersionNum'
 GET_LISTS = '/partnerThemeLists'
 SAVE_LOAN_URL = '/saveNewLoan'
+GET_CSV = '/getCSV'
 @app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
     """
@@ -50,7 +51,7 @@ def get_version_num():
         partner_name = args['partner_name']
         product = args['product']
         loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product).all()
-        num = 1 + len(loans)    
+        num = 1 + len(loans)
         return create_response({'version':num}, status=200)
     except:
         return create_response({}, status=400, message='missing arguments for GET')
@@ -59,7 +60,7 @@ def get_version_num():
 @app.route(GET_LISTS)
 def get_partner_theme_list():
     """
-        grabbing MFI Partner and Loan Theme 
+        grabbing MFI Partner and Loan Theme
     """
     themes = Theme.query.all()
     partners = Partner.query.all()
@@ -118,4 +119,28 @@ def save_loan():
     except:
         return create_response(status=422, message='Loan with this version already exists')
 
-
+@app.route(GET_CSV)
+def get_csv():
+    """
+        Get's data for a loan in csv format.
+    """
+    args = request.args
+    try:
+        theme = args['theme']
+        partner_name = args['partner_name']
+        product = args['product']
+        version_num = int(args['version_num'])
+    except:
+        return create_response({}, status=400, message='missing arguments for GET')
+    try:
+        loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product, version_num = version_num).all()
+        loan = loans[0]
+        attrs = [i for i in dir(loan) if not i.startswith('_')]
+    except:
+        return create_response({}, status=422, message='non-existent loan')
+    csv = ','.join(attrs) + '\n' + ','.join([str(getattr(loan, i)) for i in attrs])
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                     "attachment; filename=loan.csv"})
