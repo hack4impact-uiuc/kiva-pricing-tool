@@ -143,6 +143,14 @@ class Loan(db.Model):
     def __repr__(self):
         return '<loan {}>'.format(self.id)
 
+    def __dir__(self):
+        return ['partner_name','loan_theme','product_type','version_num','start_name','update_name','nominal_apr','installment_time_period', 'start_date', 'update_date'
+                ,'repayment_type','interest_time_period','interest_payment','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
+                ,'grace_period_interest_pay','grace_period_interest_calculate','grace_period_balloon','fee_percent_upfront','fee_percent_ongoing','fee_fixed_upfront'
+                ,'fee_fixed_ongoing','insurance_percent_upfront','insurance_percent_ongoing','insurance_fixed_upfront','insurance_fixed_ongoing','tax_percent_fees'
+                ,'tax_percent_interest','security_deposit_percent_upfront','security_deposit_percent_ongoing','security_deposit_fixed_upfront','security_deposit_fixed_ongoing'
+                ,'interest_paid_on_deposit_percent']
+
 class RepaymentSchedule(db.Model):
     """RepaymentSchedule"""
     __tablename__ = "repayment_schedule"
