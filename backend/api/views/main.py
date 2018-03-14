@@ -24,7 +24,7 @@ CALCULATE_URL = '/calculateAPR'
 GET_VERSION_NUM = '/getVersionNum'
 GET_LISTS = '/partnerThemeLists'
 SAVE_LOAN_URL = '/saveNewLoan'
-GET_URL = '/getUrl'
+GET_CSV = '/getCSV'
 @app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
     """
@@ -119,10 +119,10 @@ def save_loan():
     except:
         return create_response(status=422, message='Loan with this version already exists')
 
-@app.route(GET_URL)
+@app.route(GET_CSV)
 def get_csv():
     """
-        grabbing MFI Partner and Loan Theme
+        Get's data for a loan in csv format.
     """
     args = request.args
     try:
@@ -134,15 +134,11 @@ def get_csv():
         return create_response({}, status=400, message='missing arguments for GET')
     try:
         loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product, version_num = version_num).all()
-        print(loans)
         loan = loans[0]
-        print(loans[0])
         attrs = [i for i in dir(loan) if not i.startswith('_')]
-        print(attrs)
     except:
         return create_response({}, status=422, message='non-existent loan')
     csv = ','.join(attrs) + '\n' + ','.join([str(getattr(loan, i)) for i in attrs])
-    print(loans)
     return Response(
         csv,
         mimetype="text/csv",
