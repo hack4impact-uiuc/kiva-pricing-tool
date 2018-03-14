@@ -84,7 +84,7 @@ def save_loan():
             'installment_time_period' : request_json['installment_time_period'],
             'repayment_type' : request_json['repayment_type'],
             'interest_time_period' : request_json['interest_time_period'],
-            'interest_payment' : request_json['interest_payment'],
+            'interest_payment_type' : request_json['interest_payment_type'],
             'interest_calculation_type' : request_json['interest_calculation_type'],
             'loan_amount' : request_json['loan_amount'],
             'installment' : request_json['installment'],
