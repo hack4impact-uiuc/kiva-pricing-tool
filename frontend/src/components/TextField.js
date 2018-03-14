@@ -18,24 +18,34 @@ class TextField extends Component {
     let value = e.target.value
     if (this.props.typeVal.toLowerCase() == 'int') {
       let tryInt = parseInt(value)
+      let limit = parseInt(this.props.limit)
       if (isNaN(tryInt)) {
         this.setState({ error_message: 'error in input: should be an integer' })
       } else {
-        this.setState({ error_message: '' })
+        if (tryInt > limit) {
+          this.setState({ error_message: 'input limit succeeded' })
+        } else {
+          this.setState({ error_message: '' })
+        }
       }
     }
 
     if (this.props.typeVal.toLowerCase() == 'float') {
       let tryFloat = parseFloat(value)
+      let limit = parseInt(this.props.limit)
       if (isNaN(tryFloat)) {
         this.setState({ error_message: 'error in input: should be a decimal' })
       } else {
-        this.setState({ error_message: '' })
+        if (tryFloat > limit) {
+          this.setState({ error_message: 'input limit succeeded' })
+        } else {
+          this.setState({ error_message: '' })
+        }
       }
     }
 
     if (this.props.typeVal.toLowerCase() == 'string') {
-      let tryString = /^[a-zA-Z]+$/.test(value)
+      let tryString = /^[a-zA-Z]+$/.test(value) // damn look at that thicc ass regex
       if (!tryString) {
         this.setState({
           error_message: 'error in input: should only have letters'
