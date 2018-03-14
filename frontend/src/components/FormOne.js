@@ -392,6 +392,7 @@ class FormOne extends Component<void> {
             />
             <Button
               name="Save Loan"
+              url=""
               onClickHandler={() => {
                 alert('Are you sure you want to save loan?')
               }}

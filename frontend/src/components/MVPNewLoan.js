@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Forms, Dropdowns, Grid, Navbar, Jumbotron } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
-import './styles/app.css'
-import TextField from './components/TextField'
-import NewLoan from './components/NewLoan'
-import Button from './components/Button'
+// import './styles/app.css'
+import TextField from './TextField'
+import NewLoan from './NewLoan'
+import Button from './Button'
 
 class MVPNewLoan extends Component {
   render() {

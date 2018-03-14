@@ -13,26 +13,7 @@ class App extends Component {
         <Jumbotron className="banner">
           <Grid>
             <h1>Kiva TextField</h1>
-            <div class="col-lg-9">
-              <NewLoan
-                label="mfi"
-                list={partner_names}
-                hint="Select MFI Partner"
-              />
-              <NewLoan
-                label="loan"
-                list={loan_themes}
-                hint="Select Loan Type"
-              />
-              <TextField
-                id="Loan Product"
-                text="fname"
-                hint="i.e: small loan"
-                typeVal="String"
-                limit={100}
-              />
-              <Button name="Continue" url="form1" onClickHandler={() => {}} />
-            </div>
+            <Button name="New Loan" url="newloan" onClickHandler={() => {}} />
           </Grid>
         </Jumbotron>
       </div>
