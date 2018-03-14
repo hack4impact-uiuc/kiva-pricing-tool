@@ -9,7 +9,13 @@ import { Route } from 'react-router'
 import { ConnectedRouter } from 'react-router-redux'
 
 import configureStore, { history } from './store/configureStore'
-import { Colors, Navbar, APRRateDisplay, FormOne } from './components'
+import {
+  Colors,
+  Navbar,
+  APRRateDisplay,
+  FormOne,
+  MVPNewLoan
+} from './components'
 import registerServiceWorker from './registerServiceWorker'
 import './styles/index.css'
 const store = configureStore()
@@ -20,7 +26,7 @@ ReactDOM.render(
       <div>
         <Navbar />
         <Route exact path="/" component={App} />
-        <Route path="/colors" component={Colors} />
+        <Route path="/newloan" component={MVPNewLoan} />
         <Route path="/output" component={APRRateDisplay} />
         <Route path="/form1" component={FormOne} />
       </div>
