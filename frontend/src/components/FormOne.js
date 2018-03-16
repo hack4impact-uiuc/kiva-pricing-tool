@@ -18,11 +18,11 @@ class FormOne extends Component<void> {
 
   postData() {
     let data = {
-      partner_name: 'beat rice?',
-      loan_theme: 'yay',
-      product_type: 'good',
-      version_num: '3',
-      update_name: 'nalafang',
+      partner_name: 'PARTNER_NAME',
+      loan_theme: 'LOAN_THEME',
+      product_type: 'PRODUCT_TYPE',
+      version_num: '11',
+      update_name: 'UPDATE_NAME',
 
       start_name: this.refs.firstName.state.textBody,
       installment_time_period: this.refs.installment_time_period.state.value,
