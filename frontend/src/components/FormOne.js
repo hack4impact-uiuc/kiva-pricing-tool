@@ -11,19 +11,13 @@ class FormOne extends Component<void> {
   constructor(props) {
     super(props)
     this.state = {
-      aprRate: '',
-      saveData: {}
+      aprRate: ''
     }
   }
 
   postData() {
+    // console.log(this.refs.firstName.props.id
     let data = {
-      partner_name: 'AnalFang',
-      loan_theme: 'yay',
-      product_type: 'good',
-      version_num: '0',
-      update_name: 'nalafang',
-
       start_name: this.refs.firstName.state.textBody,
       installment_time_period: this.refs.installment_time_period.state.value,
       repayment_type: this.refs.repaymentType.state.value,
@@ -70,29 +64,12 @@ class FormOne extends Component<void> {
         console.log(response)
         const apr = response.data.result.apr
         this.setState({ aprRate: apr })
-        data['nominal_apr'] = apr.toString()
-        this.setState({ saveData: data })
         console.log(response.data.result.apr)
       })
       .catch(function(error) {
         console.log(
           error + ' there was an error with the request' + data.start_name
         )
-      })
-  }
-
-  saveData() {
-    axios
-      .post('http://127.0.0.1:3453/saveNewLoan', this.props.saveData)
-      .then(response => {
-        console.log(response)
-        // const apr = response.data.result.apr
-        // /this.setState({ aprRate: apr,
-        // saveData: data })
-        // console.log(response.data.result.apr)
-      })
-      .catch(function(error) {
-        console.log(error + ' there was an error with the request')
       })
   }
 
@@ -203,18 +180,16 @@ class FormOne extends Component<void> {
               />
               <Dropdown
                 title="Time Period:"
-                //{'day':0, 'week':1, 'two-weeks':2, '15 days':3, '4 weeks':4,
-                //'month':5, 'quarter':6, 'half-year':7, 'year':8}
                 items={[
-                  { id: '0', value: 'day' },
-                  { id: '1', value: 'week' },
-                  { id: '2', value: 'two-weeks' },
-                  { id: '3', value: '15 days' },
-                  { id: '4', value: '4 weeks' },
-                  { id: '5', value: 'month' },
-                  { id: '6', value: 'quarter' },
-                  { id: '7', value: 'half-year' },
-                  { id: '8', value: 'year' }
+                  { id: '1', value: 'days' },
+                  { id: '7', value: 'weeks' },
+                  { id: '14', value: 'two-weeks' },
+                  { id: '15', value: '15 days' },
+                  { id: '28', value: '4 weeks' },
+                  { id: '30', value: 'months' },
+                  { id: '90', value: 'quarters' },
+                  { id: '180', value: 'half-years' },
+                  { id: '365', value: 'years' }
                 ]}
                 ref="interest_time_period"
               />
@@ -420,7 +395,6 @@ class FormOne extends Component<void> {
               url=""
               onClickHandler={() => {
                 alert('Are you sure you want to save loan?')
-                this.saveData()
               }}
             />
           </Grid>

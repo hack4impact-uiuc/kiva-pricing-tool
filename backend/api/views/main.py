@@ -50,7 +50,7 @@ def get_version_num():
         partner_name = args['partner_name']
         product = args['product']
         loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product).all()
-        num = 1 + len(loans)
+        num = 1 + len(loans)    
         return create_response({'version':num}, status=200)
     except:
         return create_response({}, status=400, message='missing arguments for GET')
@@ -59,7 +59,7 @@ def get_version_num():
 @app.route(GET_LISTS)
 def get_partner_theme_list():
     """
-        grabbing MFI Partner and Loan Theme
+        grabbing MFI Partner and Loan Theme 
     """
     themes = Theme.query.all()
     partners = Partner.query.all()
@@ -117,3 +117,5 @@ def save_loan():
         return create_response(status=201)
     except:
         return create_response(status=422, message='Loan with this version already exists')
+
+
