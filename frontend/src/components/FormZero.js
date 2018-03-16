@@ -27,6 +27,10 @@ class FormZero extends Component {
 		this.setState({partner_names: response.data.result.partners})
 		this.setState({loan_themes: response.data.result.themes})
 	});
+	axios.get('https://api.github.com/users/jlp-io')
+		.then(response => {
+		console.log(response.data)
+		});
     }
 	
   render() { 
