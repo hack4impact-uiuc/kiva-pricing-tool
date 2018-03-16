@@ -20,7 +20,7 @@ class APRRateDisplay extends Component<void> {
             {' '}
             APR Rate: {this.props.aprRate} Damn what a thicc rate{' '}
           </PageHeader>
-          <Button name="Back" url="form1" onClickHandler={() => {}} />
+          <Button name="Back" url="" onClickHandler={() => {}} />
           <Button
             name="Save Loan"
             onClickHandler={() => {
