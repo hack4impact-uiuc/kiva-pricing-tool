@@ -3,8 +3,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css'
 import Bootstrap, { Button } from 'react-bootstrap'
 import TextField from './TextField'
 import axios from 'axios'
-// import 'bootstrap-select'
-// import 'jquery'
+
 import { Typeahead } from 'react-bootstrap-typeahead'
 
 class NewLoan extends Component {

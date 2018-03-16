@@ -41,12 +41,14 @@ class FormZero extends Component {
             list={this.state.partner_names}
             hint="Select MFI Partner"
           />
+          <br />
           <LiveSearch
             ref="loan"
             label="loan"
             list={this.state.loan_themes}
             hint="Select Loan Type"
           />
+          <br />
           <TextField
             ref="product"
             id="Loan Product"

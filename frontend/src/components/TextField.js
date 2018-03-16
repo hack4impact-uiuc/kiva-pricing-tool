@@ -45,7 +45,7 @@ class TextField extends Component {
     }
 
     if (this.props.typeVal.toLowerCase() == 'string') {
-      let tryString = /^[a-zA-Z]+$/.test(value) // damn look at that thicc ass regex
+      let tryString = /^[a-zA-Z]+$/.test(value)
       if (!tryString) {
         this.setState({
           error_message: 'error in input: should only have letters'

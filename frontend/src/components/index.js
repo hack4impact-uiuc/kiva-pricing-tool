@@ -1,29 +1,30 @@
 // @flow
-import App from '../App'
+
 import Navbar from './Navbar.component'
 import Bootstrap from 'react-bootstrap'
 
 import Colors from './Colors.container'
-import StuffList from './StuffList.container'
+import IntroPage from './IntroPage.js'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'
 import TextField from './TextField.js'
 import FormOne from './FormOne.js'
-import MVPNewLoan from './MVPNewLoan.js'
+import FormZero from './FormZero.js'
+import LiveSearch from './LiveSearch.js'
 import APRRateDisplay from './APRRateDisplay.js'
 import { BrowserRouter } from 'react-router-dom'
 
 export {
-  App,
   Colors,
   Navbar,
-  StuffList,
   Button,
   LargeTextInput,
   Dropdown,
   TextField,
   FormOne,
+  FormZero,
+  LiveSearch,
   APRRateDisplay,
-  MVPNewLoan
+  IntroPage
 }
