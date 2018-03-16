@@ -12,13 +12,6 @@ mod = Blueprint('main', __name__)
 def index():
     return '<h1>Hello World!</h1>'
 
-# function that is called when you visit /persons
-# @app.route('/persons')
-# def name():
-#     try:
-#         create_response(data=Person.query.all())
-#     except Exception as ex:
-#         return create_response(data={}, status=400, message=str(ex
 
 CALCULATE_URL = '/calculateAPR'
 GET_VERSION_NUM = '/getVersionNum'
@@ -120,6 +113,7 @@ def save_loan():
         return create_response(status=201)
     except Exception as ex:
         return create_response(status=423, message=str(ex))
+
 
 @app.route(GET_CSV)
 def get_csv():
