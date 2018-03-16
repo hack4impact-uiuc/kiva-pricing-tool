@@ -183,7 +183,7 @@ result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 # result[9:] += 0.01
 
 print (result)
-print (np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]])
+print ('{0}%'.format(round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]]*100, 2)))
 print ('------------')
 print (monthly_payment)
 print ('\nprincipal\n')

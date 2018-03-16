@@ -189,7 +189,7 @@ def cal_apr_helper(input_json):
 
         result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
-        return np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]]
+        return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2)
     except:
         #TODO status code not sure 
         return None
