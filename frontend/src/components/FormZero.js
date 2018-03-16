@@ -12,20 +12,35 @@ class FormZero extends Component {
 	super(props)
     this.state = {
 		partner_names: [],
-		loan_themes: []
+		loan_themes: [],
+		selectedPartnerName: '',
+		selectedLoanTheme: '',
+		selectedLoanProduct: '',
+		disableButton: '',
+		errorMessage: ''
     }
 	}
+	
 	componentDidMount() {
 		axios.get('http://127.0.0.1:3453/partnerThemeLists')
 			.then(response => {
 				this.setState({partner_names: response.data.result.partners})
 				this.setState({loan_themes: response.data.result.themes})
-				console.log(this.state.partner_names)
-				console.log(this.state.loan_themes)
 		});
 	}
 	
-  render() {
+  render() { 
+	 this.setState({selectedPartnerName: this.refs.mfi.state.value});
+	 console.log(this.state.selectedParterName);
+	 this.setState({selectedLoanTheme: this.refs.loan.state.value});
+ 	 console.log(this.state.selectedLoanTheme);
+ 	 this.setState({selectedLoanProduct: this.refs.product.state.value});
+	 console.log(this.state.selectedLoanProduct);
+	 if (this.state.selectedPartnerName == '' || this.state.selectedLoanTheme == '' || this.state.selectedLoanProduct == '') {
+		 this.setState({disableButton: "false"});
+	 }else{
+		 this.setState({disableButton: ""});
+	 }
    return (
       <div>
         <Navbar inverse fixedTop>
@@ -44,14 +59,16 @@ class FormZero extends Component {
 		<div class = "col-lg-11">
 		<br>
 		</br>
-		<NewLoan label = "mfi" list = {this.state.partner_names} hint = "Select MFI Partner"  />
+		<NewLoan ref = "mfi" label = "mfi" list = {this.state.partner_names} hint = "Select MFI Partner"  />
 		<br>
 		</br>
-		<NewLoan label = "loan" list = {this.state.loan_themes} hint = "Select Loan Type" />
-        <TextField text = "fname" hint="Loan Product" typeVal="String" limit={100} />
+		<NewLoan ref = "loan" label = "loan" list = {this.state.loan_themes} hint = "Select Loan Type" />
+       	<TextField ref = "product" text = "product" hint="Loan Product" typeVal="String" limit={100} />
 		<br>
 		</br>
-		<Button name = "Continue" url = "form1" onClick={this.handleClick} />
+		<Button disable = {this.state.disableButton} name = "Continue" url = "form1" onClick={this.handleClick} formProps={this.state.selectedPartnerName, this.state.selectedLoanTheme,
+			this.state.selectedLoanProduct}
+		/>		
 		</div>
 		</form>
           </Grid>
