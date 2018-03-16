@@ -8,28 +8,30 @@ import Button from './Button'
 import axios from 'axios'
 
 class FormZero extends Component {
-	constructor(props) {
-	super(props)
+    constructor(props) {
+    super(props)
     this.state = {
-		partner_names: [],
-		loan_themes: [],
-		selectedPartnerName: '',
-		selectedLoanTheme: '',
-		selectedLoanProduct: '',
-		disableButton: '',
-		errorMessage: ''
+	partner_names: [],
+	loan_themes: [],
+	selectedPartnerName: '',
+	selectedLoanTheme: '',
+	selectedLoanProduct: '',
+	disableButton: '',
+	errorMessage: ''
     }
-	}
+    }
 	
-	componentDidMount() {
-		axios.get('http://127.0.0.1:3453/partnerThemeLists')
-			.then(response => {
-				this.setState({partner_names: response.data.result.partners})
-				this.setState({loan_themes: response.data.result.themes})
-		});
-	}
+    componentDidMount() {
+	axios.get('http://127.0.0.1:3453/partnerThemeLists')
+		.then(response => {
+		this.setState({partner_names: response.data.result.partners})
+		this.setState({loan_themes: response.data.result.themes})
+	});
+    }
 	
   render() { 
+	 /*
+	 //attempt to create state values based on child, using refs as an identifier for each component instance
 	 this.setState({selectedPartnerName: this.refs.mfi.state.value});
 	 console.log(this.state.selectedParterName);
 	 this.setState({selectedLoanTheme: this.refs.loan.state.value});
@@ -41,6 +43,7 @@ class FormZero extends Component {
 	 }else{
 		 this.setState({disableButton: ""});
 	 }
+	 */
    return (
       <div>
         <Navbar inverse fixedTop>
