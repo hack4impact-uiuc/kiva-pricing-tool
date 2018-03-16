@@ -64,7 +64,7 @@ class Loan(db.Model):
     installment_time_period = db.Column(db.String, nullable=False)
     repayment_type = db.Column(db.String, nullable=False)
     interest_time_period = db.Column(db.String, nullable=False)
-    interest_payment = db.Column(db.String, nullable=False)
+    interest_payment_type = db.Column(db.String, nullable=False)
     interest_calculation_type = db.Column(db.String, nullable=False)
     loan_amount = db.Column(db.Float, nullable=False)
     installment = db.Column(db.Integer, nullable=False)
@@ -92,7 +92,7 @@ class Loan(db.Model):
 
     def __init__(self, data):
         if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','start_name','update_name','nominal_apr','installment_time_period'
-                                        ,'repayment_type','interest_time_period','interest_payment','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
+                                        ,'repayment_type','interest_time_period','interest_payment_type','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
                                         ,'grace_period_interest_pay','grace_period_interest_calculate','grace_period_balloon','fee_percent_upfront','fee_percent_ongoing','fee_fixed_upfront'
                                         ,'fee_fixed_ongoing','insurance_percent_upfront','insurance_percent_ongoing','insurance_fixed_upfront','insurance_fixed_ongoing','tax_percent_fees'
                                         ,'tax_percent_interest','security_deposit_percent_upfront','security_deposit_percent_ongoing','security_deposit_fixed_upfront','security_deposit_fixed_ongoing'
@@ -112,7 +112,7 @@ class Loan(db.Model):
         self.installment_time_period = data['installment_time_period']
         self.repayment_type = data['repayment_type']
         self.interest_time_period = data['interest_time_period']
-        self.interest_payment = data['interest_payment']
+        self.interest_payment_type = data['interest_payment_type']
         self.interest_calculation_type = data['interest_calculation_type']
         self.loan_amount = data['loan_amount']
         self.installment = data['installment']
