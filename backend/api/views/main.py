@@ -1,5 +1,5 @@
 from api import app, db
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
 from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper
@@ -24,6 +24,7 @@ CALCULATE_URL = '/calculateAPR'
 GET_VERSION_NUM = '/getVersionNum'
 GET_LISTS = '/partnerThemeLists'
 SAVE_LOAN_URL = '/saveNewLoan'
+GET_CSV = '/getCSV'
 @app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
     """
@@ -50,7 +51,7 @@ def get_version_num():
         partner_name = args['partner_name']
         product = args['product']
         loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product).all()
-        num = 1 + len(loans)    
+        num = 1 + len(loans)
         return create_response({'version':num}, status=200)
     except:
         return create_response({}, status=400, message='missing arguments for GET')
@@ -59,7 +60,7 @@ def get_version_num():
 @app.route(GET_LISTS)
 def get_partner_theme_list():
     """
-        grabbing MFI Partner and Loan Theme 
+        grabbing MFI Partner and Loan Theme
     """
     themes = Theme.query.all()
     partners = Partner.query.all()
@@ -77,45 +78,71 @@ def save_loan():
             'partner_name' : request_json['partner_name'],
             'loan_theme' : request_json['loan_theme'],
             'product_type' : request_json['product_type'],
-            'version_num' : request_json['version_num'],
+            'version_num' : int(request_json['version_num']),
             'start_name' : request_json['start_name'],
             'update_name' : request_json['update_name'],
-            'nominal_apr' : request_json['nominal_apr'],
+            'nominal_apr' : float(request_json['nominal_apr']) / 100,
             'installment_time_period' : request_json['installment_time_period'],
             'repayment_type' : request_json['repayment_type'],
             'interest_time_period' : request_json['interest_time_period'],
-            'interest_payment' : request_json['interest_payment'],
+            'interest_payment_type' : request_json['interest_payment_type'],
             'interest_calculation_type' : request_json['interest_calculation_type'],
-            'loan_amount' : request_json['loan_amount'],
-            'installment' : request_json['installment'],
-            'nominal_interest_rate' : request_json['nominal_interest_rate'],
-            'grace_period_principal' : request_json['grace_period_principal'],
-            'grace_period_interest_pay' : request_json['grace_period_interest_pay'],
-            'grace_period_interest_calculate' : request_json['grace_period_interest_calculate'],
-            'grace_period_balloon' : request_json['grace_period_balloon'],
-            'fee_percent_upfront' : request_json['fee_percent_upfront'],
-            'fee_percent_ongoing' : request_json['fee_percent_ongoing'],
-            'fee_fixed_upfront' : request_json['fee_fixed_upfront'],
-            'fee_fixed_ongoing' : request_json['fee_fixed_ongoing'],
-            'insurance_percent_upfront' : request_json['insurance_percent_upfront'],
-            'insurance_percent_ongoing' : request_json['insurance_percent_ongoing'],
-            'insurance_fixed_upfront' : request_json['insurance_fixed_upfront'],
-            'insurance_fixed_ongoing' : request_json['insurance_fixed_ongoing'],
-            'tax_percent_fees' : request_json['tax_percent_fees'],
-            'tax_percent_interest' : request_json['tax_percent_interest'],
-            'security_deposit_percent_upfront' : request_json['security_deposit_percent_upfront'],
-            'security_deposit_percent_ongoing' : request_json['security_deposit_percent_ongoing'],
-            'security_deposit_fixed_upfront' : request_json['security_deposit_fixed_upfront'],
-            'security_deposit_fixed_ongoing' : request_json['security_deposit_fixed_ongoing'],
-            'interest_paid_on_deposit_percent' : request_json['interest_paid_on_deposit_percent']
+            'loan_amount' : float(request_json['loan_amount']),
+            'installment' : int(request_json['installment']),
+            'nominal_interest_rate' : float(request_json['nominal_interest_rate']),
+            'grace_period_principal' : int(request_json['grace_period_principal']),
+            'grace_period_interest_pay' : int(request_json['grace_period_interest_pay']),
+            'grace_period_interest_calculate' : int(request_json['grace_period_interest_calculate']),
+            'grace_period_balloon' : int(request_json['grace_period_balloon']),
+            'fee_percent_upfront' : float(request_json['fee_percent_upfront'])/100,
+            'fee_percent_ongoing' : float(request_json['fee_percent_ongoing'])/100,
+            'fee_fixed_upfront' : float(request_json['fee_fixed_upfront']),
+            'fee_fixed_ongoing' : float(request_json['fee_fixed_ongoing']),
+            'insurance_percent_upfront' : float(request_json['insurance_percent_upfront'])/100,
+            'insurance_percent_ongoing' : float(request_json['insurance_percent_ongoing'])/100,
+            'insurance_fixed_upfront' : float(request_json['insurance_fixed_upfront']),
+            'insurance_fixed_ongoing' : float(request_json['insurance_fixed_ongoing']),
+            'tax_percent_fees' : float(request_json['tax_percent_fees'])/100,
+            'tax_percent_interest' : float(request_json['tax_percent_interest'])/100,
+            'security_deposit_percent_upfront' : float(request_json['security_deposit_percent_upfront'])/100,
+            'security_deposit_percent_ongoing' : float(request_json['security_deposit_percent_ongoing'])/100,
+            'security_deposit_fixed_upfront' : float(request_json['security_deposit_fixed_upfront']),
+            'security_deposit_fixed_ongoing' : float(request_json['security_deposit_fixed_ongoing']),
+            'interest_paid_on_deposit_percent' : float(request_json['interest_paid_on_deposit_percent'])/100
         }
     except:
         return create_response(status=422, message='missing compoonents for save new loan')
     try:
         db.session.add(Loan(newrow))
+        print("hi")
         db.session.commit()
+        print('hi')
         return create_response(status=201)
+    except Exception as ex:
+        return create_response(status=423, message=str(ex))
+
+@app.route(GET_CSV)
+def get_csv():
+    """
+        Get's data for a loan in csv format.
+    """
+    args = request.args
+    try:
+        theme = args['theme']
+        partner_name = args['partner_name']
+        product = args['product']
+        version_num = int(args['version_num'])
     except:
-        return create_response(status=422, message='Loan with this version already exists')
-
-
+        return create_response({}, status=400, message='missing arguments for GET')
+    try:
+        loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product, version_num = version_num).all()
+        loan = loans[0]
+        attrs = [i for i in dir(loan) if not i.startswith('_')]
+    except:
+        return create_response({}, status=422, message='non-existent loan')
+    csv = ','.join(attrs) + '\n' + ','.join([str(getattr(loan, i)) for i in attrs])
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                     "attachment; filename=loan.csv"})
