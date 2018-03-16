@@ -185,7 +185,7 @@ def cal_apr_helper(input_json):
         result[0] = loan_amount
         result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + principal_paid_arr + security_deposit) 
         # TODO change/remove following line
-        result = result[:-grace_period_balloon+1]
+        # result = result[:-grace_period_balloon+1]
 
         result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
