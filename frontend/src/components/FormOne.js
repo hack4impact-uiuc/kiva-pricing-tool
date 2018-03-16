@@ -18,10 +18,10 @@ class FormOne extends Component<void> {
 
   postData() {
     let data = {
-      partner_name: 'AnalFang',
+      partner_name: 'beat rice?',
       loan_theme: 'yay',
       product_type: 'good',
-      version_num: '0',
+      version_num: '3',
       update_name: 'nalafang',
 
       start_name: this.refs.firstName.state.textBody,
@@ -69,9 +69,11 @@ class FormOne extends Component<void> {
       .then(response => {
         console.log(response)
         const apr = response.data.result.apr
-        this.setState({ aprRate: apr })
         data['nominal_apr'] = apr.toString()
-        this.setState({ saveData: data })
+        this.setState({
+          aprRate: apr,
+          saveData: data
+        })
         console.log(response.data.result.apr)
       })
       .catch(function(error) {
@@ -82,17 +84,14 @@ class FormOne extends Component<void> {
   }
 
   saveData() {
+    console.log(this.state.saveData)
     axios
-      .post('http://127.0.0.1:3453/saveNewLoan', this.props.saveData)
+      .post('http://127.0.0.1:3453/saveNewLoan', this.state.saveData)
       .then(response => {
         console.log(response)
-        // const apr = response.data.result.apr
-        // /this.setState({ aprRate: apr,
-        // saveData: data })
-        // console.log(response.data.result.apr)
       })
       .catch(function(error) {
-        console.log(error + ' there was an error with the request')
+        console.log(error.message + ' there was an error with the request')
       })
   }
 
