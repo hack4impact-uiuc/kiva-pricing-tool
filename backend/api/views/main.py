@@ -12,13 +12,6 @@ mod = Blueprint('main', __name__)
 def index():
     return '<h1>Hello World!</h1>'
 
-# function that is called when you visit /persons
-# @app.route('/persons')
-# def name():
-#     try:
-#         create_response(data=Person.query.all())
-#     except Exception as ex:
-#         return create_response(data={}, status=400, message=str(ex
 
 CALCULATE_URL = '/calculateAPR'
 GET_VERSION_NUM = '/getVersionNum'
@@ -81,7 +74,7 @@ def save_loan():
             'version_num' : int(request_json['version_num']),
             'start_name' : request_json['start_name'],
             'update_name' : request_json['update_name'],
-            'nominal_apr' : float(request_json['nominal_apr']),
+            'nominal_apr' : float(request_json['nominal_apr']) / 100,
             'installment_time_period' : request_json['installment_time_period'],
             'repayment_type' : request_json['repayment_type'],
             'interest_time_period' : request_json['interest_time_period'],
@@ -94,30 +87,33 @@ def save_loan():
             'grace_period_interest_pay' : int(request_json['grace_period_interest_pay']),
             'grace_period_interest_calculate' : int(request_json['grace_period_interest_calculate']),
             'grace_period_balloon' : int(request_json['grace_period_balloon']),
-            'fee_percent_upfront' : float(request_json['fee_percent_upfront']),
-            'fee_percent_ongoing' : float(request_json['fee_percent_ongoing']),
+            'fee_percent_upfront' : float(request_json['fee_percent_upfront'])/100,
+            'fee_percent_ongoing' : float(request_json['fee_percent_ongoing'])/100,
             'fee_fixed_upfront' : float(request_json['fee_fixed_upfront']),
             'fee_fixed_ongoing' : float(request_json['fee_fixed_ongoing']),
-            'insurance_percent_upfront' : float(request_json['insurance_percent_upfront']),
-            'insurance_percent_ongoing' : float(request_json['insurance_percent_ongoing']),
+            'insurance_percent_upfront' : float(request_json['insurance_percent_upfront'])/100,
+            'insurance_percent_ongoing' : float(request_json['insurance_percent_ongoing'])/100,
             'insurance_fixed_upfront' : float(request_json['insurance_fixed_upfront']),
             'insurance_fixed_ongoing' : float(request_json['insurance_fixed_ongoing']),
-            'tax_percent_fees' : float(request_json['tax_percent_fees']),
-            'tax_percent_interest' : float(request_json['tax_percent_interest']),
-            'security_deposit_percent_upfront' : float(request_json['security_deposit_percent_upfront']),
-            'security_deposit_percent_ongoing' : float(request_json['security_deposit_percent_ongoing']),
+            'tax_percent_fees' : float(request_json['tax_percent_fees'])/100,
+            'tax_percent_interest' : float(request_json['tax_percent_interest'])/100,
+            'security_deposit_percent_upfront' : float(request_json['security_deposit_percent_upfront'])/100,
+            'security_deposit_percent_ongoing' : float(request_json['security_deposit_percent_ongoing'])/100,
             'security_deposit_fixed_upfront' : float(request_json['security_deposit_fixed_upfront']),
             'security_deposit_fixed_ongoing' : float(request_json['security_deposit_fixed_ongoing']),
-            'interest_paid_on_deposit_percent' : float(request_json['interest_paid_on_deposit_percent'])
+            'interest_paid_on_deposit_percent' : float(request_json['interest_paid_on_deposit_percent'])/100
         }
     except:
         return create_response(status=422, message='missing compoonents for save new loan')
     try:
         db.session.add(Loan(newrow))
+        print("hi")
         db.session.commit()
+        print('hi')
         return create_response(status=201)
-    except:
-        return create_response(status=422, message='Loan with this version already exists')
+    except Exception as ex:
+        return create_response(status=423, message=str(ex))
+
 
 @app.route(GET_CSV)
 def get_csv():
