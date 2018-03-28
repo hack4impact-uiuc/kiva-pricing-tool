@@ -9,16 +9,22 @@ class Partner(db.Model):
     """Partner"""
     __tablename__ = "partner"
 
-    partner_name = db.Column(db.String, unique=True, primary_key=True)
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    partner_name = db.Column(db.String, unique=True)
     last_modified = db.Column(db.Date, nullable=False)
-
-
+    active = db.Column(db.Boolean)
 
     def __init__(self, data):
         if not all(x in data for x in ['partner_name']):
             return #handle error
         self.partner_name = data['partner_name']
         self.last_modified = datetime.datetime.now()
+        self.active = True
+        partners = Partner.query.all()
+        if partners:
+            self.id = max(partners, key=lambda x: x.id).id + 1
+        else:
+            self.id = 1
 
     def update(self):
         self.last_modified = datetime.datetime.now()
@@ -30,8 +36,10 @@ class Theme(db.Model):
     """Theme"""
     __tablename__ = "theme"
 
+    id = db.Column(db.Integer, unique=True, primary_key=True)
     loan_theme = db.Column(db.String, unique=True, primary_key=True)
     last_modified = db.Column(db.Date, nullable=False)
+    active = db.Column(db.Boolean)
 
 
     def __init__(self, data):
@@ -39,6 +47,12 @@ class Theme(db.Model):
             return #handle error
         self.loan_theme = data['loan_theme']
         self.last_modified = datetime.datetime.now()
+        self.active = True
+        themes = Theme.query.all()
+        if themes:
+            self.id = max(themes, key=lambda x: x.id).id + 1
+        else:
+            self.id = 1
 
     def update(self):
         self.last_modified = datetime.datetime.now()
@@ -50,9 +64,9 @@ class Loan(db.Model):
     """Loan"""
     __tablename__ = "loan"
 
-    id = db.Column(db.String, unique=True, primary_key=True) #MFI-Partner_Loan-theme_Product-type_Version-num
-    partner_name = db.Column(db.String, nullable=False)
-    loan_theme = db.Column(db.String, nullable=False)
+    id = db.Column(db.String, unique=True, primary_key=True) #MFI-Partner-ID_Loan-theme-ID_Product-type_Version-num
+    partner_id = db.Column(db.Integer, nullable=False)
+    theme_id = db.Column(db.Integer, nullable=False)
     product_type = db.Column(db.String, nullable=False)
     version_num = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.Date, nullable=False)
@@ -99,9 +113,9 @@ class Loan(db.Model):
                                         ,'interest_paid_on_deposit_percent']):
             return #handle error
 
-        self.id = data['partner_name'] + "_" + data['loan_theme'] + "_" + data['product_type'] + "_" + str(data['version_num'])
-        self.partner_name = data['partner_name']
-        self.loan_theme = data['loan_theme']
+        self.partner_id = Partner.query.filter_by(partner_name = data['partner_name'])[0].id
+        self.theme_id = Theme.query.filter_by(loan_theme = data['loan_theme'])[0].id
+        self.id = str(self.partner_id) + "_" + str(self.theme_id) + "_" + data['product_type'] + "_" + str(data['version_num'])
         self.product_type = data['product_type']
         self.version_num = data['version_num']
         self.start_date = datetime.datetime.now()
@@ -156,6 +170,8 @@ class RepaymentSchedule(db.Model):
     __tablename__ = "repayment_schedule"
 
     id = db.Column(db.String,db.ForeignKey('loan.id', ondelete='SET NULL'), unique=True, primary_key=True) #MFI_Partner + Loan_theme + Product_type + Version_num
+    period_num = db.Column(db.Integer, nullable = False)
+
     payment_due_date = db.Column(db.Date, nullable=False)
     days = db.Column(db.Integer, nullable=False)
     amount_due = db.Column(db.Float, nullable=False)
@@ -166,12 +182,24 @@ class RepaymentSchedule(db.Model):
     taxes = db.Column(db.Float, nullable=False)
     security_deposit = db.Column(db.Float, nullable=False)
 
+    payment_due_date_updated = db.Column(db.Date, nullable=False)
+    days_updated = db.Column(db.Integer, nullable=False)
+    amount_due_updated = db.Column(db.Float, nullable=False)
+    principal_payment_updated = db.Column(db.Float, nullable=False)
+    interest_updated = db.Column(db.Float, nullable=False)
+    fees_updated = db.Column(db.Float, nullable=False)
+    insurance_updated = db.Column(db.Float, nullable=False)
+    taxes_updated = db.Column(db.Float, nullable=False)
+    security_deposit_updated = db.Column(db.Float, nullable=False)
+
 
     def __init__(self, email):
         if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','payment_due_date','days','amount_due','principal_payment','interest',
-                                        'fees','insurance','taxes','security_deposit']):
+                                        'fees','insurance','taxes','security_deposit','period_num']):
             return #handle error
         self.id = data['id']
+        self.period_num = data['period_num']
+        
         self.payment_due_date = data['payment_due_date']
         self.days = data['days']
         self.amount_due = data['amount_due']
@@ -181,6 +209,16 @@ class RepaymentSchedule(db.Model):
         self.insurance = data['insurance']
         self.taxes = data['taxes']
         self.security_deposit = data['security_deposit']
+
+        self.payment_due_date_updated = data['payment_due_date']
+        self.days_updated = data['days']
+        self.amount_due_updated = data['amount_due']
+        self.principal_payment_updated = data['principal_payment']
+        self.interest_updated = data['interest']
+        self.fees_updated = data['fees']
+        self.insurance_updated = data['insurance']
+        self.taxes_updated = data['taxes']
+        self.security_deposit_updated = data['security_deposit']
 
     def __repr__(self):
         return '<repayment {}>'.format(self.id)

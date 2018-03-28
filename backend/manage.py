@@ -536,8 +536,8 @@ partner_names = [
     "COCAFCAL"]
 loans = [
     {
-        "partner_name": "ABC",
-        "loan_theme": "DEF",
+        "partner_name": "Milaap",
+        "loan_theme": "Underserved",
         "product_type": "GHI",
         "version_num": 1,
         "start_name": "",
@@ -571,8 +571,8 @@ loans = [
         "security_deposit_fixed_ongoing": 1.23,
         "interest_paid_on_deposit_percent": 1.23},
     {
-        "partner_name": "ABD",
-        "loan_theme": "DEF",
+        "partner_name": "NESsT",
+        "loan_theme": "Underserved",
         "product_type": "GHI",
         "version_num": 1,
         "start_name": "",
@@ -606,8 +606,8 @@ loans = [
         "security_deposit_fixed_ongoing": 1.23,
         "interest_paid_on_deposit_percent": 1.23},
     {
-        "partner_name": "ABC",
-        "loan_theme": "DEF",
+        "partner_name": "Milaap",
+        "loan_theme": "Underserved",
         "product_type": "GHI",
         "version_num": 2,
         "start_name": "",
