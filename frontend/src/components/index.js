@@ -13,6 +13,7 @@ import FormOne from './FormOne.js'
 import FormZero from './FormZero.js'
 import LiveSearch from './LiveSearch.js'
 import APRRateDisplay from './APRRateDisplay.js'
+import FindLoan from './FindLoan.js'
 import { BrowserRouter } from 'react-router-dom'
 
 export {
@@ -26,5 +27,6 @@ export {
   FormZero,
   LiveSearch,
   APRRateDisplay,
-  IntroPage
+  IntroPage,
+  FindLoan
 }

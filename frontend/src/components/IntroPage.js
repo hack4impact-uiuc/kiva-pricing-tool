@@ -13,6 +13,14 @@ class IntroPage extends Component {
             console.log('going to new loan')
           }}
         />
+
+        <Button
+          name="Find Loan"
+          url="findloan"
+          onClickHandler={() => {
+            console.log('going to find loan')
+          }}
+        />
       </Grid>
     )
   }
