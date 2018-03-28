@@ -21,7 +21,7 @@ class FormOne extends Component<void> {
       partner_name: 'African Leadership Academy',
       loan_theme: 'Agriculture (Women)',
       product_type: 'Small Loan',
-      version_num: '3',
+      version_num: '7',
       update_name: 'David Chang',
 
       start_name: this.refs.firstName.state.textBody,
