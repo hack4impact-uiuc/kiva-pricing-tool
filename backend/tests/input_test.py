@@ -42,27 +42,28 @@ print (round_float(1.4, 2))
 installment = 12
 loan_amount = 1000
 nominal_interest_rate = 0.02
-fee_percent_ongoing = 0
-fee_percent_upfront = 0
+fee_percent_ongoing = 0.1
+fee_percent_upfront = 0.1
 fee_fixed_upfront = 0
 fee_fixed_ongoing = 0
-insurance_percent_upfront = 0
-insurance_percent_ongoing = 0
+insurance_percent_upfront = 0.1
+insurance_percent_ongoing = 0.1
 insurance_fixed_upfront = 0
 insurance_fixed_ongoing = 0
-tax_percent_interest = 0
-tax_percent_fees = 0
+tax_percent_interest = 0.1
+tax_percent_fees = 0.1
 grace_period_principal = 0
 grace_period_interest_pay = 0 
 grace_period_interest_calculate = 0
-grace_period_balloon = 4
+grace_period_balloon = 0
 security_deposit_percent_ongoing = 0.1
 security_deposit_percent_upfront = 0.1
 security_deposit_fixed_upfront = 0
 security_deposit_fixed_ongoing = 0
-interest_paid_on_deposit_percent = 0
+interest_paid_on_deposit_percent = 0.1
 interest_calculation_type = 'declining balance'
-repayment_type = 'equal installments (amortized)'
+repayment_type = 'equal principal payments'
+interest_payment_type = 'single end-term payment'
 periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
 
 installment_time_period = '4 weeks'
@@ -136,6 +137,12 @@ for idx in range(len(balance_arr)-grace_period_balloon, len(balance_arr)):
     interest_paid_arr[idx] = 0
 balance_arr[len(balance_arr) - grace_period_balloon-1] = 0
 
+# for interst payment type
+if interest_payment_type == 'single end-term payment':
+    interest_paid_arr[-1] = sum(interest_paid_arr)
+    for idx in range(len(interest_paid_arr)-1):
+        interest_paid_arr[idx] = 0
+
 
 fees_paid= np.zeros(installment + 1)
 fees_paid[0] = fee_percent_upfront * balance_arr[0] + fee_fixed_upfront
@@ -178,10 +185,17 @@ result = np.zeros(installment + 1)
 result[0] = loan_amount
 result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + principal_paid_arr + security_deposit) 
 # result = result[:-grace_period_balloon]
+
+#### below is experimental
+if grace_period_balloon != 0:
+    result = result[:-grace_period_balloon]
+#### above is experimental
 result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
 # result[9:] += 0.01
 
+print (np.irr(result))
+print (periods_per_year[installments_period_dict[installment_time_period]])
 print (result)
 print ('{0}%'.format(round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]]*100, 2)))
 print ('------------')
