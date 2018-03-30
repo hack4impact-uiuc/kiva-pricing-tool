@@ -144,6 +144,12 @@ def cal_apr_helper(input_json):
             interest_paid_arr[idx] = 0
         balance_arr[len(balance_arr) - grace_period_balloon-1] = 0
 
+        # for interst payment type
+        if interest_payment_type == 'single end-term payment':
+            interest_paid_arr[-1] = sum(interest_paid_arr)
+            for idx in range(len(interest_paid_arr)-1):
+                interest_paid_arr[idx] = 0
+
 
         fees_paid= np.zeros(installment + 1)
         fees_paid[0] = fee_percent_upfront * balance_arr[0] + fee_fixed_upfront
@@ -187,6 +193,10 @@ def cal_apr_helper(input_json):
         # TODO change/remove following line
         # result = result[:-grace_period_balloon+1]
 
+        #### below is experimental
+        if grace_period_balloon != 0:
+            result = result[:-grace_period_balloon]
+        #### above is experimental
         result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
         return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2)
