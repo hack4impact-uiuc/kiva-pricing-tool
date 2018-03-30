@@ -113,8 +113,8 @@ class Loan(db.Model):
                                         ,'interest_paid_on_deposit_percent']):
             return #handle error
 
-        self.partner_id = Partner.query.filter_by(partner_name = data['partner_name'])[0].id
-        self.theme_id = Theme.query.filter_by(loan_theme = data['loan_theme'])[0].id
+        self.partner_id = Partner.query.filter_by(partner_name = data['partner_name']).first().id
+        self.theme_id = Theme.query.filter_by(loan_theme = data['loan_theme']).first().id
         self.id = str(self.partner_id) + "_" + str(self.theme_id) + "_" + data['product_type'] + "_" + str(data['version_num'])
         self.product_type = data['product_type']
         self.version_num = data['version_num']
@@ -158,8 +158,8 @@ class Loan(db.Model):
         return '<loan {}>'.format(self.id)
 
     def __dir__(self):
-        return ['partner_name','loan_theme','product_type','version_num','start_name','update_name','nominal_apr','installment_time_period', 'start_date', 'update_date'
-                ,'repayment_type','interest_time_period','interest_payment','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
+        return ['partner_id','theme_id','product_type','version_num','start_name','update_name','nominal_apr','installment_time_period', 'start_date', 'update_date'
+                ,'repayment_type','interest_time_period','interest_payment_type','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
                 ,'grace_period_interest_pay','grace_period_interest_calculate','grace_period_balloon','fee_percent_upfront','fee_percent_ongoing','fee_fixed_upfront'
                 ,'fee_fixed_ongoing','insurance_percent_upfront','insurance_percent_ongoing','insurance_fixed_upfront','insurance_fixed_ongoing','tax_percent_fees'
                 ,'tax_percent_interest','security_deposit_percent_upfront','security_deposit_percent_ongoing','security_deposit_fixed_upfront','security_deposit_fixed_ongoing'
@@ -199,7 +199,7 @@ class RepaymentSchedule(db.Model):
             return #handle error
         self.id = data['id']
         self.period_num = data['period_num']
-        
+
         self.payment_due_date = data['payment_due_date']
         self.days = data['days']
         self.amount_due = data['amount_due']

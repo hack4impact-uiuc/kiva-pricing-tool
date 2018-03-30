@@ -18,6 +18,18 @@ GET_VERSION_NUM = '/getVersionNum'
 GET_LISTS = '/partnerThemeLists'
 SAVE_LOAN_URL = '/saveNewLoan'
 GET_CSV = '/getCSV'
+
+GET_ALL_MFI = "/getAllMFI"
+EDIT_MFI = "/editMFI/<partner_name>"
+ADD_MFI = "/addMFI"
+REMOVE_MFI = "/removeMFI/<partner_name>"
+
+GET_ALL_LT = "/getAllLT"
+EDIT_LT = "/editLT/<loan_theme>"
+ADD_LT = "/addLT"
+REMOVE_LT = "/removeLT/<loan_theme>"
+
+
 @app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
     """
@@ -43,11 +55,15 @@ def get_version_num():
         theme = args['theme']
         partner_name = args['partner_name']
         product = args['product']
-        loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product).all()
-        num = 1 + len(loans)
-        return create_response({'version':num}, status=200)
     except:
         return create_response({}, status=400, message='missing arguments for GET')
+    p = Partner.query.filter_by(partner_name=partner_name).first()
+    t = Theme.query.filter_by(loan_theme=theme).first()
+    if p is None or t is None or not p.active or not t.active:
+        return create_response({}, status=400, message='Non-Existent MFI Partner and/or Loan Theme')
+    loans = Loan.query.filter_by(partner_id = p.id, theme_id = t.id, product_type = product).all()
+    num = 1 + len(loans)
+    return create_response({'version':num}, status=200)
 
 
 @app.route(GET_LISTS)
@@ -129,7 +145,11 @@ def get_csv():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
     try:
-        loans = Loan.query.filter_by(partner_name = partner_name, loan_theme = theme, product_type = product, version_num = version_num).all()
+        p = Partner.query.filter_by(partner_name=partner_name).first()
+        t = Theme.query.filter_by(loan_theme=theme).first()
+        if p is None or t is None or not p.active or not t.active:
+            return create_response({}, status=400, message='Non-Existent MFI Partner and/or Loan Theme')
+        loans = Loan.query.filter_by(partner_id = p.id, theme_id = t.id, product_type = product, version_num = version_num).all()
         loan = loans[0]
         attrs = [i for i in dir(loan) if not i.startswith('_')]
     except:
@@ -140,3 +160,99 @@ def get_csv():
         mimetype="text/csv",
         headers={"Content-disposition":
                      "attachment; filename=loan.csv"})
+
+@app.route(GET_ALL_MFI, methods=['GET'])
+def getAllMFI():
+    partners = Partner.query.filter_by(active=True).all()
+    return create_response({'partners': [x.partner_name for x in partners]}, status=200)
+
+@app.route(EDIT_MFI, methods=['PUT'])
+def editMFI(partner_name):
+    data = request.get_json()
+    partner = Partner.query.filter_by(partner_name=partner_name).first()
+    if partner is None:
+        return create_response(status=422, message="No such MFI Partner currently exists")
+    try:
+        new_name = data['updated_partner_name']
+        partner.partner_name = new_name
+        db.session.commit()
+        return create_response(message="Update Successful")
+    except:
+        return create_response({}, status=400, message='missing arguments for PUT')
+
+@app.route(ADD_MFI, methods=['POST'])
+def addMFI():
+    data = request.get_json()
+    try:
+        partner_name = data['partner_name']
+        partner = Partner.query.filter_by(partner_name=partner_name).first()
+        if partner is None:
+            p = Partner(data)
+            db.session.add(p)
+            db.session.commit()
+            return create_response(message='Post Successful')
+        elif partner.active:
+            return create_response(status=422, message='Resource Already Exists')
+        else:
+            partner.active = True
+            db.session.commit()
+            return create_response(message='Post Successful')
+    except:
+        return create_response({}, status=400, message='missing arguments for POST')
+
+@app.route(REMOVE_MFI, methods=['DELETE'])
+def removeMFI(partner_name):
+    partner = Partner.query.filter_by(partner_name=partner_name).first()
+    if partner is None or partner.active is False:
+        return create_response(status=422, message="No such MFI Partner currently exists")
+    partner.active = False
+    db.session.commit()
+    return create_response(message="Update Successful")
+
+@app.route(GET_ALL_LT, methods=['GET'])
+def getAllLT():
+    themes = Theme.query.filter_by(active=True).all()
+    return create_response({'partners': [x.loan_theme for x in themes]}, status=200)
+
+@app.route(EDIT_LT, methods=['PUT'])
+def editLT(loan_theme):
+    data = request.get_json()
+    theme = Theme.query.filter_by(loan_theme=loan_theme).first()
+    if theme is None:
+        return create_response(status=422, message="No such Loan Theme currently exists")
+    try:
+        new_name = data['updated_loan_theme']
+        theme.loan_theme = new_name
+        db.session.commit()
+        return create_response(message="Update Successful")
+    except:
+        return create_response({}, status=400, message='missing arguments for PUT')
+
+@app.route(ADD_LT, methods=['POST'])
+def addLT():
+    data = request.get_json()
+    try:
+        loan_theme = data['loan_theme']
+        theme = Theme.query.filter_by(loan_theme=loan_theme).first()
+        if theme is None:
+            t = Theme(data)
+            db.session.add(t)
+            db.session.commit()
+            return create_response(message='Post Successful')
+        elif theme.active:
+            return create_response(status=422, message='Resource Already Exists')
+        else:
+            theme.active = True
+            db.session.commit()
+            return create_response(message='Post Successful')
+    except:
+        return create_response({}, status=400, message='missing arguments for POST')
+
+@app.route(REMOVE_LT, methods=['DELETE'])
+def removeLT(loan_theme):
+    theme = Theme.query.filter_by(loan_theme=loan_theme).first()
+    if theme is None or theme.active is False:
+        return create_response(status=422, message="No such Loan Theme currently exists")
+    theme.active = False
+    db.session.commit()
+    return create_response(message="Update Successful")
