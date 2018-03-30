@@ -1,17 +1,12 @@
 // @flow
 import { fetchStuff } from './stuff.action'
-export const submitFindLoan = (mfi, loanType, productType, versionNumber) => ({
-  type: 'submitFindLoan',
-  payload: {
-    mfi,
-    loanType,
-    productType,
-    versionNumber
-  }
-})
+import {
+  submitFindLoan,
+  backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
+} from './findLoan.action'
 
-export const backFindLoan = {
-  type: 'backFindLoan'
+export {
+  fetchStuff,
+  submitFindLoan,
+  backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
 }
-
-export { fetchStuff }

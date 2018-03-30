@@ -1,16 +1,20 @@
-const formDataReducer = (state = [], action) => {
+import initialState from './initialState'
+import { FIND_LOAN_SUBMIT, FIND_LOAN_BACK } from './../actions/actionTypes'
+export default function formDataReducer(state = initialState.formData, action) {
+  console.log(action.type)
   switch (action.type) {
-    case 'submitFindLoan':
+    case FIND_LOAN_SUBMIT:
+      console.log('MEGHA THIS IS ALL YOUR FAULT')
       return [
         ...state,
         {
-          mfi: action.mfi,
-          loanType: action.loanType,
-          productType: action.productType,
-          versionNum: action.versionNum
+          mfi: action.payload.mfi,
+          loanType: action.payload.loanType,
+          productType: action.payload.productType,
+          versionNum: action.payload.versionNum
         }
       ]
-    case 'backFindLoan':
+    case FIND_LOAN_BACK:
       return [
         ...state,
         {
@@ -21,8 +25,7 @@ const formDataReducer = (state = [], action) => {
         }
       ]
     default:
+      console.log('kgjsdfhjfldd')
       return state
   }
 }
-
-export default formDataReducer
