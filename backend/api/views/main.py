@@ -12,13 +12,14 @@ mod = Blueprint('main', __name__)
 def index():
     return '<h1>Hello World!</h1>'
 
-
+# Generic endpoint URLs
 CALCULATE_URL = '/calculateAPR'
 GET_VERSION_NUM = '/getVersionNum'
 GET_LISTS = '/partnerThemeLists'
 SAVE_LOAN_URL = '/saveNewLoan'
 GET_CSV = '/getCSV'
 
+# Admin endpoint URLs
 GET_ALL_MFI = "/getAllMFI"
 EDIT_MFI = "/editMFI/<partner_name>"
 ADD_MFI = "/addMFI"
@@ -28,6 +29,13 @@ GET_ALL_LT = "/getAllLT"
 EDIT_LT = "/editLT/<loan_theme>"
 ADD_LT = "/addLT"
 REMOVE_LT = "/removeLT/<loan_theme>"
+
+# Find loan endpoint URLs
+FINDLOAN_GET_MFI_LIST = "/getMFIEntry"
+FINDLOAN_GET_LOAN_ENTRY = "/getLTEntry"
+FINDLOAN_GET_PRODUCT_ENTRY = "/getPTEntry"
+FINDLOAN_GET_VERSION_LIST = "/getVersionNumEntry"
+FINDLOAN_GET_LOAN_DATA = "/findLoan"
 
 
 @app.route(CALCULATE_URL, methods=['POST'])
@@ -256,3 +264,147 @@ def removeLT(loan_theme):
     theme.active = False
     db.session.commit()
     return create_response(message="Update Successful")
+
+@app.route(FINDLOAN_GET_MFI_LIST)
+def get_mfi_list():
+    """ Get list of MFI partners that have loans in the database """
+    # Get all unique partner ids from loan table
+    partner_ids = db.session.query(Loan.partner_id).distinct()
+    # Get corresponding partner names for each id
+    partner_names = list()
+    for id_value in partner_ids:
+        partner_names.append(Partner.query.get(id_value))
+
+    # Return list of names present in loan table
+    data = {'partners' : [entry.partner_name for entry in partner_names]}
+    return create_response(data = data, status = 200)
+
+@app.route(FINDLOAN_GET_LOAN_ENTRY, methods = ['POST'])
+def get_loan_theme_entry():
+    """ Get list of loan themes associated with a specific partner """
+    args = request.get_json()
+    try:
+        # Get corresponding ID for passed partner name
+        mfi_name = args['partner_name']
+        # Partner name should also be unique, .first() should always return correct row
+        partner_id = Partner.query.filter_by(partner_name = mfi_name).first().id
+
+        # Get all loan themes with RETURNED PARTNER ID
+        loan_list = list()
+        for entry in Loan.query.filter_by(partner_id = partner_id).all():
+            loan_list.append(Theme.query.filter_by(id = entry.theme_id).first())
+        # Return list of loan themes under given mfi name
+        data = {'themes' : [entry.loan_theme for entry in loan_list]}
+        return create_response(data = data, status = 200)
+    except:
+        return create_response({}, status=400, message='missing arguments for GET')
+
+@app.route(FINDLOAN_GET_PRODUCT_ENTRY, methods = ['POST'])
+def get_product_entry():
+    """ Get list of product types associated with specific partner and theme """
+    args = request.get_json()
+    try:
+        # Get partner name and loan theme from passed args
+        mfi_name = args['partner_name']
+        theme_name = args['loan_theme']
+        
+        # Get corresponding ids for partner and loan theme
+        mfi_id = Partner.query.filter_by(partner_name = mfi_name).first().id
+        theme_id = Theme.query.filter_by(loan_theme = theme_name).first().id
+
+        # Get all product themes with RETURNED PARTER ID AND LOAN ID
+        product_list = list()
+        for entry in Loan.query.filter_by(partner_id = mfi_id, theme_id = theme_id).all():
+            product_list.append(entry.product_type)
+
+        # Return list of product types under given mfi name and theme id
+        data = {'product_types' : [entry for entry in product_list]}
+        return create_response(data = data, status = 200)
+    except:
+        return create_response({}, status=400, message='missing arguments for GET')
+
+@app.route(FINDLOAN_GET_VERSION_LIST, methods = ['POST'])
+def get_version_list():
+    """ Get list of version numbers associated with partner, theme, and product type """
+    args = request.get_json()
+    try:
+        # Get all args from form
+        partner_name = args['partner_name']
+        theme_name = args['loan_theme']
+        product_type = args['product_type']
+
+        # Get corresponding ids
+        mfi_id = Partner.query.filter_by(partner_name = partner_name).first().id
+        theme_id = Theme.query.filter_by(loan_theme = theme_name).first().id
+
+        # Get corresponding rows from RETURNED IDs and names
+        version_list = list()
+        for entry in Loan.query.filter_by(partner_id = mfi_id, theme_id = theme_id, product_type = product_type):
+            version_list.append(entry.version_num)
+
+        # Return list of version nums under given mfi name, theme id, product type
+        data = {'version_nums' : [num for num in version_list]}
+        return create_response(data = data, status = 200)
+    except:
+        return create_response({}, status=400, message='missing arguments for GET')
+
+@app.route(FINDLOAN_GET_LOAN_DATA, methods = ['POST'])
+def get_loan():
+    """ Get all data from given partner, theme, product_type, and version number """
+    args = request.get_json()
+    try:
+        # Get all args from form
+        partner_name = args['partner_name']
+        theme_name = args['loan_theme']
+        product_type = args['product_type']
+        version = args['version_num']
+
+        # Get corresponding ids
+        mfi_id = Partner.query.filter_by(partner_name = partner_name).first().id
+        theme_id = Theme.query.filter_by(loan_theme = theme_name).first().id
+
+        # Get corresponding row from RETURNED IDs and names & return data
+        id_string = "" + str(mfi_id) + "_" + str(theme_id) + "_" + product_type + "_" + str(version)
+        entry = Loan.query.get(id_string)
+        data = {
+            'partner' : partner_name,
+            'loan_theme' : theme_name,
+            'product_type' : entry.product_type,
+            'version_num' : entry.version_num,
+            'start_date' : entry.start_date,
+            'update_date' : entry.update_date,
+            'start_name' : entry.start_name,
+            'update_name' : entry.update_name,
+            'nominal_apr' : entry.nominal_apr,
+            'installment_time_period' : entry.installment_time_period,
+            'repayment_type' : entry.repayment_type,
+            'interest_time_period' : entry.interest_time_period,
+            'interest_payment_type' : entry.interest_payment_type,
+            'interest_calculation_type' : entry.interest_calculation_type,
+            'loan_amount' : entry.loan_amount,
+            'installment' : entry.installment,
+            'nominal_interest_rate' : entry.nominal_interest_rate,
+            'grace_period_principal' : entry.grace_period_principal,
+            'grace_period_interest_pay' : entry.grace_period_interest_pay,
+            'grace_period_interest_calculate' : entry.grace_period_interest_calculate,
+            'grace_period_balloon' : entry.grace_period_balloon,
+            'fee_percent_upfront' : entry.fee_percent_upfront,
+            'fee_percent_ongoing' : entry.fee_percent_ongoing,
+            'fee_fixed_upfront' : entry.fee_fixed_upfront,
+            'fee_fixed_ongoing' : entry.fee_fixed_ongoing,
+            'insurance_percent_upfront' : entry.insurance_percent_upfront,
+            'insurance_percent_ongoing' : entry.insurance_percent_ongoing,
+            'insurance_fixed_upfront' : entry.insurance_fixed_upfront,
+            'insurance_fixed_ongoing' : entry.insurance_fixed_ongoing,
+            'tax_percent_fees' : entry.tax_percent_fees,
+            'tax_percent_interest' : entry.tax_percent_interest,
+            'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront,
+            'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing,
+            'security_deposit_fixed_upfront' : entry.security_deposit_fixed_upfront,
+            'security_deposit_fixed_ongoing' : entry.security_deposit_fixed_ongoing,
+            'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent
+        }
+        return create_response(data = data, status = 200)
+    except:
+        return create_response({}, status=400, message='missing arguments for GET')
+
