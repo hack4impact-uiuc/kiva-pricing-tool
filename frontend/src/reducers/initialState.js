@@ -1,10 +1,15 @@
 // @flow
-import type { Store } from './../types'
+// import type { Store } from './../types'
 
-const initialState: Store = {
+const initialState = {
   stuff: [],
   colors: ['red', 'yellow', 'blue'],
-  formData: []
+  formData: {
+    mfi: null,
+    loanType: null,
+    productType: null,
+    versionNum: null
+  }
 }
 
 export default initialState

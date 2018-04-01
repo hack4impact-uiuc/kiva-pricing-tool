@@ -18,13 +18,10 @@ function backToIntro() {
 
 export function submitFindLoan(mfi, loanType, productType, versionNumber) {
   console.log(mfi, loanType, productType, versionNumber)
-  return dispatch => {
-    return findLoanSubmitted(mfi, loanType, productType, versionNumber)
-  }
+  return dispatch =>
+    dispatch(findLoanSubmitted(mfi, loanType, productType, versionNumber))
 }
 
 export function backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong() {
-  return dispatch => {
-    return backToIntro()
-  }
+  return dispatch => dispatch(backToIntro())
 }

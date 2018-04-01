@@ -7,7 +7,9 @@ import {
 import FindLoan from './../components/FindLoan'
 
 function mapStateToProps(state) {
-  return {}
+  return {
+    formDataReducer: state.formDataReducer
+  }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -7,14 +7,15 @@ import TextField from './TextField'
 import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
+import { Typeahead } from 'react-bootstrap-typeahead'
 
 class FindLoan extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      partner_names: [],
-      loan_themes: [],
-      versions: [],
+      partner_names: ['hello', 'yo', 'swag'],
+      loan_themes: ['hello', 'yo', 'swag'],
+      versions: ['1', '2', '3'],
       selectedPartnerName: '',
       selectedLoanTheme: '',
       selectedLoanProduct: '',
@@ -25,10 +26,10 @@ class FindLoan extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
-      this.setState({ partner_names: response.data.result.partners })
-      this.setState({ loan_themes: response.data.result.themes })
-    })
+    // axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
+    //   this.setState({ partner_names: response.data.result.partners })
+    //   this.setState({ loan_themes: response.data.result.themes })
+    // })
   }
 
   onChangeHandler() {
@@ -37,58 +38,71 @@ class FindLoan extends Component {
     })
   }
 
+  handleChange(i) {
+    console.log(i)
+    this.setState({ selectedPartnerName: i.target.value })
+  }
   render() {
     const {
       submitFindLoan,
+      formDataReducer,
       backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
     } = this.props
+    console.log(formDataReducer)
+    console.log(formDataReducer.loanType)
+    console.log('hi')
+
     return (
       <Grid>
         <Form>
-          <LiveSearch
+          <Typeahead
             ref="mfi"
             label="mfi"
-            list={this.state.partner_names}
             hint="Select MFI Partner"
-            onChange={e => {
-              this.setState({ selectedPartnerName: e.target.value })
+            options={this.state.partner_names}
+            selected={formDataReducer.mfi}
+            onInputChange={e => {
+              this.setState({ selectedPartnerName: e })
             }}
           />
           <br />
-          <LiveSearch
+          <Typeahead
             ref="loan"
             label="loan"
-            list={this.state.loan_themes}
+            options={this.state.loan_themes}
             hint="Select Loan Type"
-            onChange={e => {
-              this.setState({ selectedLoanTheme: e.target.value })
+            selected={formDataReducer.loanType}
+            onInputChange={e => {
+              console.log(e)
+              this.setState({ selectedLoanTheme: e })
             }}
           />
           <br />
-
-          <LiveSearch
+          {/* <input>
+            onChange={event => this.handleChange(event)}
+          </input> */}
+          <Typeahead
             ref="product"
             label="product"
-            // id="Loan Product"
-            // text="product"
-            list={[]}
+            options={[]}
             hint="Search Products i.e. small loan"
             typeVal="String"
             limit={100}
-            onChange={e => {
-              this.setState({ selectedLoanProduct: e.target.value })
+            selected={formDataReducer.productType}
+            onInputChange={e => {
+              this.setState({ selectedLoanProduct: e })
             }}
           />
+
           <br />
 
-          <LiveSearch
+          <Typeahead
             ref="version"
             label="version"
-            list={this.state.versions}
+            options={this.state.versions}
             hint="Search Versions:"
-            onChange={e => {
-              console.log(e.target.val)
-              this.setState({ selectedVersionNum: e.target.val })
+            onInputChange={e => {
+              this.setState({ selectedVersionNum: e })
             }}
           />
           <br />
@@ -105,7 +119,12 @@ class FindLoan extends Component {
             name="Continue"
             url="form1"
             onClickHandler={() => {
-              console.log('Submitting')
+              console.log(
+                this.state.selectedPartnerName,
+                this.state.selectedLoanTheme,
+                this.state.selectedLoanProduct,
+                this.state.selectedVersionNum
+              )
               submitFindLoan(
                 this.state.selectedPartnerName,
                 this.state.selectedLoanTheme,
@@ -113,12 +132,6 @@ class FindLoan extends Component {
                 this.state.selectedVersionNum
               )
             }}
-            formProps={
-              (this.state.selectedPartnerName,
-              this.state.selectedLoanTheme,
-              this.state.selectedLoanProduct,
-              this.state.selectedVersionNum)
-            }
           />
           {/* </div> */}
         </Form>
