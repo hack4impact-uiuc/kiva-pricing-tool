@@ -279,14 +279,14 @@ def get_mfi_list():
     data = {'partners' : [entry.partner_name for entry in partner_names]}
     return create_response(data = data, status = 200)
 
-@app.route(FINDLOAN_GET_LOAN_ENTRY, methods = ['POST'])
+@app.route(FINDLOAN_GET_LOAN_ENTRY)
 def get_loan_theme_entry():
     """ Get list of loan themes associated with a specific partner """
-    args = request.get_json()
     try:
-        # Get corresponding ID for passed partner name
-        mfi_name = args['partner_name']
-        # Partner name should also be unique, .first() should always return correct row
+        # Get partner name from passed args
+        mfi_name = request.args['partner_name']
+
+        # Partner name unique, .first() should always return correct row
         partner_id = Partner.query.filter_by(partner_name = mfi_name).first().id
 
         # Get all loan themes with RETURNED PARTNER ID
@@ -299,14 +299,13 @@ def get_loan_theme_entry():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
-@app.route(FINDLOAN_GET_PRODUCT_ENTRY, methods = ['POST'])
+@app.route(FINDLOAN_GET_PRODUCT_ENTRY)
 def get_product_entry():
     """ Get list of product types associated with specific partner and theme """
-    args = request.get_json()
     try:
         # Get partner name and loan theme from passed args
-        mfi_name = args['partner_name']
-        theme_name = args['loan_theme']
+        mfi_name = request.args['partner_name']
+        theme_name = request.args['loan_theme']
         
         # Get corresponding ids for partner and loan theme
         mfi_id = Partner.query.filter_by(partner_name = mfi_name).first().id
@@ -323,15 +322,15 @@ def get_product_entry():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
-@app.route(FINDLOAN_GET_VERSION_LIST, methods = ['POST'])
+@app.route(FINDLOAN_GET_VERSION_LIST)
 def get_version_list():
     """ Get list of version numbers associated with partner, theme, and product type """
     args = request.get_json()
     try:
         # Get all args from form
-        partner_name = args['partner_name']
-        theme_name = args['loan_theme']
-        product_type = args['product_type']
+        partner_name = request.args['partner_name']
+        theme_name = request.args['loan_theme']
+        product_type = request.args['product_type']
 
         # Get corresponding ids
         mfi_id = Partner.query.filter_by(partner_name = partner_name).first().id
@@ -348,16 +347,16 @@ def get_version_list():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
-@app.route(FINDLOAN_GET_LOAN_DATA, methods = ['POST'])
+@app.route(FINDLOAN_GET_LOAN_DATA)
 def get_loan():
     """ Get all data from given partner, theme, product_type, and version number """
     args = request.get_json()
     try:
         # Get all args from form
-        partner_name = args['partner_name']
-        theme_name = args['loan_theme']
-        product_type = args['product_type']
-        version = args['version_num']
+        partner_name = request.args['partner_name']
+        theme_name = request.args['loan_theme']
+        product_type = request.args['product_type']
+        version = request.args['version_num']
 
         # Get corresponding ids
         mfi_id = Partner.query.filter_by(partner_name = partner_name).first().id
