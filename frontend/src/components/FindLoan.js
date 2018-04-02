@@ -38,10 +38,11 @@ class FindLoan extends Component {
     })
   }
 
-  handleChange(i) {
-    console.log(i)
-    this.setState({ selectedPartnerName: i.target.value })
+  handleTextChange(name, value) {
+    console.log(name, value)
+    this.setState({ [name]: value })
   }
+
   render() {
     const {
       submitFindLoan,
@@ -62,7 +63,8 @@ class FindLoan extends Component {
             options={this.state.partner_names}
             selected={formDataReducer.mfi}
             onInputChange={e => {
-              this.setState({ selectedPartnerName: e })
+              this.handleTextChange('selectedPartnerName', e)
+              // this.setState({ selectedPartnerName: e })
             }}
           />
           <br />
@@ -74,7 +76,8 @@ class FindLoan extends Component {
             selected={formDataReducer.loanType}
             onInputChange={e => {
               console.log(e)
-              this.setState({ selectedLoanTheme: e })
+              this.handleTextChange('selectedLoanTheme', e)
+              // this.setState({ selectedLoanTheme: e })
             }}
           />
           <br />
@@ -84,13 +87,14 @@ class FindLoan extends Component {
           <Typeahead
             ref="product"
             label="product"
-            options={[]}
+            options={['Apple', 'Banana', 'Orange']}
             hint="Search Products i.e. small loan"
             typeVal="String"
             limit={100}
             selected={formDataReducer.productType}
             onInputChange={e => {
-              this.setState({ selectedLoanProduct: e })
+              // this.setState({ selectedLoanProduct: e })
+              this.handleTextChange('selectedLoanProduct', e)
             }}
           />
 
@@ -102,7 +106,8 @@ class FindLoan extends Component {
             options={this.state.versions}
             hint="Search Versions:"
             onInputChange={e => {
-              this.setState({ selectedVersionNum: e })
+              // this.setState({ selectedVersionNum: e })
+              this.handleTextChange('selectedVersionNum', e)
             }}
           />
           <br />
