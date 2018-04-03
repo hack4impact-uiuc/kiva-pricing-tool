@@ -12,14 +12,15 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 class FindLoan extends Component {
   constructor(props) {
     super(props)
+    const { formDataReducer } = this.props
     this.state = {
       partner_names: ['hello', 'yo', 'swag'],
       loan_themes: ['hello', 'yo', 'swag'],
       versions: ['1', '2', '3'],
-      selectedPartnerName: '',
-      selectedLoanTheme: '',
-      selectedLoanProduct: '',
-      selectedVersionNum: '',
+      selectedPartnerName: formDataReducer.mfi,
+      selectedLoanTheme: formDataReducer.loanType,
+      selectedLoanProduct: formDataReducer.productType,
+      selectedVersionNum: formDataReducer.versionNum,
       disableButton: '',
       errorMessage: ''
     }
@@ -43,9 +44,8 @@ class FindLoan extends Component {
       formDataReducer,
       backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
     } = this.props
-    console.log(this.state)
-    console.log(formDataReducer.loanType)
-    console.log('hi')
+    // console.log(this.state)
+    // console.log(formDataReducer.loanType)
 
     return (
       <Grid>
@@ -58,7 +58,6 @@ class FindLoan extends Component {
             selected={formDataReducer.mfi}
             onChange={e => {
               this.handleTextChange('selectedPartnerName', e)
-              // this.setState({ selectedPartnerName: e })
             }}
           />
           <br />
@@ -71,13 +70,9 @@ class FindLoan extends Component {
             onChange={e => {
               console.log(e)
               this.handleTextChange('selectedLoanTheme', e)
-              // this.setState({ selectedLoanTheme: e })
             }}
           />
           <br />
-          {/* <input>
-            onChange={event => this.handleChange(event)}
-          </input> */}
           <Typeahead
             ref="product"
             label="product"
@@ -87,7 +82,6 @@ class FindLoan extends Component {
             limit={100}
             selected={formDataReducer.productType}
             onChange={e => {
-              // this.setState({ selectedLoanProduct: e })
               this.handleTextChange('selectedLoanProduct', e)
             }}
           />
@@ -101,7 +95,6 @@ class FindLoan extends Component {
             selected={formDataReducer.versionNum}
             hint="Search Versions:"
             onChange={e => {
-              // this.setState({ selectedVersionNum: e })
               this.handleTextChange('selectedVersionNum', e)
             }}
           />
@@ -119,35 +112,14 @@ class FindLoan extends Component {
             name="Continue"
             url="form1"
             onClickHandler={() => {
-              // console.log(
-              //   "a" + this.state.selectedPartnerName,
-              //  "b" + this.state.selectedLoanTheme,
-              //   "c" + this.state.selectedLoanProduct,
-              //   "d" + this.state.selectedVersionNum
-              // )
-              // console.log(
-              //   formDataReducer.selectedPartnerName,
-              //   formDataReducer.selectedLoanTheme,
-              //   formDataReducer.selectedLoanProduct,
-              //   formDataReducer.selectedVersionNum
-              // )
               submitFindLoan(
-                this.state.selectedPartnerName.length == 0
-                  ? formDataReducer.mfi
-                  : this.state.selectedPartnerName,
-                this.state.selectedLoanTheme.length == 0
-                  ? formDataReducer.loanType
-                  : this.state.selectedLoanTheme,
-                this.state.selectedLoanProduct.length == 0
-                  ? formDataReducer.productType
-                  : this.state.selectedLoanProduct,
-                this.state.selectedVersionNum.length == 0
-                  ? formDataReducer.versionNum
-                  : this.state.selectedVersionNum
+                this.state.selectedPartnerName,
+                this.state.selectedLoanTheme,
+                this.state.selectedLoanProduct,
+                this.state.selectedVersionNum
               )
             }}
           />
-          {/* </div> */}
         </Form>
       </Grid>
     )
