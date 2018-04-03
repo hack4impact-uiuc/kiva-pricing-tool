@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-// import { submitFindLoan, backFindLoan } from '../actions'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import './../styles/app.css'
 import TextField from './TextField'
@@ -12,16 +11,16 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 class FindLoan extends Component {
   constructor(props) {
     super(props)
-    const { loanSearchReducer } = this.props
-    console.log(loanSearchReducer)
+    const { formDataReducer } = this.props
+    console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
       versions: ['1', '2', '3'],
-      selectedPartnerName: loanSearchReducer.mfi,
-      selectedLoanTheme: loanSearchReducer.loanType,
-      selectedLoanProduct: loanSearchReducer.productType,
-      selectedVersionNum: loanSearchReducer.versionNum,
+      selectedPartnerName: formDataReducer.mfi,
+      selectedLoanTheme: formDataReducer.loanType,
+      selectedLoanProduct: formDataReducer.productType,
+      selectedVersionNum: formDataReducer.versionNum,
       disableButton: '',
       errorMessage: ''
     }
@@ -60,7 +59,7 @@ class FindLoan extends Component {
   render() {
     const {
       submitFindLoan,
-      loanSearchReducer,
+      formDataReducer,
       backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
     } = this.props
 
@@ -72,7 +71,7 @@ class FindLoan extends Component {
             label="mfi"
             hint="Select MFI Partner"
             options={this.state.partner_names}
-            selected={loanSearchReducer.mfi}
+            selected={formDataReducer.mfi}
             onChange={e => {
               this.handleTextChange('selectedPartnerName', e)
             }}
@@ -84,7 +83,7 @@ class FindLoan extends Component {
             label="loan"
             options={this.state.loan_themes}
             hint="Select Loan Type"
-            selected={loanSearchReducer.loanType}
+            selected={formDataReducer.loanType}
             onChange={e => {
               this.handleTextChange('selectedLoanTheme', e)
             }}
@@ -97,7 +96,7 @@ class FindLoan extends Component {
             hint="Search Products i.e. small loan"
             typeVal="String"
             limit={100}
-            selected={loanSearchReducer.productType}
+            selected={formDataReducer.productType}
             onChange={e => {
               this.handleTextChange('selectedLoanProduct', e)
             }}
@@ -109,7 +108,7 @@ class FindLoan extends Component {
             ref="version"
             label="version"
             options={this.state.versions}
-            selected={loanSearchReducer.versionNum}
+            selected={formDataReducer.versionNum}
             hint="Search Versions:"
             onChange={e => {
               console.log(e)

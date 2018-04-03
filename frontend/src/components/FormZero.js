@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import './../styles/app.css'
 import TextField from './TextField'
@@ -9,9 +10,14 @@ import axios from 'axios'
 class FormZero extends Component {
   constructor(props) {
     super(props)
+    const { formDataReducer } = this.props
+    console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
+      // selectedPartnerName: formDataReducer.mfi,
+      // selectedLoanTheme: formDataReducer.loanType,
+      // selectedLoanProduct: formDataReducer.productType,
       selectedPartnerName: '',
       selectedLoanTheme: '',
       selectedLoanProduct: '',

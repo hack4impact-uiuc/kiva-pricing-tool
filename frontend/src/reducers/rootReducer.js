@@ -3,12 +3,12 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 // import stuff from './stuff.reducer'
 import colors from './colors.reducer'
-import loanSearchReducer from './loanSearchReducer'
+import formDataReducer from './formDataReducer'
 
 const rootReducer = combineReducers({
   // stuff,
   colors,
-  loanSearchReducer,
+  formDataReducer,
   router: routerReducer
 })
 
