@@ -1,7 +1,10 @@
 import initialState from './initialState'
 import { FIND_LOAN_SUBMIT, FIND_LOAN_BACK } from './../actions/actionTypes'
 
-export default function formDataReducer(state = initialState.formData, action) {
+export default function loanSearchReducer(
+  state = initialState.formSearch,
+  action
+) {
   console.log(action.payload)
   switch (action.type) {
     case FIND_LOAN_SUBMIT:

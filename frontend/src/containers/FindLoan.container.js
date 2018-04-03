@@ -8,7 +8,7 @@ import FindLoan from './../components/FindLoan'
 
 function mapStateToProps(state) {
   return {
-    formDataReducer: state.formDataReducer
+    loanSearchReducer: state.loanSearchReducer
   }
 }
 

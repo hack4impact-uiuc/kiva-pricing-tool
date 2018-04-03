@@ -4,7 +4,7 @@
 const initialState = {
   stuff: [],
   colors: ['red', 'yellow', 'blue'],
-  formData: {
+  formSearch: {
     mfi: null,
     loanType: null,
     productType: null,
