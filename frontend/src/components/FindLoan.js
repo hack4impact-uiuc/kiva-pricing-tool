@@ -32,12 +32,6 @@ class FindLoan extends Component {
     // })
   }
 
-  onChangeHandler() {
-    this.setState({
-      selectedPartnerName: this.refs.mfi.value
-    })
-  }
-
   handleTextChange(name, value) {
     console.log(name, value)
     this.setState({ [name]: value })
@@ -49,7 +43,7 @@ class FindLoan extends Component {
       formDataReducer,
       backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
     } = this.props
-    console.log(formDataReducer)
+    console.log(this.state)
     console.log(formDataReducer.loanType)
     console.log('hi')
 
@@ -62,7 +56,7 @@ class FindLoan extends Component {
             hint="Select MFI Partner"
             options={this.state.partner_names}
             selected={formDataReducer.mfi}
-            onInputChange={e => {
+            onChange={e => {
               this.handleTextChange('selectedPartnerName', e)
               // this.setState({ selectedPartnerName: e })
             }}
@@ -74,7 +68,7 @@ class FindLoan extends Component {
             options={this.state.loan_themes}
             hint="Select Loan Type"
             selected={formDataReducer.loanType}
-            onInputChange={e => {
+            onChange={e => {
               console.log(e)
               this.handleTextChange('selectedLoanTheme', e)
               // this.setState({ selectedLoanTheme: e })
@@ -92,7 +86,7 @@ class FindLoan extends Component {
             typeVal="String"
             limit={100}
             selected={formDataReducer.productType}
-            onInputChange={e => {
+            onChange={e => {
               // this.setState({ selectedLoanProduct: e })
               this.handleTextChange('selectedLoanProduct', e)
             }}
@@ -104,8 +98,9 @@ class FindLoan extends Component {
             ref="version"
             label="version"
             options={this.state.versions}
+            selected={formDataReducer.versionNum}
             hint="Search Versions:"
-            onInputChange={e => {
+            onChange={e => {
               // this.setState({ selectedVersionNum: e })
               this.handleTextChange('selectedVersionNum', e)
             }}

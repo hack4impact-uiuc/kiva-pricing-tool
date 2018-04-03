@@ -16,12 +16,12 @@ export default function formDataReducer(state = initialState.formData, action) {
       break
     case FIND_LOAN_BACK:
       return {
-        ...state,
+        ...state
 
-        mfi: null,
-        loanType: null,
-        productType: null,
-        versionNum: null
+        // mfi: null,
+        // loanType: null,
+        // productType: null,
+        // versionNum: null
       }
       break
     default:
