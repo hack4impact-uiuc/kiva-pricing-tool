@@ -119,17 +119,31 @@ class FindLoan extends Component {
             name="Continue"
             url="form1"
             onClickHandler={() => {
-              console.log(
-                this.state.selectedPartnerName,
-                this.state.selectedLoanTheme,
-                this.state.selectedLoanProduct,
-                this.state.selectedVersionNum
-              )
+              // console.log(
+              //   "a" + this.state.selectedPartnerName,
+              //  "b" + this.state.selectedLoanTheme,
+              //   "c" + this.state.selectedLoanProduct,
+              //   "d" + this.state.selectedVersionNum
+              // )
+              // console.log(
+              //   formDataReducer.selectedPartnerName,
+              //   formDataReducer.selectedLoanTheme,
+              //   formDataReducer.selectedLoanProduct,
+              //   formDataReducer.selectedVersionNum
+              // )
               submitFindLoan(
-                this.state.selectedPartnerName,
-                this.state.selectedLoanTheme,
-                this.state.selectedLoanProduct,
-                this.state.selectedVersionNum
+                this.state.selectedPartnerName.length == 0
+                  ? formDataReducer.mfi
+                  : this.state.selectedPartnerName,
+                this.state.selectedLoanTheme.length == 0
+                  ? formDataReducer.loanType
+                  : this.state.selectedLoanTheme,
+                this.state.selectedLoanProduct.length == 0
+                  ? formDataReducer.productType
+                  : this.state.selectedLoanProduct,
+                this.state.selectedVersionNum.length == 0
+                  ? formDataReducer.versionNum
+                  : this.state.selectedVersionNum
               )
             }}
           />
