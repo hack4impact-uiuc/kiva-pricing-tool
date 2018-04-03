@@ -15,8 +15,8 @@ class FindLoan extends Component {
     const { loanSearchReducer } = this.props
     console.log(loanSearchReducer)
     this.state = {
-      partner_names: ['hello', 'yo', 'swag'],
-      loan_themes: ['hello', 'yo', 'swag'],
+      partner_names: [],
+      loan_themes: [],
       versions: ['1', '2', '3'],
       selectedPartnerName: loanSearchReducer.mfi,
       selectedLoanTheme: loanSearchReducer.loanType,
@@ -38,14 +38,31 @@ class FindLoan extends Component {
     this.setState({ [name]: value })
   }
 
+  inputsEntered() {
+    console.log(this.state)
+    return (
+      !this.isNullOrEmpty(this.state.selectedPartnerName) &&
+      !this.isNullOrEmpty(this.state.selectedLoanTheme) &&
+      !this.isNullOrEmpty(this.state.selectedLoanProduct) &&
+      !this.isNullOrEmpty(this.state.selectedVersionNum)
+    )
+  }
+
+  isNullOrEmpty(input) {
+    return input == null || input.length == 0
+  }
+
+  inputsMissing(e) {
+    alert('missing inputs')
+    e.preventDefault()
+  }
+
   render() {
     const {
       submitFindLoan,
       loanSearchReducer,
       backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
     } = this.props
-    // console.log(this.state)
-    // console.log(loanSearchReducer.loanType)
 
     return (
       <Grid>
@@ -60,6 +77,7 @@ class FindLoan extends Component {
               this.handleTextChange('selectedPartnerName', e)
             }}
           />
+
           <br />
           <Typeahead
             ref="loan"
@@ -68,7 +86,6 @@ class FindLoan extends Component {
             hint="Select Loan Type"
             selected={loanSearchReducer.loanType}
             onChange={e => {
-              console.log(e)
               this.handleTextChange('selectedLoanTheme', e)
             }}
           />
@@ -95,7 +112,9 @@ class FindLoan extends Component {
             selected={loanSearchReducer.versionNum}
             hint="Search Versions:"
             onChange={e => {
+              console.log(e)
               this.handleTextChange('selectedVersionNum', e)
+              console.log(this.state.selectedVersionNum)
             }}
           />
           <br />
@@ -108,10 +127,12 @@ class FindLoan extends Component {
             }}
           />
           <Button
-            disable={this.state.disableButton}
+            disable={!this.inputsEntered()}
             name="Continue"
             url="form1"
-            onClickHandler={() => {
+            onClickHandler={e => {
+              console.log(!this.inputsEntered())
+              console.log(e)
               submitFindLoan(
                 this.state.selectedPartnerName,
                 this.state.selectedLoanTheme,

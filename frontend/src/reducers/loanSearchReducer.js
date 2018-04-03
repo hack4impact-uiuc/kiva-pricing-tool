@@ -28,7 +28,6 @@ export default function loanSearchReducer(
       }
       break
     default:
-      console.log('kgjsdfhjfldd')
       return state
   }
 }

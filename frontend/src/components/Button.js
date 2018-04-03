@@ -11,11 +11,13 @@ class Button extends Component {
           <button
             className="button"
             type="button"
+            // disabled={this.props.disable ? this.props.disable : false}
             onClick={() => {
               this.props.onClickHandler()
-              history.push('/' + this.props.url)
+              var runnable =
+                this.props.disable == null ? true : !this.props.disable
+              runnable && history.push('/' + this.props.url)
             }}
-            disabled={this.props.disable}
           >
             {this.props.name}
           </button>
