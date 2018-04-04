@@ -21,7 +21,7 @@ class FormOne extends Component<void> {
       partner_name: 'African Leadership Academy',
       loan_theme: 'Agriculture (Women)',
       product_type: 'Small Loan',
-      version_num: '7',
+      version_num: '198660',
       update_name: 'David Chang',
 
       start_name: this.refs.firstName.state.textBody,
@@ -78,7 +78,7 @@ class FormOne extends Component<void> {
       })
       .catch(function(error) {
         console.log(
-          error + ' there was an error with the request' + data.start_name
+          error + ' there was an error with the request ' + data.start_name
         )
       })
   }
@@ -243,6 +243,8 @@ class FormOne extends Component<void> {
               limit="180"
               ref="grace_period_interest_calculate"
             />
+            // write on change handler to use data from the number of
+            installments as the limit for balloon
             <TextField
               id="Balloon"
               hint="ex. 1"
