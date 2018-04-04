@@ -14,7 +14,11 @@ import {
   APRRateDisplay,
   FormOne,
   FormZero,
-  IntroPage
+  IntroPage,
+  LiveSearch,
+  AdminMain,
+  AdminPartners,
+  AdminThemes
 } from './components'
 import registerServiceWorker from './registerServiceWorker'
 import './styles/index.css'
@@ -29,6 +33,8 @@ ReactDOM.render(
         <Route path="/newloan" component={FormZero} />
         <Route path="/findloan" component={LiveSearch} />
         <Route path="/adminmain" component={AdminMain} />
+        <Route path="/partnerlist" component={AdminPartners} />
+        <Route path="/themelist" component={AdminThemes} />
         <Route path="/output" component={APRRateDisplay} />
         <Route path="/form1" component={FormOne} />
       </div>
