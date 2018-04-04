@@ -7,10 +7,26 @@ class IntroPage extends Component {
     return (
       <Grid>
         <Button
-          name="Enter New Loan"
+          name="New Loan"
           url="newloan"
           onClickHandler={() => {
             console.log('going to new loan')
+          }}
+        />
+
+        <Button
+          name="Find Loan"
+          url="findloan"
+          onClickHandler={() => {
+            console.log('going to find loan')
+          }}
+        />
+
+        <Button
+          name="Admin Tools"
+          url="adminmain"
+          onClickHandler={() => {
+            console.log('going to admin tools')
           }}
         />
       </Grid>

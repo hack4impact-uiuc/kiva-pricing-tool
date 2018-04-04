@@ -27,6 +27,8 @@ ReactDOM.render(
         <Navbar />
         <Route exact path="/" component={IntroPage} />
         <Route path="/newloan" component={FormZero} />
+        <Route path="/findloan" component={LiveSearch} />
+        <Route path="/adminmain" component={AdminMain} />
         <Route path="/output" component={APRRateDisplay} />
         <Route path="/form1" component={FormOne} />
       </div>
