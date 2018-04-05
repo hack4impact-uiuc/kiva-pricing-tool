@@ -80,27 +80,27 @@ class FormZero extends Component {
               this.handleClick
             }}
           />
-		  <Button
+	  <Button
             disable={this.state.disableButton}
             name="Back"
             url=""
             onClickHandler={e => {
               this.handleClick
             }}
-			/>
+	  />
 
-		  <button
+	  <button
             type="button"
             disabled={this.props.disable}
-			onClick={() => {
-				axios.get('http://127.0.0.1:3453/getVersionNum?partner_name=' + this.state.selectedPartnerName + '&theme=' + this.state.selectedLoanTheme + '&product=' + this.state.selectedLoanProduct).then(response => {
-					this.setState({versionNum: response.data.result})
-				}
-				)
-			}
-			}
-			>Find Version</button>
-			<p>{this.state.versionNum}</p>
+	    onClick={() => {
+	    axios.get('http://127.0.0.1:3453/getVersionNum?partner_name=' + this.state.selectedPartnerName + '&theme=' + this.state.selectedLoanTheme + '&product=' + this.state.selectedLoanProduct).then(response => {
+		this.setState({versionNum: response.data.result})
+	    }
+	    )
+	    }
+	    }
+            >Find Version</button>
+	    <p>{this.state.versionNum}</p>
           {/* </div> */}
         </Form>
       </Grid>
