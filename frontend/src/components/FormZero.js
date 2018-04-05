@@ -11,20 +11,20 @@ class FormZero extends Component {
   constructor(props) {
     super(props)
     this.state = {
-	  partner_names: [],
-   	loan_themes: [],
-	  selectedPartnerName: '',
+    partner_names: [],
+    loan_themes: [],
+    selectedPartnerName: '',
     selectedLoanTheme: '',
     selectedLoanProduct: 'small loan',
     disableButton: '',
     errorMessage: '',
-	  versionNum: '',
+    versionNum: '',
     }
   }
 
   componentDidMount() {
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
-	  console.log(response.data.result)
+      console.log(response.data.result)
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
@@ -53,9 +53,9 @@ class FormZero extends Component {
           options={this.state.partner_names}
           placeholder="select MFI partner"
      	  onChange={this.handleMFIChange.bind(this)}
-		  />
+	  />
           <br />
-		  <Typeahead
+	  <Typeahead
           labelKey={this.props.label}
           multiple=""
           options={this.state.loan_themes}
@@ -93,12 +93,10 @@ class FormZero extends Component {
             type="button"
             disabled={this.props.disable}
 	    onClick={() => {
-	    axios.get('http://127.0.0.1:3453/getVersionNum?partner_name=' + this.state.selectedPartnerName + '&theme=' + this.state.selectedLoanTheme + '&product=' + this.state.selectedLoanProduct).then(response => {
+	    	axios.get('http://127.0.0.1:3453/getVersionNum?partner_name=' + this.state.selectedPartnerName + '&theme=' + this.state.selectedLoanTheme + '&product=' + this.state.selectedLoanProduct).then(response => {
 		this.setState({versionNum: response.data.result})
-	    }
-	    )
-	    }
-	    }
+	    	})
+	    }}
             >Find Version</button>
 	    <p>{this.state.versionNum}</p>
           {/* </div> */}
