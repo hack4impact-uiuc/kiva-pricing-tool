@@ -17,10 +17,6 @@ class FindLoan extends Component {
       partner_names: [],
       loan_themes: [],
       versions: ['1', '2', '3'],
-      selectedPartnerName: formDataReducer.mfi,
-      selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType,
-      selectedVersionNum: formDataReducer.versionNum,
       disableButton: '',
       errorMessage: ''
     }
@@ -33,17 +29,19 @@ class FindLoan extends Component {
     })
   }
 
-  handleTextChange(name, value) {
-    this.setState({ [name]: value })
-  }
-
   inputsEntered() {
-    console.log(this.state)
+    const { formDataReducer } = this.props
+    console.log(
+      formDataReducer.mfi,
+      formDataReducer.loanType,
+      formDataReducer.productType,
+      formDataReducer.versionNum
+    )
     return (
-      !this.isNullOrEmpty(this.state.selectedPartnerName) &&
-      !this.isNullOrEmpty(this.state.selectedLoanTheme) &&
-      !this.isNullOrEmpty(this.state.selectedLoanProduct) &&
-      !this.isNullOrEmpty(this.state.selectedVersionNum)
+      !this.isNullOrEmpty(formDataReducer.mfi) &&
+      !this.isNullOrEmpty(formDataReducer.loanType) &&
+      !this.isNullOrEmpty(formDataReducer.productType) &&
+      !this.isNullOrEmpty(formDataReducer.versionNum)
     )
   }
 
@@ -51,16 +49,12 @@ class FindLoan extends Component {
     return input == null || input.length == 0
   }
 
-  inputsMissing(e) {
-    alert('missing inputs')
-    e.preventDefault()
-  }
-
   render() {
     const {
       submitFindLoan,
       formDataReducer,
-      backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
+      backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong,
+      changedFormData
     } = this.props
 
     return (
@@ -69,11 +63,12 @@ class FindLoan extends Component {
           <Typeahead
             ref="mfi"
             label="mfi"
-            hint="Select MFI Partner"
+            placeholder="Select MFI Partner"
             options={this.state.partner_names}
             selected={formDataReducer.mfi}
             onChange={e => {
-              this.handleTextChange('selectedPartnerName', e)
+              changedFormData('mfi', e)
+              // this.handleTextChange('selectedPartnerName', e)
             }}
           />
 
@@ -82,10 +77,10 @@ class FindLoan extends Component {
             ref="loan"
             label="loan"
             options={this.state.loan_themes}
-            hint="Select Loan Type"
+            placeholder="Select Loan Type"
             selected={formDataReducer.loanType}
             onChange={e => {
-              this.handleTextChange('selectedLoanTheme', e)
+              changedFormData('loanType', e)
             }}
           />
           <br />
@@ -93,12 +88,12 @@ class FindLoan extends Component {
             ref="product"
             label="product"
             options={['Apple', 'Banana', 'Orange']}
-            hint="Search Products i.e. small loan"
+            placeholder="Search Products i.e. small loan"
             typeVal="String"
             limit={100}
             selected={formDataReducer.productType}
             onChange={e => {
-              this.handleTextChange('selectedLoanProduct', e)
+              changedFormData('productType', e)
             }}
           />
 
@@ -109,10 +104,10 @@ class FindLoan extends Component {
             label="version"
             options={this.state.versions}
             selected={formDataReducer.versionNum}
-            hint="Search Versions:"
+            placeholder="Search Versions:"
             onChange={e => {
               console.log(e)
-              this.handleTextChange('selectedVersionNum', e)
+              changedFormData('versionNum', e)
               console.log(this.state.selectedVersionNum)
             }}
           />
@@ -129,16 +124,7 @@ class FindLoan extends Component {
             disable={!this.inputsEntered()}
             name="Continue"
             url="form1"
-            onClickHandler={e => {
-              console.log(!this.inputsEntered())
-              console.log(e)
-              submitFindLoan(
-                this.state.selectedPartnerName,
-                this.state.selectedLoanTheme,
-                this.state.selectedLoanProduct,
-                this.state.selectedVersionNum
-              )
-            }}
+            onClickHandler={() => {}}
           />
         </Form>
       </Grid>

@@ -2,7 +2,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {
   submitFindLoan,
-  backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
+  backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong,
+  changedFormData
 } from './../actions'
 import FindLoan from './../components/FindLoan'
 
@@ -17,7 +18,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       submitFindLoan,
-      backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
+      backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong,
+      changedFormData
     },
     dispatch
   )

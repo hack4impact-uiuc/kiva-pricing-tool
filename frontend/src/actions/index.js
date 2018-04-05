@@ -5,10 +5,12 @@ import {
   backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong
 } from './findLoan.action'
 import { contNewLoan } from './newLoan.action'
+import { changedFormData } from './formData.action'
 
 export {
   fetchStuff,
   submitFindLoan,
   backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong,
-  contNewLoan
+  contNewLoan,
+  changedFormData
 }

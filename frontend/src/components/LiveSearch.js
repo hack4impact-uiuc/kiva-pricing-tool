@@ -9,7 +9,6 @@ class LiveSearch extends Component {
   constructor(props) {
     super(props)
     this.state = { error_message: '', value: '' }
-    // var Typeahead = require('react-bootstrap-typeahead').Typeahead
   }
 
   handleChange(e) {

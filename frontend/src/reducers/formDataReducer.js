@@ -2,7 +2,8 @@ import initialState from './initialState'
 import {
   FIND_LOAN_SUBMIT,
   FIND_LOAN_BACK,
-  NEW_LOAN_CONT
+  NEW_LOAN_CONT,
+  FIELD_CHANGED
 } from './../actions/actionTypes'
 
 export default function formDataReducer(state = initialState.formData, action) {
@@ -15,7 +16,8 @@ export default function formDataReducer(state = initialState.formData, action) {
         mfi: action.payload.mfi,
         loanType: action.payload.loanType,
         productType: action.payload.productType,
-        versionNum: action.payload.versionNumber
+        versionNum: action.payload.versionNumber,
+        backRoute: 'findloan'
       }
       break
     case FIND_LOAN_BACK:
@@ -25,7 +27,8 @@ export default function formDataReducer(state = initialState.formData, action) {
         mfi: null,
         loanType: null,
         productType: null,
-        versionNum: null
+        versionNum: null,
+        backRoute: null
       }
       break
     case NEW_LOAN_CONT:
@@ -34,7 +37,14 @@ export default function formDataReducer(state = initialState.formData, action) {
 
         mfi: action.payload.mfi,
         loanType: action.payload.loanType,
-        productType: action.payload.productType
+        productType: action.payload.productType,
+        backRoute: 'newloan'
+      }
+    case FIELD_CHANGED:
+      return {
+        ...state,
+
+        [action.payload.field]: action.payload.value
       }
     default:
       return state
