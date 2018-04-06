@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { contNewLoan, changedFormData } from './../actions'
+import { changedFormData } from './../actions'
 import FormZero from './../components/FormZero'
 
 function mapStateToProps(state) {
@@ -12,7 +12,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      contNewLoan,
       changedFormData
     },
     dispatch
