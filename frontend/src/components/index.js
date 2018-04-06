@@ -9,10 +9,11 @@ import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'
 import TextField from './TextField.js'
-import FormOne from './FormOne.js'
-import FormZero from './FormZero.js'
+import FormOne from './../containers/FormOne.container'
+import FormZero from './../containers/FormZero.container'
 import LiveSearch from './LiveSearch.js'
 import APRRateDisplay from './APRRateDisplay.js'
+import FindLoan from './../containers/FindLoan.container'
 import { BrowserRouter } from 'react-router-dom'
 
 export {
@@ -26,5 +27,6 @@ export {
   FormZero,
   LiveSearch,
   APRRateDisplay,
-  IntroPage
+  IntroPage,
+  FindLoan
 }

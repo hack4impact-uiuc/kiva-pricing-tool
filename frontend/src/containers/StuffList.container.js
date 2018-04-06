@@ -2,7 +2,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { fetchStuff } from './../actions'
-import StuffList from './StuffList.component'
+import StuffList from './../components/StuffList.component'
 import type { StuffStateProps } from './../types'
 
 function mapStateToProps(state): StuffStateProps {

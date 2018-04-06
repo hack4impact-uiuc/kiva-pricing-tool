@@ -14,7 +14,8 @@ import {
   APRRateDisplay,
   FormOne,
   FormZero,
-  IntroPage
+  IntroPage,
+  FindLoan
 } from './components'
 import registerServiceWorker from './registerServiceWorker'
 import './styles/index.css'
@@ -27,6 +28,7 @@ ReactDOM.render(
         <Navbar />
         <Route exact path="/" component={IntroPage} />
         <Route path="/newloan" component={FormZero} />
+        <Route path="/findloan" component={FindLoan} />
         <Route path="/output" component={APRRateDisplay} />
         <Route path="/form1" component={FormOne} />
       </div>

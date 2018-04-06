@@ -7,7 +7,7 @@ import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
 import axios from 'axios'
 
-class APRRateDisplay extends Component<void> {
+class APRRateDisplay extends Component {
   constructor(props) {
     super(props)
   }
@@ -17,7 +17,7 @@ class APRRateDisplay extends Component<void> {
       <Jumbotron className="banner">
         <Grid>
           <PageHeader>APR Rate: {this.props.aprRate}%</PageHeader>
-          <Button name="Back" url="" onClickHandler={() => {}} />
+          <Button name="Back" url="" />
           <Button
             name="Save Loan"
             onClickHandler={() => {
