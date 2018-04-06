@@ -55,7 +55,7 @@ class FormOne extends Component {
       insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
       insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
       security_deposit_percent_upfront:
-        formDataReducer.securityDeposityPercentUpfront,
+        formDataReducer.securityDepositPercentUpfront,
       security_deposit_percent_ongoing:
         formDataReducer.securityDepositPercentOngoing,
       security_deposit_fixed_upfront:
