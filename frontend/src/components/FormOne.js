@@ -1,5 +1,6 @@
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
+import { connect } from 'react-redux'
 import { Link, Route, withRouter } from 'react-router-dom'
 import { Dropdown, StuffList, Button, TextField, APRRateDisplay } from './'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
@@ -16,52 +17,57 @@ class FormOne extends Component<void> {
     }
   }
 
-  postData() {
-    let data = {
-      partner_name: 'African Leadership Academy',
-      loan_theme: 'Agriculture (Women)',
-      product_type: 'Small Loan',
-      version_num: '7',
-      update_name: 'David Chang',
+  handleTextChange = (name, value) => {
+    const { changedFormData } = this.props
+    console.log(name, value)
+    changedFormData([name], [value])
+    // this.setState({ [name]: value })
+  }
 
-      start_name: this.refs.firstName.state.textBody,
-      installment_time_period: this.refs.installment_time_period.state.value,
-      repayment_type: this.refs.repaymentType.state.value,
-      interest_time_period: this.refs.interest_time_period.state.value,
-      interest_payment_type: this.refs.interest_payment_type.state.value,
-      interest_calculation_type: this.refs.interest_calculation_type.state
-        .value,
-      loan_amount: this.refs.loan_amount.state.textBody,
-      installment: this.refs.installment.state.textBody,
-      nominal_interest_rate: this.refs.nominal_interest_rate.state.textBody,
-      grace_period_principal: this.refs.grace_period_principal.state.textBody,
-      grace_period_interest_pay: this.refs.grace_period_interest_pay.state
-        .textBody,
-      grace_period_interest_calculate: this.refs.grace_period_interest_calculate
-        .state.textBody,
-      grace_period_balloon: this.refs.grace_period_balloon.state.textBody,
-      fee_percent_upfront: this.refs.fee_percent_upfront.state.textBody,
-      fee_percent_ongoing: this.refs.fee_percent_ongoing.state.textBody,
-      fee_fixed_upfront: this.refs.fee_fixed_upfront.state.textBody,
-      fee_fixed_ongoing: this.refs.fee_fixed_ongoing.state.textBody,
-      tax_percent_fees: this.refs.tax_percent_fees.state.textBody,
-      tax_percent_interest: this.refs.tax_percent_interest.state.textBody,
-      insurance_percent_upfront: this.refs.insurance_percent_upfront.state
-        .textBody,
-      insurance_percent_ongoing: this.refs.insurance_percent_ongoing.state
-        .textBody,
-      insurance_fixed_upfront: this.refs.insurance_fixed_upfront.state.textBody,
-      insurance_fixed_ongoing: this.refs.insurance_fixed_ongoing.state.textBody,
-      security_deposit_percent_upfront: this.refs
-        .security_deposit_percent_upfront.state.textBody,
-      security_deposit_percent_ongoing: this.refs
-        .security_deposit_percent_ongoing.state.textBody,
-      security_deposit_fixed_upfront: this.refs.security_deposit_fixed_upfront
-        .state.textBody,
-      security_deposit_fixed_ongoing: this.refs.security_deposit_fixed_ongoing
-        .state.textBody,
-      interest_paid_on_deposit_percent: this.refs
-        .interest_paid_on_deposit_percent.state.textBody
+  postData() {
+    const { formDataReducer } = this.props
+    let data = {
+      partner_name: formDataReducer.mfi,
+      loan_theme: formDataReducer.loanType,
+      product_type: formDataReducer.productType,
+      version_num: formDataReducer.versionNum,
+
+      update_name: formDataReducer.updateName, // ???
+
+      start_name: formDataReducer.startName,
+      installment_time_period: formDataReducer.installmentTimePeriod,
+      repayment_type: formDataReducer.repaymentType,
+      interest_time_period: formDataReducer.interestTimePeriod,
+      interest_payment_type: formDataReducer.interestPaymentType,
+      interest_calculation_type: formDataReducer.interestCalculationType,
+      loan_amount: formDataReducer.loanAmount,
+      installment: formDataReducer.installment,
+      nominal_interest_rate: formDataReducer.nominalInterestRate,
+      grace_period_principal: formDataReducer.gracePeriodPrincipal,
+      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
+      grace_period_interest_calculate:
+        formDataReducer.gracePeriodInterestCalculate,
+      grace_period_balloon: formDataReducer.gracePeriodBalloon,
+      fee_percent_upfront: formDataReducer.feePercentUpfront,
+      fee_percent_ongoing: formDataReducer.feePercentOngoing,
+      fee_fixed_upfront: formDataReducer.feeFixedUpfront,
+      fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
+      tax_percent_fees: formDataReducer.taxPercentFees,
+      tax_percent_interest: formDataReducer.taxPercentInterest,
+      insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
+      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
+      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
+      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
+      security_deposit_percent_upfront:
+        formDataReducer.securityDeposityPercentUpfront,
+      security_deposit_percent_ongoing:
+        formDataReducer.securityDepositPercentOngoing,
+      security_deposit_fixed_upfront:
+        formDataReducer.securityDepositFixedUpfront,
+      security_deposit_fixed_ongoing:
+        formDataReducer.securityDepositFixedOngoing,
+      interest_paid_on_deposit_percent:
+        formDataReducer.interestPaidOnDepositPercent
     }
     console.log(data)
     axios
@@ -104,324 +110,403 @@ class FormOne extends Component<void> {
   }
 
   render() {
-    //will have to render like this until we incorporate redux
-    if (!this.state.aprRate) {
-      return (
-        <Grid>
-          <PageHeader>User Information</PageHeader>
-          <Form inline>
-            <TextField
-              id="First Name"
-              hint="ex. John"
-              typeVal="String"
-              limit="100"
-              ref="firstName"
-            />
-            <TextField
+    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    return (
+      <Grid>
+        <PageHeader>User Information</PageHeader>
+        <Form inline>
+          <TextField
+            id="Full Name"
+            reduxId="startName"
+            hint="ex. John"
+            typeVal="String"
+            limit="100"
+            ref="firstName"
+            textBody={formDataReducer.startName}
+            onTextInputChange={this.handleTextChange}
+          />
+          {/* <TextField
               id="Last Name"
               hint="ex. Smith"
               typeVal="String"
               limit="100"
               ref="lastName"
-            />
-          </Form>
+            /> */}
+        </Form>
 
-          <PageHeader>Basic Loan Conditions</PageHeader>
+        <PageHeader>Basic Loan Conditions</PageHeader>
 
-          <Form inline>
-            <Dropdown
-              title="Repayment Type:"
-              items={[
-                //must match backend! IMPORTANT
-                { id: '1', value: 'equal principal payments' },
-                { id: '2', value: 'equal installments (amortized)' },
-                { id: '3', value: 'single end-term principal payment' }
-              ]}
-              ref="repaymentType"
-            />
-            <Dropdown
-              title="Interest Payment:"
-              items={[
-                { id: '1', value: 'Multiple Installments' },
-                { id: '2', value: 'Single End-Term Payments' }
-              ]}
-              ref="interest_payment_type"
-            />
-            <Dropdown
-              title="Interest Calculation:"
-              items={[
-                { id: '1', value: 'initial amount or flat' },
-                // { id: '2', value: 'Flat' },
-                { id: '2', value: 'declining balance' }
-              ]}
-              ref="interest_calculation_type"
-            />
-          </Form>
+        <Form inline>
+          <Dropdown
+            title="Repayment Type:"
+            reduxId="repaymentType"
+            items={[
+              //must match backend! IMPORTANT
+              { id: '1', value: 'equal principal payments' },
+              { id: '2', value: 'equal installments (amortized)' },
+              { id: '3', value: 'single end-term principal payment' }
+            ]}
+            ref="repaymentType"
+            onTextInputChange={this.handleTextChange}
+            selected={formDataReducer.repaymentType}
+          />
+          <Dropdown
+            title="Interest Payment:"
+            reduxId="interestPaymentType"
+            items={[
+              { id: '1', value: 'Multiple Installments' },
+              { id: '2', value: 'Single End-Term Payments' }
+            ]}
+            ref="interest_payment_type"
+            onTextInputChange={this.handleTextChange}
+            selected={formDataReducer.interestPaymentType}
+          />
+          <Dropdown
+            title="Interest Calculation:"
+            reduxId="interestCalculationType"
+            items={[
+              { id: '1', value: 'initial amount or flat' },
+              // { id: '2', value: 'Flat' },
+              { id: '2', value: 'declining balance' }
+            ]}
+            ref="interest_calculation_type"
+            onTextInputChange={this.handleTextChange}
+            selected={formDataReducer.interestCalculationType}
+          />
+        </Form>
 
-          <br />
-          <Form inline>
-            <TextField
-              id="Loan Amount"
-              hint="ex. 5000"
-              typeVal="float"
-              limit="900000000"
-              ref="loan_amount"
-            />
-            <TextField
-              id="Number of Terms"
-              hint="ex. 12"
-              typeVal="int"
-              limit="180"
-              ref="installment"
-            />
-            <TextField
-              id="Nominal Interest Rate"
-              hint="ex. 12"
-              typeVal="int"
-              limit="100"
-              ref="nominal_interest_rate"
-            />
-          </Form>
+        <br />
+        <Form inline>
+          <TextField
+            id="Loan Amount"
+            reduxId="loanAmount"
+            hint="ex. 5000"
+            typeVal="float"
+            limit="900000000"
+            ref="loan_amount"
+            textBody={formDataReducer.loanAmount}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Number of Terms"
+            reduxId="installment"
+            hint="ex. 12"
+            typeVal="int"
+            limit="180"
+            ref="installment"
+            textBody={formDataReducer.installment}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Nominal Interest Rate"
+            reduxId="nominalInterestRate"
+            hint="ex. 12"
+            typeVal="int"
+            limit="100"
+            ref="nominal_interest_rate"
+            textBody={formDataReducer.nominalInterestRate}
+            onTextInputChange={this.handleTextChange}
+          />
+        </Form>
 
-          <Form inline>
-            <Dropdown
-              title="Time Period:"
-              items={[
-                { id: '1', value: 'days' },
-                { id: '7', value: 'weeks' },
-                { id: '14', value: 'two-weeks' },
-                { id: '15', value: '15 days' },
-                { id: '28', value: '4 weeks' },
-                { id: '30', value: 'months' },
-                { id: '90', value: 'quarters' },
-                { id: '180', value: 'half-years' },
-                { id: '365', value: 'years' }
-              ]}
-              ref="installment_time_period"
-            />
-            <Dropdown
-              title="Time Period:"
-              //{'day':0, 'week':1, 'two-weeks':2, '15 days':3, '4 weeks':4,
-              //'month':5, 'quarter':6, 'half-year':7, 'year':8}
-              items={[
-                { id: '0', value: 'day' },
-                { id: '1', value: 'week' },
-                { id: '2', value: 'two-weeks' },
-                { id: '3', value: '15 days' },
-                { id: '4', value: '4 weeks' },
-                { id: '5', value: 'month' },
-                { id: '6', value: 'quarter' },
-                { id: '7', value: 'half-year' },
-                { id: '8', value: 'year' }
-              ]}
-              ref="interest_time_period"
-            />
-          </Form>
+        <Form inline>
+          <Dropdown
+            title="Time Period:"
+            reduxId="installmentTimePeriod"
+            items={[
+              { id: '1', value: 'days' },
+              { id: '7', value: 'weeks' },
+              { id: '14', value: 'two-weeks' },
+              { id: '15', value: '15 days' },
+              { id: '28', value: '4 weeks' },
+              { id: '30', value: 'months' },
+              { id: '90', value: 'quarters' },
+              { id: '180', value: 'half-years' },
+              { id: '365', value: 'years' }
+            ]}
+            ref="installment_time_period"
+            onTextInputChange={this.handleTextChange}
+            selected={formDataReducer.installmentTimePeriod}
+          />
+          <Dropdown
+            title="Time Period:"
+            reduxId="interestTimePeriod"
+            items={[
+              { id: '0', value: 'day' },
+              { id: '1', value: 'week' },
+              { id: '2', value: 'two-weeks' },
+              { id: '3', value: '15 days' },
+              { id: '4', value: '4 weeks' },
+              { id: '5', value: 'month' },
+              { id: '6', value: 'quarter' },
+              { id: '7', value: 'half-year' },
+              { id: '8', value: 'year' }
+            ]}
+            ref="interest_time_period"
+            onTextInputChange={this.handleTextChange}
+            selected={formDataReducer.interestTimePeriod}
+          />
+        </Form>
 
-          <h2>
-            <small> Grace or Prepay </small>
-          </h2>
-          <Form inline>
-            <TextField
-              id="Capital"
-              hint="ex. 1"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_principal"
-            />
-            <TextField
-              id="Int Pmt"
-              hint="ex. 1"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_interest_pay"
-            />
-            <TextField
-              id="Int Calc"
-              hint="ex. 1"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_interest_calculate"
-            />
-            <TextField
-              id="Balloon"
-              hint="ex. 1"
-              typeVal="float"
-              limit="180"
-              ref="grace_period_balloon"
-            />
-          </Form>
+        <h2>
+          <small> Grace or Prepay </small>
+        </h2>
+        <Form inline>
+          <TextField
+            id="Capital"
+            reduxId="gracePeriodPrincipal"
+            hint="ex. 1"
+            typeVal="float"
+            limit="180"
+            ref="grace_period_principal"
+            textBody={formDataReducer.gracePeriodPrincipal}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Int Pmt"
+            reduxId="gracePeriodInterestPay"
+            hint="ex. 1"
+            typeVal="float"
+            limit="180"
+            ref="grace_period_interest_pay"
+            textBody={formDataReducer.gracePeriodInterestPay}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Int Calc"
+            reduxId="gracePeriodInterestCalculate"
+            hint="ex. 1"
+            typeVal="float"
+            limit="180"
+            ref="grace_period_interest_calculate"
+            textBody={formDataReducer.gracePeriodInterestCalculate}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Balloon"
+            reduxId="gracePeriodBalloon"
+            hint="ex. 1"
+            typeVal="float"
+            limit="180"
+            ref="grace_period_balloon"
+            textBody={formDataReducer.gracePeriodBalloon}
+            onTextInputChange={this.handleTextChange}
+          />
+        </Form>
 
-          <PageHeader>Fees and Taxes</PageHeader>
+        <PageHeader>Fees and Taxes</PageHeader>
 
-          <h2>
-            <small> Fees </small>
-          </h2>
+        <h2>
+          <small> Fees </small>
+        </h2>
 
-          <Form inline>
-            <TextField
-              id="Fee%"
-              hint="Upfront"
-              typeVal="float"
-              limit="180"
-              ref="fee_percent_upfront"
-            />
-            <TextField
-              id="Fee%"
-              hint="Ongoing"
-              typeVal="float"
-              limit="180"
-              ref="fee_percent_ongoing"
-            />
-            <TextField
-              id="Fee (fixed amt)"
-              hint="Upfront"
-              typeVal="float"
-              limit="100000000"
-              ref="fee_fixed_upfront"
-            />
-            <TextField
-              id="Fee (fixed amt)"
-              hint="Ongoing"
-              typeVal="float"
-              limit="100000000"
-              ref="fee_fixed_ongoing"
-            />
-          </Form>
+        <Form inline>
+          <TextField
+            id="Fee%"
+            reduxId="feePercentUpfront"
+            hint="Upfront"
+            typeVal="float"
+            limit="180"
+            ref="fee_percent_upfront"
+            textBody={formDataReducer.feePercentUpfront}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Fee%"
+            reduxId="feePercentOngoing"
+            hint="Ongoing"
+            typeVal="float"
+            limit="180"
+            ref="fee_percent_ongoing"
+            textBody={formDataReducer.feePercentOngoing}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Fee (fixed amt)"
+            reduxId="feeFixedUpfront"
+            hint="Upfront"
+            typeVal="float"
+            limit="100000000"
+            ref="fee_fixed_upfront"
+            textBody={formDataReducer.feeFixedUpfront}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Fee (fixed amt)"
+            reduxId="feeFixedOngoing"
+            hint="Ongoing"
+            typeVal="float"
+            limit="100000000"
+            ref="fee_fixed_ongoing"
+            textBody={formDataReducer.feeFixedOngoing}
+            onTextInputChange={this.handleTextChange}
+          />
+        </Form>
 
-          <h2>
-            <small> Taxes </small>
-          </h2>
+        <h2>
+          <small> Taxes </small>
+        </h2>
 
-          <Form inline>
-            <TextField
-              id="Value Added Tax % on Fees"
-              typeVal="float"
-              limit="100"
-              ref="tax_percent_fees"
-            />
-            <TextField
-              id="Value Added Tax % on Interest"
-              typeVal="float"
-              limit="100"
-              ref="tax_percent_interest"
-            />
-          </Form>
+        <Form inline>
+          <TextField
+            id="Value Added Tax % on Fees"
+            reduxId="taxPercentFees"
+            typeVal="float"
+            limit="100"
+            ref="tax_percent_fees"
+            textBody={formDataReducer.taxPercentFees}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Value Added Tax % on Interest"
+            reduxId="taxPercentInterest"
+            typeVal="float"
+            limit="100"
+            ref="tax_percent_interest"
+            textBody={formDataReducer.taxPercentInterest}
+            onTextInputChange={this.handleTextChange}
+          />
+        </Form>
 
-          <PageHeader>Insurance</PageHeader>
+        <PageHeader>Insurance</PageHeader>
 
-          <Form inline>
-            <TextField
-              id="Insurance %"
-              hint="Upfront"
-              typeVal="float"
-              limit="100"
-              ref="insurance_percent_upfront"
-            />
-            <TextField
-              id="Insurance %"
-              hint="Ongoing"
-              typeVal="float"
-              limit="100"
-              ref="insurance_percent_ongoing"
-            />
-            <TextField
-              id="Insurance (fixed amt)"
-              hint="Upfront"
-              typeVal="float"
-              limit="900000000"
-              ref="insurance_fixed_upfront"
-            />
-            <TextField
-              id="Insurance (fixed amt)"
-              hint="Ongoing"
-              typeVal="float"
-              limit="900000000"
-              ref="insurance_fixed_ongoing"
-            />
-          </Form>
+        <Form inline>
+          <TextField
+            id="Insurance %"
+            reduxId="insurancePercentUpfront"
+            hint="Upfront"
+            typeVal="float"
+            limit="100"
+            ref="insurance_percent_upfront"
+            textBody={formDataReducer.insurancePercentUpfront}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Insurance %"
+            reduxId="insurancePercentOngoing"
+            hint="Ongoing"
+            typeVal="float"
+            limit="100"
+            ref="insurance_percent_ongoing"
+            textBody={formDataReducer.insurancePercentOngoing}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Insurance (fixed amt)"
+            reduxId="insuranceFixedUpfront"
+            hint="Upfront"
+            typeVal="float"
+            limit="900000000"
+            ref="insurance_fixed_upfront"
+            textBody={formDataReducer.insuranceFixedUpfront}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Insurance (fixed amt)"
+            reduxId="insuranceFixedOngoing"
+            hint="Ongoing"
+            typeVal="float"
+            limit="900000000"
+            ref="insurance_fixed_ongoing"
+            textBody={formDataReducer.insuranceFixedOngoing}
+            onTextInputChange={this.handleTextChange}
+          />
+        </Form>
 
-          <PageHeader>Security Deposit</PageHeader>
+        <PageHeader>Security Deposit</PageHeader>
 
-          <Form inline>
-            <TextField
-              id="Security Deposit %"
-              hint="Upfront"
-              typeVal="float"
-              limit="100"
-              ref="security_deposit_percent_upfront"
-            />
-            <TextField
-              id="Security Deposit %"
-              hint="Ongoing"
-              typeVal="float"
-              limit="100"
-              ref="security_deposit_percent_ongoing"
-            />
-            <TextField
-              id="Security Deposit (fixed amt)"
-              hint="Upfront"
-              typeVal="float"
-              limit="900000000"
-              ref="security_deposit_fixed_upfront"
-            />
-            <TextField
-              id="Security Deposit (fixed amt)"
-              hint="Ongoing"
-              typeVal="float"
-              limit="900000000"
-              ref="security_deposit_fixed_ongoing"
-            />
-            <TextField
-              id="Interest Paid on Deposit"
-              typeVal="float"
-              limit="900000000"
-              ref="interest_paid_on_deposit_percent"
-            />
-          </Form>
+        <Form inline>
+          <TextField
+            id="Security Deposit %"
+            reduxId="securityDepositPercentUpfront"
+            hint="Upfront"
+            typeVal="float"
+            limit="100"
+            ref="security_deposit_percent_upfront"
+            textBody={formDataReducer.securityDepositPercentUpfront}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Security Deposit %"
+            reduxId="securityDepositPercentOngoing"
+            hint="Ongoing"
+            typeVal="float"
+            limit="100"
+            ref="security_deposit_percent_ongoing"
+            textBody={formDataReducer.securityDepositPercentOngoing}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Security Deposit (fixed amt)"
+            reduxId="securityDepositFixedUpfront"
+            hint="Upfront"
+            typeVal="float"
+            limit="900000000"
+            ref="security_deposit_fixed_upfront"
+            textBody={formDataReducer.securityDepositFixedUpfront}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Security Deposit (fixed amt)"
+            reduxId="securityDepositFixedOngoing"
+            hint="Ongoing"
+            typeVal="float"
+            limit="900000000"
+            ref="security_deposit_fixed_ongoing"
+            textBody={formDataReducer.securityDepositFixedOngoing}
+            onTextInputChange={this.handleTextChange}
+          />
+          <TextField
+            id="Interest Paid on Deposit"
+            reduxId="interestPaidOnDepositPercent"
+            typeVal="float"
+            limit="900000000"
+            ref="interest_paid_on_deposit_percent"
+            textBody={formDataReducer.interestPaidOnDepositPercent}
+            onTextInputChange={this.handleTextChange}
+          />
+        </Form>
 
-          <Button name="Back" url="findloan" onClickHandler={() => {}} />
-          <button
+        <Button name="Back" url="findloan" onClickHandler={() => {}} />
+        {/* <button
             onClick={e => {
               this.postData()
             }}
           >
             Next
-          </button>
-          {/* <Button
-              name="Next"
-              url="output"
-              // aprRate ={ e => {
-              //   this.getAPRRate()
-              // }}
-              onClickHandler={e => {
-                this.postData()
-              }}
-            /> */}
-        </Grid>
-      )
-    } else {
-      return (
-        <Grid>
-          <PageHeader> APR Rate: {this.state.aprRate}%</PageHeader>
-          <Button
-            name="Back"
-            url="form1"
-            onClickHandler={e => {
-              this.changeContent()
-            }}
-          />
-          <Button
-            name="Save Loan"
-            url=""
-            onClickHandler={() => {
-              alert('Are you sure you want to save loan?')
-              this.saveData()
-            }}
-          />
-        </Grid>
-      )
-    }
+          </button> */}
+        <Button
+          name="Next"
+          url="output"
+          aprRate={this.state.aprRate}
+          onClickHandler={e => {
+            this.postData()
+          }}
+        />
+      </Grid>
+    )
+    // else {
+    //   return (
+    //     <Grid>
+    //       <PageHeader> APR Rate: {this.state.aprRate}%</PageHeader>
+    //       <Button
+    //         name="Back"
+    //         url="form1"
+    //         onClickHandler={e => {
+    //           this.changeContent()
+    //         }}
+    //       />
+    //       <Button
+    //         name="Save Loan"
+    //         url=""
+    //         onClickHandler={() => {
+    //           alert('Are you sure you want to save loan?')
+    //           this.saveData()
+    //         }}
+    //       />
+    //     </Grid>
+    //   )
+    // }
   }
 }
 
