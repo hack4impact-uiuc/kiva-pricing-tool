@@ -8,7 +8,7 @@ import axios from 'axios'
 
 import './../styles/app.scss'
 
-class FormOne extends Component<void> {
+class FormOne extends Component {
   constructor(props) {
     super(props)
     this.state = {

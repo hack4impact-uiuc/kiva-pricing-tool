@@ -7,7 +7,7 @@ import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
 import axios from 'axios'
 
-class APRRateDisplay extends Component<void> {
+class APRRateDisplay extends Component {
   constructor(props) {
     super(props)
   }
