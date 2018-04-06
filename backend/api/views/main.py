@@ -43,6 +43,7 @@ def cal_apr():
     """
         calculate and send a response with APR
     """
+    print("in calc url")
     input_json = request.get_json()
     args = request.args
     payload = {}
@@ -90,6 +91,7 @@ def get_partner_theme_list():
 def save_loan():
     """Save a new loan to the database, attempts to get all form data and use loan's __init__ to add"""
     request_json = request.get_json()
+    print(request_json.keys())
     try:
         newrow = {
             'partner_name' : request_json['partner_name'],
@@ -130,6 +132,7 @@ def save_loan():
     except:
         return create_response(status=422, message='missing compoonents for save new loan')
     try:
+        loan = Loan(newrow)
         db.session.add(Loan(newrow))
         print("hi")
         db.session.commit()

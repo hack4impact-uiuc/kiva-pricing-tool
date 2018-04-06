@@ -56,6 +56,7 @@ class FindLoan extends Component {
             selected={formDataReducer.mfi}
             onChange={e => {
               changedFormData('mfi', e)
+              changedFormData('backRoute', 'findloan')
             }}
           />
 
@@ -74,7 +75,7 @@ class FindLoan extends Component {
           <Typeahead
             ref="product"
             label="product"
-            options={['Apple', 'Banana', 'Orange']}
+            options={['Small Business', 'Entrepreneur', 'Education']}
             placeholder="Search Products i.e. small loan"
             typeVal="String"
             limit={100}

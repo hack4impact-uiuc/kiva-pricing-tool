@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { changedFormData } from './../actions'
-import FormOne from './../components/FormOne'
+import APRRateDisplay from './../components/APRRateDisplay'
 
 function mapStateToProps(state) {
   console.log(state)
@@ -19,4 +19,4 @@ function mapDispatchToProps(dispatch) {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormOne)
+export default connect(mapStateToProps, mapDispatchToProps)(APRRateDisplay)

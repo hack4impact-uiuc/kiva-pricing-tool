@@ -9,6 +9,7 @@ const initialState = {
     loanType: null,
     productType: null,
     versionNum: null,
+
     backRoute: null,
     updateName: null,
     startName: null,
@@ -38,7 +39,10 @@ const initialState = {
     securityDepositPercentOngoing: null,
     securityDepositFixedUpfront: null,
     securityDepositFixedOngoing: null,
-    interestPaidOnDepositPercent: null
+    interestPaidOnDepositPercent: null,
+
+    aprRate: null,
+    saveData: null
   }
 }
 

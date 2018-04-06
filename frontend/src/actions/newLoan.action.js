@@ -13,6 +13,5 @@ function newLoanCont(mfi, loanType, productType) {
 }
 
 export function contNewLoan(mfi, loanType, productType) {
-  console.log(mfi, loanType, productType)
   return dispatch => dispatch(newLoanCont(mfi, loanType, productType))
 }

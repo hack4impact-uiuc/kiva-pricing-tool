@@ -8,7 +8,7 @@ import axios from 'axios'
 
 import './../styles/app.scss'
 
-class FormOne extends Component {
+class APRInputs extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -22,48 +22,90 @@ class FormOne extends Component {
     changedFormData([name], [value])
   }
 
-  postData() {
+  inputsEntered() {
     const { formDataReducer } = this.props
+    return (
+      !this.isNullOrEmpty(formDataReducer.mfi) &&
+      !this.isNullOrEmpty(formDataReducer.loanType) &&
+      !this.isNullOrEmpty(formDataReducer.productType) &&
+      !this.isNullOrEmpty(formDataReducer.versionNum) &&
+      !this.isNullOrEmpty(formDataReducer.startName) &&
+      !this.isNullOrEmpty(formDataReducer.installmentTimePeriod) &&
+      !this.isNullOrEmpty(formDataReducer.repaymentType) &&
+      !this.isNullOrEmpty(formDataReducer.interestTimePeriod) &&
+      !this.isNullOrEmpty(formDataReducer.interestPaymentType) &&
+      !this.isNullOrEmpty(formDataReducer.interestCalculationType) &&
+      !this.isNullOrEmpty(formDataReducer.loanAmount) &&
+      !this.isNullOrEmpty(formDataReducer.installment) &&
+      !this.isNullOrEmpty(formDataReducer.nominalInterestRate) &&
+      !this.isNullOrEmpty(formDataReducer.gracePeriodBalloon) &&
+      !this.isNullOrEmpty(formDataReducer.gracePeriodPrincipal) &&
+      !this.isNullOrEmpty(formDataReducer.gracePeriodInterestPay) &&
+      !this.isNullOrEmpty(formDataReducer.gracePeriodInterestCalculate) &&
+      !this.isNullOrEmpty(formDataReducer.feePercentOngoing) &&
+      !this.isNullOrEmpty(formDataReducer.feePercentUpfront) &&
+      !this.isNullOrEmpty(formDataReducer.feeFixedUpfront) &&
+      !this.isNullOrEmpty(formDataReducer.feeFixedOngoing) &&
+      !this.isNullOrEmpty(formDataReducer.taxPercentFees) &&
+      !this.isNullOrEmpty(formDataReducer.taxPercentInterest) &&
+      !this.isNullOrEmpty(formDataReducer.insurancePercentUpfront) &&
+      !this.isNullOrEmpty(formDataReducer.insurancePercentOngoing) &&
+      !this.isNullOrEmpty(formDataReducer.insuranceFixedUpfront) &&
+      !this.isNullOrEmpty(formDataReducer.insuranceFixedOngoing) &&
+      !this.isNullOrEmpty(formDataReducer.securityDepositPercentUpfront) &&
+      !this.isNullOrEmpty(formDataReducer.securityDepositPercentOngoing) &&
+      !this.isNullOrEmpty(formDataReducer.securityDepositFixedUpfront) &&
+      !this.isNullOrEmpty(formDataReducer.securityDepositFixedOngoing) &&
+      !this.isNullOrEmpty(formDataReducer.interestPaidOnDepositPercent)
+    )
+  }
+
+  isNullOrEmpty(input) {
+    return input == null || input.length == 0
+  }
+
+  postData() {
+    const { formDataReducer,changedFormData } = this.props
     let data = {
-      partner_name: formDataReducer.mfi,
-      loan_theme: formDataReducer.loanType,
-      product_type: formDataReducer.productType,
-      version_num: formDataReducer.versionNum,
+      partner_name: formDataReducer.mfi[0],
+      loan_theme: formDataReducer.loanType[0],
+      product_type: formDataReducer.productType[0],
+      version_num: formDataReducer.versionNum[0],
       update_name: formDataReducer.updateName,
-      start_name: formDataReducer.startName,
-      installment_time_period: formDataReducer.installmentTimePeriod,
-      repayment_type: formDataReducer.repaymentType,
-      interest_time_period: formDataReducer.interestTimePeriod,
-      interest_payment_type: formDataReducer.interestPaymentType,
-      interest_calculation_type: formDataReducer.interestCalculationType,
-      loan_amount: formDataReducer.loanAmount,
-      installment: formDataReducer.installment,
-      nominal_interest_rate: formDataReducer.nominalInterestRate,
-      grace_period_principal: formDataReducer.gracePeriodPrincipal,
-      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
+      start_name: formDataReducer.startName[0],
+      installment_time_period: formDataReducer.installmentTimePeriod[0],
+      repayment_type: formDataReducer.repaymentType[0],
+      interest_time_period: formDataReducer.interestTimePeriod[0],
+      interest_payment_type: formDataReducer.interestPaymentType[0],
+      interest_calculation_type: formDataReducer.interestCalculationType[0],
+      loan_amount: formDataReducer.loanAmount[0],
+      installment: formDataReducer.installment[0],
+      nominal_interest_rate: formDataReducer.nominalInterestRate[0],
+      grace_period_principal: formDataReducer.gracePeriodPrincipal[0],
+      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay[0],
       grace_period_interest_calculate:
-        formDataReducer.gracePeriodInterestCalculate,
-      grace_period_balloon: formDataReducer.gracePeriodBalloon,
-      fee_percent_upfront: formDataReducer.feePercentUpfront,
-      fee_percent_ongoing: formDataReducer.feePercentOngoing,
-      fee_fixed_upfront: formDataReducer.feeFixedUpfront,
-      fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
-      tax_percent_fees: formDataReducer.taxPercentFees,
-      tax_percent_interest: formDataReducer.taxPercentInterest,
-      insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
-      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
-      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
-      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
+        formDataReducer.gracePeriodInterestCalculate[0],
+      grace_period_balloon: formDataReducer.gracePeriodBalloon[0],
+      fee_percent_upfront: formDataReducer.feePercentUpfront[0],
+      fee_percent_ongoing: formDataReducer.feePercentOngoing[0],
+      fee_fixed_upfront: formDataReducer.feeFixedUpfront[0],
+      fee_fixed_ongoing: formDataReducer.feeFixedOngoing[0],
+      tax_percent_fees: formDataReducer.taxPercentFees[0],
+      tax_percent_interest: formDataReducer.taxPercentInterest[0],
+      insurance_percent_upfront: formDataReducer.insurancePercentUpfront[0],
+      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing[0],
+      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront[0],
+      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing[0],
       security_deposit_percent_upfront:
-        formDataReducer.securityDeposityPercentUpfront,
+        formDataReducer.securityDepositPercentUpfront[0],
       security_deposit_percent_ongoing:
-        formDataReducer.securityDepositPercentOngoing,
+        formDataReducer.securityDepositPercentOngoing[0],
       security_deposit_fixed_upfront:
-        formDataReducer.securityDepositFixedUpfront,
+        formDataReducer.securityDepositFixedUpfront[0],
       security_deposit_fixed_ongoing:
-        formDataReducer.securityDepositFixedOngoing,
+        formDataReducer.securityDepositFixedOngoing[0],
       interest_paid_on_deposit_percent:
-        formDataReducer.interestPaidOnDepositPercent
+        formDataReducer.interestPaidOnDepositPercent[0]
     }
 
     axios
@@ -71,11 +113,11 @@ class FormOne extends Component {
       .then(response => {
         const apr = response.data.result.apr
         data['nominal_apr'] = apr.toString()
-        this.setState({
-          aprRate: apr,
-          saveData: data
-        })
-        console.log(response.data.result.apr)
+        changedFormData("aprRate", apr)
+        
+          // aprRate: apr,
+          // saveData: data
+       
       })
       .catch(function(error) {
         console.log(
@@ -84,25 +126,6 @@ class FormOne extends Component {
       })
   }
 
-  saveData() {
-    console.log(this.state.saveData)
-    axios
-      .post('http://127.0.0.1:3453/saveNewLoan', this.state.saveData)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(function(error) {
-        console.log(error.message + ' there was an error with the request')
-      })
-  }
-
-  getAPRRate() {
-    return this.state.aprRate
-  }
-
-  changeContent() {
-    this.setState({ aprRate: '' })
-  }
 
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
@@ -427,11 +450,14 @@ class FormOne extends Component {
           />
         </Form>
 
-        <Button name="Back" url="findloan" />
+        <Button 
+          name="Back" 
+          url={formDataReducer.backRoute}
+        />
         <Button
           name="Next"
-          url="output"
-          aprRate={this.state.aprRate}
+          disable={!this.inputsEntered()} 
+          url={"output"}
           onClickHandler={e => {
             this.postData()
           }}
@@ -441,4 +467,4 @@ class FormOne extends Component {
   }
 }
 
-export default FormOne
+export default APRInputs

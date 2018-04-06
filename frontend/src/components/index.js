@@ -9,11 +9,11 @@ import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'
 import TextField from './TextField.js'
-import FormOne from './../containers/FormOne.container'
-import FormZero from './../containers/FormZero.container'
+import APRInputs from './../containers/APRInputs'
+import NewLoan from './../containers/NewLoan'
 import LiveSearch from './LiveSearch.js'
-import APRRateDisplay from './APRRateDisplay.js'
-import FindLoan from './../containers/FindLoan.container'
+import APRRateDisplay from './../containers/APRDisplay'
+import FindLoan from './../containers/FindLoan'
 import { BrowserRouter } from 'react-router-dom'
 
 export {
@@ -23,8 +23,8 @@ export {
   LargeTextInput,
   Dropdown,
   TextField,
-  FormOne,
-  FormZero,
+  APRInputs,
+  NewLoan,
   LiveSearch,
   APRRateDisplay,
   IntroPage,

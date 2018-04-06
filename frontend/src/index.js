@@ -12,8 +12,8 @@ import {
   Colors,
   Navbar,
   APRRateDisplay,
-  FormOne,
-  FormZero,
+  APRInputs,
+  NewLoan,
   IntroPage,
   FindLoan
 } from './components'
@@ -27,10 +27,10 @@ ReactDOM.render(
       <div>
         <Navbar />
         <Route exact path="/" component={IntroPage} />
-        <Route path="/newloan" component={FormZero} />
+        <Route path="/newloan" component={NewLoan} />
         <Route path="/findloan" component={FindLoan} />
         <Route path="/output" component={APRRateDisplay} />
-        <Route path="/form1" component={FormOne} />
+        <Route path="/form1" component={APRInputs} />
       </div>
     </ConnectedRouter>
   </Provider>,

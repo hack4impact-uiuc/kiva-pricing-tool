@@ -8,7 +8,7 @@ import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
 
-class FormZero extends Component {
+class NewLoan extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
@@ -51,7 +51,6 @@ class FormZero extends Component {
 
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
-    console.log(formDataReducer)
     return (
       <Grid>
         <Form>
@@ -64,6 +63,7 @@ class FormZero extends Component {
             selected={formDataReducer.mfi}
             onChange={e => {
               changedFormData('mfi', e)
+              changedFormData('backRoute', "newloan")
             }}
           />
           <br />
@@ -88,10 +88,25 @@ class FormZero extends Component {
             onTextInputChange={this.handleTextChange}
           />
 
-          <Button disable={this.inputsEntered()} name="Continue" url="form1" />
+          <Button 
+            disable={!this.inputsEntered()} 
+            name="Continue" 
+            url="form1" 
+            onClickHandler = {() => {
+              axios
+              .get(
+                'http://127.0.0.1:3453/getVersionNum?partner_name=' + formDataReducer.mfi 
+                + '&theme=' + formDataReducer.loanType
+                + '&product=' + formDataReducer.loanProduct
+              )
+              .then(response => {
+                  changedFormData('versionNum', response.data.result)
+              })
+            }}
+          />
         </Form>
       </Grid>
     )
   }
 }
-export default FormZero
+export default NewLoan
