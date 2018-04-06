@@ -17,7 +17,7 @@ class APRRateDisplay extends Component<void> {
       <Jumbotron className="banner">
         <Grid>
           <PageHeader>APR Rate: {this.props.aprRate}%</PageHeader>
-          <Button name="Back" url="" onClickHandler={() => {}} />
+          <Button name="Back" url="" />
           <Button
             name="Save Loan"
             onClickHandler={() => {

@@ -31,12 +31,6 @@ class FindLoan extends Component {
 
   inputsEntered() {
     const { formDataReducer } = this.props
-    console.log(
-      formDataReducer.mfi,
-      formDataReducer.loanType,
-      formDataReducer.productType,
-      formDataReducer.versionNum
-    )
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
@@ -50,25 +44,18 @@ class FindLoan extends Component {
   }
 
   render() {
-    const {
-      submitFindLoan,
-      formDataReducer,
-      backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong,
-      changedFormData
-    } = this.props
+    const { formDataReducer, changedFormData } = this.props
 
     return (
       <Grid>
         <Form>
           <Typeahead
-            ref="mfi"
             label="mfi"
             placeholder="Select MFI Partner"
             options={this.state.partner_names}
             selected={formDataReducer.mfi}
             onChange={e => {
               changedFormData('mfi', e)
-              // this.handleTextChange('selectedPartnerName', e)
             }}
           />
 
@@ -106,26 +93,13 @@ class FindLoan extends Component {
             selected={formDataReducer.versionNum}
             placeholder="Search Versions:"
             onChange={e => {
-              console.log(e)
               changedFormData('versionNum', e)
-              console.log(this.state.selectedVersionNum)
             }}
           />
           <br />
 
-          <Button
-            name="Back"
-            url=""
-            onClickHandler={e => {
-              backClickedToIntroButMeghaDoesntApproveOfThisFunctionBecauseItsTooLong()
-            }}
-          />
-          <Button
-            disable={!this.inputsEntered()}
-            name="Continue"
-            url="form1"
-            onClickHandler={() => {}}
-          />
+          <Button name="Back" url="" />
+          <Button disable={!this.inputsEntered()} name="Continue" url="form1" />
         </Form>
       </Grid>
     )

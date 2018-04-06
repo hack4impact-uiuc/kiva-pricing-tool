@@ -19,9 +19,7 @@ class FormOne extends Component<void> {
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
-    console.log(name, value)
     changedFormData([name], [value])
-    // this.setState({ [name]: value })
   }
 
   postData() {
@@ -31,9 +29,7 @@ class FormOne extends Component<void> {
       loan_theme: formDataReducer.loanType,
       product_type: formDataReducer.productType,
       version_num: formDataReducer.versionNum,
-
-      update_name: formDataReducer.updateName, // ???
-
+      update_name: formDataReducer.updateName,
       start_name: formDataReducer.startName,
       installment_time_period: formDataReducer.installmentTimePeriod,
       repayment_type: formDataReducer.repaymentType,
@@ -69,11 +65,10 @@ class FormOne extends Component<void> {
       interest_paid_on_deposit_percent:
         formDataReducer.interestPaidOnDepositPercent
     }
-    console.log(data)
+
     axios
       .post('http://127.0.0.1:3453/calculateAPR', data)
       .then(response => {
-        console.log(response)
         const apr = response.data.result.apr
         data['nominal_apr'] = apr.toString()
         this.setState({
@@ -121,17 +116,9 @@ class FormOne extends Component<void> {
             hint="ex. John"
             typeVal="String"
             limit="100"
-            ref="firstName"
             textBody={formDataReducer.startName}
             onTextInputChange={this.handleTextChange}
           />
-          {/* <TextField
-              id="Last Name"
-              hint="ex. Smith"
-              typeVal="String"
-              limit="100"
-              ref="lastName"
-            /> */}
         </Form>
 
         <PageHeader>Basic Loan Conditions</PageHeader>
@@ -146,7 +133,6 @@ class FormOne extends Component<void> {
               { id: '2', value: 'equal installments (amortized)' },
               { id: '3', value: 'single end-term principal payment' }
             ]}
-            ref="repaymentType"
             onTextInputChange={this.handleTextChange}
             selected={formDataReducer.repaymentType}
           />
@@ -157,7 +143,6 @@ class FormOne extends Component<void> {
               { id: '1', value: 'Multiple Installments' },
               { id: '2', value: 'Single End-Term Payments' }
             ]}
-            ref="interest_payment_type"
             onTextInputChange={this.handleTextChange}
             selected={formDataReducer.interestPaymentType}
           />
@@ -169,7 +154,6 @@ class FormOne extends Component<void> {
               // { id: '2', value: 'Flat' },
               { id: '2', value: 'declining balance' }
             ]}
-            ref="interest_calculation_type"
             onTextInputChange={this.handleTextChange}
             selected={formDataReducer.interestCalculationType}
           />
@@ -183,7 +167,6 @@ class FormOne extends Component<void> {
             hint="ex. 5000"
             typeVal="float"
             limit="900000000"
-            ref="loan_amount"
             textBody={formDataReducer.loanAmount}
             onTextInputChange={this.handleTextChange}
           />
@@ -193,7 +176,6 @@ class FormOne extends Component<void> {
             hint="ex. 12"
             typeVal="int"
             limit="180"
-            ref="installment"
             textBody={formDataReducer.installment}
             onTextInputChange={this.handleTextChange}
           />
@@ -203,7 +185,6 @@ class FormOne extends Component<void> {
             hint="ex. 12"
             typeVal="int"
             limit="100"
-            ref="nominal_interest_rate"
             textBody={formDataReducer.nominalInterestRate}
             onTextInputChange={this.handleTextChange}
           />
@@ -224,7 +205,6 @@ class FormOne extends Component<void> {
               { id: '180', value: 'half-years' },
               { id: '365', value: 'years' }
             ]}
-            ref="installment_time_period"
             onTextInputChange={this.handleTextChange}
             selected={formDataReducer.installmentTimePeriod}
           />
@@ -242,7 +222,6 @@ class FormOne extends Component<void> {
               { id: '7', value: 'half-year' },
               { id: '8', value: 'year' }
             ]}
-            ref="interest_time_period"
             onTextInputChange={this.handleTextChange}
             selected={formDataReducer.interestTimePeriod}
           />
@@ -258,7 +237,6 @@ class FormOne extends Component<void> {
             hint="ex. 1"
             typeVal="float"
             limit="180"
-            ref="grace_period_principal"
             textBody={formDataReducer.gracePeriodPrincipal}
             onTextInputChange={this.handleTextChange}
           />
@@ -268,7 +246,6 @@ class FormOne extends Component<void> {
             hint="ex. 1"
             typeVal="float"
             limit="180"
-            ref="grace_period_interest_pay"
             textBody={formDataReducer.gracePeriodInterestPay}
             onTextInputChange={this.handleTextChange}
           />
@@ -278,7 +255,6 @@ class FormOne extends Component<void> {
             hint="ex. 1"
             typeVal="float"
             limit="180"
-            ref="grace_period_interest_calculate"
             textBody={formDataReducer.gracePeriodInterestCalculate}
             onTextInputChange={this.handleTextChange}
           />
@@ -288,7 +264,6 @@ class FormOne extends Component<void> {
             hint="ex. 1"
             typeVal="float"
             limit="180"
-            ref="grace_period_balloon"
             textBody={formDataReducer.gracePeriodBalloon}
             onTextInputChange={this.handleTextChange}
           />
@@ -307,7 +282,6 @@ class FormOne extends Component<void> {
             hint="Upfront"
             typeVal="float"
             limit="180"
-            ref="fee_percent_upfront"
             textBody={formDataReducer.feePercentUpfront}
             onTextInputChange={this.handleTextChange}
           />
@@ -317,7 +291,6 @@ class FormOne extends Component<void> {
             hint="Ongoing"
             typeVal="float"
             limit="180"
-            ref="fee_percent_ongoing"
             textBody={formDataReducer.feePercentOngoing}
             onTextInputChange={this.handleTextChange}
           />
@@ -327,7 +300,6 @@ class FormOne extends Component<void> {
             hint="Upfront"
             typeVal="float"
             limit="100000000"
-            ref="fee_fixed_upfront"
             textBody={formDataReducer.feeFixedUpfront}
             onTextInputChange={this.handleTextChange}
           />
@@ -337,7 +309,6 @@ class FormOne extends Component<void> {
             hint="Ongoing"
             typeVal="float"
             limit="100000000"
-            ref="fee_fixed_ongoing"
             textBody={formDataReducer.feeFixedOngoing}
             onTextInputChange={this.handleTextChange}
           />
@@ -353,7 +324,6 @@ class FormOne extends Component<void> {
             reduxId="taxPercentFees"
             typeVal="float"
             limit="100"
-            ref="tax_percent_fees"
             textBody={formDataReducer.taxPercentFees}
             onTextInputChange={this.handleTextChange}
           />
@@ -362,7 +332,6 @@ class FormOne extends Component<void> {
             reduxId="taxPercentInterest"
             typeVal="float"
             limit="100"
-            ref="tax_percent_interest"
             textBody={formDataReducer.taxPercentInterest}
             onTextInputChange={this.handleTextChange}
           />
@@ -377,7 +346,6 @@ class FormOne extends Component<void> {
             hint="Upfront"
             typeVal="float"
             limit="100"
-            ref="insurance_percent_upfront"
             textBody={formDataReducer.insurancePercentUpfront}
             onTextInputChange={this.handleTextChange}
           />
@@ -387,7 +355,6 @@ class FormOne extends Component<void> {
             hint="Ongoing"
             typeVal="float"
             limit="100"
-            ref="insurance_percent_ongoing"
             textBody={formDataReducer.insurancePercentOngoing}
             onTextInputChange={this.handleTextChange}
           />
@@ -397,7 +364,6 @@ class FormOne extends Component<void> {
             hint="Upfront"
             typeVal="float"
             limit="900000000"
-            ref="insurance_fixed_upfront"
             textBody={formDataReducer.insuranceFixedUpfront}
             onTextInputChange={this.handleTextChange}
           />
@@ -407,7 +373,6 @@ class FormOne extends Component<void> {
             hint="Ongoing"
             typeVal="float"
             limit="900000000"
-            ref="insurance_fixed_ongoing"
             textBody={formDataReducer.insuranceFixedOngoing}
             onTextInputChange={this.handleTextChange}
           />
@@ -422,7 +387,6 @@ class FormOne extends Component<void> {
             hint="Upfront"
             typeVal="float"
             limit="100"
-            ref="security_deposit_percent_upfront"
             textBody={formDataReducer.securityDepositPercentUpfront}
             onTextInputChange={this.handleTextChange}
           />
@@ -432,7 +396,6 @@ class FormOne extends Component<void> {
             hint="Ongoing"
             typeVal="float"
             limit="100"
-            ref="security_deposit_percent_ongoing"
             textBody={formDataReducer.securityDepositPercentOngoing}
             onTextInputChange={this.handleTextChange}
           />
@@ -442,7 +405,6 @@ class FormOne extends Component<void> {
             hint="Upfront"
             typeVal="float"
             limit="900000000"
-            ref="security_deposit_fixed_upfront"
             textBody={formDataReducer.securityDepositFixedUpfront}
             onTextInputChange={this.handleTextChange}
           />
@@ -452,7 +414,6 @@ class FormOne extends Component<void> {
             hint="Ongoing"
             typeVal="float"
             limit="900000000"
-            ref="security_deposit_fixed_ongoing"
             textBody={formDataReducer.securityDepositFixedOngoing}
             onTextInputChange={this.handleTextChange}
           />
@@ -461,20 +422,12 @@ class FormOne extends Component<void> {
             reduxId="interestPaidOnDepositPercent"
             typeVal="float"
             limit="900000000"
-            ref="interest_paid_on_deposit_percent"
             textBody={formDataReducer.interestPaidOnDepositPercent}
             onTextInputChange={this.handleTextChange}
           />
         </Form>
 
-        <Button name="Back" url="findloan" onClickHandler={() => {}} />
-        {/* <button
-            onClick={e => {
-              this.postData()
-            }}
-          >
-            Next
-          </button> */}
+        <Button name="Back" url="findloan" />
         <Button
           name="Next"
           url="output"
@@ -485,28 +438,6 @@ class FormOne extends Component<void> {
         />
       </Grid>
     )
-    // else {
-    //   return (
-    //     <Grid>
-    //       <PageHeader> APR Rate: {this.state.aprRate}%</PageHeader>
-    //       <Button
-    //         name="Back"
-    //         url="form1"
-    //         onClickHandler={e => {
-    //           this.changeContent()
-    //         }}
-    //       />
-    //       <Button
-    //         name="Save Loan"
-    //         url=""
-    //         onClickHandler={() => {
-    //           alert('Are you sure you want to save loan?')
-    //           this.saveData()
-    //         }}
-    //       />
-    //     </Grid>
-    //   )
-    // }
   }
 }
 

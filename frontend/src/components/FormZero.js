@@ -19,7 +19,6 @@ class FormZero extends Component {
       selectedPartnerName: formDataReducer.mfi,
       selectedLoanTheme: formDataReducer.loanType,
       selectedLoanProduct: formDataReducer.productType,
-      // disableButton: '',
       errorMessage: ''
     }
   }
@@ -33,24 +32,11 @@ class FormZero extends Component {
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
-    console.log(name, value)
     changedFormData([name], [value])
-    // this.setState({ [name]: value })
   }
-
-  // textFieldChangeHandler = (stateId, value) => {
-  //   console.log(stateId, value)
-  //   // this.setState({ [stateId]: value })
-  // }
 
   inputsEntered() {
     const { formDataReducer } = this.props
-    console.log(
-      formDataReducer.mfi,
-      formDataReducer.loanType,
-      formDataReducer.productType,
-      formDataReducer.versionNum
-    )
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
@@ -70,7 +56,6 @@ class FormZero extends Component {
       <Grid>
         <Form>
           <Typeahead
-            ref="mfi"
             label="mfi"
             options={this.state.partner_names}
             placeholder="Select MFI Partner"
@@ -78,13 +63,11 @@ class FormZero extends Component {
             limit={100}
             selected={formDataReducer.mfi}
             onChange={e => {
-              // this.handleTextChange('selectedPartnerName', e)
               changedFormData('mfi', e)
             }}
           />
           <br />
           <Typeahead
-            ref="loan"
             label="loan"
             options={this.state.loan_themes}
             placeholder="Select Loan Type"
@@ -95,7 +78,6 @@ class FormZero extends Component {
           />
           <br />
           <TextField
-            ref="selectedLoanProduct"
             reduxId="productType"
             id="Loan Product"
             text="product"
@@ -105,21 +87,8 @@ class FormZero extends Component {
             textBody={formDataReducer.productType}
             onTextInputChange={this.handleTextChange}
           />
-          <Button
-            disable={this.inputsEntered()}
-            name="Continue"
-            url="form1"
-            onClickHandler={() => {
-              console.log(!this.inputsEntered())
-              // console.log(e)
-              // contNewLoan(
-              //   this.state.selectedPartnerName,
-              //   this.state.selectedLoanTheme,
-              //   this.state.selectedLoanProduct
-              // )
-            }}
-          />
-          {/* </div> */}
+
+          <Button disable={this.inputsEntered()} name="Continue" url="form1" />
         </Form>
       </Grid>
     )
