@@ -12,7 +12,7 @@ class FindLoan extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    console.log(formDataReducer)
+    // console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -27,6 +27,11 @@ class FindLoan extends Component {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
+  }
+
+  handleTextChange = (name, value) => {
+    const { changedFormData } = this.props
+    changedFormData([name], [value])
   }
 
   inputsEntered() {
@@ -100,7 +105,12 @@ class FindLoan extends Component {
           <br />
 
           <Button name="Back" url="" />
-          <Button disable={!this.inputsEntered()} name="Continue" url="form1" />
+          <Button
+            disable={!this.inputsEntered()}
+            name="Continue"
+            url="form1"
+            onClickHandler={() => changedFormData('back', 'findloan')}
+          />
         </Form>
       </Grid>
     )

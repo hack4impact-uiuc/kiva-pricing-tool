@@ -4,7 +4,7 @@ import Navbar from './Navbar.component'
 import Bootstrap from 'react-bootstrap'
 
 import Colors from './Colors.container'
-import IntroPage from './IntroPage.js'
+import IntroPage from './../containers/IntroPage.js'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'

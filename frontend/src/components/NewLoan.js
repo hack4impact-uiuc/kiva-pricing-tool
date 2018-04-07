@@ -50,7 +50,7 @@ class NewLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     return (
       <Grid>
         <Form>
@@ -63,7 +63,7 @@ class NewLoan extends Component {
             selected={formDataReducer.mfi}
             onChange={e => {
               changedFormData('mfi', e)
-              changedFormData('backRoute', "newloan")
+              changedFormData('backRoute', 'newloan')
             }}
           />
           <br />
@@ -88,20 +88,27 @@ class NewLoan extends Component {
             onTextInputChange={this.handleTextChange}
           />
 
-          <Button 
-            disable={!this.inputsEntered()} 
-            name="Continue" 
-            url="form1" 
-            onClickHandler = {() => {
+          <Button
+            disable={!this.inputsEntered()}
+            name="Continue"
+            url="form1"
+            onClickHandler={() => {
               axios
-              .get(
-                'http://127.0.0.1:3453/getVersionNum?partner_name=' + formDataReducer.mfi 
-                + '&theme=' + formDataReducer.loanType
-                + '&product=' + formDataReducer.loanProduct
-              )
-              .then(response => {
-                  changedFormData('versionNum', response.data.result)
-              })
+                .get(
+                  'http://127.0.0.1:3453/getVersionNum?partner_name=' +
+                    formDataReducer.mfi +
+                    '&theme=' +
+                    formDataReducer.loanType +
+                    '&product=' +
+                    formDataReducer.loanProduct
+                )
+                .then(response => {
+                  changedFormData('versionNum', [
+                    response.data.result['version'].toString()
+                  ])
+                })
+
+              changedFormData('back', 'newloan')
             }}
           />
         </Form>
