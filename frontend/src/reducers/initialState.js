@@ -1,5 +1,4 @@
 const initialState = {
-  stuff: [],
   colors: ['red', 'yellow', 'blue'],
   formData: {
     mfi: null,

@@ -3,7 +3,6 @@
 import Navbar from './../containers/Navbar'
 import Bootstrap from 'react-bootstrap'
 
-import Colors from './Colors.container'
 import IntroPage from './IntroPage'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
@@ -17,7 +16,6 @@ import FindLoan from './../containers/FindLoan'
 import { BrowserRouter } from 'react-router-dom'
 
 export {
-  Colors,
   Navbar,
   Button,
   LargeTextInput,

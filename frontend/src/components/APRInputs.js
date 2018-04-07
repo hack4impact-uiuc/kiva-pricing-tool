@@ -2,7 +2,7 @@
 import React, { Component, View, StyleSheet } from 'react'
 import { connect } from 'react-redux'
 import { Link, Route, withRouter } from 'react-router-dom'
-import { Dropdown, StuffList, Button, TextField, APRRateDisplay } from './'
+import { Dropdown, Button, TextField, APRRateDisplay } from './'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import axios from 'axios'
 

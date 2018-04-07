@@ -9,7 +9,6 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import configureStore, { history } from './store/configureStore'
 import {
-  Colors,
   Navbar,
   APRRateDisplay,
   APRInputs,
