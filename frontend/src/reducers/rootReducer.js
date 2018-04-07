@@ -14,6 +14,7 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
+  console.log(action.type)
   if (action.type === actionTypes.RESET) {
     state = undefined
   }

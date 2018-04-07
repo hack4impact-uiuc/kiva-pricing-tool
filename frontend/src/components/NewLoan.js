@@ -50,7 +50,7 @@ class NewLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData } = this.props
+    const { formDataReducer, changedFormData, resetFormData } = this.props
     return (
       <Grid>
         <Form>
@@ -63,7 +63,6 @@ class NewLoan extends Component {
             selected={formDataReducer.mfi}
             onChange={e => {
               changedFormData('mfi', e)
-              changedFormData('backRoute', 'newloan')
             }}
           />
           <br />
@@ -87,6 +86,8 @@ class NewLoan extends Component {
             textBody={formDataReducer.productType}
             onTextInputChange={this.handleTextChange}
           />
+
+          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
 
           <Button
             disable={!this.inputsEntered()}

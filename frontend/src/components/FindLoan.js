@@ -49,7 +49,7 @@ class FindLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData } = this.props
+    const { formDataReducer, changedFormData, resetFormData } = this.props
 
     return (
       <Grid>
@@ -104,7 +104,7 @@ class FindLoan extends Component {
           />
           <br />
 
-          <Button name="Back" url="" />
+          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
           <Button
             disable={!this.inputsEntered()}
             name="Continue"

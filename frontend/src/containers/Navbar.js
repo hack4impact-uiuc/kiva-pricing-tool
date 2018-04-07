@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { resetFormData } from './../actions'
-import IntroPage from './../components/IntroPage'
+import Navbar from './../components/Navbar'
 
 function mapStateToProps(state) {
   console.log(state)
@@ -19,4 +19,4 @@ function mapDispatchToProps(dispatch) {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IntroPage)
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

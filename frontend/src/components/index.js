@@ -1,10 +1,10 @@
 // @flow
 
-import Navbar from './Navbar.component'
+import Navbar from './../containers/Navbar'
 import Bootstrap from 'react-bootstrap'
 
 import Colors from './Colors.container'
-import IntroPage from './../containers/IntroPage.js'
+import IntroPage from './IntroPage'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'
