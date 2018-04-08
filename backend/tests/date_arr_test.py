@@ -47,10 +47,10 @@ def get_num_days(period, prev_date):
     else:
         return days_dict[period]
 
-def calc_origin_days(day, month, year, installment_time_period):
+def calc_origin_days(day, month, year, installment_time_period, num_installment):
     date_arr = []
     day_num_arr = []
-    start_date = datetime.datetime(year=start_year, month=start_month, day=start_day)
+    start_date = datetime.datetime(year=year, month=month, day=day)
     prev_date = start_date
     day_num_arr.append(0)
     start_date_str = '{0}-{1}-{2}'.format(start_date.day, month_num_to_str_dict[start_date.month], start_date.year)
@@ -65,7 +65,7 @@ def calc_origin_days(day, month, year, installment_time_period):
         prev_date = new_date
     return date_arr, day_num_arr
 
-date_arr, day_num_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period)
+date_arr, day_num_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, num_installment)
 for idx in range(len(date_arr)):
     print ('{0}   {1}'.format(date_arr[idx], day_num_arr[idx]))
 
@@ -88,7 +88,7 @@ def on_change_day(input_date_arr, input_day_arr, change_row_idx, change_val, pre
     new_date_arr.append(date_col[0])
     new_day_num_arr.append(0)
     for idx in range(1,len(date_col)):
-        if prev_changes[idx] != 0:
+        if prev_changes[idx] != None:
             days_to_incre = prev_changes[idx]
         else:
             days_to_incre = get_num_days(installment_time_period, prev_date)
@@ -102,7 +102,10 @@ def on_change_day(input_date_arr, input_day_arr, change_row_idx, change_val, pre
     return new_date_arr, new_day_num_arr
 
 
-prev_changes = np.zeros(len(date_arr))
+prev_changes = np.zeros(len(date_arr), dtype=object)
+for idx in range(len(prev_changes)):
+    prev_changes[idx] = None
+    
 # if modify_days:
 new_date_arr, new_day_num_arr = on_change_day(date_arr, day_num_arr, 1, 100, prev_changes)
 prev_changes[1] = 100

@@ -1,6 +1,9 @@
 import json
 from flask import jsonify
 import numpy as np
+import datetime
+from calendar import monthrange
+import calendar
 
 days_dict = {'days':1, 'weeks':7, 'two-weeks':14, '15 days':15, '4 weeks': 28}
 month_num_to_str_dict = {1:'Jan', 2: 'Feb', 3: 'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
@@ -181,7 +184,6 @@ def cal_apr_helper(input_json):
         for idx in range(1, len(security_deposit)):
             security_deposit_interest_paid[idx] = (np.sum(security_deposit[:idx]) + np.sum(security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
 
-
         # security_deposit = np.array([round_float(x, 2) for x in security_deposit])
 
         taxes_on_fee = fees_paid * tax_percent_fees
@@ -203,14 +205,16 @@ def cal_apr_helper(input_json):
         result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
         # build the repayment schedule matrix
+        start_day = 1
+        start_month = 1
+        start_year = 2012
         schedule_matrix = []
-        period_arr = range(num_installment+1)
+        period_arr = range(installment+1)
         schedule_matrix.append(period_arr)
-        date_arr = []
+        date_arr, days_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, installment)
         schedule_matrix.append(date_arr)
-        days_arr = []
         schedule_matrix.append(days_arr)
-        principal_distributed_arr = np.zeros(num_installment+1)
+        principal_distributed_arr = np.zeros(installment+1)
         principal_distributed_arr[0] = loan_amount
         schedule_matrix.append(principal_distributed_arr)
         schedule_matrix.append(principal_paid_arr)
@@ -220,8 +224,17 @@ def cal_apr_helper(input_json):
         schedule_matrix.append(insurance_paid)
         schedule_matrix.append(taxes)
         schedule_matrix.append(security_deposit)
-        schedule_matrix.append(interest_paid_arr)
-        schedule_matrix.append(deposit_)
+        schedule_matrix.append(security_deposit_interest_paid)
+        deposite_withdraw = np.zeros(installment+1)
+        deposite_withdraw[-1] = np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
+        schedule_matrix.append(deposite_withdraw)
+        security_deposit_balance = np.zeros(installment+1)
+        for idx in range(len(security_deposit_balance)):
+            security_deposit_balance[idx] = np.sum(security_deposit[:idx+1]) + np.sum(security_deposit_interest_paid[:idx+1])
+        security_deposit_balance[-1] = 0
+        schedule_matrix.append(security_deposit_balance)
+        schedule_matrix.append(result) 
+        schedule_matrix = np.array(schedule_matrix)
 
         return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2)
     except:
@@ -256,10 +269,10 @@ def get_num_days(period, prev_date):
         return days_dict[period]
 
 # calculate the days column on repayment schedule when directed from input form
-def calc_origin_days(day, month, year, installment_time_period):
+def calc_origin_days(day, month, year, installment_time_period, num_installment):
     date_arr = []
     day_num_arr = []
-    start_date = datetime.datetime(year=start_year, month=start_month, day=start_day)
+    start_date = datetime.datetime(year=year, month=month, day=day)
     prev_date = start_date
     day_num_arr.append(0)
     start_date_str = '{0}-{1}-{2}'.format(start_date.day, month_num_to_str_dict[start_date.month], start_date.year)
