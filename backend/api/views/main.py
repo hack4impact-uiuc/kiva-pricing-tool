@@ -220,7 +220,7 @@ def removeMFI(partner_name):
 @app.route(GET_ALL_LT, methods=['GET'])
 def getAllLT():
     themes = Theme.query.filter_by(active=True).all()
-    return create_response({'partners': [x.loan_theme for x in themes]}, status=200)
+    return create_response({'loan_theme': [x.loan_theme for x in themes]}, status=200)
 
 @app.route(EDIT_LT, methods=['PUT'])
 def editLT(loan_theme):
