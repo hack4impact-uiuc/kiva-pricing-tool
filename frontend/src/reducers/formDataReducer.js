@@ -1,5 +1,5 @@
 import initialState from './initialState'
-import { FIELD_CHANGED } from './../actions/actionTypes'
+import { FIELD_CHANGED, RESET } from './../actions/actionTypes'
 
 export default function formDataReducer(state = initialState.formData, action) {
   switch (action.type) {
@@ -9,6 +9,8 @@ export default function formDataReducer(state = initialState.formData, action) {
 
         [action.payload.field]: action.payload.value
       }
+    case RESET:
+      return {}
     default:
       return state
   }

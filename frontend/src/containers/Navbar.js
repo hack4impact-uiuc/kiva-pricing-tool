@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { changedFormData, resetFormData } from './../actions'
-import NewLoan from './../components/NewLoan'
+import { resetFormData } from './../actions'
+import Navbar from './../components/Navbar'
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }
@@ -12,11 +13,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      changedFormData,
       resetFormData
     },
     dispatch
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewLoan)
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

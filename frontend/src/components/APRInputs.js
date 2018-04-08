@@ -2,7 +2,7 @@
 import React, { Component, View, StyleSheet } from 'react'
 import { connect } from 'react-redux'
 import { Link, Route, withRouter } from 'react-router-dom'
-import { Dropdown, StuffList, Button, TextField, APRRateDisplay } from './'
+import { Dropdown, Button, TextField, APRRateDisplay } from './'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import axios from 'axios'
 
@@ -11,9 +11,11 @@ import './../styles/app.scss'
 class APRInputs extends Component {
   constructor(props) {
     super(props)
+    const { formDataReducer } = this.props
     this.state = {
       aprRate: '',
-      saveData: {}
+      saveData: {},
+      back: formDataReducer.backRoute
     }
   }
 
@@ -65,7 +67,7 @@ class APRInputs extends Component {
   }
 
   postData() {
-    const { formDataReducer,changedFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     let data = {
       partner_name: formDataReducer.mfi[0],
       loan_theme: formDataReducer.loanType[0],
@@ -113,11 +115,10 @@ class APRInputs extends Component {
       .then(response => {
         const apr = response.data.result.apr
         data['nominal_apr'] = apr.toString()
-        changedFormData("aprRate", apr)
-        
-          // aprRate: apr,
-          // saveData: data
-       
+        changedFormData('aprRate', apr)
+
+        // aprRate: apr,
+        // saveData: data
       })
       .catch(function(error) {
         console.log(
@@ -126,9 +127,9 @@ class APRInputs extends Component {
       })
   }
 
-
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
+    console.log('hello' + this.state.back)
     return (
       <Grid>
         <PageHeader>User Information</PageHeader>
@@ -450,14 +451,11 @@ class APRInputs extends Component {
           />
         </Form>
 
-        <Button 
-          name="Back" 
-          url={formDataReducer.backRoute}
-        />
+        <Button name="Back" url={this.state.back} />
         <Button
           name="Next"
-          disable={!this.inputsEntered()} 
-          url={"output"}
+          disable={!this.inputsEntered()}
+          url={'output'}
           onClickHandler={e => {
             this.postData()
           }}

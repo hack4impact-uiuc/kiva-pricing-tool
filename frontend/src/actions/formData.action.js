@@ -10,11 +10,16 @@ function formDataChanged(field, value) {
   }
 }
 
+function formDataReset() {
+  return {
+    type: actionTypes.RESET
+  }
+}
+
 export function changedFormData(field, value) {
   return dispatch => dispatch(formDataChanged(field, value))
 }
 
-export function submitFindLoan(mfi, loanType, productType, versionNumber) {
-  return dispatch =>
-    dispatch(formDataChanged(mfi, loanType, productType, versionNumber))
+export function resetFormData() {
+  return dispatch => dispatch(formDataReset())
 }

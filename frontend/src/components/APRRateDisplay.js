@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, StuffList, Button, TextField } from './'
+import { Dropdown, Button, TextField } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'

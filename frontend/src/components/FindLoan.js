@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import './../styles/app.css'
 import TextField from './TextField'
@@ -7,12 +8,13 @@ import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import PropTypes from 'prop-types'
 
 class FindLoan extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    console.log(formDataReducer)
+    // console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -22,11 +24,30 @@ class FindLoan extends Component {
     }
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
+    const { resetFormData } = this.props
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
+
+    this._unblock = this.context.router.history.block(() => {
+      resetFormData()
+    })
+  }
+
+  componentWillUnmount() {
+    // When the component unmounts, call the function
+    this._unblock()
+  }
+
+  handleTextChange = (name, value) => {
+    const { changedFormData } = this.props
+    changedFormData([name], [value])
   }
 
   inputsEntered() {
@@ -44,7 +65,7 @@ class FindLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData } = this.props
+    const { formDataReducer, changedFormData, resetFormData } = this.props
 
     return (
       <Grid>
@@ -99,12 +120,17 @@ class FindLoan extends Component {
           />
           <br />
 
-          <Button name="Back" url="" />
-          <Button disable={!this.inputsEntered()} name="Continue" url="form1" />
+          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
+          <Button
+            disable={!this.inputsEntered()}
+            name="Continue"
+            url="form1"
+            onClickHandler={() => changedFormData('back', 'findloan')}
+          />
         </Form>
       </Grid>
     )
   }
 }
 
-export default FindLoan
+export default withRouter(FindLoan)

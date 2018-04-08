@@ -7,6 +7,7 @@ import TextField from './TextField'
 import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
+import PropTypes from 'prop-types'
 
 class NewLoan extends Component {
   constructor(props) {
@@ -23,11 +24,25 @@ class NewLoan extends Component {
     }
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
+    const { resetFormData } = this.props
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
+
+    this._unblock = this.context.router.history.block(() => {
+      resetFormData()
+    })
+  }
+
+  componentWillUnmount() {
+    // When the component unmounts, call the function
+    this._unblock()
   }
 
   handleTextChange = (name, value) => {
@@ -50,7 +65,7 @@ class NewLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer, changedFormData, resetFormData } = this.props
     return (
       <Grid>
         <Form>
@@ -63,7 +78,6 @@ class NewLoan extends Component {
             selected={formDataReducer.mfi}
             onChange={e => {
               changedFormData('mfi', e)
-              changedFormData('backRoute', "newloan")
             }}
           />
           <br />
@@ -88,20 +102,29 @@ class NewLoan extends Component {
             onTextInputChange={this.handleTextChange}
           />
 
-          <Button 
-            disable={!this.inputsEntered()} 
-            name="Continue" 
-            url="form1" 
-            onClickHandler = {() => {
+          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
+
+          <Button
+            disable={!this.inputsEntered()}
+            name="Continue"
+            url="form1"
+            onClickHandler={() => {
               axios
-              .get(
-                'http://127.0.0.1:3453/getVersionNum?partner_name=' + formDataReducer.mfi 
-                + '&theme=' + formDataReducer.loanType
-                + '&product=' + formDataReducer.loanProduct
-              )
-              .then(response => {
-                  changedFormData('versionNum', response.data.result)
-              })
+                .get(
+                  'http://127.0.0.1:3453/getVersionNum?partner_name=' +
+                    formDataReducer.mfi +
+                    '&theme=' +
+                    formDataReducer.loanType +
+                    '&product=' +
+                    formDataReducer.loanProduct
+                )
+                .then(response => {
+                  changedFormData('versionNum', [
+                    response.data.result['version'].toString()
+                  ])
+                })
+
+              changedFormData('back', 'newloan')
             }}
           />
         </Form>
