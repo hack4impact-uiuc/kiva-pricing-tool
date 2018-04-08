@@ -182,6 +182,8 @@ class RepaymentSchedule(db.Model):
     taxes = db.Column(db.Float, nullable=False)
     security_deposit = db.Column(db.Float, nullable=False)
     security_interest_paid = db.Column(db.Float, nullable=False)
+    balance = db.Column(db.Float, nullable=True)
+    deposit_balance = db.Column(db.Float, nullable=True)
 
     payment_due_date_user = db.Column(db.Date, nullable=True)
     days_user = db.Column(db.Integer, nullable=True)
@@ -193,6 +195,8 @@ class RepaymentSchedule(db.Model):
     taxes_user = db.Column(db.Float, nullable=True)
     security_deposit_user = db.Column(db.Float, nullable=True)
     security_interest_paid_user = db.Column(db.Float, nullable=False)
+    balance_user = db.Column(db.Float, nullable=False)
+    deposit_balance_user = db.Column(db.Float, nullable=False)
 
     payment_due_date_calc = db.Column(db.Date, nullable=False)
     days_calc = db.Column(db.Integer, nullable=False)
@@ -204,10 +208,12 @@ class RepaymentSchedule(db.Model):
     taxes_calc = db.Column(db.Float, nullable=False)
     security_deposit_calc = db.Column(db.Float, nullable=False)
     security_interest_paid_calc = db.Column(db.Float, nullable=False)
+    balance_calc = db.Column(db.Float, nullable=True)
+    deposit_balance_calc = db.Column(db.Float, nullable=True)
 
     def __init__(self, email):
         if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','payment_due_date','days','amount_due','principal_payment','interest',
-                                        'fees','insurance','taxes','security_deposit','period_num','security_interest_paid']):
+                                        'fees','insurance','taxes','security_deposit','period_num','security_interest_paid','balance','deposit_balance']):
             return #handle error
         self.id = data['id']
         self.period_num = data['period_num']
@@ -216,34 +222,40 @@ class RepaymentSchedule(db.Model):
         self.days = data['days']
         self.amount_due = data['amount_due']
         self.principal_payment = data['principal_payment']
+        self.balance = data['balance']
         self.interest = data['interest']
         self.fees = data['fees']
         self.insurance = data['insurance']
         self.taxes = data['taxes']
         self.security_deposit = data['security_deposit']
         self.security_interest_paid= data['security_interest_paid']
+        self.deposit_balance = data['deposit_balance']
 
         self.payment_due_date_user = None
         self.days_user = None
         self.amount_due_user = None
         self.principal_payment_user = None
+        self.balance_user = None
         self.interest_user = None
         self.fees_user = None
         self.insurance_user = None
         self.taxes_user = None
         self.security_deposit_user = None
         self.security_interest_paid_user = None
+        self.deposit_balance_user = None
 
         self.payment_due_date_calc = self.payment_due_date
         self.days_calc = self.days
         self.amount_due_calc = self.amount_due
         self.principal_payment_calc = self.principal_payment
+        self.balance_calc = self.balance
         self.interest_calc = self.interest
         self.fees_calc = self.fees
         self.insurance_calc = self.insurance
         self.taxes_calc = self.taxes
         self.security_deposit_calc = self.security_deposit
         self.security_interest_paid_calc = self.security_interest_paid
+        self.deposit_balance_calc = self.deposit_balance
 
     def __repr__(self):
         return '<repayment {}>'.format(self.id)
