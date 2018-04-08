@@ -35,15 +35,15 @@ class FindLoan extends Component {
       this.setState({ loan_themes: response.data.result.themes })
     })
 
-    this._unblock = this.context.router.history.block(() => {
-      resetFormData()
-    })
+    // this._unblock = this.context.router.history.block(() => {
+    //   resetFormData()
+    // })
   }
 
-  componentWillUnmount() {
-    // When the component unmounts, call the function
-    this._unblock()
-  }
+  // componentWillUnmount() {
+  //   // When the component unmounts, call the function
+  //   this._unblock()
+  // }
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
