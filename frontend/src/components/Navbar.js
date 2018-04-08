@@ -14,9 +14,7 @@ class Navbar extends Component {
         <Grid>
           <BootstrapNavbar.Header>
             <BootstrapNavbar.Brand>
-              <Link to="/" onClick={resetFormData}>
-                APR Pricing Tool
-              </Link>
+              <Link to="/">APR Pricing Tool</Link>
             </BootstrapNavbar.Brand>
             <BootstrapNavbar.Toggle />
           </BootstrapNavbar.Header>
@@ -25,5 +23,5 @@ class Navbar extends Component {
     )
   }
 }
-
+// onClick={resetFormData}
 export default Navbar

@@ -3,7 +3,7 @@
 import Navbar from './../containers/Navbar'
 import Bootstrap from 'react-bootstrap'
 
-import IntroPage from './IntroPage'
+import IntroPage from './../containers/IntroPage'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import LargeTextInput from './LargeTextInput.js'

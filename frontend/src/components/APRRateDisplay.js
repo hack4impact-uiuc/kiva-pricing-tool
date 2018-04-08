@@ -18,7 +18,7 @@ class APRRateDisplay extends Component {
       loan_theme: formDataReducer.loanType[0],
       product_type: formDataReducer.productType[0],
       version_num: '1',
-      update_name: formDataReducer.updateName,
+      update_name: formDataReducer.startName[0],
       start_name: formDataReducer.startName[0],
       nominal_apr: formDataReducer.aprRate,
       installment_time_period: formDataReducer.installmentTimePeriod[0],

@@ -129,7 +129,7 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
-    console.log('hello' + this.state.back)
+    // console.log('hello' + this.state.back)
     return (
       <Grid>
         <PageHeader>User Information</PageHeader>
