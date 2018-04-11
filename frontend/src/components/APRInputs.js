@@ -114,9 +114,9 @@ class APRInputs extends Component {
       .post('http://127.0.0.1:3453/calculateAPR', data)
       .then(response => {
         const apr = response.data.result.apr
-        data['nominal_apr'] = apr.toString()
+        const matrix = response.data.result.matrix
         changedFormData('aprRate', apr)
-
+        changedFormData('original_repayment_schedule', matrix)
         // aprRate: apr,
         // saveData: data
       })

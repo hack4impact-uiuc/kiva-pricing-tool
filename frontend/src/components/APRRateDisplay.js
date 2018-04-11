@@ -6,10 +6,21 @@ import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
 import axios from 'axios'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 
 class APRRateDisplay extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      partner_names: [],
+      data: [
+        { partner: 'Google' },
+        { partner: 'Facebook' },
+        { partner: 'Amazon' },
+        { partner: 'Uber' }
+      ]
+    }
   }
   saveData() {
     const { formDataReducer, changedFormData } = this.props
@@ -70,13 +81,87 @@ class APRRateDisplay extends Component {
     return (
       <Grid>
         <PageHeader> APR Rate: {formDataReducer.aprRate}%</PageHeader>
-        <Button name="Back" url="form1" />
         <Button
-          name="Save Loan"
+          name="Submit"
           url=""
           onClickHandler={() => {
             this.saveData()
           }}
+        />
+        <a href="output.csv" download>
+          <button onclick="createCsv()">Download CSV</button>
+        </a>
+        <br />
+        <Button name="Cancel" url="form0" />
+        <Button name="Edit" />
+        <ReactTable
+          columns={[
+            {
+              Header: 'Period Number',
+              accessor: 'period_num',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Payment Due Date',
+              accessor: 'payment_due_date',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Days',
+              accessor: 'days',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Amount Due',
+              accessor: 'amount_due',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Principal Payment',
+              accessor: 'principal_payment',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Interest',
+              accessor: 'interest',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Fees',
+              accessor: 'fees',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Insurance',
+              accessor: 'insurance',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Taxes',
+              accessor: 'taxes',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Security Deposit',
+              accessor: 'security_deposit',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Security Interest Paid',
+              accessor: 'security_interest_paid',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Balance',
+              accessor: 'balance',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Deposit Balance',
+              accessor: 'deposit_balance',
+              Cell: this.renderEditable
+            }
+          ]}
         />
       </Grid>
     )
