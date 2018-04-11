@@ -1,6 +1,12 @@
 import json
 from flask import jsonify
 import numpy as np
+import datetime
+from calendar import monthrange
+import calendar
+
+days_dict = {'days':1, 'weeks':7, 'two-weeks':14, '15 days':15, '4 weeks': 28}
+month_num_to_str_dict = {1:'Jan', 2: 'Feb', 3: 'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
 
 def create_response(data={}, status=200, message=''):
     """
@@ -173,7 +179,6 @@ def cal_apr_helper(input_json):
         for idx in range(1, len(security_deposit)):
             security_deposit_interest_paid[idx] = (np.sum(security_deposit[:idx]) + np.sum(security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
 
-
         # security_deposit = np.array([round_float(x, 2) for x in security_deposit])
 
         taxes_on_fee = fees_paid * tax_percent_fees
@@ -193,7 +198,116 @@ def cal_apr_helper(input_json):
             result = result[:-grace_period_balloon]
         #### above is experimental
         result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
-        return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2)
+
+        # build the repayment schedule matrix
+        start_day = 1
+        start_month = 1
+        start_year = 2012
+        schedule_matrix = []
+        period_arr = range(installment+1)
+        schedule_matrix.append(period_arr)
+        date_arr, days_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, installment)
+        schedule_matrix.append(date_arr)
+        schedule_matrix.append(days_arr)
+        amount_due = np.zeros(installment+1)
+        amount_due[0] = loan_amount
+        schedule_matrix.append(amount_due)
+        schedule_matrix.append(principal_paid_arr)
+        schedule_matrix.append(balance_arr)
+        schedule_matrix.append(interest_paid_arr)
+        schedule_matrix.append(fees_paid)
+        schedule_matrix.append(insurance_paid)
+        schedule_matrix.append(taxes)
+        schedule_matrix.append(security_deposit)
+        schedule_matrix.append(security_deposit_interest_paid)
+        deposite_withdraw = np.zeros(installment+1)
+        deposite_withdraw[-1] = np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
+        schedule_matrix.append(deposite_withdraw)
+        security_deposit_balance = np.zeros(installment+1)
+        for idx in range(len(security_deposit_balance)):
+            security_deposit_balance[idx] = np.sum(security_deposit[:idx+1]) + np.sum(security_deposit_interest_paid[:idx+1])
+        security_deposit_balance[-1] = 0
+        schedule_matrix.append(security_deposit_balance)
+        schedule_matrix.append(result) 
+        schedule_matrix = np.array(schedule_matrix)
+
+        return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
+
     except:
         #TODO status code not sure 
         return None
+
+#  helper function for calculate the number of days in the specified period
+def get_num_days(period, prev_date):
+    if period == 'months':
+        return monthrange(prev_date.year, prev_date.month)[1]
+    elif period == 'quarters':
+        days_aggreg = 0
+        for idx in range(3):
+            days_aggreg += monthrange(prev_date.year, prev_date.month)[1]
+            # update the prev_date forward by one month
+            prev_date += datetime.timedelta(days=get_num_days('months', prev_date))
+        return days_aggreg
+    elif period == 'half-years':
+        days_aggreg = 0
+        for idx in range(6):
+            days_aggreg += monthrange(prev_date.year, prev_date.month)[1]
+            # update the prev_date forward by one month
+            prev_date += datetime.timedelta(days=get_num_days('months', prev_date))
+        return days_aggreg
+
+    elif period == 'years':
+        if calendar.isleap(prev_date.year):
+            return 366
+        else:
+            return 365
+    else:
+        return days_dict[period]
+
+# calculate the days column on repayment schedule when directed from input form
+def calc_origin_days(day, month, year, installment_time_period, num_installment):
+    date_arr = []
+    day_num_arr = []
+    start_date = datetime.datetime(year=year, month=month, day=day)
+    prev_date = start_date
+    day_num_arr.append(0)
+    start_date_str = '{0}-{1}-{2}'.format(start_date.day, month_num_to_str_dict[start_date.month], start_date.year)
+    date_arr.append(start_date_str)
+
+    for idx in range(num_installment):
+        days_to_incre = get_num_days(installment_time_period, prev_date)
+        new_date = prev_date + datetime.timedelta(days=days_to_incre)
+        new_date_str = '{0}-{1}-{2}'.format(new_date.day, month_num_to_str_dict[new_date.month], new_date.year)
+        date_arr.append(new_date_str)
+        day_num_arr.append(days_to_incre)
+        prev_date = new_date
+    return date_arr, day_num_arr
+
+#######
+#For repayment schedule date and days on change
+#######
+# recalculate the days column on repayment schedule 
+def on_change_day(input_date_arr, input_day_arr, change_row_idx, change_val, prev_changes):
+    new_date_arr = []
+    new_day_num_arr = []
+    prev_changes[change_row_idx] = change_val
+    date_col = input_date_arr
+    day_col = input_day_arr
+    print (input_day_arr)
+    start_date = datetime.datetime.strptime(date_col[0], '%d-%b-%Y')
+    prev_date = start_date
+    new_date_arr.append(date_col[0])
+    new_day_num_arr.append(0)
+    for idx in range(1,len(date_col)):
+        if prev_changes[idx] != 0:
+            days_to_incre = prev_changes[idx]
+        else:
+            days_to_incre = get_num_days(installment_time_period, prev_date)
+            
+        new_date = prev_date + datetime.timedelta(days=days_to_incre)
+        new_date_str = '{0}-{1}-{2}'.format(new_date.day, month_num_to_str_dict[new_date.month], new_date.year)
+        new_date_arr.append(new_date_str)
+        new_day_num_arr.append(days_to_incre)
+        prev_date = new_date
+
+    return new_date_arr, new_day_num_arr

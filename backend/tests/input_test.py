@@ -1,6 +1,12 @@
 import numpy as np
 import itertools as it
+import sys
+import datetime
+from calendar import monthrange
+import calendar
+sys.path.insert(0, '../api')
 
+from utils import get_num_days, calc_origin_days, on_change_day
 
 def round_float(f, n):
     return np.floor(f * 10 ** n + 0.5) / 10**n
@@ -44,26 +50,26 @@ loan_amount = 1000
 nominal_interest_rate = 0.02
 fee_percent_ongoing = 0.1
 fee_percent_upfront = 0.1
-fee_fixed_upfront = 0
-fee_fixed_ongoing = 0
+fee_fixed_upfront = 100
+fee_fixed_ongoing = 100
 insurance_percent_upfront = 0.1
 insurance_percent_ongoing = 0.1
-insurance_fixed_upfront = 0
-insurance_fixed_ongoing = 0
+insurance_fixed_upfront = 50
+insurance_fixed_ongoing = 10
 tax_percent_interest = 0.1
 tax_percent_fees = 0.1
 grace_period_principal = 0
-grace_period_interest_pay = 0 
+grace_period_interest_pay = 4
 grace_period_interest_calculate = 0
 grace_period_balloon = 0
 security_deposit_percent_ongoing = 0.1
 security_deposit_percent_upfront = 0.1
-security_deposit_fixed_upfront = 0
-security_deposit_fixed_ongoing = 0
+security_deposit_fixed_upfront = 10
+security_deposit_fixed_ongoing = 10
 interest_paid_on_deposit_percent = 0.1
 interest_calculation_type = 'declining balance'
-repayment_type = 'equal principal payments'
-interest_payment_type = 'single end-term payment'
+repayment_type = 'equal installments (amortized)'
+interest_payment_type = 'multiple installments'
 periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
 
 installment_time_period = '4 weeks'
@@ -192,8 +198,39 @@ if grace_period_balloon != 0:
 #### above is experimental
 result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
+# build the repayment schedule matrix
+start_day = 1
+start_month = 1
+start_year = 2012
+schedule_matrix = []
+period_arr = range(installment+1)
+schedule_matrix.append(period_arr)
+date_arr, days_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, installment)
+schedule_matrix.append(date_arr)
+schedule_matrix.append(days_arr)
+principal_distributed_arr = np.zeros(installment+1)
+principal_distributed_arr[0] = loan_amount
+schedule_matrix.append(principal_distributed_arr)
+schedule_matrix.append(principal_paid_arr)
+schedule_matrix.append(balance_arr)
+schedule_matrix.append(interest_paid_arr)
+schedule_matrix.append(fees_paid)
+schedule_matrix.append(insurance_paid)
+schedule_matrix.append(taxes)
+schedule_matrix.append(security_deposit)
+schedule_matrix.append(security_deposit_interest_paid)
+deposite_withdraw = np.zeros(installment+1)
+deposite_withdraw[-1] = np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
+schedule_matrix.append(deposite_withdraw)
+security_deposit_balance = np.zeros(installment+1)
+for idx in range(len(security_deposit_balance)):
+    security_deposit_balance[idx] = np.sum(security_deposit[:idx+1]) + np.sum(security_deposit_interest_paid[:idx+1])
+security_deposit_balance[-1] = 0
+schedule_matrix.append(security_deposit_balance)
+schedule_matrix.append(result) 
+schedule_matrix = np.array(schedule_matrix)
 # result[9:] += 0.01
-
+print (schedule_matrix)
 print (np.irr(result))
 print (periods_per_year[installments_period_dict[installment_time_period]])
 print (result)
