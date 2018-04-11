@@ -57,7 +57,6 @@ def cal_apr_helper(input_json):
         interest_time_period = input_json['interest_time_period']
         interest_payment_type = input_json['interest_payment_type']
         interest_calculation_type = input_json['interest_calculation_type']
-
         loan_amount = float(input_json['loan_amount'])
         installment = int(input_json['installment'])
         nominal_interest_rate = float(input_json['nominal_interest_rate']) / 100
@@ -80,21 +79,17 @@ def cal_apr_helper(input_json):
         security_deposit_fixed_upfront = float(input_json['security_deposit_fixed_upfront'])
         security_deposit_fixed_ongoing = float(input_json['security_deposit_fixed_ongoing'])
         interest_paid_on_deposit_percent = float(input_json['interest_paid_on_deposit_percent'])/ 100
-        
         installments_period_dict = {'days':0, 'weeks':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'months':5, 'quarters':6, 'half-years':7, 'years':8}
         interest_period_dict = {'day':0, 'week':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'month':5, 'quarter':6, 'half-year':7, 'year':8}
-
         periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
 
         installments_arr = 1/ (periods_per_year / 12)
         nominal_arr = 1 / installments_arr
-
         scaled_interest = nominal_interest_rate*installments_arr[installments_period_dict[installment_time_period]] * nominal_arr[interest_period_dict[interest_time_period]]
         # scaled_interest = round_float(scaled_interest, 4)
         # amortization
         monthly_payment = loan_amount / (((1+scaled_interest)**(installment- grace_period_principal) -1) / (scaled_interest * (1+scaled_interest)**(installment- grace_period_principal)))
         # monthly_payment = round_float(monthly_payment, 2)
-
         principal_paid_arr = np.zeros(installment + 1)
         balance_arr = np.zeros(installment+1)
         interest_paid_arr = np.zeros(installment+1)
@@ -237,6 +232,7 @@ def cal_apr_helper(input_json):
         schedule_matrix = np.array(schedule_matrix)
 
         return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
+
     except:
         #TODO status code not sure 
         return None

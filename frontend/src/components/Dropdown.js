@@ -5,7 +5,7 @@ import './../styles/dropdown.css'
 class Dropdown extends Component {
   // Dropdown title
   state = {
-    value: this.props.title
+    value: this.props.selected ? this.props.selected : this.props.title
   }
 
   // Dropdown menu options
@@ -19,7 +19,11 @@ class Dropdown extends Component {
             <MenuItem
               key={item.id}
               // Get value of selected item, change state and update title
-              onSelect={() => this.setState({ value: item.value })}
+              onSelect={() => {
+                if (this.props.onTextInputChange)
+                  this.props.onTextInputChange(this.props.reduxId, item.value)
+                this.setState({ value: item.value })
+              }}
             >
               {item.value}
             </MenuItem>
