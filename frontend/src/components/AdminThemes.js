@@ -28,6 +28,14 @@ class AdminThemes extends Component {
     })
   }
 
+  removeLoan(theme_name) {
+    axios
+      .delete('http://127.0.0.1:3453/removeMFI/' + theme_name)
+      .then(response => {
+        this.componentDidMount
+      })
+  }
+
   renderEditable(cellInfo) {
     return (
       <div
@@ -107,7 +115,20 @@ class AdminThemes extends Component {
               Header: 'Remove',
               id: 'delete-button',
               width: 150,
-              Cell: props => <Button name="Remove" />
+              Cell: props => (
+                <Button
+                  name="Remove"
+                  url="themelist"
+                  onClickHandler={() => this.removeLoan(this.Cell)}
+                />
+              )
+            },
+            {
+              Header: 'TEST',
+              id: 'test',
+              Cell: ({ row, original }) => {
+                return <span>{original.loan_theme}</span>
+              }
             }
           ]}
         />
