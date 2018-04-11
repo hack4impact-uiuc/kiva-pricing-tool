@@ -61,7 +61,7 @@ tax_percent_fees = 0.1
 grace_period_principal = 0
 grace_period_interest_pay = 4
 grace_period_interest_calculate = 0
-grace_period_balloon = 0
+grace_period_balloon = 4
 security_deposit_percent_ongoing = 0.1
 security_deposit_percent_upfront = 0.1
 security_deposit_fixed_upfront = 10
@@ -70,8 +70,8 @@ interest_paid_on_deposit_percent = 0.1
 interest_calculation_type = 'declining balance'
 repayment_type = 'equal installments (amortized)'
 interest_payment_type = 'multiple installments'
-periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
 
+periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
 installment_time_period = '4 weeks'
 interest_time_period = 'month'
 
@@ -168,8 +168,10 @@ for idx in range(len(balance_arr)-grace_period_balloon-1, len(balance_arr)-1):
 security_deposit = np.zeros(installment + 1)
 security_deposit[0] = security_deposit_percent_upfront * balance_arr[0] + security_deposit_fixed_upfront
 security_deposit[1:] = principal_paid_arr[1:] * security_deposit_percent_ongoing + security_deposit_fixed_ongoing
+print(security_deposit)
 for idx in range(len(balance_arr)-grace_period_balloon-1, len(balance_arr)):
     security_deposit[idx] -= security_deposit_fixed_ongoing
+print(security_deposit)
 
 
 security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[installments_period_dict[installment_time_period]]
@@ -208,9 +210,9 @@ schedule_matrix.append(period_arr)
 date_arr, days_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, installment)
 schedule_matrix.append(date_arr)
 schedule_matrix.append(days_arr)
-principal_distributed_arr = np.zeros(installment+1)
-principal_distributed_arr[0] = loan_amount
-schedule_matrix.append(principal_distributed_arr)
+amount_due = np.zeros(installment+1)
+amount_due[0] = loan_amount
+schedule_matrix.append(amount_due)
 schedule_matrix.append(principal_paid_arr)
 schedule_matrix.append(balance_arr)
 schedule_matrix.append(interest_paid_arr)
