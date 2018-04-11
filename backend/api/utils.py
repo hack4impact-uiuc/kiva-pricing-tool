@@ -214,9 +214,9 @@ def cal_apr_helper(input_json):
         date_arr, days_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, installment)
         schedule_matrix.append(date_arr)
         schedule_matrix.append(days_arr)
-        principal_distributed_arr = np.zeros(installment+1)
-        principal_distributed_arr[0] = loan_amount
-        schedule_matrix.append(principal_distributed_arr)
+        amount_due = np.zeros(installment+1)
+        amount_due[0] = loan_amount
+        schedule_matrix.append(amount_due)
         schedule_matrix.append(principal_paid_arr)
         schedule_matrix.append(balance_arr)
         schedule_matrix.append(interest_paid_arr)
@@ -236,7 +236,7 @@ def cal_apr_helper(input_json):
         schedule_matrix.append(result) 
         schedule_matrix = np.array(schedule_matrix)
 
-        return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2)
+        return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
     except:
         #TODO status code not sure 
         return None

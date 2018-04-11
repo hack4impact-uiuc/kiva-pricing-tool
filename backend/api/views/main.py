@@ -26,11 +26,11 @@ def cal_apr():
     input_json = request.get_json()
     args = request.args
     payload = {}
-    apr = cal_apr_helper(input_json)
+    apr, matrix = cal_apr_helper(input_json)
     if apr == None:
         return create_response({}, status=400, message='missing components for calculating apr rate')
     else:
-        return create_response(data={'apr':apr}, status=200)
+        return create_response(data={'apr':apr, 'matrix':matrix}, status=200)
 
 
 @app.route(GET_VERSION_NUM)
