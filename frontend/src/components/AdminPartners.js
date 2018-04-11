@@ -6,21 +6,29 @@ import LiveSearch from './LiveSearch'
 import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
+import axios from 'axios'
 
 class AdminPartners extends Component {
   constructor(props) {
     super(props)
     this.state = {
       partner_names: [],
-      data: [
-        { partner: 'Google' },
-        { partner: 'Facebook' },
-        { partner: 'Amazon' },
-        { partner: 'Uber' }
-      ]
+      data: []
     }
     this.renderEditable = this.renderEditable.bind(this)
   }
+
+  componentDidMount() {
+    axios.get('http://127.0.0.1:3453/getAllMFI').then(response => {
+      this.setState({ partner_names: response.data.result.partners })
+      for (let partner of this.state.partner_names) {
+        this.setState({
+          data: this.state.data.concat({ partner_names: partner })
+        })
+      }
+    })
+  }
+
   renderEditable(cellInfo) {
     return (
       <div
@@ -38,7 +46,10 @@ class AdminPartners extends Component {
       />
     )
   }
+
   render() {
+    const listdata = this.state.data
+
     return (
       <Grid>
         <PageHeader>Admin Partners List</PageHeader>
@@ -50,9 +61,9 @@ class AdminPartners extends Component {
           </h2>
 
           <LiveSearch
-            ref="mfi"
-            label="mfi"
-            list={this.state.partner_names}
+            ref="partner_names"
+            label="partner_names"
+            list={listdata}
             hint="Search MFI Partner"
           />
         </Form>
@@ -67,7 +78,7 @@ class AdminPartners extends Component {
             id=""
             hint="Add MFI Partner"
             typeVal="String"
-            limit="100"
+            limit="5000"
             ref="addpartnername"
           />
         </Form>
@@ -76,18 +87,19 @@ class AdminPartners extends Component {
           name="Add "
           url="partnerlist"
           onClickHandler={() => {
-            console.log('added new loan ')
+            listdata.push({ partner: this.refs.addpartnername.state.textBody })
+            console.log(this.refs.addpartnername.state.textBody)
           }}
         />
 
         <br />
 
         <ReactTable
-          data={this.state.data}
+          data={listdata}
           columns={[
             {
               Header: 'MFI Partner',
-              accessor: 'partner',
+              accessor: 'partner_names',
               Cell: this.renderEditable
             },
             {
@@ -101,6 +113,19 @@ class AdminPartners extends Component {
               id: 'delete-button',
               width: 150,
               Cell: props => <Button name="Remove" />
+            },
+            {
+              Header: 'TEST',
+              id: 'test',
+              Cell: ({ row, original }) => {
+                return <span>{original.partner_names}</span>
+              }
+            }
+          ]}
+          defaultSorted={[
+            {
+              id: 'partner_names',
+              desc: false
             }
           ]}
         />
