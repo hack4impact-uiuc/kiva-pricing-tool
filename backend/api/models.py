@@ -113,8 +113,8 @@ class Loan(db.Model):
                                         ,'interest_paid_on_deposit_percent']):
             return #handle error
 
-        self.partner_id = Partner.query.filter_by(partner_name = data['partner_name'])[0].id
-        self.theme_id = Theme.query.filter_by(loan_theme = data['loan_theme'])[0].id
+        self.partner_id = Partner.query.filter_by(partner_name = data['partner_name']).first().id
+        self.theme_id = Theme.query.filter_by(loan_theme = data['loan_theme']).first().id
         self.id = str(self.partner_id) + "_" + str(self.theme_id) + "_" + data['product_type'] + "_" + str(data['version_num'])
         self.product_type = data['product_type']
         self.version_num = data['version_num']
@@ -158,8 +158,8 @@ class Loan(db.Model):
         return '<loan {}>'.format(self.id)
 
     def __dir__(self):
-        return ['partner_name','loan_theme','product_type','version_num','start_name','update_name','nominal_apr','installment_time_period', 'start_date', 'update_date'
-                ,'repayment_type','interest_time_period','interest_payment','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
+        return ['partner_id','theme_id','product_type','version_num','start_name','update_name','nominal_apr','installment_time_period', 'start_date', 'update_date'
+                ,'repayment_type','interest_time_period','interest_payment_type','interest_calculation_type','loan_amount','installment','nominal_interest_rate','grace_period_principal'
                 ,'grace_period_interest_pay','grace_period_interest_calculate','grace_period_balloon','fee_percent_upfront','fee_percent_ongoing','fee_fixed_upfront'
                 ,'fee_fixed_ongoing','insurance_percent_upfront','insurance_percent_ongoing','insurance_fixed_upfront','insurance_fixed_ongoing','tax_percent_fees'
                 ,'tax_percent_interest','security_deposit_percent_upfront','security_deposit_percent_ongoing','security_deposit_fixed_upfront','security_deposit_fixed_ongoing'
@@ -181,44 +181,81 @@ class RepaymentSchedule(db.Model):
     insurance = db.Column(db.Float, nullable=False)
     taxes = db.Column(db.Float, nullable=False)
     security_deposit = db.Column(db.Float, nullable=False)
+    security_interest_paid = db.Column(db.Float, nullable=False)
+    balance = db.Column(db.Float, nullable=True)
+    deposit_balance = db.Column(db.Float, nullable=True)
 
-    payment_due_date_updated = db.Column(db.Date, nullable=False)
-    days_updated = db.Column(db.Integer, nullable=False)
-    amount_due_updated = db.Column(db.Float, nullable=False)
-    principal_payment_updated = db.Column(db.Float, nullable=False)
-    interest_updated = db.Column(db.Float, nullable=False)
-    fees_updated = db.Column(db.Float, nullable=False)
-    insurance_updated = db.Column(db.Float, nullable=False)
-    taxes_updated = db.Column(db.Float, nullable=False)
-    security_deposit_updated = db.Column(db.Float, nullable=False)
+    payment_due_date_user = db.Column(db.Date, nullable=True)
+    days_user = db.Column(db.Integer, nullable=True)
+    amount_due_user = db.Column(db.Float, nullable=True)
+    principal_payment_user = db.Column(db.Float, nullable=True)
+    interest_user = db.Column(db.Float, nullable=True)
+    fees_user = db.Column(db.Float, nullable=True)
+    insurance_user = db.Column(db.Float, nullable=True)
+    taxes_user = db.Column(db.Float, nullable=True)
+    security_deposit_user = db.Column(db.Float, nullable=True)
+    security_interest_paid_user = db.Column(db.Float, nullable=False)
+    balance_user = db.Column(db.Float, nullable=False)
+    deposit_balance_user = db.Column(db.Float, nullable=False)
 
+    payment_due_date_calc = db.Column(db.Date, nullable=False)
+    days_calc = db.Column(db.Integer, nullable=False)
+    amount_due_calc = db.Column(db.Float, nullable=False)
+    principal_payment_calc = db.Column(db.Float, nullable=False)
+    interest_calc = db.Column(db.Float, nullable=False)
+    fees_calc = db.Column(db.Float, nullable=False)
+    insurance_calc = db.Column(db.Float, nullable=False)
+    taxes_calc = db.Column(db.Float, nullable=False)
+    security_deposit_calc = db.Column(db.Float, nullable=False)
+    security_interest_paid_calc = db.Column(db.Float, nullable=False)
+    balance_calc = db.Column(db.Float, nullable=True)
+    deposit_balance_calc = db.Column(db.Float, nullable=True)
 
     def __init__(self, email):
         if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','payment_due_date','days','amount_due','principal_payment','interest',
-                                        'fees','insurance','taxes','security_deposit','period_num']):
+                                        'fees','insurance','taxes','security_deposit','period_num','security_interest_paid','balance','deposit_balance']):
             return #handle error
         self.id = data['id']
         self.period_num = data['period_num']
-        
+
         self.payment_due_date = data['payment_due_date']
         self.days = data['days']
         self.amount_due = data['amount_due']
         self.principal_payment = data['principal_payment']
+        self.balance = data['balance']
         self.interest = data['interest']
         self.fees = data['fees']
         self.insurance = data['insurance']
         self.taxes = data['taxes']
         self.security_deposit = data['security_deposit']
+        self.security_interest_paid= data['security_interest_paid']
+        self.deposit_balance = data['deposit_balance']
 
-        self.payment_due_date_updated = data['payment_due_date']
-        self.days_updated = data['days']
-        self.amount_due_updated = data['amount_due']
-        self.principal_payment_updated = data['principal_payment']
-        self.interest_updated = data['interest']
-        self.fees_updated = data['fees']
-        self.insurance_updated = data['insurance']
-        self.taxes_updated = data['taxes']
-        self.security_deposit_updated = data['security_deposit']
+        self.payment_due_date_user = None
+        self.days_user = None
+        self.amount_due_user = None
+        self.principal_payment_user = None
+        self.balance_user = None
+        self.interest_user = None
+        self.fees_user = None
+        self.insurance_user = None
+        self.taxes_user = None
+        self.security_deposit_user = None
+        self.security_interest_paid_user = None
+        self.deposit_balance_user = None
+
+        self.payment_due_date_calc = self.payment_due_date
+        self.days_calc = self.days
+        self.amount_due_calc = self.amount_due
+        self.principal_payment_calc = self.principal_payment
+        self.balance_calc = self.balance
+        self.interest_calc = self.interest
+        self.fees_calc = self.fees
+        self.insurance_calc = self.insurance
+        self.taxes_calc = self.taxes
+        self.security_deposit_calc = self.security_deposit
+        self.security_interest_paid_calc = self.security_interest_paid
+        self.deposit_balance_calc = self.deposit_balance
 
     def __repr__(self):
         return '<repayment {}>'.format(self.id)
