@@ -5,6 +5,18 @@ import datetime
 from calendar import monthrange
 import calendar
 
+DAY_IDX = 1
+DATE_IDX = 2
+PRINCIPAL_PAID_IDX = 4
+BALANCE_IDX = 5
+INTEREST_PAID_IDX = 6
+FEES_IDX = 7
+INSURANCE_IDX = 8
+TAXES_IDX = 9
+SECURITY_DEPOSIT_IDX = 10
+SECURITY_DEPOSIT_INTEREST_PAID_IDX = 11
+SECURITY_DEPOSIT_WITHDRAW_IDX = 12
+SECURITY_DEPOSIT_BALANCE_IDX = 13
 days_dict = {'days':1, 'weeks':7, 'two-weeks':14, '15 days':15, '4 weeks': 28}
 month_num_to_str_dict = {1:'Jan', 2: 'Feb', 3: 'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
 
@@ -204,7 +216,7 @@ def cal_apr_helper(input_json):
         start_month = 1
         start_year = 2012
         schedule_matrix = []
-        period_arr = range(installment+1)
+        period_arr = list(range(installment+1))
         schedule_matrix.append(period_arr)
         date_arr, days_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, installment)
         schedule_matrix.append(date_arr)
@@ -238,7 +250,7 @@ def cal_apr_helper(input_json):
         return None
 
 #  helper function for calculate the number of days in the specified period
-def get_num_days(period, prev_date):
+def get_num_days_to_incre(period, prev_date):
     if period == 'months':
         return monthrange(prev_date.year, prev_date.month)[1]
     elif period == 'quarters':
@@ -246,14 +258,14 @@ def get_num_days(period, prev_date):
         for idx in range(3):
             days_aggreg += monthrange(prev_date.year, prev_date.month)[1]
             # update the prev_date forward by one month
-            prev_date += datetime.timedelta(days=get_num_days('months', prev_date))
+            prev_date += datetime.timedelta(days=get_num_days_to_incre('months', prev_date))
         return days_aggreg
     elif period == 'half-years':
         days_aggreg = 0
         for idx in range(6):
             days_aggreg += monthrange(prev_date.year, prev_date.month)[1]
             # update the prev_date forward by one month
-            prev_date += datetime.timedelta(days=get_num_days('months', prev_date))
+            prev_date += datetime.timedelta(days=get_num_days_to_incre('months', prev_date))
         return days_aggreg
 
     elif period == 'years':
@@ -275,7 +287,7 @@ def calc_origin_days(day, month, year, installment_time_period, num_installment)
     date_arr.append(start_date_str)
 
     for idx in range(num_installment):
-        days_to_incre = get_num_days(installment_time_period, prev_date)
+        days_to_incre = get_num_days_to_incre(installment_time_period, prev_date)
         new_date = prev_date + datetime.timedelta(days=days_to_incre)
         new_date_str = '{0}-{1}-{2}'.format(new_date.day, month_num_to_str_dict[new_date.month], new_date.year)
         date_arr.append(new_date_str)
@@ -284,26 +296,194 @@ def calc_origin_days(day, month, year, installment_time_period, num_installment)
     return date_arr, day_num_arr
 
 #######
-#For repayment schedule date and days on change
+# Below are functions for repayment schedule change
 #######
 # recalculate the days column on repayment schedule 
-def on_change_day(input_date_arr, input_day_arr, change_row_idx, change_val, prev_changes):
+def on_principal_change(origin_matrix, changes_on_principal, grace_period_balloon):
+    aggreg = 0
+    new_principal_paid = origin_matrix[PRINCIPAL_PAID_IDX]
+    # populate the previous changes except the last row
+    for idx in range(1,len(origin_matrix[0])-grace_period_balloon-1):
+        #  amount the override exceeds the origin_matrix value
+        if changes_on_principal[idx] != None:
+            aggreg += changes_on_principal[idx] - new_principal_paid[idx]
+            new_principal_paid[idx] = changes_on_principal[idx]
+    
+    # check if user has changed the last row of principal paid column
+    if changes_on_principal[-1-grace_period_balloon] != None:
+        new_principal_paid[-1-grace_period_balloon] = changes_on_principal[-1-grace_period_balloon]
+    else:
+        new_principal_paid[-1-grace_period_balloon] -= aggreg
+    return new_principal_paid
+
+def update_balance(origin_matrix):
+
+    principal = origin_matrix[PRINCIPAL_PAID_IDX]
+    new_balance = np.zeros(len(origin_matrix[0]))
+    new_balance[0] = origin_matrix[BALANCE_IDX][0]
+    for idx in range(1,len(origin_matrix[0])):
+        new_balance[idx] = new_balance[idx-1] - principal[idx]
+
+        # when there is ballon number, the last #balloon cells should be zero
+        # however, due two floating point subtraction, this will not be exactly zero. So force it.
+        if new_balance[idx] < 0.01 and new_balance[idx] > 0:
+            new_balance[idx] = 0
+    return new_balance
+
+def update_fees(origin_matrix, fee_percent_ongoing, fee_fixed_ongoing):
+    balance_upfront = origin_matrix[BALANCE_IDX][0]
+    new_fees = np.zeros(len(origin_matrix[0]))
+    new_fees[0] = origin_matrix[FEES_IDX][0]
+    principal = origin_matrix[PRINCIPAL_PAID_IDX]
+    for idx in range(1, len(origin_matrix[0])):
+        # deal with balloon
+        if principal[idx] == 0:
+            new_fees[idx] = 0
+        else:
+            new_fees[idx] = principal[idx] * fee_percent_ongoing + fee_fixed_ongoing
+    return new_fees
+
+def update_security_deposit(origin_matrix, security_deposit_percent_ongoing, security_deposit_fixed_ongoing, security_deposit_scaled_interest, grace_period_balloon):
+    principal = origin_matrix[PRINCIPAL_PAID_IDX]
+    new_security_deposit = np.zeros(len(origin_matrix[0]))
+    new_security_deposit[0] = origin_matrix[SECURITY_DEPOSIT_IDX][0]
+    new_security_deposit_interest_paid = np.zeros(len(origin_matrix[0]))
+
+    new_security_deposit[1:] = principal[1:] * security_deposit_percent_ongoing + security_deposit_fixed_ongoing
+    for idx in range(len(origin_matrix[0])-grace_period_balloon-1, len(origin_matrix[0])):
+        new_security_deposit[idx] -= security_deposit_fixed_ongoing
+
+    for idx in range(1, len(origin_matrix[0])):
+        new_security_deposit_interest_paid[idx] = (np.sum(new_security_deposit[:idx]) + np.sum(new_security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
+    return new_security_deposit, new_security_deposit_interest_paid
+
+def update_security_deposit_balance(origin_matrix):
+    new_security_deposit = origin_matrix[SECURITY_DEPOSIT_IDX]
+    new_security_deposit_interest_paid = origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX]
+    new_security_deposit_balance = np.zeros(len(new_security_deposit))
+    new_security_deposit_balance[0] = new_security_deposit[0]
+    for idx in range(len(new_security_deposit_balance)-1):
+        new_security_deposit_balance[idx] = np.sum(new_security_deposit[:idx+1]) + np.sum(new_security_deposit_interest_paid[:idx+1])
+    return new_security_deposit_balance
+
+def update_security_deposit_withdraw(origin_matrix):
+    new_security_deposit_withdraw = np.zeros(len(origin_matrix[0]))
+    new_security_deposit_withdraw[-1] = np.sum(origin_matrix[SECURITY_DEPOSIT_IDX]) + np.sum(origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
+    return new_security_deposit_withdraw
+
+def update_insurance(origin_matrix, insurance_percent_ongoing, insurance_fixed_ongoing, grace_period_balloon):
+    balance = origin_matrix[BALANCE_IDX]
+    new_insurance_paid= np.zeros(len(origin_matrix[0]))
+    new_insurance_paid[0] = origin_matrix[INSURANCE_IDX][0]
+    new_insurance_paid[1:] = balance[1:] * insurance_percent_ongoing + insurance_fixed_ongoing
+    new_insurance_paid[-1] = 0
+    for idx in range(len(origin_matrix[0])-grace_period_balloon-1, len(origin_matrix[0])-1):
+        new_insurance_paid[idx] -= insurance_fixed_ongoing
+    return new_insurance_paid
+
+
+def update_interest(origin_matrix, interest_calculation_type, scaled_interest, grace_period_interest_calculate, grace_period_interest_pay, grace_period_balloon):
+    balance = origin_matrix[BALANCE_IDX]
+    new_interest_paid_arr = np.zeros(len(origin_matrix[0]))
+
+    for idx in range(1, len(balance)):
+        new_interest_paid_arr[idx] = balance[idx-1] * scaled_interest
+
+    if interest_calculation_type == 'initial amount or flat':
+        new_interest_paid_arr[1:] = balance[0] * scaled_interest 
+
+    # for grace period interest calculation
+    for idx in range(1, grace_period_interest_calculate+1):
+        new_interest_paid_arr[idx] = 0
+
+    #  for grace period interest payment
+    for idx in range(1, grace_period_interest_pay+1):
+        new_interest_paid_arr[grace_period_interest_pay+1] += new_interest_paid_arr[idx]
+        new_interest_paid_arr[idx] = 0
+
+    # for grace ballon
+    for idx in range(len(balance)-grace_period_balloon, len(balance)):
+        new_interest_paid_arr[idx] = 0
+    return new_interest_paid_arr
+
+def update_taxes(origin_matrix, tax_percent_fees, tax_percent_interest):
+    new_taxes = np.zeros(len(origin_matrix[0]))
+    fees_paid = origin_matrix[FEES_IDX]
+    interest_paid_arr = origin_matrix[INTEREST_PAID_IDX]
+    taxes_on_fee = fees_paid * tax_percent_fees
+    taxes_on_interest = interest_paid_arr * tax_percent_interest
+    new_taxes = taxes_on_fee + taxes_on_interest
+    return new_taxes
+
+def update_cash_flow(origin_matrix):
+    return origin_matrix[PRINCIPAL_DISBURSED_IDX] \
+    - origin_matrix[PRINCIPAL_PAID_IDX] \
+    - origin_matrix[INTEREST_PAID_IDX] \
+    - origin_matrix[INSURANCE_IDX] \
+    - origin_matrix[FEES_IDX] \
+    - origin_matrix[TAXES_IDX] \
+    - origin_matrix[SECURITY_DEPOSIT_IDX] \
+    + origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX]
+    
+def on_fees_change(origin_matrix, changes_on_fees):
+    new_fees = origin_matrix[FEES_IDX]
+    for idx in range(len(origin_matrix[0])):
+        if changes_on_fees[idx] != None:
+            new_fees[idx] = changes_on_fees[idx]
+    return new_fees
+
+def on_taxes_change(origin_matrix, changes_on_taxes):
+    new_taxes = origin_matrix[TAXES_IDX]
+    for idx in range(len(origin_matrix[0])):
+        if changes_on_taxes[idx] != None:
+            new_taxes[idx] = changes_on_taxes[idx]
+    return new_taxes
+
+def on_insurance_change(origin_matrix, changes_on_insurance):
+    new_insurance = origin_matrix[INSURANCE_IDX]
+    for idx in range(len(origin_matrix[0])):
+        if changes_on_insurance[idx] != None:
+            new_insurance[idx] = changes_on_insurance[idx]
+    return new_insurance
+
+def on_interest_change(origin_matrix, changes_on_interest):
+    new_interest = origin_matrix[INTEREST_PAID_IDX]
+    for idx in range(len(new_interest)):
+        if changes_on_interest[idx] != None:
+            # check if the change is made on last row
+            if idx != len(new_interest)-1:
+                new_interest[idx+1] += new_interest[idx] - changes_on_interest[idx]
+            
+            new_interest[idx] = changes_on_interest[idx]
+    return new_interest
+
+def on_security_deposite_change(origin_matrix, changes_on_deposite, security_deposit_scaled_interest):
+    new_security_deposit = origin_matrix[SECURITY_DEPOSIT_IDX]
+    for idx in range(len(new_security_deposit)):
+        if changes_on_deposite[idx] != None:
+            new_security_deposit[idx] = changes_on_deposite[idx]
+    new_security_deposit_interest_paid = np.zeros(len(origin_matrix[0]))
+
+    for idx in range(1, len(new_security_deposit)):
+        new_security_deposit_interest_paid[idx] = (np.sum(new_security_deposit[:idx]) + np.sum(new_security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
+    return new_security_deposit, new_security_deposit_interest_paid
+
+def on_days_change(origin_matrix, changes_on_days, changes_on_date, installment_time_period):
     new_date_arr = []
     new_day_num_arr = []
-    prev_changes[change_row_idx] = change_val
-    date_col = input_date_arr
-    day_col = input_day_arr
-    print (input_day_arr)
+    date_col = origin_matrix[DATE_IDX]
+    day_col = origin_matrix[DAY_IDX]
     start_date = datetime.datetime.strptime(date_col[0], '%d-%b-%Y')
     prev_date = start_date
     new_date_arr.append(date_col[0])
     new_day_num_arr.append(0)
     for idx in range(1,len(date_col)):
-        if prev_changes[idx] != 0:
-            days_to_incre = prev_changes[idx]
+        if changes_on_date[idx] != None:
+            days_to_incre = (datetime.datetime.strptime(changes_on_date[idx], '%d-%b-%Y') - prev_date).days
+        elif changes_on_days[idx] != None:
+            days_to_incre = changes_on_days[idx]
         else:
-            days_to_incre = get_num_days(installment_time_period, prev_date)
-            
+            days_to_incre = get_num_days_to_incre(installment_time_period, prev_date)
         new_date = prev_date + datetime.timedelta(days=days_to_incre)
         new_date_str = '{0}-{1}-{2}'.format(new_date.day, month_num_to_str_dict[new_date.month], new_date.year)
         new_date_arr.append(new_date_str)
