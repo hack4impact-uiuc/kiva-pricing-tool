@@ -12,17 +12,15 @@ class AdminThemes extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      theme_data: [],
       data: []
     }
 
-    this.renderEditable = this.renderEditable.bind(this)
+    this.renderUneditable = this.renderUneditable.bind(this)
   }
 
   componentDidMount() {
     axios.get('http://127.0.0.1:3453/getAllLT').then(response => {
-      this.setState({ theme_data: response.data.result.loan_theme })
-      for (let theme of this.state.theme_data) {
+      for (let theme of response.data.result.loan_theme) {
         this.setState({ data: this.state.data.concat({ loan_theme: theme }) })
       }
     })
@@ -30,17 +28,33 @@ class AdminThemes extends Component {
 
   removeLoan(theme_name) {
     axios
-      .delete('http://127.0.0.1:3453/removeMFI/' + theme_name)
+      .delete('http://127.0.0.1:3453/removeLT/' + theme_name)
       .then(response => {
-        this.componentDidMount
+        for (var i = 0; i < this.state.data.length; i++) {
+          if (this.state.data[i].loan_theme === theme_name) {
+            this.setState({
+              data: this.state.data
+                .slice(0, i)
+                .concat(this.state.data.slice(i + 1))
+            })
+          }
+        }
       })
   }
 
-  renderEditable(cellInfo) {
+  addLoan(theme_name) {
+    let data = { loan_theme: theme_name }
+    axios.post('http://127.0.0.1:3453/addLT', data).then(response => {
+      this.setState({
+        data: this.state.data.concat({ loan_theme: theme_name })
+      })
+    })
+  }
+
+  renderUneditable(cellInfo) {
     return (
       <div
-        style={{ backgroundColor: '#fafafa' }}
-        contentEditable
+        //style={{ backgroundColor: '#fafafa' }}
         suppressContentEditableWarning
         onBlur={e => {
           const data = [...this.state.data]
@@ -91,7 +105,7 @@ class AdminThemes extends Component {
           name="Add "
           url="themelist"
           onClickHandler={() => {
-            console.log('added new theme')
+            this.addLoan(this.refs.addloantheme.state.textBody)
           }}
         />
 
@@ -99,36 +113,42 @@ class AdminThemes extends Component {
 
         <ReactTable
           data={this.state.data}
+          noDataText="Loading Loan Themes...This may take a moment"
           columns={[
             {
               Header: 'Loan Theme',
               accessor: 'loan_theme',
-              Cell: this.renderEditable
+              id: 'loan_theme',
+              Cell: this.renderUneditable,
+              filterable: true
             },
             {
               Header: 'Edit',
               id: 'edit-button',
               width: 150,
-              Cell: props => <Button name="Edit" />
+              Cell: props => <Button name="Edit" />,
+              filterable: false
             },
             {
               Header: 'Remove',
               id: 'delete-button',
               width: 150,
-              Cell: props => (
-                <Button
-                  name="Remove"
-                  url="themelist"
-                  onClickHandler={() => this.removeLoan(this.Cell)}
-                />
-              )
-            },
-            {
-              Header: 'TEST',
-              id: 'test',
               Cell: ({ row, original }) => {
-                return <span>{original.loan_theme}</span>
-              }
+                return (
+                  <Button
+                    name="Remove"
+                    url="themelist"
+                    onClickHandler={() => this.removeLoan(original.loan_theme)}
+                  />
+                )
+              },
+              filterable: false
+            }
+          ]}
+          defaultSorted={[
+            {
+              id: 'loan_theme',
+              desc: false
             }
           ]}
         />
