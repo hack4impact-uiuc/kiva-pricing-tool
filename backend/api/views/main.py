@@ -2,7 +2,7 @@ from api import app, db
 from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
-from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper
+from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper, update_repayment_schedule
 import numpy as np
 
 mod = Blueprint('main', __name__)
@@ -56,36 +56,23 @@ def cal_apr():
         return create_response(data={'apr':apr, 'matrix':matrix}, status=200)
 
 @app.route(RECALCULATE_URL, methods=['POST'])
-def cal_apr():
+def cal_repayment():
     """
-        calculate and send a response with APR
+        recalculate repayment schedule and APR
     """
     #TODO: discuss with frontend the format and needs
     input_json = request.get_json()
-    args = request.args
+    input_form = input_json['input_form']
+    user_change = input_json['user_change']
     payload = {}
-    
-    origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], installment_time_period)
-    origin_matrix[PRINCIPAL_PAID_IDX] = on_principal_change(origin_matrix, user_change[PRINCIPAL_PAID_IDX], grace_period_balloon)
-    origin_matrix[SECURITY_DEPOSIT_IDX], origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX] =  update_security_deposit(origin_matrix, security_deposit_percent_ongoing, security_deposit_fixed_ongoing, security_deposit_scaled_interest, grace_period_balloon)
-    origin_matrix[SECURITY_DEPOSIT_IDX], origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX] = on_security_deposite_change(origin_matrix, user_change[SECURITY_DEPOSIT_IDX], security_deposit_scaled_interest)
-    origin_matrix[FEES_IDX] = update_fees(origin_matrix, fee_percent_ongoing, fee_fixed_ongoing)
-    origin_matrix[FEES_IDX] = on_fees_change(origin_matrix, user_change[FEES_IDX])
-    origin_matrix[BALANCE_IDX] = update_balance(origin_matrix)
-    origin_matrix[INSURANCE_IDX] = update_insurance(origin_matrix, insurance_percent_ongoing, insurance_fixed_ongoing, grace_period_balloon)
-    origin_matrix[INSURANCE_IDX] = on_insurance_change(origin_matrix, user_change[INSURANCE_IDX])
-    origin_matrix[INTEREST_PAID_IDX] = update_interest(origin_matrix, interest_calculation_type, scaled_interest, grace_period_interest_calculate, grace_period_interest_pay, grace_period_balloon)
-    origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX])
-    origin_matrix[TAXES_IDX] = update_taxes(origin_matrix, tax_percent_fees, tax_percent_interest)
-    origin_matrix[TAXES_IDX] = on_taxes_change(origin_matrix, user_change[TAXES_IDX])
-    origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix)
-    origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix)
-    origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
-    # if apr == None:
-    #     return create_response({}, status=400, message='missing components for calculating apr rate')
-    # else:
-    #     return create_response(data={'apr':apr, 'matrix':matrix}, status=200)
-
+    try:
+        apr, origin_matrix = cal_apr(input_form)
+        apr, recal_matrix = update_repayment_schedule(origin_matrix, user_change, input_form)
+        payload['apr'] =  apr 
+        payload['recal_matrix'] = recal_matrix
+        return create_response(payload)
+    except Exception as e:
+        return create_response(message=str(e), status=400)
 
 @app.route(GET_VERSION_NUM)
 def get_version_num():
