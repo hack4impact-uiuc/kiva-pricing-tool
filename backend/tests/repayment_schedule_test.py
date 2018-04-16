@@ -3,8 +3,11 @@ from input_test import fake_cal_apr
 import datetime
 from calendar import monthrange
 import calendar
-DAY_IDX = 2
+import sys
+sys.path.insert(0, '../api')
+from util_xirr import *
 DATE_IDX = 1
+DAY_IDX = 2
 PRINCIPAL_DISBURSED_IDX = 3
 PRINCIPAL_PAID_IDX = 4
 BALANCE_IDX = 5
@@ -51,16 +54,18 @@ interest_time_period = 'month'
 installments_period_dict = {'days':0, 'weeks':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'months':5, 'quarters':6, 'half-years':7, 'years':8}
 interest_period_dict = {'day':0, 'week':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'month':5, 'quarter':6, 'half-year':7, 'year':8}
 
-# for days and date calculation in repayment schedule
-days_dict = {'days':1, 'weeks':7, 'two-weeks':14, '15 days':15, '4 weeks': 28}
-month_num_to_str_dict = {1:'Jan', 2: 'Feb', 3: 'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
-
-# installments_arr = np.array([1, 7, 14, 15, 28, 30, 90, 180, 360])
 installments_arr = 1/ (periods_per_year / 12)
 nominal_arr = 1 / installments_arr
 
 scaled_interest = nominal_interest_rate*installments_arr[installments_period_dict[installment_time_period]] * nominal_arr[interest_period_dict[interest_time_period]]
 security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[installments_period_dict[installment_time_period]]
+
+# for days and date calculation in repayment schedule
+days_dict = {'days':1, 'weeks':7, 'two-weeks':14, '15 days':15, '4 weeks': 28}
+month_num_to_str_dict = {1:'Jan', 2: 'Feb', 3: 'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
+
+def round_float(f, n):
+    return np.floor(f * 10 ** n + 0.5) / 10**n
 
 def on_principal_change(origin_matrix, changes_on_principal, grace_period_balloon):
     aggreg = 0
@@ -116,22 +121,22 @@ def update_security_deposit(origin_matrix, security_deposit_percent_ongoing, sec
     for idx in range(len(origin_matrix[0])-grace_period_balloon-1, len(origin_matrix[0])):
         new_security_deposit[idx] -= security_deposit_fixed_ongoing
 
-    for idx in range(1, len(origin_matrix[0])):
+    for idx in range(1, len(origin_matrix[0])- grace_period_balloon):
         new_security_deposit_interest_paid[idx] = (np.sum(new_security_deposit[:idx]) + np.sum(new_security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
     return new_security_deposit, new_security_deposit_interest_paid
 
-def update_security_deposit_balance(origin_matrix):
+def update_security_deposit_balance(origin_matrix, grace_period_balloon):
     new_security_deposit = origin_matrix[SECURITY_DEPOSIT_IDX]
     new_security_deposit_interest_paid = origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX]
     new_security_deposit_balance = np.zeros(len(new_security_deposit))
     new_security_deposit_balance[0] = new_security_deposit[0]
-    for idx in range(len(new_security_deposit_balance)-1):
+    for idx in range(len(new_security_deposit_balance)-grace_period_balloon):
         new_security_deposit_balance[idx] = np.sum(new_security_deposit[:idx+1]) + np.sum(new_security_deposit_interest_paid[:idx+1])
     return new_security_deposit_balance
 
-def update_security_deposit_withdraw(origin_matrix):
+def update_security_deposit_withdraw(origin_matrix, grace_period_balloon):
     new_security_deposit_withdraw = np.zeros(len(origin_matrix[0]))
-    new_security_deposit_withdraw[-1] = np.sum(origin_matrix[SECURITY_DEPOSIT_IDX]) + np.sum(origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
+    new_security_deposit_withdraw[-1-grace_period_balloon] = np.sum(origin_matrix[SECURITY_DEPOSIT_IDX]) + np.sum(origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
     return new_security_deposit_withdraw
 
 def update_insurance(origin_matrix, insurance_percent_ongoing, insurance_fixed_ongoing, grace_period_balloon):
@@ -209,25 +214,25 @@ def on_insurance_change(origin_matrix, changes_on_insurance):
             new_insurance[idx] = changes_on_insurance[idx]
     return new_insurance
 
-def on_interest_change(origin_matrix, changes_on_interest):
+def on_interest_change(origin_matrix, changes_on_interest, grace_period_balloon):
     new_interest = origin_matrix[INTEREST_PAID_IDX]
     for idx in range(len(new_interest)):
         if changes_on_interest[idx] != None:
             # check if the change is made on last row
-            if idx != len(new_interest)-1:
+            if idx != len(new_interest)-1-grace_period_balloon:
                 new_interest[idx+1] += new_interest[idx] - changes_on_interest[idx]
             
             new_interest[idx] = changes_on_interest[idx]
     return new_interest
 
-def on_security_deposite_change(origin_matrix, changes_on_deposite, security_deposit_scaled_interest):
+def on_security_deposite_change(origin_matrix, changes_on_deposite, security_deposit_scaled_interest, grace_period_balloon):
     new_security_deposit = origin_matrix[SECURITY_DEPOSIT_IDX]
     for idx in range(len(new_security_deposit)):
         if changes_on_deposite[idx] != None:
             new_security_deposit[idx] = changes_on_deposite[idx]
     new_security_deposit_interest_paid = np.zeros(len(origin_matrix[0]))
 
-    for idx in range(1, len(new_security_deposit)):
+    for idx in range(1, len(new_security_deposit)-grace_period_balloon):
         new_security_deposit_interest_paid[idx] = (np.sum(new_security_deposit[:idx]) + np.sum(new_security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
     return new_security_deposit, new_security_deposit_interest_paid
 
@@ -281,6 +286,41 @@ def on_days_change(origin_matrix, changes_on_days, changes_on_date, installment_
 
     return new_date_arr, new_day_num_arr
 
+def cal_xirr(origin_matrix, grace_period_balloon):
+    date_col = origin_matrix[DATE_IDX]
+    cash_flow = origin_matrix[CASH_FLOW_IDX]
+    date_cash_list = []
+    print (len(origin_matrix[0]))
+    for idx in range(len(origin_matrix[0])-grace_period_balloon):
+        date = datetime.datetime.strptime(date_col[idx], '%d-%b-%Y')
+        date_cash_list.append((date, cash_flow[idx]))
+    print (date_cash_list)
+    return xirr(date_cash_list)
+
+# def xirr1(transactions):
+#     years = [(ta[0] - transactions[0][0]).days / 365.0 for ta in transactions]
+#     residual = 1
+#     step = 0.05
+#     guess = 0.05
+#     epsilon = 0.0001
+#     limit = 10000
+#     while abs(residual) > epsilon and limit > 0:
+#         limit -= 1
+#         residual = 0.0
+#         for i, ta in enumerate(transactions):
+#             print ((guess, years[i]))
+#             residual += ta[1] / pow(guess, years[i])
+#         print ('***')
+#         print (guess)
+#         print (residual)
+#         if abs(residual) > epsilon:
+#             if residual > 0:
+#                 guess += step
+#             else:
+#                 guess -= step
+#                 step /= 2.0
+#     return guess-1
+
 
 #########
 # NOTE each ROW correspond to an column in the excel tool. 
@@ -297,19 +337,23 @@ user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(objec
 #         user_change[i][j] = None
 user_change[:] = None
 
-user_change[PRINCIPAL_PAID_IDX][4] = 100
-user_change[PRINCIPAL_PAID_IDX][5] = 100
-user_change[PRINCIPAL_PAID_IDX][-1] = 100
-user_change[FEES_IDX][4] = 200
-user_change[INSURANCE_IDX][6] = 100
-user_change[INTEREST_PAID_IDX][8] = 12
-user_change[INTEREST_PAID_IDX][-1] = 10
-user_change[TAXES_IDX][4] = 30
-user_change[SECURITY_DEPOSIT_IDX][6] = 10
-user_change[DAY_IDX][4] = 60
-user_change[DAY_IDX][5] = 60
-user_change[DATE_IDX][4] = '10-Mar-2012'
-user_change[DATE_IDX][6] = '18-Aug-2012'
+# user_change[PRINCIPAL_PAID_IDX][4] = 100
+# user_change[PRINCIPAL_PAID_IDX][5] = 100
+# user_change[PRINCIPAL_PAID_IDX][6] = 100
+# user_change[FEES_IDX][4] = 200
+# user_change[FEES_IDX][8] = 100
+# user_change[INSURANCE_IDX][6] = 100
+# user_change[INSURANCE_IDX][7] = 30
+# user_change[INTEREST_PAID_IDX][8] = 12
+# user_change[INTEREST_PAID_IDX][4] = 10
+# user_change[TAXES_IDX][4] = 30
+# user_change[TAXES_IDX][8] = 10
+# user_change[SECURITY_DEPOSIT_IDX][6] = 10
+# user_change[SECURITY_DEPOSIT_IDX][8] = 10
+# user_change[DAY_IDX][4] = 60
+# user_change[DAY_IDX][5] = 60
+# user_change[DATE_IDX][4] = '10-Mar-2012'
+# user_change[DATE_IDX][6] = '18-Aug-2012'
 print (user_change)
 print (type(origin_matrix))
 # print (origin_matrix)
@@ -320,17 +364,20 @@ print (type(origin_matrix))
 origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], installment_time_period)
 origin_matrix[PRINCIPAL_PAID_IDX] = on_principal_change(origin_matrix, user_change[PRINCIPAL_PAID_IDX], grace_period_balloon)
 origin_matrix[SECURITY_DEPOSIT_IDX], origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX] =  update_security_deposit(origin_matrix, security_deposit_percent_ongoing, security_deposit_fixed_ongoing, security_deposit_scaled_interest, grace_period_balloon)
-origin_matrix[SECURITY_DEPOSIT_IDX], origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX] = on_security_deposite_change(origin_matrix, user_change[SECURITY_DEPOSIT_IDX], security_deposit_scaled_interest)
+origin_matrix[SECURITY_DEPOSIT_IDX], origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX] = on_security_deposite_change(origin_matrix, user_change[SECURITY_DEPOSIT_IDX], security_deposit_scaled_interest, grace_period_balloon)
 origin_matrix[FEES_IDX] = update_fees(origin_matrix, fee_percent_ongoing, fee_fixed_ongoing)
 origin_matrix[FEES_IDX] = on_fees_change(origin_matrix, user_change[FEES_IDX])
 origin_matrix[BALANCE_IDX] = update_balance(origin_matrix)
 origin_matrix[INSURANCE_IDX] = update_insurance(origin_matrix, insurance_percent_ongoing, insurance_fixed_ongoing, grace_period_balloon)
 origin_matrix[INSURANCE_IDX] = on_insurance_change(origin_matrix, user_change[INSURANCE_IDX])
 origin_matrix[INTEREST_PAID_IDX] = update_interest(origin_matrix, interest_calculation_type, scaled_interest, grace_period_interest_calculate, grace_period_interest_pay, grace_period_balloon)
-origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX])
+origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX], grace_period_balloon)
 origin_matrix[TAXES_IDX] = update_taxes(origin_matrix, tax_percent_fees, tax_percent_interest)
 origin_matrix[TAXES_IDX] = on_taxes_change(origin_matrix, user_change[TAXES_IDX])
-origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix)
-origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix)
+origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix, grace_period_balloon)
+origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
 origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
+
 print (origin_matrix)
+print (cal_xirr(origin_matrix, grace_period_balloon))
+print ('{0}%'.format(round_float(np.irr(origin_matrix[CASH_FLOW_IDX]) * periods_per_year[installments_period_dict[installment_time_period]]*100, 2)))

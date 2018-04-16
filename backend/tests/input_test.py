@@ -175,7 +175,7 @@ def fake_cal_apr():
 
     security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[installments_period_dict[installment_time_period]]
     security_deposit_interest_paid = np.zeros(installment + 1)
-    for idx in range(1, len(security_deposit)):
+    for idx in range(1, len(security_deposit) - grace_period_balloon):
         security_deposit_interest_paid[idx] = (np.sum(security_deposit[:idx]) + np.sum(security_deposit_interest_paid[:idx])) * security_deposit_scaled_interest
 
 
@@ -195,10 +195,25 @@ def fake_cal_apr():
 
     #### below is experimental
     if grace_period_balloon != 0:
-        result = result[:-grace_period_balloon]
+        # result = result[:-grace_period_balloon]
+        for idx in range(len(result)-grace_period_balloon, len(result)):
+            result[idx] = 0
     #### above is experimental
-    result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
 
+    ##### 
+    print ('#'*10)
+    print (result)
+    # result[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
+    result[-grace_period_balloon-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
+    print ('*'*10)
+    # print (result_for_cal)
+    # result_for_cal[-1] += np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
+    # print (result)
+    # print (result_for_cal)
+    print (result)
+    print ('*'*10)
+
+    ######
     # build the repayment schedule matrix
     start_day = 1
     start_month = 1
@@ -221,38 +236,39 @@ def fake_cal_apr():
     schedule_matrix.append(security_deposit)
     schedule_matrix.append(security_deposit_interest_paid)
     deposite_withdraw = np.zeros(installment+1)
-    deposite_withdraw[-1] = np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
+    deposite_withdraw[-grace_period_balloon-1] = np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
     schedule_matrix.append(deposite_withdraw)
     security_deposit_balance = np.zeros(installment+1)
-    for idx in range(len(security_deposit_balance)):
+    for idx in range(len(security_deposit_balance)-grace_period_balloon):
         security_deposit_balance[idx] = np.sum(security_deposit[:idx+1]) + np.sum(security_deposit_interest_paid[:idx+1])
     security_deposit_balance[-1] = 0
     schedule_matrix.append(security_deposit_balance)
     schedule_matrix.append(result) 
     schedule_matrix = np.array(schedule_matrix, dtype=object)
     # result[9:] += 0.01
-    # print (np.irr(result))
-    # print (periods_per_year[installments_period_dict[installment_time_period]])
-    # print (result)
-    # print ('{0}%'.format(round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]]*100, 2)))
-    # print ('------------')
-    # print (monthly_payment)
-    # print ('\nprincipal\n')
-    # print (principal_paid_arr)
-    # print ('\nbalance\n')
-    # print (balance_arr)
-    # print ('\ninterest_paid_arr\n')
-    # print (interest_paid_arr)
-    # print ('\nfees paid\n')
-    # print (fees_paid)
-    # print ('\n insurance_paid\n')
-    # print (insurance_paid)
-    # print ('\ntaxes\n')
-    # print (taxes)
-    # print ('\n security_deposit\n')
-    # print (security_deposit)
-    # print ('\n security_deposit_interest_paid\n')
-    # print (security_deposit_interest_paid)
+    print (np.irr(result)) ####changed from result to result for cal
+    print (periods_per_year[installments_period_dict[installment_time_period]])
+    print (result)
+    print ('{0}%'.format(round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]]*100, 2)))
+    print ('------------')
+    print (monthly_payment)
+    print ('\nprincipal\n')
+    print (principal_paid_arr)
+    print ('\nbalance\n')
+    print (balance_arr)
+    print ('\ninterest_paid_arr\n')
+    print (interest_paid_arr)
+    print ('\nfees paid\n')
+    print (fees_paid)
+    print ('\n insurance_paid\n')
+    print (insurance_paid)
+    print ('\ntaxes\n')
+    print (taxes)
+    print ('\n security_deposit\n')
+    print (security_deposit)
+    print ('\n security_deposit_interest_paid\n')
+    print (security_deposit_interest_paid)
+    print (schedule_matrix)
     return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
 
 fake_cal_apr()
