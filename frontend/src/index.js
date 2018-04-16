@@ -14,7 +14,10 @@ import {
   APRInputs,
   NewLoan,
   IntroPage,
-  FindLoan
+  FindLoan,
+  AdminMain,
+  AdminPartners,
+  AdminThemes
 } from './components'
 import registerServiceWorker from './registerServiceWorker'
 import './styles/index.css'
@@ -28,6 +31,9 @@ ReactDOM.render(
         <Route exact path="/" component={IntroPage} />
         <Route path="/newloan" component={NewLoan} />
         <Route path="/findloan" component={FindLoan} />
+        <Route path="/adminmain" component={AdminMain} />
+        <Route path="/partnerlist" component={AdminPartners} />
+        <Route path="/themelist" component={AdminThemes} />
         <Route path="/output" component={APRRateDisplay} />
         <Route path="/form1" component={APRInputs} />
       </div>
