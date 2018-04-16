@@ -24,6 +24,44 @@ class APRInputs extends Component {
     changedFormData([name], [value])
   }
 
+  componentWillMount() {
+    const { formDataReducer, changedFormData } = this.props
+    if (formDataReducer.back == 'findloan') {
+      console.log('mounting')
+      axios
+        .get(
+          'http://127.0.0.1:3453/findLoan?partner_name=' +
+            formDataReducer.mfi[0] +
+            '&loan_theme=' +
+            formDataReducer.loanType[0] +
+            '&product_type=' +
+            formDataReducer.productType[0] +
+            '&version_num=' +
+            formDataReducer.versionNum[0]
+        )
+        .then(response => {
+          for (const key of Object.keys(response.data.result)) {
+            console.log(this.camelCase(key), response.data.result[key])
+            changedFormData(this.camelCase(key), [
+              response.data.result[key].toString()
+            ])
+          }
+          this.setState({ saveData: response.data.result })
+        })
+    }
+  }
+
+  camelCase(key) {
+    let terms = key.split('_')
+    if (terms.length == 1) return terms
+
+    for (var i = 1; i < terms.length; i++) {
+      terms[i] = terms[i].charAt(0).toUpperCase() + terms[i].slice(1)
+    }
+
+    return terms.join('')
+  }
+
   inputsEntered() {
     const { formDataReducer } = this.props
     return (
@@ -130,7 +168,7 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
-    console.log(formDataReducer.loanAmount)
+    console.log('RENDERING', formDataReducer, formDataReducer.installment)
     return (
       <Grid>
         <PageHeader>User Information</PageHeader>
@@ -213,7 +251,13 @@ class APRInputs extends Component {
             hint="ex. 12"
             typeVal="int"
             limit="180"
-            textBody={formDataReducer.installment}
+            textBody={
+              // console.log("FUCKING FORM REDUCER", formDataReducer.installment)
+              // formDataReducer.installment
+              formDataReducer.installment
+                ? formDataReducer.installment[0]
+                : null
+            }
             onTextInputChange={this.handleTextChange}
           />
           <TextField

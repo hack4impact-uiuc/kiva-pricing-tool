@@ -13,6 +13,16 @@ class TextField extends Component {
       textBody: this.props.textBody ? this.props.textBody : ''
     }
   }
+  // componentWillReceiveProps(nextProps){
+  //   this.setState()
+  // }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      ...prevState,
+      ...nextProps
+    }
+  }
 
   handleChange(e) {
     let value = e.target.value

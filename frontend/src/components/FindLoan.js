@@ -236,7 +236,7 @@ class FindLoan extends Component {
             name="Duplicate"
             disable={!this.inputsEntered()}
             url="form1"
-            onClickHandler={() => this.searchLoan()}
+            onClickHandler={() => changedFormData('back', 'findloan')}
           />
         </Form>
       </Grid>
