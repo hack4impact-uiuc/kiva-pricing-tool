@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { Grid, Jumbotron, PageHeader, Bootstrap, Form } from 'react-bootstrap'
+import {
+  Grid,
+  Jumbotron,
+  PageHeader,
+  Bootstrap,
+  Form,
+  Alert
+} from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import LiveSearch from './LiveSearch'
@@ -7,13 +14,16 @@ import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
+import ReactDOM from 'react-dom'
 
 class AdminPartners extends Component {
   constructor(props) {
     super(props)
     this.state = {
       partner_names: [],
-      data: []
+      data: [],
+      addshow: false,
+      removeshow: false
     }
     this.renderEditable = this.renderEditable.bind(this)
   }
@@ -44,6 +54,44 @@ class AdminPartners extends Component {
           __html: this.state.data[cellInfo.index][cellInfo.column.id]
         }}
       />
+    )
+  }
+
+  addPartner(partner_name) {
+    this.setState({ addshow: true })
+    let data = { partner_name: partner_name }
+    axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
+      this.setState({
+        data: this.state.data.concat({ partner_names: partner_name })
+      })
+    })
+  }
+
+  removeLoan(partner_name) {
+    this.setState({ removeshow: true })
+    // Remove loan from being visible from table, remove from state.data array if successful response from db
+    axios
+      .delete('http://127.0.0.1:3453/removeMFI/' + partner_name)
+      .then(response => {
+        for (var i = 0; i < this.state.data.length; i++) {
+          if (this.state.data[i].partner_names === partner_name) {
+            // Remove element in place, return array with element removed
+            this.setState({
+              data: this.state.data
+                .slice(0, i)
+                .concat(this.state.data.slice(i + 1))
+            })
+          }
+        }
+      })
+  }
+
+  confirmAdd() {
+    ReactDOM.render(
+      <Alert bsStyle="success">
+        <h4>Add Successful!</h4>
+      </Alert>,
+      document.getElementById('root')
     )
   }
 
@@ -87,15 +135,26 @@ class AdminPartners extends Component {
           name="Add "
           url="partnerlist"
           onClickHandler={() => {
-            listdata.push({ partner: this.refs.addpartnername.state.textBody })
-            console.log(this.refs.addpartnername.state.textBody)
+            this.addPartner(this.refs.addpartnername.state.textBody)
           }}
         />
+
+        {this.state.addshow == true ? (
+          <Alert bsStyle="success">
+            <h4>Add Successful!</h4>
+          </Alert>
+        ) : null}
+
+        {this.state.removeshow == true ? (
+          <Alert bsStyle="danger">
+            <h4>Partner Removed!</h4>
+          </Alert>
+        ) : null}
 
         <br />
 
         <ReactTable
-          data={listdata}
+          data={this.state.data}
           columns={[
             {
               Header: 'MFI Partner',
@@ -103,16 +162,26 @@ class AdminPartners extends Component {
               Cell: this.renderEditable
             },
             {
-              header: 'Edit',
+              Header: 'Edit',
               id: 'edit-button',
               width: 150,
               Cell: props => <Button name="Edit" />
             },
             {
-              header: 'Remove',
+              Header: 'Remove',
               id: 'delete-button',
               width: 150,
-              Cell: props => <Button name="Remove" />
+              Cell: ({ row, original }) => {
+                // Generate row such that value of text field is rememebered to pass into remove loan function
+                return (
+                  <Button
+                    name="Remove"
+                    url="partnerlist"
+                    onClickHandler={() =>
+                      this.removeLoan(original.partner_names)} // Send text value to remove loan function
+                  />
+                )
+              }
             },
             {
               Header: 'TEST',
