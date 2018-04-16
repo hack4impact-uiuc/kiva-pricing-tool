@@ -4,7 +4,7 @@ import { resetFormData } from './../actions'
 import Navbar from './../components/Navbar'
 
 function mapStateToProps(state) {
-  console.log(state)
+  // console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }

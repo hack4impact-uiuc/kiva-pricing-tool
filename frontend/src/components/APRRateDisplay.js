@@ -20,7 +20,7 @@ class APRRateDisplay extends Component {
       version_num: '1',
       update_name: formDataReducer.startName[0],
       start_name: formDataReducer.startName[0],
-      nominal_apr: formDataReducer.aprRate,
+      nominal_apr: formDataReducer.nominalApr,
       installment_time_period: formDataReducer.installmentTimePeriod[0],
       repayment_type: formDataReducer.repaymentType[0],
       interest_time_period: formDataReducer.interestTimePeriod[0],
@@ -69,7 +69,7 @@ class APRRateDisplay extends Component {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
     return (
       <Grid>
-        <PageHeader> APR Rate: {formDataReducer.aprRate}%</PageHeader>
+        <PageHeader> APR Rate: {formDataReducer.nominalApr}%</PageHeader>
         <Button name="Back" url="form1" />
         <Button
           name="Save Loan"

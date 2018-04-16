@@ -4,7 +4,7 @@ import { changedFormData, resetFormData } from './../actions'
 import FindLoan from './../components/FindLoan'
 
 function mapStateToProps(state) {
-  console.log(state)
+  // console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }

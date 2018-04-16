@@ -4,7 +4,7 @@ import { changedFormData } from './../actions'
 import APRRateDisplay from './../components/APRRateDisplay'
 
 function mapStateToProps(state) {
-  console.log(state)
+  // console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }

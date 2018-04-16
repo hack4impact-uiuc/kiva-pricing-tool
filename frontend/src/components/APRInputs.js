@@ -15,7 +15,7 @@ class APRInputs extends Component {
     this.state = {
       aprRate: '',
       saveData: {},
-      back: formDataReducer.backRoute
+      back: formDataReducer.back
     }
   }
 
@@ -68,6 +68,10 @@ class APRInputs extends Component {
 
   postData() {
     const { formDataReducer, changedFormData } = this.props
+    if (!this.inputsEntered()) {
+      // something is blank in the form
+      return
+    }
     let data = {
       partner_name: formDataReducer.mfi[0],
       loan_theme: formDataReducer.loanType[0],
@@ -115,10 +119,7 @@ class APRInputs extends Component {
       .then(response => {
         const apr = response.data.result.apr
         data['nominal_apr'] = apr.toString()
-        changedFormData('aprRate', apr)
-
-        // aprRate: apr,
-        // saveData: data
+        changedFormData('nominalApr', apr)
       })
       .catch(function(error) {
         console.log(
@@ -129,7 +130,7 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
-    // console.log('hello' + this.state.back)
+    console.log(formDataReducer.loanAmount)
     return (
       <Grid>
         <PageHeader>User Information</PageHeader>
@@ -158,7 +159,11 @@ class APRInputs extends Component {
               { id: '3', value: 'single end-term principal payment' }
             ]}
             onTextInputChange={this.handleTextChange}
-            selected={formDataReducer.repaymentType}
+            selected={
+              formDataReducer.repaymentType
+                ? formDataReducer.repaymentType[0]
+                : null
+            }
           />
           <Dropdown
             title="Interest Payment:"
@@ -168,7 +173,11 @@ class APRInputs extends Component {
               { id: '2', value: 'Single End-Term Payments' }
             ]}
             onTextInputChange={this.handleTextChange}
-            selected={formDataReducer.interestPaymentType}
+            selected={
+              formDataReducer.interestPaymentType
+                ? formDataReducer.interestPaymentType[0]
+                : null
+            }
           />
           <Dropdown
             title="Interest Calculation:"
@@ -179,7 +188,11 @@ class APRInputs extends Component {
               { id: '2', value: 'declining balance' }
             ]}
             onTextInputChange={this.handleTextChange}
-            selected={formDataReducer.interestCalculationType}
+            selected={
+              formDataReducer.interestCalculationType
+                ? formDataReducer.interestCalculationType[0]
+                : null
+            }
           />
         </Form>
 
@@ -230,7 +243,11 @@ class APRInputs extends Component {
               { id: '365', value: 'years' }
             ]}
             onTextInputChange={this.handleTextChange}
-            selected={formDataReducer.installmentTimePeriod}
+            selected={
+              formDataReducer.installmentTimePeriod
+                ? formDataReducer.installmentTimePeriod[0]
+                : null
+            }
           />
           <Dropdown
             title="Time Period:"
@@ -247,7 +264,11 @@ class APRInputs extends Component {
               { id: '8', value: 'year' }
             ]}
             onTextInputChange={this.handleTextChange}
-            selected={formDataReducer.interestTimePeriod}
+            selected={
+              formDataReducer.interestTimePeriod
+                ? formDataReducer.interestTimePeriod[0]
+                : null
+            }
           />
         </Form>
 

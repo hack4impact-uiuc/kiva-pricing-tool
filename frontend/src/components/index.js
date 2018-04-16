@@ -1,6 +1,6 @@
 // @flow
 
-import Navbar from './../containers/Navbar'
+import Navbar from './Navbar'
 import Bootstrap from 'react-bootstrap'
 
 import IntroPage from './../containers/IntroPage'

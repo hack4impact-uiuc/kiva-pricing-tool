@@ -4,7 +4,7 @@ import { changedFormData } from './../actions'
 import APRInputs from './../components/APRInputs'
 
 function mapStateToProps(state) {
-  console.log(state)
+  // console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }

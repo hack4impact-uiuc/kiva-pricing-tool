@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import { Grid, Navbar as BootstrapNavbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 class Navbar extends Component {
