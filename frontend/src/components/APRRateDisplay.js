@@ -15,6 +15,7 @@ class APRRateDisplay extends Component {
     this.state = {
       id: null,
       partner_names: [],
+      visualtype: "bar",
       data: [
         { partner: 'Google' },
         { partner: 'Facebook' },
@@ -24,20 +25,9 @@ class APRRateDisplay extends Component {
     }
   }
   
-    createBarChart() {
-		this.setState({id: "bar"});
+  createChart(paramVisual) {
+	this.setState({visualType: paramVisual})	  
   }
-  
-  createPieChart() {
-		this.setState({id: "pie"});
-  }
-  
-  createHeatmap() {
-		this.setState({id: "heat"});
-  }
-  
-  
-  
   
   saveData() {
     const { formDataReducer, changedFormData } = this.props
@@ -108,18 +98,17 @@ class APRRateDisplay extends Component {
         <a href="output.csv" download>
           <button onclick="createCsv()">Download CSV</button>
         </a>
-        <div class = "col-lg-5 pull-right">
+        <div class = "col-lg-4 pull-right">
         <ul class = "nav nav-pills nav-stacked">
-            <button onclick="createBarChart()">Bar Chart</button>
-            <button onclick="createPieChart()">Pie Chart</button>
-            <button onclick="createHeatmap()">Heatmap</button>
+	    <button onClick={()=>this.createChart("bar")}>Bar Chart</button>
+	    <button onClick={()=>this.createChart("pie")}>Pie Chart</button>
+	    <button onClick={()=>this.createChart("line")}>Line Chart</button>
+	    <button onClick={()=>this.createChart("tree")}>TreeMap</button>
             <li role = "presentation" class = "active"><a href = "#">Line Chart</a></li>
-            <li role = "presentation"><a href = "#">Heatmap</a></li>
             <li role = "presentation"><a href = "#">Pie Chart</a></li>
-            <li role = "presentation"><a href = "#">Logout</a></li>
         </ul>
         </div>
-        <KivaChart />
+        <KivaChart visualType = {this.state.visualType}/>
         <br />
         <Button name="Cancel" url="form0" />
         <Button name="Edit" />
