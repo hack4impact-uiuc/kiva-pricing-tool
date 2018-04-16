@@ -9,13 +9,12 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import configureStore, { history } from './store/configureStore'
 import {
-  Colors,
   Navbar,
   APRRateDisplay,
-  FormOne,
-  FormZero,
+  APRInputs,
+  NewLoan,
   IntroPage,
-  LiveSearch,
+  FindLoan,
   AdminMain,
   AdminPartners,
   AdminThemes
@@ -30,13 +29,13 @@ ReactDOM.render(
       <div>
         <Navbar />
         <Route exact path="/" component={IntroPage} />
-        <Route path="/newloan" component={FormZero} />
-        <Route path="/findloan" component={LiveSearch} />
+        <Route path="/newloan" component={NewLoan} />
+        <Route path="/findloan" component={FindLoan} />
         <Route path="/adminmain" component={AdminMain} />
         <Route path="/partnerlist" component={AdminPartners} />
         <Route path="/themelist" component={AdminThemes} />
         <Route path="/output" component={APRRateDisplay} />
-        <Route path="/form1" component={FormOne} />
+        <Route path="/form1" component={APRInputs} />
       </div>
     </ConnectedRouter>
   </Provider>,

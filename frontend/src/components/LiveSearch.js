@@ -8,8 +8,7 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 class LiveSearch extends Component {
   constructor(props) {
     super(props)
-    this.state = { error_message: '', multiple: false, value: '' }
-    var Typeahead = require('react-bootstrap-typeahead').Typeahead
+    this.state = { error_message: '', value: '' }
   }
 
   handleChange(e) {

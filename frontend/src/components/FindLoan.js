@@ -1,25 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
-import { Typeahead } from 'react-bootstrap-typeahead'
 import './../styles/app.css'
 import TextField from './TextField'
 import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
+import { Typeahead } from 'react-bootstrap-typeahead'
 import PropTypes from 'prop-types'
 
-class NewLoan extends Component {
+class FindLoan extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    console.log(formDataReducer)
+    // console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
-      selectedPartnerName: formDataReducer.mfi,
-      selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType,
+      versions: ['1', '2', '3'],
+      disableButton: '',
       errorMessage: ''
     }
   }
@@ -66,22 +66,24 @@ class NewLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData, resetFormData } = this.props
+
     return (
       <Grid>
         <Form>
           <Typeahead
             label="mfi"
-            options={this.state.partner_names}
             placeholder="Select MFI Partner"
-            typeVal="String"
-            limit={100}
+            options={this.state.partner_names}
             selected={formDataReducer.mfi}
             onChange={e => {
               changedFormData('mfi', e)
+              changedFormData('backRoute', 'findloan')
             }}
           />
+
           <br />
           <Typeahead
+            ref="loan"
             label="loan"
             options={this.state.loan_themes}
             placeholder="Select Loan Type"
@@ -91,45 +93,44 @@ class NewLoan extends Component {
             }}
           />
           <br />
-          <TextField
-            reduxId="productType"
-            id="Loan Product"
-            text="product"
-            hint="i.e. small loan"
+          <Typeahead
+            ref="product"
+            label="product"
+            options={['Small Business', 'Entrepreneur', 'Education']}
+            placeholder="Search Products i.e. small loan"
             typeVal="String"
             limit={100}
-            textBody={formDataReducer.productType}
-            onTextInputChange={this.handleTextChange}
+            selected={formDataReducer.productType}
+            onChange={e => {
+              changedFormData('productType', e)
+            }}
           />
 
-          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
+          <br />
 
+          <Typeahead
+            ref="version"
+            label="version"
+            options={this.state.versions}
+            selected={formDataReducer.versionNum}
+            placeholder="Search Versions:"
+            onChange={e => {
+              changedFormData('versionNum', e)
+            }}
+          />
+          <br />
+
+          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
           <Button
             disable={!this.inputsEntered()}
             name="Continue"
             url="form1"
-            onClickHandler={() => {
-              axios
-                .get(
-                  'http://127.0.0.1:3453/getVersionNum?partner_name=' +
-                    formDataReducer.mfi +
-                    '&theme=' +
-                    formDataReducer.loanType +
-                    '&product=' +
-                    formDataReducer.loanProduct
-                )
-                .then(response => {
-                  changedFormData('versionNum', [
-                    response.data.result['version'].toString()
-                  ])
-                })
-
-              changedFormData('back', 'newloan')
-            }}
+            onClickHandler={() => changedFormData('back', 'findloan')}
           />
         </Form>
       </Grid>
     )
   }
 }
-export default NewLoan
+
+export default withRouter(FindLoan)

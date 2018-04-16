@@ -43,14 +43,15 @@ def cal_apr():
     """
         calculate and send a response with APR
     """
+    print("in calc url")
     input_json = request.get_json()
     args = request.args
     payload = {}
-    apr = cal_apr_helper(input_json)
+    apr, matrix = cal_apr_helper(input_json)
     if apr == None:
         return create_response({}, status=400, message='missing components for calculating apr rate')
     else:
-        return create_response(data={'apr':apr}, status=200)
+        return create_response(data={'apr':apr, 'matrix':matrix}, status=200)
 
 
 @app.route(GET_VERSION_NUM)
@@ -90,6 +91,7 @@ def get_partner_theme_list():
 def save_loan():
     """Save a new loan to the database, attempts to get all form data and use loan's __init__ to add"""
     request_json = request.get_json()
+    print(request_json.keys())
     try:
         newrow = {
             'partner_name' : request_json['partner_name'],
@@ -130,6 +132,7 @@ def save_loan():
     except:
         return create_response(status=422, message='missing compoonents for save new loan')
     try:
+        loan = Loan(newrow)
         db.session.add(Loan(newrow))
         print("hi")
         db.session.commit()
