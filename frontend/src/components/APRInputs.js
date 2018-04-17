@@ -116,7 +116,49 @@ class APRInputs extends Component {
         const apr = response.data.result.apr
         const matrix = response.data.result.matrix
         changedFormData('aprRate', apr)
-        changedFormData('original_repayment_schedule', matrix)
+        let reformatted_matrix = []
+        let user_matrix = []
+        let calc_matrix = []
+        let null_entry = {
+          period_num: null,
+          payment_due_date: null,
+          days: null,
+          amount_due: null,
+          principal_payment: null,
+          balance: null,
+          interest: null,
+          fees: null,
+          insurance: null,
+          taxes: null,
+          security_deposit: null,
+          security_interest_paid: null,
+          deposit_balance: null
+        }
+        if (matrix != null) {
+          for (let i = 0; i < matrix[0].length; i++) {
+            reformatted_matrix.push({
+              period_num: matrix[0][i],
+              payment_due_date: matrix[1][i],
+              days: matrix[2][i],
+              amount_due: matrix[3][i],
+              principal_payment: matrix[4][i],
+              balance: matrix[5][i],
+              interest: matrix[6][i],
+              fees: matrix[7][i],
+              insurance: matrix[8][i],
+              taxes: matrix[9][i],
+              security_deposit: matrix[10][i],
+              security_interest_paid: matrix[11][i],
+              deposit_balance: matrix[12][i]
+            })
+            user_matrix.push(null_entry)
+            calc_matrix.push(null_entry)
+          }
+        }
+        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
+        changedFormData('original_repayment_schedule', reformatted_matrix)
+        changedFormData('user_repayment_schedule', user_matrix)
+        changedFormData('calc_repayment_schedule', calc_matrix)
         // aprRate: apr,
         // saveData: data
       })
