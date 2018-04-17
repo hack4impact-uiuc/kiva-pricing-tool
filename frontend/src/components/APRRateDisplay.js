@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Button, TextField } from './'
+import { Dropdown, Button, TextField, KivaChart } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
@@ -15,6 +15,9 @@ class APRRateDisplay extends Component {
 
     this.state = {
       // data: this.convertMatrix(),
+      id: null,
+      partner_names: [],
+      visualtype: 'bar',
       data: []
     }
     // this.convertMatrix = this.convertMatrix.bind(this)
@@ -229,6 +232,9 @@ class APRRateDisplay extends Component {
           ()
       })
   }
+  createChart(paramVisual) {
+    this.setState({ visualType: paramVisual })
+  }
   saveData() {
     const { formDataReducer, changedFormData } = this.props
     let data = {
@@ -302,6 +308,21 @@ class APRRateDisplay extends Component {
           }}
           disable={true}
         />
+        <div class="col-lg-4 pull-right">
+          <ul class="nav nav-pills nav-stacked">
+            <button onClick={() => this.createChart('bar')}>Bar Chart</button>
+            <button onClick={() => this.createChart('pie')}>Pie Chart</button>
+            <button onClick={() => this.createChart('line')}>Line Chart</button>
+            <button onClick={() => this.createChart('tree')}>TreeMap</button>
+            <li role="presentation" class="active">
+              <a href="#">Line Chart</a>
+            </li>
+            <li role="presentation">
+              <a href="#">Pie Chart</a>
+            </li>
+          </ul>
+        </div>
+        <KivaChart visualType={this.state.visualType} />
         <br />
         <Button name="Cancel" url="" />
         <Button name="Edit" url="form1" />

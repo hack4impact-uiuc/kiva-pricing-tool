@@ -11,6 +11,7 @@ import TextField from './TextField.js'
 import APRInputs from './../containers/APRInputs'
 import NewLoan from './../containers/NewLoan'
 import LiveSearch from './LiveSearch.js'
+import KivaChart from './KivaChart.js'
 import APRRateDisplay from './../containers/APRDisplay'
 import FindLoan from './../containers/FindLoan'
 import { BrowserRouter } from 'react-router-dom'
@@ -22,6 +23,7 @@ export {
   Dropdown,
   TextField,
   APRInputs,
+  KivaChart,
   NewLoan,
   LiveSearch,
   APRRateDisplay,
