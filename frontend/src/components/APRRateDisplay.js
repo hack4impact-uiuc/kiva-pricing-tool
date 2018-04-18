@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Button, TextField, KivaChart } from './'
+import { Dropdown, Button, TextField /*, KivaChart */ } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
@@ -182,35 +182,45 @@ class APRRateDisplay extends Component {
     return (
       <div
         style={
-          editable
-            ? { backgroundColor: '#fafafa' }
-            : { backgroundColor: '#eaeaea' }
+          !editable
+            ? { backgroundColor: '#eaeaea' }
+            : formDataReducer.user_repayment_schedule[cellInfo.index][
+                cellInfo.column.id
+              ] !== null
+              ? { backgroundColor: '#bafaba' }
+              : { backgroundColor: '#fafafa' }
         }
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
           // this.updateTable(e, cellInfo)
-          console.log(cellInfo)
-          console.log(e)
-          if (
-            formDataReducer.user_repayment_schedule[cellInfo.index][
+          const data = [...formDataReducer.user_repayment_schedule]
+          let orig = data[cellInfo.index][cellInfo.column.id]
+          console.log(formDataReducer.user_repayment_schedule)
+          console.log(
+            formDataReducer.original_repayment_schedule[cellInfo.index][
               cellInfo.column.id
-            ] !== e.target.innerHTML
+            ]
+          )
+          console.log(e.target.innerHTML)
+          if (
+            formDataReducer.calc_repayment_schedule[cellInfo.index][
+              cellInfo.column.id
+            ] !== parseFloat(e.target.innerHTML)
           ) {
             formDataReducer.user_repayment_schedule[cellInfo.index][
               cellInfo.column.id
-            ] =
-              e.target.innerHTML
+            ] = parseFloat(e.target.innerHTML)
             console.log('abc')
           }
         }}
-        // onInput={e => {
+        /*// onInput={e => {
         //   console.log(formDataReducer.user_repayment_schedule)
         //   formDataReducer.user_repayment_schedule[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
-        // }}
+        // }}*/
         dangerouslySetInnerHTML={{
           __html:
-            formDataReducer.user_repayment_schedule[cellInfo.index][
+            formDataReducer.original_repayment_schedule[cellInfo.index][
               cellInfo.column.id
             ]
         }}
@@ -327,7 +337,7 @@ class APRRateDisplay extends Component {
         <Button name="Cancel" url="" />
         <Button name="Edit" url="form1" />
         <ReactTable
-          data={formDataReducer.original_repayment_schedule}
+          data={formDataReducer.calc_repayment_schedule}
           columns={[
             {
               Header: 'Period Number',
