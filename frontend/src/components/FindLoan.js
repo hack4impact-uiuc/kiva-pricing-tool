@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
+import {
+  Grid,
+  Jumbotron,
+  PageHeader,
+  Form,
+  Bootstrap,
+  Row,
+  Col
+} from 'react-bootstrap'
 import './../styles/app.css'
 import TextField from './TextField'
 import LiveSearch from './LiveSearch'
@@ -68,67 +76,93 @@ class FindLoan extends Component {
     const { formDataReducer, changedFormData, resetFormData } = this.props
 
     return (
-      <Grid>
-        <Form>
-          <Typeahead
-            label="mfi"
-            placeholder="Select MFI Partner"
-            options={this.state.partner_names}
-            selected={formDataReducer.mfi}
-            onChange={e => {
-              changedFormData('mfi', e)
-              changedFormData('backRoute', 'findloan')
-            }}
-          />
+      <div className="page-body-grey">
+        <Grid
+          fluid
+          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+        >
+          <Row>
+            <Col sm={12} md={12} className="bs-center">
+              <PageHeader className="page-header-montserrat">
+                Find Loan
+              </PageHeader>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12} md={12}>
+              <Form>
+                <Typeahead
+                  className="vertical-margin-item"
+                  label="mfi"
+                  placeholder="Select MFI Partner"
+                  options={this.state.partner_names}
+                  selected={formDataReducer.mfi}
+                  onChange={e => {
+                    changedFormData('mfi', e)
+                    changedFormData('backRoute', 'findloan')
+                  }}
+                />
 
-          <br />
-          <Typeahead
-            ref="loan"
-            label="loan"
-            options={this.state.loan_themes}
-            placeholder="Select Loan Type"
-            selected={formDataReducer.loanType}
-            onChange={e => {
-              changedFormData('loanType', e)
-            }}
-          />
-          <br />
-          <Typeahead
-            ref="product"
-            label="product"
-            options={['Small Business', 'Entrepreneur', 'Education']}
-            placeholder="Search Products i.e. small loan"
-            typeVal="String"
-            limit={100}
-            selected={formDataReducer.productType}
-            onChange={e => {
-              changedFormData('productType', e)
-            }}
-          />
+                <Typeahead
+                  className="vertical-margin-item"
+                  ref="loan"
+                  label="loan"
+                  options={this.state.loan_themes}
+                  placeholder="Select Loan Type"
+                  selected={formDataReducer.loanType}
+                  onChange={e => {
+                    changedFormData('loanType', e)
+                  }}
+                />
 
-          <br />
+                <Typeahead
+                  className="vertical-margin-item"
+                  ref="product"
+                  label="product"
+                  options={['Small Business', 'Entrepreneur', 'Education']}
+                  placeholder="Search Products i.e. small loan"
+                  typeVal="String"
+                  limit={100}
+                  selected={formDataReducer.productType}
+                  onChange={e => {
+                    changedFormData('productType', e)
+                  }}
+                />
 
-          <Typeahead
-            ref="version"
-            label="version"
-            options={this.state.versions}
-            selected={formDataReducer.versionNum}
-            placeholder="Search Versions:"
-            onChange={e => {
-              changedFormData('versionNum', e)
-            }}
-          />
-          <br />
+                <Typeahead
+                  className="vertical-margin-item"
+                  ref="version"
+                  label="version"
+                  options={this.state.versions}
+                  selected={formDataReducer.versionNum}
+                  placeholder="Search Versions:"
+                  onChange={e => {
+                    changedFormData('versionNum', e)
+                  }}
+                />
+              </Form>
+            </Col>
+          </Row>
 
-          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
-          <Button
-            disable={!this.inputsEntered()}
-            name="Continue"
-            url="form1"
-            onClickHandler={() => changedFormData('back', 'findloan')}
-          />
-        </Form>
-      </Grid>
+          <Row>
+            <Col xs={6} sm={6} md={6}>
+              <Button
+                name="Back"
+                url=""
+                onClickHandler={() => resetFormData()}
+              />
+            </Col>
+            <Col xs={6} sm={6} md={6} className="bs-button-right">
+              <Button
+                disable={!this.inputsEntered()}
+                name="Continue"
+                url="form1"
+                onClickHandler={() => changedFormData('back', 'findloan')}
+              />
+            </Col>
+          </Row>
+        </Grid>
+      </div>
     )
   }
 }

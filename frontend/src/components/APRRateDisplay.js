@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Dropdown, Button, TextField } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
-import './../styles/app.scss'
+import './../styles/app.css'
 import axios from 'axios'
 
 class APRRateDisplay extends Component {

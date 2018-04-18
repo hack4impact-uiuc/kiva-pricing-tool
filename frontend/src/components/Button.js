@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
-import './../styles/button.scss'
+import './../styles/button.css'
 // import './../styles/instructions.css'
 class Button extends Component {
   render() {
@@ -9,7 +9,7 @@ class Button extends Component {
       <Route
         render={({ history }) => (
           <button
-            className="button"
+            className="button-fancy"
             type="button"
             onClick={() => {
               if (this.props.onClickHandler) this.props.onClickHandler()

@@ -1,8 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
+import {
+  Grid,
+  Jumbotron,
+  PageHeader,
+  Form,
+  Bootstrap,
+  Row,
+  Col
+} from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import './../styles/app.css'
+import './../styles/button.css'
 import TextField from './TextField'
 import LiveSearch from './LiveSearch'
 import Button from './Button'
@@ -67,68 +76,95 @@ class NewLoan extends Component {
   render() {
     const { formDataReducer, changedFormData, resetFormData } = this.props
     return (
-      <Grid>
-        <Form>
-          <Typeahead
-            label="mfi"
-            options={this.state.partner_names}
-            placeholder="Select MFI Partner"
-            typeVal="String"
-            limit={100}
-            selected={formDataReducer.mfi}
-            onChange={e => {
-              changedFormData('mfi', e)
-            }}
-          />
-          <br />
-          <Typeahead
-            label="loan"
-            options={this.state.loan_themes}
-            placeholder="Select Loan Type"
-            selected={formDataReducer.loanType}
-            onChange={e => {
-              changedFormData('loanType', e)
-            }}
-          />
-          <br />
-          <TextField
-            reduxId="productType"
-            id="Loan Product"
-            text="product"
-            hint="i.e. small loan"
-            typeVal="String"
-            limit={100}
-            textBody={formDataReducer.productType}
-            onTextInputChange={this.handleTextChange}
-          />
+      <div className="page-body-grey">
+        <Grid
+          fluid
+          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+        >
+          <Row>
+            <Col sm={12} md={12} className="bs-center">
+              <PageHeader className="page-header-montserrat">
+                New Loan
+              </PageHeader>
+            </Col>
+          </Row>
+          <Row>
+            <Form>
+              <Typeahead
+                className="vertical-margin-item"
+                label="mfi"
+                options={this.state.partner_names}
+                placeholder="Select MFI Partner"
+                typeVal="String"
+                limit={100}
+                selected={formDataReducer.mfi}
+                onChange={e => {
+                  changedFormData('mfi', e)
+                }}
+              />
 
-          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
+              <Typeahead
+                className="vertical-margin-item"
+                label="loan"
+                options={this.state.loan_themes}
+                placeholder="Select Loan Type"
+                selected={formDataReducer.loanType}
+                onChange={e => {
+                  changedFormData('loanType', e)
+                }}
+              />
 
-          <Button
-            disable={!this.inputsEntered()}
-            name="Continue"
-            url="form1"
-            onClickHandler={() => {
-              axios
-                .get(
-                  'http://127.0.0.1:3453/getVersionNum?partner_name=' +
-                    formDataReducer.mfi +
-                    '&theme=' +
-                    formDataReducer.loanType +
-                    '&product=' +
-                    formDataReducer.loanProduct
-                )
-                .then(response => {
-                  changedFormData('versionNum', [
-                    response.data.result['version'].toString()
-                  ])
-                })
+              <TextField
+                className="vertical-margin-item"
+                reduxId="productType"
+                id="Loan Product"
+                text="product"
+                hint="i.e. small loan"
+                typeVal="String"
+                limit={100}
+                textBody={formDataReducer.productType}
+                onTextInputChange={this.handleTextChange}
+              />
+            </Form>
 
-              changedFormData('back', 'newloan')
-            }}
-          />
-        </Form>
-      </Grid>
+            <Row>
+              <Col xs={6} sm={6} md={6}>
+                <Button
+                  name="Back"
+                  url=""
+                  onClickHandler={() => resetFormData()}
+                />
+              </Col>
+              <Col xs={6} sm={6} md={6} className="bs-button-right">
+                <Button
+                  className="button-default"
+                  disable={!this.inputsEntered()}
+                  name="Continue"
+                  url="form1"
+                  onClickHandler={() => {
+                    axios
+                      .get(
+                        'http://127.0.0.1:3453/getVersionNum?partner_name=' +
+                          formDataReducer.mfi +
+                          '&theme=' +
+                          formDataReducer.loanType +
+                          '&product=' +
+                          formDataReducer.loanProduct
+                      )
+                      .then(response => {
+                        changedFormData('versionNum', [
+                          response.data.result['version'].toString()
+                        ])
+                      })
+
+                    changedFormData('back', 'newloan')
+                  }}
+                />
+              </Col>
+            </Row>
+          </Row>
+        </Grid>
+      </div>
     )
   }
 }
