@@ -35,8 +35,20 @@ $color-text: #333;
 	margin-right: 20%;
 }
 
+/* specifies top and bottom to avoid overrides from other padding classes */
 .padded-element-vertical {
-	padding: 4% 0%;
+	padding-top: 4%;
+	padding-bottom: 4%;
+}
+
+.padded-element-horizontal {
+	padding-left: 4%;
+	padding-right: 4%;
+}
+
+.padded-element-horizontal-lg {
+	padding-left: 8%;
+	padding-right: 8%;
 }
 
 .padded-element-shrink {
@@ -45,6 +57,11 @@ $color-text: #333;
 
 .round-corners-large {
 	border-radius: 15px;
+}
+
+.img-container-center img {
+	display: block;
+	margin: auto;
 }
 
 .bs-center {
