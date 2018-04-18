@@ -1,8 +1,44 @@
-.button:hover {
+.button-default:hover {
   background-color: grey;
+  color: white;
 }
 
-.button {
-    background-color: white;
-    border-style: solid 1px black;
+.button-default {
+	background-color: white;
+    padding: 2% 6%;
+    font-size: 12pt;
+}
+
+/*
+.button-fancy {
+	background-color: transparent;
+	color: #32746D;
+    padding: 2% 6%;
+    font-size: 12pt;
+    border: 2px solid #32746D;
+    border-radius: 5px;
+}*/
+
+.button-fancy {
+    background-color: #44807A;
+    color: white;
+    padding: 2% 6%;
+    font-size: 12pt;
+    border: 2px solid #44807A;
+    border-bottom: 4px solid #2E6A64;
+    border-radius: 5px;
+    letter-spacing: 1px;
+}
+
+.button-fancy:hover {
+	background-color: black;
+	color: white;
+    padding: 2% 6%;
+    font-size: 12pt;
+    border: 2px solid black;
+    border-radius: 5px;
+    -webkit-transition: all 0.15s ease-in;
+    -moz-transition: all 0.15s ease-in;
+    -o-transition: all 0.15s ease-in;
+    transition: all 0.15s ease-in;
 }
