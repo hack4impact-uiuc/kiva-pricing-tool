@@ -432,5 +432,5 @@ def get_loan():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
-eate_response({}, status=400, message='missing arguments for GET')
+create_response({}, status=400, message='missing arguments for GET')
 
