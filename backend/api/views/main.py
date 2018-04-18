@@ -2,7 +2,7 @@ from api import app, db
 from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
-from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper, update_repayment_schedule
+from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper, update_repayment_schedule, round_matrix
 import numpy as np
 
 mod = Blueprint('main', __name__)
@@ -50,6 +50,7 @@ def cal_apr():
     args = request.args
     payload = {}
     apr, matrix = cal_apr_helper(input_json)
+    matrix = round_matrix(matrix)
     if apr == None:
         return create_response({}, status=400, message='missing components for calculating apr rate')
     else:
@@ -335,11 +336,9 @@ def get_product_entry():
         theme_id = Theme.query.filter_by(loan_theme = theme_name).first().id
 
         # Get all product themes with RETURNED PARTER ID AND LOAN ID
-        product_list = []
-        # for entry in Loan.query.filter_by(partner_id = mfi_id, theme_id = theme_id).distinct():
-        #     product_list.append(entry.product_type)
-        for value in db.session.query(Loan.product_type).distinct():
-            product_list.append(value[0])
+        product_list = list()
+        for entry in Loan.query.filter_by(partner_id = mfi_id, theme_id = theme_id).all():
+            product_list.append(entry.product_type)
 
         # Return list of product types under given mfi name and theme id
         data = {'product_types' : [entry for entry in product_list]}
@@ -431,4 +430,6 @@ def get_loan():
         return create_response(data = data, status = 200)
     except:
         return create_response({}, status=400, message='missing arguments for GET')
+
+eate_response({}, status=400, message='missing arguments for GET')
 
