@@ -2,7 +2,7 @@ from api import app, db
 from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
-from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper
+from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper, update_repayment_schedule
 import numpy as np
 
 mod = Blueprint('main', __name__)
@@ -14,10 +14,12 @@ def index():
 
 # Generic endpoint URLs
 CALCULATE_URL = '/calculateAPR'
+RECALCULATE_URL = '/recalculate'
 GET_VERSION_NUM = '/getVersionNum'
 GET_LISTS = '/partnerThemeLists'
 SAVE_LOAN_URL = '/saveNewLoan'
 GET_CSV = '/getCSV'
+
 
 # Admin endpoint URLs
 GET_ALL_MFI = "/getAllMFI"
@@ -53,6 +55,24 @@ def cal_apr():
     else:
         return create_response(data={'apr':apr, 'matrix':matrix}, status=200)
 
+@app.route(RECALCULATE_URL, methods=['POST'])
+def cal_repayment():
+    """
+        recalculate repayment schedule and APR
+    """
+    #TODO: discuss with frontend the format and needs
+    input_json = request.get_json()
+    input_form = input_json['input_form']
+    user_change = input_json['user_change']
+    payload = {}
+    try:
+        apr, origin_matrix = cal_apr(input_form)
+        apr, recal_matrix = update_repayment_schedule(origin_matrix, user_change, input_form)
+        payload['apr'] =  apr 
+        payload['recal_matrix'] = recal_matrix
+        return create_response(payload)
+    except Exception as e:
+        return create_response(message=str(e), status=400)
 
 @app.route(GET_VERSION_NUM)
 def get_version_num():
