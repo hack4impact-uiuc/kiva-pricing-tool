@@ -18,7 +18,7 @@ SECURITY_DEPOSIT_IDX = 10
 SECURITY_DEPOSIT_INTEREST_PAID_IDX = 11
 SECURITY_DEPOSIT_WITHDRAW_IDX = 12
 SECURITY_DEPOSIT_BALANCE_IDX = 13
-CASH_FLOW_IDX = -1
+CASH_FLOW_IDX = 14
 days_dict = {'days':1, 'weeks':7, 'two-weeks':14, '15 days':15, '4 weeks': 28}
 month_num_to_str_dict = {1:'Jan', 2: 'Feb', 3: 'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
 
@@ -127,7 +127,7 @@ def cal_apr_helper(input_json):
                     print('impossible repayment_type')
                     exit(1)
 
-
+                
                 if repayment_type == 'equal installments (amortized)':
                     principal_paid_arr[idx] = monthly_payment - interest_paid_arr[idx]
                 elif repayment_type == 'equal principal payments':
@@ -140,7 +140,7 @@ def cal_apr_helper(input_json):
             principal_paid_arr[-1] = loan_amount
 
         if interest_calculation_type == 'initial amount or flat':
-            interest_paid_arr[1:] = balance_arr[0] * scaled_interest
+            interest_paid_arr[1:] = balance_arr[0] * scaled_interest 
 
         # for grace period interest calculation
         for idx in range(1, grace_period_interest_calculate+1):
@@ -205,9 +205,7 @@ def cal_apr_helper(input_json):
 
         result = np.zeros(installment + 1)
         result[0] = loan_amount
-
         result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + principal_paid_arr + security_deposit) 
-
 
         #### below is experimental
         if grace_period_balloon != 0:
@@ -225,33 +223,34 @@ def cal_apr_helper(input_json):
         period_arr = list(range(installment+1))
         schedule_matrix.append(period_arr)
         date_arr, days_arr = calc_origin_days(start_day, start_month, start_year, installment_time_period, installment)
-        schedule_matrix.append(list(date_arr))
-        schedule_matrix.append(list(days_arr))
+        schedule_matrix.append(date_arr)
+        schedule_matrix.append(days_arr)
         amount_due = np.zeros(installment+1)
         amount_due[0] = loan_amount
-        schedule_matrix.append(list(amount_due))
-        schedule_matrix.append(list(principal_paid_arr))
-        schedule_matrix.append(list(balance_arr))
-        schedule_matrix.append(list(interest_paid_arr))
-        schedule_matrix.append(list(fees_paid))
-        schedule_matrix.append(list(insurance_paid))
-        schedule_matrix.append(list(taxes))
-        schedule_matrix.append(list(security_deposit))
-        schedule_matrix.append(list(security_deposit_interest_paid))
+        schedule_matrix.append(amount_due)
+        schedule_matrix.append(principal_paid_arr)
+        schedule_matrix.append(balance_arr)
+        schedule_matrix.append(interest_paid_arr)
+        schedule_matrix.append(fees_paid)
+        schedule_matrix.append(insurance_paid)
+        schedule_matrix.append(taxes)
+        schedule_matrix.append(security_deposit)
+        schedule_matrix.append(security_deposit_interest_paid)
         deposite_withdraw = np.zeros(installment+1)
         deposite_withdraw[-1] = np.sum(security_deposit) + np.sum(security_deposit_interest_paid)
-        schedule_matrix.append(list(deposite_withdraw))
+        schedule_matrix.append(deposite_withdraw)
         security_deposit_balance = np.zeros(installment+1)
         for idx in range(len(security_deposit_balance)-grace_period_balloon):
             security_deposit_balance[idx] = np.sum(security_deposit[:idx+1]) + np.sum(security_deposit_interest_paid[:idx+1])
         security_deposit_balance[-1] = 0
-        schedule_matrix.append(list(security_deposit_balance))
-        schedule_matrix.append(list(result))
+        schedule_matrix.append(security_deposit_balance)
+        schedule_matrix.append(result) 
+        schedule_matrix = np.array(schedule_matrix)
 
         return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
 
     except:
-        #TODO status code not sure
+        #TODO status code not sure 
         return None
 
 #  helper function for calculate the number of days in the specified period
@@ -303,7 +302,6 @@ def calc_origin_days(day, month, year, installment_time_period, num_installment)
 #######
 # Below are functions for repayment schedule change
 #######
-
 # recalculate the days column on repayment schedule 
 
 def on_principal_change(origin_matrix, changes_on_principal, grace_period_balloon):
@@ -502,7 +500,6 @@ def get_num_days_to_incre(period, prev_date):
         return days_dict[period]
 
 def on_days_change(origin_matrix, changes_on_days, changes_on_date, installment_time_period):
-
     new_date_arr = []
     new_day_num_arr = []
     date_col = origin_matrix[DATE_IDX]
@@ -518,7 +515,6 @@ def on_days_change(origin_matrix, changes_on_days, changes_on_date, installment_
             days_to_incre = changes_on_days[idx]
         else:
             days_to_incre = get_num_days_to_incre(installment_time_period, prev_date)
-
         new_date = prev_date + datetime.timedelta(days=days_to_incre)
         new_date_str = '{0}-{1}-{2}'.format(new_date.day, month_num_to_str_dict[new_date.month], new_date.year)
         new_date_arr.append(new_date_str)
@@ -526,7 +522,6 @@ def on_days_change(origin_matrix, changes_on_days, changes_on_date, installment_
         prev_date = new_date
 
     return new_date_arr, new_day_num_arr
-
 
 def cal_scaled_interest(nominal_interest_rate, installment_time_period, interest_time_period, interest_paid_on_deposit_percent):
 
@@ -579,6 +574,12 @@ def update_repayment_schedule(origin_matrix, user_change, input_form):
     origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
     origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
 
+    origin_matrix = round_matrix(origin_matrix)
     fake_apr = 100
     return fake_apr, origin_matrix
 
+def round_matrix(origin_matrix):
+    for row_idx in range(PRINCIPAL_DISBURSED_IDX, CASH_FLOW_IDX+1):
+        for col_idx in range(len(origin_matrix[0])):
+            origin_matrix[row_idx][col_idx] = round_float(origin_matrix[row_idx][col_idx], 2)
+    return origin_matrix

@@ -19,7 +19,7 @@ SECURITY_DEPOSIT_IDX = 10
 SECURITY_DEPOSIT_INTEREST_PAID_IDX = 11
 SECURITY_DEPOSIT_WITHDRAW_IDX = 12
 SECURITY_DEPOSIT_BALANCE_IDX = 13
-CASH_FLOW_IDX = -1
+CASH_FLOW_IDX = 14
 
 installment = 12
 loan_amount = 1000
@@ -377,6 +377,12 @@ origin_matrix[TAXES_IDX] = on_taxes_change(origin_matrix, user_change[TAXES_IDX]
 origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix, grace_period_balloon)
 origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
 origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
+
+# rounding
+for row_idx in range(PRINCIPAL_DISBURSED_IDX, CASH_FLOW_IDX+1):
+    for col_idx in range(len(origin_matrix[0])):
+        origin_matrix[row_idx][col_idx] = round_float(origin_matrix[row_idx][col_idx], 2)
+
 
 print (origin_matrix)
 print (cal_xirr(origin_matrix, grace_period_balloon))
