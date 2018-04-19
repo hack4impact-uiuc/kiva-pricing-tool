@@ -14,7 +14,6 @@ import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
-import ReactDOM from 'react-dom'
 
 class AdminPartners extends Component {
   constructor(props) {
@@ -84,15 +83,6 @@ class AdminPartners extends Component {
           }
         }
       })
-  }
-
-  confirmAdd() {
-    ReactDOM.render(
-      <Alert bsStyle="success">
-        <h4>Add Successful!</h4>
-      </Alert>,
-      document.getElementById('root')
-    )
   }
 
   render() {
@@ -181,13 +171,6 @@ class AdminPartners extends Component {
                       this.removeLoan(original.partner_names)} // Send text value to remove loan function
                   />
                 )
-              }
-            },
-            {
-              Header: 'TEST',
-              id: 'test',
-              Cell: ({ row, original }) => {
-                return <span>{original.partner_names}</span>
               }
             }
           ]}

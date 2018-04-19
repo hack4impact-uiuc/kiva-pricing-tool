@@ -10,3 +10,74 @@ $color-text: #333;
     color: $color-text;
     font-size: 20px !important;
 }
+
+.page-body-grey {
+	width: 100vw;
+	height: 100vh;
+	background-color: #E8E8E8;
+	overflow: hidden;
+}
+
+.solid-background {
+	background-color: white;
+}
+
+.solid-background-grey {
+	background-color: #E8E8E8;
+}
+
+.screen-vertical-centered-grid {
+	margin-top: 10%;
+}
+
+.screen-horizontal-centered {
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
+/* specifies top and bottom to avoid overrides from other padding classes */
+.padded-element-vertical {
+	padding-top: 4%;
+	padding-bottom: 4%;
+}
+
+.padded-element-horizontal {
+	padding-left: 4%;
+	padding-right: 4%;
+}
+
+.padded-element-horizontal-lg {
+	padding-left: 8%;
+	padding-right: 8%;
+}
+
+.padded-element-shrink {
+	padding: 6% 10%;
+}
+
+.round-corners-large {
+	border-radius: 15px;
+}
+
+.img-container-center img {
+	display: block;
+	margin: auto;
+}
+
+.bs-center {
+	text-align: center;
+}
+
+.bs-button-right {
+	text-align: right;
+}
+
+.vertical-margin-item {
+	margin: 2% 0%;
+}
+
+.page-header-montserrat {
+	font-family: montserrat, sans-serif;
+	padding: 0;
+	border: none;
+}
