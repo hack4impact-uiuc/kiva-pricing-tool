@@ -99,7 +99,7 @@ class NewLoan extends Component {
             typeVal="String"
             limit={100}
             textBody={formDataReducer.productType}
-            onTextInputChange={this.handleTextChange}
+            // onTextInputChange={this.handleTextChange}
           />
 
           <Button name="Back" url="" onClickHandler={() => resetFormData()} />

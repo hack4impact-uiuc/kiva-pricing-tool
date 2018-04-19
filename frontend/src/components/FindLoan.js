@@ -62,7 +62,6 @@ class FindLoan extends Component {
 
   getVersionNum() {
     const { formDataReducer } = this.props
-
     if (
       formDataReducer.mfi &&
       formDataReducer.loanType &&

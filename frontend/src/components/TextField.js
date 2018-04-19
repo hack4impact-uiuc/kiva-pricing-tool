@@ -1,31 +1,36 @@
 import React, { Component } from 'react'
 import Bootstrap from 'react-bootstrap'
+import { connect } from 'react-redux'
 import axios from 'axios'
 
 class TextField extends Component {
   constructor(props) {
     super(props)
+    const { formDataReducer } = this.props
     this.state = {
       valid: true,
       id: this.props.text,
       error_message: '',
       type: this.props.typeVal,
-      textBody: this.props.textBody ? this.props.textBody : ''
+      // textBody: this.props.textBody ? this.props.textBody : ''
     }
   }
+
   // componentWillReceiveProps(nextProps){
-  //   this.setState()
+  //   this.setState({ textBody: nextProps.textBody })
   // }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return {
-      ...prevState,
-      ...nextProps
-    }
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   return {
+  //     ...prevState,
+  //     ...nextProps
+  //   }
+  // }
 
   handleChange(e) {
+    const { formDataReducer, changedFormData } = this.props
     let value = e.target.value
+    
     if (this.props.typeVal.toLowerCase() == 'int') {
       let tryInt = parseInt(value)
       let limit = parseInt(this.props.limit)
@@ -70,7 +75,8 @@ class TextField extends Component {
     this.setState({ textBody: value })
     // console.log(this.props.reduxId, value)
     // console.log(this.props.onTextInputChange)
-    this.props.onTextInputChange(this.props.reduxId, value)
+    // this.props.onTextInputChange(this.props.reduxId, value)
+    changedFormData(this.props.reduxId, value)
   }
 
   render() {
@@ -86,7 +92,7 @@ class TextField extends Component {
           id={this.props.text}
           placeholder={this.props.hint}
           onChange={event => this.handleChange(event)}
-          value={this.state.textBody}
+          value={this.props.textBody}
           required
           autofocus
         />
