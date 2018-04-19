@@ -12,6 +12,8 @@ export default function formDataReducer(state = initialState.formData, action) {
     case RESET:
       return {}
     default:
-      return state
+      return {
+        ...state
+      }
   }
 }
