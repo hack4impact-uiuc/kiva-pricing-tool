@@ -140,16 +140,19 @@ class APRInputs extends Component {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
     // console.log('hello' + this.state.back)
     return (
-      <Grid fluid>
-        <Row>
+      <div className="page-body-grey padded-element-vertical overpad-shrink">
+        <Grid
+          fluid
+          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+        >
           <Row>
-            <Col sm={12} md={12}>
-              <PageHeader>User Information</PageHeader>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12} md={12}>
-              <Form inline>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>User Information</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
                 <TextField
                   id="Full Name"
                   reduxId="startName"
@@ -159,20 +162,18 @@ class APRInputs extends Component {
                   textBody={formDataReducer.startName}
                   onTextInputChange={this.handleTextChange}
                 />
-              </Form>
-            </Col>
+              </Col>
+            </Row>
           </Row>
-        </Row>
 
-        <Row>
           <Row>
-            <Col sm={12} md={12}>
-              <PageHeader>Basic Loan Conditions</PageHeader>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12} md={12}>
-              <Form inline>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Basic Loan Conditions</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={4} md={4}>
                 <Dropdown
                   title="Repayment Type:"
                   reduxId="repaymentType"
@@ -185,6 +186,8 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={formDataReducer.repaymentType}
                 />
+              </Col>
+              <Col sm={4} md={4}>
                 <Dropdown
                   title="Interest Payment:"
                   reduxId="interestPaymentType"
@@ -195,6 +198,8 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={formDataReducer.interestPaymentType}
                 />
+              </Col>
+              <Col sm={4} md={4}>
                 <Dropdown
                   title="Interest Calculation:"
                   reduxId="interestCalculationType"
@@ -206,202 +211,190 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={formDataReducer.interestCalculationType}
                 />
-              </Form>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12} md={12}>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Loan Amount"
-                    reduxId="loanAmount"
-                    hint="ex. 5000"
-                    typeVal="float"
-                    limit="900000000"
-                    textBody={formDataReducer.loanAmount}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    id="Number of Terms"
-                    reduxId="installment"
-                    hint="ex. 12"
-                    typeVal="int"
-                    limit="180"
-                    textBody={formDataReducer.installment}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Dropdown
-                    title="Time Period:"
-                    reduxId="installmentTimePeriod"
-                    items={[
-                      { id: '1', value: 'days' },
-                      { id: '7', value: 'weeks' },
-                      { id: '14', value: 'two-weeks' },
-                      { id: '15', value: '15 days' },
-                      { id: '28', value: '4 weeks' },
-                      { id: '30', value: 'months' },
-                      { id: '90', value: 'quarters' },
-                      { id: '180', value: 'half-years' },
-                      { id: '365', value: 'years' }
-                    ]}
-                    onTextInputChange={this.handleTextChange}
-                    selected={formDataReducer.installmentTimePeriod}
-                  />
-                </FormGroup>
-              </Form>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12} md={12}>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Nominal Interest Rate"
-                    reduxId="nominalInterestRate"
-                    hint="ex. 12"
-                    typeVal="int"
-                    limit="100"
-                    textBody={formDataReducer.nominalInterestRate}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Dropdown
-                    title="Time Period:"
-                    reduxId="interestTimePeriod"
-                    items={[
-                      { id: '0', value: 'day' },
-                      { id: '1', value: 'week' },
-                      { id: '2', value: 'two-weeks' },
-                      { id: '3', value: '15 days' },
-                      { id: '4', value: '4 weeks' },
-                      { id: '5', value: 'month' },
-                      { id: '6', value: 'quarter' },
-                      { id: '7', value: 'half-year' },
-                      { id: '8', value: 'year' }
-                    ]}
-                    onTextInputChange={this.handleTextChange}
-                    selected={formDataReducer.interestTimePeriod}
-                  />
-                </FormGroup>
-              </Form>
-            </Col>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={4} md={4}>
+                <TextField
+                  id="Loan Amount"
+                  reduxId="loanAmount"
+                  hint="ex. 5000"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.loanAmount}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={4} md={4}>
+                <TextField
+                  id="Number of Terms"
+                  reduxId="installment"
+                  hint="ex. 12"
+                  typeVal="int"
+                  limit="180"
+                  textBody={formDataReducer.installment}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={4} md={4}>
+                <Dropdown
+                  title="Time Period:"
+                  reduxId="installmentTimePeriod"
+                  items={[
+                    { id: '1', value: 'days' },
+                    { id: '7', value: 'weeks' },
+                    { id: '14', value: 'two-weeks' },
+                    { id: '15', value: '15 days' },
+                    { id: '28', value: '4 weeks' },
+                    { id: '30', value: 'months' },
+                    { id: '90', value: 'quarters' },
+                    { id: '180', value: 'half-years' },
+                    { id: '365', value: 'years' }
+                  ]}
+                  onTextInputChange={this.handleTextChange}
+                  selected={formDataReducer.installmentTimePeriod}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Nominal Interest Rate"
+                  reduxId="nominalInterestRate"
+                  hint="ex. 12"
+                  typeVal="int"
+                  limit="100"
+                  textBody={formDataReducer.nominalInterestRate}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <Dropdown
+                  title="Time Period:"
+                  reduxId="interestTimePeriod"
+                  items={[
+                    { id: '0', value: 'day' },
+                    { id: '1', value: 'week' },
+                    { id: '2', value: 'two-weeks' },
+                    { id: '3', value: '15 days' },
+                    { id: '4', value: '4 weeks' },
+                    { id: '5', value: 'month' },
+                    { id: '6', value: 'quarter' },
+                    { id: '7', value: 'half-year' },
+                    { id: '8', value: 'year' }
+                  ]}
+                  onTextInputChange={this.handleTextChange}
+                  selected={formDataReducer.interestTimePeriod}
+                />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col sm={3} md={3}>
+                <TextField
+                  id="Grace and Prepay"
+                  reduxId="gracePeriodPrincipal"
+                  hint="Capital"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodPrincipal}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={3} md={3}>
+                <TextField
+                  reduxId="gracePeriodInterestPay"
+                  hint="Int Pmt"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodInterestPay}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={3} md={3}>
+                <TextField
+                  reduxId="gracePeriodInterestCalculate"
+                  hint="Int Calc"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodInterestCalculate}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={3} md={3}>
+                <TextField
+                  reduxId="gracePeriodBalloon"
+                  hint="Balloon"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodBalloon}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+            </Row>
           </Row>
 
           <Row>
-            <Col sm={12} md={12}>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Grace and Prepay"
-                    reduxId="gracePeriodPrincipal"
-                    hint="Capital"
-                    typeVal="float"
-                    limit="180"
-                    textBody={formDataReducer.gracePeriodPrincipal}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="gracePeriodInterestPay"
-                    hint="Int Pmt"
-                    typeVal="float"
-                    limit="180"
-                    textBody={formDataReducer.gracePeriodInterestPay}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="gracePeriodInterestCalculate"
-                    hint="Int Calc"
-                    typeVal="float"
-                    limit="180"
-                    textBody={formDataReducer.gracePeriodInterestCalculate}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="gracePeriodBalloon"
-                    hint="Balloon"
-                    typeVal="float"
-                    limit="180"
-                    textBody={formDataReducer.gracePeriodBalloon}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-              </Form>
-            </Col>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Fees</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Fee%"
+                  reduxId="feePercentUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.feePercentUpfront}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  reduxId="feePercentOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.feePercentOngoing}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Fee (fixed amt)"
+                  reduxId="feeFixedUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="100000000"
+                  textBody={formDataReducer.feeFixedUpfront}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  reduxId="feeFixedOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="100000000"
+                  textBody={formDataReducer.feeFixedOngoing}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+            </Row>
           </Row>
-        </Row>
-
-        <Row>
-          <Col sm={6} md={6}>
+          <Row>
             <Row>
-              <PageHeader>Fees</PageHeader>
+              <Col sm={12} md={12}>
+                <PageHeader>Taxes</PageHeader>
+              </Col>
             </Row>
             <Row>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Fee%"
-                    reduxId="feePercentUpfront"
-                    hint="Upfront"
-                    typeVal="float"
-                    limit="180"
-                    textBody={formDataReducer.feePercentUpfront}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="feePercentOngoing"
-                    hint="Ongoing"
-                    typeVal="float"
-                    limit="180"
-                    textBody={formDataReducer.feePercentOngoing}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-              </Form>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Fee (fixed amt)"
-                    reduxId="feeFixedUpfront"
-                    hint="Upfront"
-                    typeVal="float"
-                    limit="100000000"
-                    textBody={formDataReducer.feeFixedUpfront}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="feeFixedOngoing"
-                    hint="Ongoing"
-                    typeVal="float"
-                    limit="100000000"
-                    textBody={formDataReducer.feeFixedOngoing}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-              </Form>
-            </Row>
-          </Col>
-          <Col sm={6} md={6}>
-            <Row>
-              <PageHeader>Taxes</PageHeader>
-            </Row>
-            <Row>
-              <Form inline>
+              <Col sm={12} md={12}>
                 <TextField
                   id="Value Added Tax % on Fees"
                   reduxId="taxPercentFees"
@@ -410,6 +403,10 @@ class APRInputs extends Component {
                   textBody={formDataReducer.taxPercentFees}
                   onTextInputChange={this.handleTextChange}
                 />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
                 <TextField
                   id="Value Added Tax % on Interest"
                   reduxId="taxPercentInterest"
@@ -418,123 +415,118 @@ class APRInputs extends Component {
                   textBody={formDataReducer.taxPercentInterest}
                   onTextInputChange={this.handleTextChange}
                 />
-              </Form>
+              </Col>
             </Row>
-          </Col>
-        </Row>
-
-        <Row>
-          <Row>
-            <Col sm={12} md={12}>
-              <PageHeader>Insurance</PageHeader>
-            </Col>
           </Row>
-          <Row>
-            <Col sm={12} md={12}>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Insurance %"
-                    reduxId="insurancePercentUpfront"
-                    hint="Upfront"
-                    typeVal="float"
-                    limit="100"
-                    textBody={formDataReducer.insurancePercentUpfront}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="insurancePercentOngoing"
-                    hint="Ongoing"
-                    typeVal="float"
-                    limit="100"
-                    textBody={formDataReducer.insurancePercentOngoing}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-              </Form>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Insurance (fixed amt)"
-                    reduxId="insuranceFixedUpfront"
-                    hint="Upfront"
-                    typeVal="float"
-                    limit="900000000"
-                    textBody={formDataReducer.insuranceFixedUpfront}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="insuranceFixedOngoing"
-                    hint="Ongoing"
-                    typeVal="float"
-                    limit="900000000"
-                    textBody={formDataReducer.insuranceFixedOngoing}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-              </Form>
-            </Col>
-          </Row>
-        </Row>
 
-        <Row>
           <Row>
-            <Col sm={12} md={12}>
-              <PageHeader>Security Deposit</PageHeader>
-            </Col>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Insurance</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Insurance %"
+                  reduxId="insurancePercentUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.insurancePercentUpfront}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  reduxId="insurancePercentOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.insurancePercentOngoing}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Insurance (fixed amt)"
+                  reduxId="insuranceFixedUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.insuranceFixedUpfront}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  reduxId="insuranceFixedOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.insuranceFixedOngoing}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+            </Row>
           </Row>
-          <Row>
-            <Col sm={12} md={12}>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Security Deposit %"
-                    reduxId="securityDepositPercentUpfront"
-                    hint="Upfront"
-                    typeVal="float"
-                    limit="100"
-                    textBody={formDataReducer.securityDepositPercentUpfront}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="securityDepositPercentOngoing"
-                    hint="Ongoing"
-                    typeVal="float"
-                    limit="100"
-                    textBody={formDataReducer.securityDepositPercentOngoing}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-              </Form>
-              <Form inline>
-                <FormGroup>
-                  <TextField
-                    id="Security Deposit (fixed amt)"
-                    reduxId="securityDepositFixedUpfront"
-                    hint="Upfront"
-                    typeVal="float"
-                    limit="900000000"
-                    textBody={formDataReducer.securityDepositFixedUpfront}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <TextField
-                    reduxId="securityDepositFixedOngoing"
-                    hint="Ongoing"
-                    typeVal="float"
-                    limit="900000000"
-                    textBody={formDataReducer.securityDepositFixedOngoing}
-                    onTextInputChange={this.handleTextChange}
-                  />
-                </FormGroup>
 
+          <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Security Deposit</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Security Deposit %"
+                  reduxId="securityDepositPercentUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.securityDepositPercentUpfront}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  reduxId="securityDepositPercentOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.securityDepositPercentOngoing}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Security Deposit (fixed amt)"
+                  reduxId="securityDepositFixedUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.securityDepositFixedUpfront}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  reduxId="securityDepositFixedOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.securityDepositFixedOngoing}
+                  onTextInputChange={this.handleTextChange}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
                 <TextField
                   id="Interest Paid on Deposit"
                   reduxId="interestPaidOnDepositPercent"
@@ -543,27 +535,32 @@ class APRInputs extends Component {
                   textBody={formDataReducer.interestPaidOnDepositPercent}
                   onTextInputChange={this.handleTextChange}
                 />
-              </Form>
+              </Col>
+            </Row>
+          </Row>
+
+          <Row>
+            <Col xs={6} sm={6} md={6}>
+              <Button
+                className="button-fancy"
+                name="Back"
+                url={this.state.back}
+              />
+            </Col>
+            <Col xs={6} sm={6} md={6} className="bs-button-right">
+              <Button
+                className="button-fancy"
+                name="Next"
+                disable={!this.inputsEntered()}
+                url={'output'}
+                onClickHandler={e => {
+                  this.postData()
+                }}
+              />
             </Col>
           </Row>
-        </Row>
-
-        <Row>
-          <Col sm={6} md={6}>
-            <Button name="Back" url={this.state.back} />
-          </Col>
-          <Col sm={6} md={6} className="bs-button-right">
-            <Button
-              name="Next"
-              disable={!this.inputsEntered()}
-              url={'output'}
-              onClickHandler={e => {
-                this.postData()
-              }}
-            />
-          </Col>
-        </Row>
-      </Grid>
+        </Grid>
+      </div>
     )
   }
 }

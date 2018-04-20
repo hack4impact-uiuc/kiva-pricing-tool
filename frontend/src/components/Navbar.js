@@ -22,15 +22,14 @@ class Navbar extends Component {
       <Grid>
         <BootstrapNavbar fixedTop fluid className="custom-navbar-styles">
           <BootstrapNavbar.Toggle />
-          <Nav>
-            <NavItem className="hover-fancy">
-              <Link className="nav-white-link link-no-effect" to="/">
-                Home
-              </Link>
-            </NavItem>
-          </Nav>
           <BootstrapNavbar.Collapse>
             <Nav>
+              <NavItem className="hover-fancy">
+                <Link className="nav-white-link link-no-effect" to="/">
+                  Home
+                </Link>
+              </NavItem>
+
               <NavItem className="hover-fancy">
                 <Link className="nav-white-link link-no-effect" to="newloan">
                   New Loan
@@ -46,17 +45,14 @@ class Navbar extends Component {
               <NavDropdown className="hover-fancy" title="Admin Tools">
                 <MenuItem>
                   <Link
-                    className="nav-white-link link-no-effect"
+                    className="link-no-effect dropdown-link"
                     to="partnerlist"
                   >
                     Partner List
                   </Link>
                 </MenuItem>
                 <MenuItem>
-                  <Link
-                    className="nav-white-link link-no-effect"
-                    to="themelist"
-                  >
+                  <Link className="link-no-effect dropdown-link" to="themelist">
                     Loan Theme List
                   </Link>
                 </MenuItem>

@@ -76,7 +76,7 @@ class NewLoan extends Component {
   render() {
     const { formDataReducer, changedFormData, resetFormData } = this.props
     return (
-      <div className="page-body-grey">
+      <div className="page-body-grey overflow-handler">
         <Grid
           fluid
           className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
@@ -117,9 +117,8 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                id="Loan Product"
                 text="product"
-                hint="i.e. small loan"
+                hint="Loan Product (i.e. small loan)"
                 typeVal="String"
                 limit={100}
                 textBody={formDataReducer.productType}
@@ -130,6 +129,7 @@ class NewLoan extends Component {
             <Row>
               <Col xs={6} sm={6} md={6}>
                 <Button
+                  className="button-fancy"
                   name="Back"
                   url=""
                   onClickHandler={() => resetFormData()}
@@ -137,7 +137,7 @@ class NewLoan extends Component {
               </Col>
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
-                  className="button-default"
+                  className="button-fancy"
                   disable={!this.inputsEntered()}
                   name="Continue"
                   url="form1"

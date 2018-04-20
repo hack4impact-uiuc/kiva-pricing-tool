@@ -15,15 +15,11 @@ $color-text: #333;
 	width: 100vw;
 	height: 100vh;
 	background-color: #E8E8E8;
-	overflow: hidden;
+	overflow: auto;
 }
 
 .solid-background {
 	background-color: white;
-}
-
-.solid-background-grey {
-	background-color: #E8E8E8;
 }
 
 .screen-vertical-centered-grid {
@@ -53,6 +49,10 @@ $color-text: #333;
 
 .padded-element-shrink {
 	padding: 6% 10%;
+}
+
+.overpad-shrink {
+	padding-top: 0;
 }
 
 .round-corners-large {
