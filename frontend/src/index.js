@@ -1,6 +1,8 @@
 // @flow
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-theme.css'
+import 'typeface-raleway'
+import 'typeface-montserrat'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -9,14 +11,12 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import configureStore, { history } from './store/configureStore'
 import {
-  Colors,
   Navbar,
   APRRateDisplay,
-  FormOne,
-  FormZero,
+  APRInputs,
+  NewLoan,
   IntroPage,
-  LiveSearch,
-  AdminMain,
+  FindLoan,
   AdminPartners,
   AdminThemes
 } from './components'
@@ -30,13 +30,12 @@ ReactDOM.render(
       <div>
         <Navbar />
         <Route exact path="/" component={IntroPage} />
-        <Route path="/newloan" component={FormZero} />
-        <Route path="/findloan" component={LiveSearch} />
-        <Route path="/adminmain" component={AdminMain} />
+        <Route path="/newloan" component={NewLoan} />
+        <Route path="/findloan" component={FindLoan} />
         <Route path="/partnerlist" component={AdminPartners} />
         <Route path="/themelist" component={AdminThemes} />
         <Route path="/output" component={APRRateDisplay} />
-        <Route path="/form1" component={FormOne} />
+        <Route path="/form1" component={APRInputs} />
       </div>
     </ConnectedRouter>
   </Provider>,

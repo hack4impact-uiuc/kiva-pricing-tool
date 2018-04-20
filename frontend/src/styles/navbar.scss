@@ -1,0 +1,21 @@
+.custom-navbar-styles {
+	background-image: none; /* Remove bootstrap included gradient */
+	background-color: #32746D;
+	border: none;
+}
+
+.custom-navbar-styles .nav-white-link {
+	color: white;
+}
+
+.custom-navbar-styles .link-no-effect:hover {
+	text-decoration: none; 
+}
+
+.hover-fancy:hover {
+	background-color: white;
+}
+
+.hover-fancy:hover a {
+	color: black;
+}

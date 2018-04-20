@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
-import './../styles/button.scss'
+import './../styles/button.css'
 // import './../styles/instructions.css'
 class Button extends Component {
   render() {
@@ -9,13 +9,14 @@ class Button extends Component {
       <Route
         render={({ history }) => (
           <button
-            className="button"
+            className="button-fancy"
             type="button"
             onClick={() => {
-              this.props.onClickHandler()
-              history.push('/' + this.props.url)
+              if (this.props.onClickHandler) this.props.onClickHandler()
+              var runnable =
+                this.props.disable == null ? true : !this.props.disable
+              runnable && history.push('/' + this.props.url)
             }}
-            disabled={this.props.disable}
           >
             {this.props.name}
           </button>

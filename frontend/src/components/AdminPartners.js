@@ -22,12 +22,14 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
+
       addconfirm: false,
       adderror: false,
       removeshow: false,
       savesuccess: false,
       editing: false,
-      edited_partners: []
+      edited_partners: [],
+      addshow: false
     }
     this.renderEditable = this.renderEditable.bind(this)
   }
@@ -112,6 +114,7 @@ class AdminPartners extends Component {
   }
 
   addPartner(partner_name) {
+
     if (
       partner_name != null &&
       partner_name.length != 0 &&
@@ -131,6 +134,17 @@ class AdminPartners extends Component {
       this.setState({ addshow: true })
     }
   }
+
+//     this.setState({ addshow: true })
+//     let data = { partner_name: partner_name }
+//     axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
+//       this.setState({
+//         data: this.state.data.concat({ partner_names: partner_name })
+//       })
+//     })
+//   }
+
+
 
   removePartner(partner_name) {
     this.setState({ removeshow: true })
@@ -202,10 +216,12 @@ class AdminPartners extends Component {
         {this.state.adderror == true ? (
           <Alert bsStyle="warning">
             <h4>Partner Already Exists</h4>
+
           </Alert>
         ) : null}
 
         {this.state.removeshow == true ? (
+
           <Alert bsStyle="warning" closeLabel="close">
             <h4>Partner Removed</h4>
           </Alert>
@@ -220,6 +236,7 @@ class AdminPartners extends Component {
           }}
         />
 
+
         <ReactTable
           data={this.state.data}
           columns={[
@@ -229,6 +246,14 @@ class AdminPartners extends Component {
               Cell: this.state.editing ? this.renderEditable : null
             },
             {
+
+              Header: 'Edit',
+              id: 'edit-button',
+              width: 150,
+              Cell: props => <Button name="Edit" />
+            },
+            {
+
               Header: 'Remove',
               id: 'delete-button',
               width: 150,
