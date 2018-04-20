@@ -28,7 +28,9 @@
     "react-table": "^6.8.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "typeface-montserrat": "0.0.54",
+    "typeface-raleway": "0.0.54"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

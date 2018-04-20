@@ -1,6 +1,8 @@
 // @flow
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-theme.css'
+import 'typeface-raleway'
+import 'typeface-montserrat'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -15,7 +17,6 @@ import {
   NewLoan,
   IntroPage,
   FindLoan,
-  AdminMain,
   AdminPartners,
   AdminThemes
 } from './components'
@@ -31,7 +32,6 @@ ReactDOM.render(
         <Route exact path="/" component={IntroPage} />
         <Route path="/newloan" component={NewLoan} />
         <Route path="/findloan" component={FindLoan} />
-        <Route path="/adminmain" component={AdminMain} />
         <Route path="/partnerlist" component={AdminPartners} />
         <Route path="/themelist" component={AdminThemes} />
         <Route path="/output" component={APRRateDisplay} />

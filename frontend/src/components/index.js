@@ -14,7 +14,6 @@ import LiveSearch from './LiveSearch.js'
 import KivaChart from './KivaChart.js'
 import APRRateDisplay from './../containers/APRDisplay'
 import FindLoan from './../containers/FindLoan'
-import AdminMain from './AdminMain.js'
 import AdminPartners from './AdminPartners.js'
 import AdminThemes from './AdminThemes.js'
 
@@ -33,7 +32,6 @@ export {
   APRRateDisplay,
   IntroPage,
   FindLoan,
-  AdminMain,
   AdminPartners,
   AdminThemes
 }

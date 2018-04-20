@@ -244,7 +244,7 @@ def removeMFI(partner_name):
 @app.route(GET_ALL_LT, methods=['GET'])
 def getAllLT():
     themes = Theme.query.filter_by(active=True).all()
-    return create_response({'partners': [x.loan_theme for x in themes]}, status=200)
+    return create_response({'loan_theme': [x.loan_theme for x in themes]}, status=200)
 
 @app.route(EDIT_LT, methods=['PUT'])
 def editLT(loan_theme):
@@ -336,9 +336,11 @@ def get_product_entry():
         theme_id = Theme.query.filter_by(loan_theme = theme_name).first().id
 
         # Get all product themes with RETURNED PARTER ID AND LOAN ID
-        product_list = list()
-        for entry in Loan.query.filter_by(partner_id = mfi_id, theme_id = theme_id).all():
-            product_list.append(entry.product_type)
+
+        product_list = []
+        for value in db.session.query(Loan.product_type).distinct():
+            product_list.append(value[0])
+
 
         # Return list of product types under given mfi name and theme id
         data = {'product_types' : [entry for entry in product_list]}
@@ -431,5 +433,5 @@ def get_loan():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
-create_response({}, status=400, message='missing arguments for GET')
+
 
