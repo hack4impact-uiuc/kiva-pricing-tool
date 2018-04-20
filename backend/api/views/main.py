@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
 from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper, update_repayment_schedule, round_matrix
+from api.utils import PERIOD_IDX, DATE_IDX, DAY_IDX, PRINCIPAL_DISBURSED_IDX, PRINCIPAL_PAID_IDX, BALANCE_IDX, INTEREST_PAID_IDX, FEES_IDX, INSURANCE_IDX, TAXES_IDX, SECURITY_DEPOSIT_IDX, SECURITY_DEPOSIT_INTEREST_PAID_IDX, SECURITY_DEPOSIT_WITHDRAW_IDX, SECURITY_DEPOSIT_BALANCE_IDX, CASH_FLOW_IDX
 import numpy as np
 
 mod = Blueprint('main', __name__)
@@ -39,6 +40,7 @@ FINDLOAN_GET_PRODUCT_ENTRY = "/getPTEntry"
 FINDLOAN_GET_VERSION_LIST = "/getVersionNumEntry"
 FINDLOAN_GET_LOAN_DATA = "/findLoan"
 
+SAVE_REPAYMENT_SCHEDULE = "/saveRepayment"
 
 @app.route(CALCULATE_URL, methods=['POST'])
 def cal_apr():
@@ -433,5 +435,85 @@ def get_loan():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
+@app.route(SAVE_REPAYMENT_SCHEDULE, method=['POST'])
+def save_repayment():
+    request_json = request.get_json()
+    print(request_json.keys())
+
+    partner_name : request_json['partner_name'],
+    loan_theme : request_json['loan_theme'],
+    product_type : request_json['product_type'],
+    version_num : request_json['version_num']
+    partner_id = Partner.query.filter_by(partner_name=partner_name).first().id
+    theme_id = Theme.query.filter_by(loan_theme=loan_theme).fisrt().id
+    repay_id = str(partner_id) + str(theme_id) + product_type + version_num
+    try:
+        origin_matrix = request_json['origin_matrix']
+        user_change_matrix = request_json['user_change_matrix']
+        recal_matrix = request_json['repay_matrix']
+    except:
+        return create_response(status=422, message='missing compoonents for save repyament schedule')
+
+    # delete previous record first
+    prev_repay = RepaymentSchedule.query.filter_by(id=repay_id).delete()
+    for col_idx in range(len(origin_matrix[0])):
+        cur_origin_col = origin_matrix[:,col_idx]
+        cur_user_change_col = user_change_matrix[:, col_idx]
+        cur_recal_col = repay_matrix[:,col_idx]
+
+        newrow = {
+                'id' = repay_id
+                'period_num' = int(cur_origin_col[PERIOD_IDX])
+                'payment_due_date' = datetime.datetime.strptime(cur_origin_col[DATE_IDX], '%d-%b-%Y')
+                'days' = int(cur_origin_col[DAY_IDX])
+                'amount_due' = float(cur_origin_col[PRINCIPAL_DISBURSED_IDX])
+                'principal_payment' = float(cur_origin_col[PRINCIPAL_PAID_IDX])
+                'interest' = float(cur_origin_col[INTEREST_PAID_IDX])
+                'fees' = float(cur_origin_col[FEES_IDX])
+                'insurance' = float(cur_origin_col[INSURANCE_IDX])
+                'taxes' = float(cur_origin_col[TAXES_IDX])
+                'security_deposit' = float(cur_origin_col[SECURITY_DEPOSIT_IDX])
+                'security_interest_paid' = float(cur_origin_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
+                'balance' = float(cur_origin_col[BALANCE_IDX])
+                'deposit_balance' = float(cur_origin_col[SECURITY_DEPOSIT_BALANCE_IDX])
+                'deposit_withdrawal' = float(cur_origin_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
+                'total_cashflow' = float(cur_origin_col[CASH_FLOW_IDX])
+
+                'period_num_user' = int(cur_user_change_col[PERIOD_IDX])
+                'payment_due_date_user' = datetime.datetime.strptime(cur_user_change_col[DATE_IDX], '%d-%b-%Y')
+                'days_user' = int(cur_user_change_col[DAY_IDX])
+                'amount_due_user' = float(cur_user_change_col[PRINCIPAL_DISBURSED_IDX])
+                'principal_payment_user' = float(cur_user_change_col[PRINCIPAL_PAID_IDX])
+                'interest_user' = float(cur_user_change_col[INTEREST_PAID_IDX])
+                'fees_user' = float(cur_user_change_col[FEES_IDX])
+                'insurance_user' = float(cur_user_change_col[INSURANCE_IDX])
+                'taxes_user' = float(cur_user_change_col[TAXES_IDX])
+                'security_deposit_uesr' = float(cur_user_change_col[SECURITY_DEPOSIT_IDX])
+                'security_interest_paid_user' = float(cur_user_change_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
+                'balance_user' = float(cur_user_change_col[BALANCE_IDX])
+                'deposit_balance_user' = float(cur_user_change_col[SECURITY_DEPOSIT_BALANCE_IDX])
+                'deposit_withdrawal_user' = float(cur_user_change_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
+                'total_cashflow_user' = float(cur_user_change_col[CASH_FLOW_IDX])
+
+                'period_num_calc' = int(cur_recal_col[PERIOD_IDX])
+                'payment_due_date_calc' = datetime.datetime.strptime(cur_recal_col[DATE_IDX], '%d-%b-%Y')
+                'days_calc' = int(cur_recal_col[DAY_IDX])
+                'amount_due_calc' = float(cur_recal_col[PRINCIPAL_DISBURSED_IDX])
+                'principal_payment_calc' = float(cur_recal_col[PRINCIPAL_PAID_IDX])
+                'interest_calc' = float(cur_recal_col[INTEREST_PAID_IDX])
+                'fees_calc' = float(cur_recal_col[FEES_IDX])
+                'insurance_calc' = float(cur_recal_col[INSURANCE_IDX])
+                'taxes_calc' = float(cur_recal_col[TAXES_IDX])
+                'security_deposit_calc' = float(cur_recal_col[SECURITY_DEPOSIT_IDX])
+                'security_interest_paid_calc' = float(cur_recal_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
+                'balance_calc' = float(cur_recal_col[BALANCE_IDX])
+                'deposit_balance_calc' = float(cur_recal_col[SECURITY_DEPOSIT_BALANCE_IDX])
+                'deposit_withdrawal_calc' = float(cur_recal_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
+                'total_cashflow_calc' = float(cur_recal_col[CASH_FLOW_IDX])
+            }
+        repay_schedule = RepaymentSchedule(newrow)
+        db.session.add(repay_schedule)
+    db.session.commit()
+    return create_response(status=201)
 
 
