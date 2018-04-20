@@ -143,7 +143,7 @@ class APRInputs extends Component {
       <div className="page-body-grey padded-element-vertical overpad-shrink">
         <Grid
           fluid
-          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-all round-corners-large solid-background"
         >
           <Row>
             <Row>
@@ -154,6 +154,7 @@ class APRInputs extends Component {
             <Row>
               <Col sm={12} md={12}>
                 <TextField
+                  className="inline-textfield"
                   id="Full Name"
                   reduxId="startName"
                   hint="ex. John"
@@ -173,7 +174,7 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={4} md={4}>
+              <Col sm={4} md={4} className="bs-center">
                 <Dropdown
                   title="Repayment Type:"
                   reduxId="repaymentType"
@@ -187,7 +188,7 @@ class APRInputs extends Component {
                   selected={formDataReducer.repaymentType}
                 />
               </Col>
-              <Col sm={4} md={4}>
+              <Col sm={4} md={4} className="bs-center">
                 <Dropdown
                   title="Interest Payment:"
                   reduxId="interestPaymentType"
@@ -199,7 +200,7 @@ class APRInputs extends Component {
                   selected={formDataReducer.interestPaymentType}
                 />
               </Col>
-              <Col sm={4} md={4}>
+              <Col sm={4} md={4} className="bs-center">
                 <Dropdown
                   title="Interest Calculation:"
                   reduxId="interestCalculationType"
@@ -236,7 +237,7 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                 />
               </Col>
-              <Col sm={4} md={4}>
+              <Col sm={4} md={4} className="bs-center">
                 <Dropdown
                   title="Time Period:"
                   reduxId="installmentTimePeriod"
@@ -341,8 +342,9 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={6} md={6}>
+              <Col sm={6} md={6} className="bs-button-right">
                 <TextField
+                  className="inline-textfield"
                   id="Fee%"
                   reduxId="feePercentUpfront"
                   hint="Upfront"
@@ -354,6 +356,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={6} md={6}>
                 <TextField
+                  className="inline-textfield"
                   reduxId="feePercentOngoing"
                   hint="Ongoing"
                   typeVal="float"
@@ -364,8 +367,9 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={6} md={6}>
+              <Col sm={6} md={6} className="bs-button-right">
                 <TextField
+                  className="inline-textfield"
                   id="Fee (fixed amt)"
                   reduxId="feeFixedUpfront"
                   hint="Upfront"
@@ -377,6 +381,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={6} md={6}>
                 <TextField
+                  className="inline-textfield"
                   reduxId="feeFixedOngoing"
                   hint="Ongoing"
                   typeVal="float"
@@ -396,6 +401,7 @@ class APRInputs extends Component {
             <Row>
               <Col sm={12} md={12}>
                 <TextField
+                  className="inline-textfield"
                   id="Value Added Tax % on Fees"
                   reduxId="taxPercentFees"
                   typeVal="float"
@@ -408,6 +414,7 @@ class APRInputs extends Component {
             <Row>
               <Col sm={12} md={12}>
                 <TextField
+                  className="inline-textfield"
                   id="Value Added Tax % on Interest"
                   reduxId="taxPercentInterest"
                   typeVal="float"
@@ -426,8 +433,9 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={6} md={6}>
+              <Col sm={6} md={6} className="bs-button-right">
                 <TextField
+                  className="inline-textfield"
                   id="Insurance %"
                   reduxId="insurancePercentUpfront"
                   hint="Upfront"
@@ -439,6 +447,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={6} md={6}>
                 <TextField
+                  className="inline-textfield"
                   reduxId="insurancePercentOngoing"
                   hint="Ongoing"
                   typeVal="float"
@@ -449,8 +458,9 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={6} md={6}>
+              <Col sm={6} md={6} className="bs-button-right">
                 <TextField
+                  className="inline-textfield"
                   id="Insurance (fixed amt)"
                   reduxId="insuranceFixedUpfront"
                   hint="Upfront"
@@ -462,6 +472,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={6} md={6}>
                 <TextField
+                  className="inline-textfield"
                   reduxId="insuranceFixedOngoing"
                   hint="Ongoing"
                   typeVal="float"
@@ -480,8 +491,9 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={6} md={6}>
+              <Col sm={6} md={6} className="bs-button-right">
                 <TextField
+                  className="inline-textfield"
                   id="Security Deposit %"
                   reduxId="securityDepositPercentUpfront"
                   hint="Upfront"
@@ -493,6 +505,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={6} md={6}>
                 <TextField
+                  className="inline-textfield"
                   reduxId="securityDepositPercentOngoing"
                   hint="Ongoing"
                   typeVal="float"
@@ -503,8 +516,9 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={6} md={6}>
+              <Col sm={6} md={6} className="bs-button-right">
                 <TextField
+                  className="inline-textfield"
                   id="Security Deposit (fixed amt)"
                   reduxId="securityDepositFixedUpfront"
                   hint="Upfront"
@@ -516,6 +530,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={6} md={6}>
                 <TextField
+                  className="inline-textfield"
                   reduxId="securityDepositFixedOngoing"
                   hint="Ongoing"
                   typeVal="float"
