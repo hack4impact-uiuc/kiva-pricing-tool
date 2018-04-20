@@ -169,6 +169,7 @@ class APRInputs extends Component {
           }
         }
         reformatted_matrix[0]['period_num'] = 'Disbursement Info'
+        calc_matrix[0]['period_num'] = 'Disbursement Info'
         changedFormData('original_repayment_schedule', reformatted_matrix)
         changedFormData('user_repayment_schedule', user_matrix)
         changedFormData('calc_repayment_schedule', calc_matrix)

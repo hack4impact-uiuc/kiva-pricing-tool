@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Button, TextField /*, KivaChart */ } from './'
+import { Dropdown, Button, TextField /*, KivaChart*/ } from './'
 import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.scss'
@@ -53,12 +53,9 @@ class APRRateDisplay extends Component {
   updateTable(e, cellInfo) {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
     if (
-      formDataReducer.original_repayment_schedule[cellInfo.index][
+      formDataReducer.calc_repayment_schedule[cellInfo.index][
         cellInfo.column.id
-      ] !==
-      formDataReducer.user_repayment_schedule[cellInfo.index][
-        cellInfo.column.id
-      ]
+      ] !== e.target.innerHTML
     ) {
       let inputs = {
         partner_name: formDataReducer.mfi[0],
@@ -137,8 +134,9 @@ class APRRateDisplay extends Component {
           formDataReducer.calc_repayment_schedule[i]['deposit_balance']
         )
       }
+      user_change[0][0] = '0'
       let data = {
-        inputs: inputs,
+        input_form: inputs,
         user_change: user_change
       }
       axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
@@ -193,34 +191,11 @@ class APRRateDisplay extends Component {
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
-          // this.updateTable(e, cellInfo)
-          const data = [...formDataReducer.user_repayment_schedule]
-          let orig = data[cellInfo.index][cellInfo.column.id]
-          console.log(formDataReducer.user_repayment_schedule)
-          console.log(
-            formDataReducer.original_repayment_schedule[cellInfo.index][
-              cellInfo.column.id
-            ]
-          )
-          console.log(e.target.innerHTML)
-          if (
-            formDataReducer.calc_repayment_schedule[cellInfo.index][
-              cellInfo.column.id
-            ] !== parseFloat(e.target.innerHTML)
-          ) {
-            formDataReducer.user_repayment_schedule[cellInfo.index][
-              cellInfo.column.id
-            ] = parseFloat(e.target.innerHTML)
-            console.log('abc')
-          }
+          this.updateTable(e, cellInfo)
         }}
-        /*// onInput={e => {
-        //   console.log(formDataReducer.user_repayment_schedule)
-        //   formDataReducer.user_repayment_schedule[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
-        // }}*/
         dangerouslySetInnerHTML={{
           __html:
-            formDataReducer.original_repayment_schedule[cellInfo.index][
+            formDataReducer.calc_repayment_schedule[cellInfo.index][
               cellInfo.column.id
             ]
         }}
@@ -318,7 +293,7 @@ class APRRateDisplay extends Component {
           }}
           disable={true}
         />
-        <div class="col-lg-4 pull-right">
+        {/*<div class="col-lg-4 pull-right">
           <ul class="nav nav-pills nav-stacked">
             <button onClick={() => this.createChart('bar')}>Bar Chart</button>
             <button onClick={() => this.createChart('pie')}>Pie Chart</button>
@@ -332,7 +307,7 @@ class APRRateDisplay extends Component {
             </li>
           </ul>
         </div>
-        <KivaChart visualType={this.state.visualType} />
+        <KivaChart visualType={this.state.visualType} />*/}
         <br />
         <Button name="Cancel" url="" />
         <Button name="Edit" url="form1" />
