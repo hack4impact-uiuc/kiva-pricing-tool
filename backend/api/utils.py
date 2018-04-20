@@ -536,6 +536,21 @@ def cal_scaled_interest(nominal_interest_rate, installment_time_period, interest
     security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[installments_period_dict[installment_time_period]]
     return scaled_interest, security_deposit_scaled_interest
 
+def cal_apr_manual_mode(origin_matrix, grace_period_balloon):
+    test = [(-10000, '1-Jan-2008'),(2750, '1-Mar-2008'),(4250, '30-Oct-2008'),(3250, '15-Feb-2009'),(2750, '1-Apr-2009')]
+    date_col = origin_matrix[DATE_IDX]
+    cash_flow = origin_matrix[CASH_FLOW_IDX]
+    date_cash_list = []
+    print (len(origin_matrix[0]))
+    for idx in range(len(origin_matrix[0])):
+        date = datetime.datetime.strptime(date_col[idx], '%d-%b-%Y')
+        date_cash_list.append((date, cash_flow[idx]))
+    print (date_cash_list)
+    EIR = xirr(date_cash_list)
+    period_num = len(origin_matrix[0])
+    # convert from EIR to APR 
+    return (period_num * ((1+EIR)**(1/period_num)-1))
+
 def update_repayment_schedule(origin_matrix, user_change, input_form):
     installment_time_period = input_form['installment_time_period']
     grace_period_balloon = input_form['grace_period_balloon']
@@ -574,9 +589,11 @@ def update_repayment_schedule(origin_matrix, user_change, input_form):
     origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
     origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
 
+
+    new_apr = cal_apr_manual_mode(origin_matrix, grace_period_balloon)
     origin_matrix = round_matrix(origin_matrix)
-    fake_apr = 100
-    return fake_apr, origin_matrix
+    return new_apr, origin_matrix
+
 
 def round_matrix(origin_matrix):
     for row_idx in range(PRINCIPAL_DISBURSED_IDX, CASH_FLOW_IDX+1):

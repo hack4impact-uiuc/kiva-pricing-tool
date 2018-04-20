@@ -60,7 +60,8 @@ def fake_cal_apr():
     grace_period_principal = 0
     grace_period_interest_pay = 0
     grace_period_interest_calculate = 0
-    grace_period_balloon = 0
+    grace_period_balloon = 4
+
     security_deposit_percent_ongoing = 0.1
     security_deposit_percent_upfront = 0.1
     security_deposit_fixed_upfront = 10
