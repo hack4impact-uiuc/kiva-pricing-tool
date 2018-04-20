@@ -22,6 +22,10 @@ $color-text: #333;
 	background-color: white;
 }
 
+.solid-background-grey {
+	background-color: #E8E8E8;
+}
+
 .screen-vertical-centered-grid {
 	margin-top: 10%;
 }
@@ -82,6 +86,10 @@ $color-text: #333;
 
 .vertical-margin-item {
 	margin: 2% 0%;
+}
+
+.search-input {
+	width: 100%;
 }
 
 .page-header-montserrat {

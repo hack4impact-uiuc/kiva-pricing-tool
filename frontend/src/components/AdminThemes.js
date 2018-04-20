@@ -1,5 +1,13 @@
 import React, { Component } from 'react'
-import { Grid, Jumbotron, PageHeader, Bootstrap, Form } from 'react-bootstrap'
+import {
+  Grid,
+  Jumbotron,
+  PageHeader,
+  Bootstrap,
+  Form,
+  Row,
+  Col
+} from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import TextField from './TextField'
@@ -77,111 +85,115 @@ class AdminThemes extends Component {
   // ------------------------------------------------------ RENDER ELEMENTS --------------------------------------------------------
   render() {
     return (
-      <Grid>
-        <PageHeader>Loan Theme List</PageHeader>
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Search Themes: </small>{' '}
-          </h2>
+      <Grid className="padded-element-vertical">
+        <Row>
+          <Col sm={12} md={12}>
+            <PageHeader className="page-header-montserrat bs-center">
+              Loan Theme List
+            </PageHeader>
+          </Col>
+        </Row>
 
-          <div>
-            <input
-              placeholder="Search Loan Theme"
-              onChange={event =>
-                this.setState({
-                  filtered: [{ id: 'loan_theme', value: event.target.value }]
-                })}
-              // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <h2>
+              {' '}
+              <small> Search Themes: </small>{' '}
+            </h2>
+
+            <div>
+              <input
+                className="search-input"
+                placeholder="Search Loan Theme"
+                onChange={event =>
+                  this.setState({
+                    filtered: [{ id: 'loan_theme', value: event.target.value }]
+                  })}
+                // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
+              />
+            </div>
+          </Col>
+          <Col sm={6} md={6}>
+            <h2>
+              {' '}
+              <small> Add Loan Theme: </small>{' '}
+            </h2>
+
+            <TextField
+              id=""
+              hint="Add Loan Theme"
+              typeVal="String"
+              limit="100"
+              ref="addloantheme"
             />
-          </div>
-        </Form>
 
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Add Loan Theme: </small>{' '}
-          </h2>
+            <Button
+              name="Add "
+              url="themelist"
+              onClickHandler={() => {
+                this.addLoan(this.refs.addloantheme.state.textBody)
+              }}
+            />
+          </Col>
+        </Row>
 
-          <TextField
-            id=""
-            hint="Add Loan Theme"
-            typeVal="String"
-            limit="100"
-            ref="addloantheme"
-          />
-        </Form>
-
-        <Button
-          name="Add "
-          url="themelist"
-          onClickHandler={() => {
-            this.addLoan(this.refs.addloantheme.state.textBody)
-          }}
-        />
-
-        <br />
-
-        <ReactTable
-          data={this.state.data}
-          noDataText="No Results Found." // Text displayed when no data is in the table
-          loadingText="Loading themes...This may take a moment." // Text displayed when data is being loaded
-          columns={[
-            {
-              Header: 'Loan Theme',
-              accessor: 'loan_theme',
-              Cell: this.renderUneditable,
-              filterMethod: (
-                filter,
-                row // Custom filter method for case insensitive filtering
-              ) =>
-                row[filter.id]
-                  .toLowerCase()
-                  .startsWith(filter.value.toLowerCase()) ||
-                row[filter.id]
-                  .toLowerCase()
-                  .endsWith(filter.value.toLowerCase())
-            },
-            {
-              Header: 'Edit',
-              id: 'edit-button',
-              width: 150,
-              Cell: props => <Button name="Edit" />
-            },
-            {
-              Header: 'Remove',
-              id: 'delete-button',
-              width: 150,
-              Cell: ({ row, original }) => {
-                // Generate row such that value of text field is rememebered to pass into remove loan function
-                return (
-                  <Button
-                    name="Remove"
-                    url="themelist"
-                    onClickHandler={() => this.removeLoan(original.loan_theme)} // Send text value to remove loan function
-                  />
-                )
-              }
-            }
-          ]}
-          // Allow react table to use state.filterable to filter correct column based on state.filterable id and value
-          filtered={this.state.filtered}
-          defaultSorted={[
-            // Sort table alphabetically
-            {
-              id: 'loan_theme',
-              desc: false
-            }
-          ]}
-        />
-
-        <Button
-          name="Back"
-          url="adminmain"
-          onClickHandler={() => {
-            console.log('going to admin main screen')
-          }}
-        />
+        <Row>
+          <Col sm={12} md={12}>
+            <ReactTable
+              data={this.state.data}
+              noDataText="No Results Found." // Text displayed when no data is in the table
+              loadingText="Loading themes...This may take a moment." // Text displayed when data is being loaded
+              columns={[
+                {
+                  Header: 'Loan Theme',
+                  accessor: 'loan_theme',
+                  Cell: this.renderUneditable,
+                  filterMethod: (
+                    filter,
+                    row // Custom filter method for case insensitive filtering
+                  ) =>
+                    row[filter.id]
+                      .toLowerCase()
+                      .startsWith(filter.value.toLowerCase()) ||
+                    row[filter.id]
+                      .toLowerCase()
+                      .endsWith(filter.value.toLowerCase())
+                },
+                {
+                  Header: 'Edit',
+                  id: 'edit-button',
+                  width: 150,
+                  Cell: props => <Button name="Edit" />
+                },
+                {
+                  Header: 'Remove',
+                  id: 'delete-button',
+                  width: 150,
+                  Cell: ({ row, original }) => {
+                    // Generate row such that value of text field is rememebered to pass into remove loan function
+                    return (
+                      <Button
+                        name="Remove"
+                        url="themelist"
+                        onClickHandler={() =>
+                          this.removeLoan(original.loan_theme)} // Send text value to remove loan function
+                      />
+                    )
+                  }
+                }
+              ]}
+              // Allow react table to use state.filterable to filter correct column based on state.filterable id and value
+              filtered={this.state.filtered}
+              defaultSorted={[
+                // Sort table alphabetically
+                {
+                  id: 'loan_theme',
+                  desc: false
+                }
+              ]}
+            />
+          </Col>
+        </Row>
       </Grid>
     )
   }

@@ -5,7 +5,9 @@ import {
   PageHeader,
   Bootstrap,
   Form,
-  Alert
+  Alert,
+  Row,
+  Col
 } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
@@ -89,106 +91,118 @@ class AdminPartners extends Component {
     const listdata = this.state.data
 
     return (
-      <Grid>
-        <PageHeader>Admin Partners List</PageHeader>
+      <Grid className="padded-element-vertical">
+        <Row>
+          <Col sm={12} md={12}>
+            <PageHeader className="page-header-montserrat bs-center">
+              Admin Partners List
+            </PageHeader>
+          </Col>
+        </Row>
 
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Search Partners: </small>{' '}
-          </h2>
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <h2>
+              {' '}
+              <small> Search Partners: </small>{' '}
+            </h2>
 
-          <LiveSearch
-            ref="partner_names"
-            label="partner_names"
-            list={listdata}
-            hint="Search MFI Partner"
-          />
-        </Form>
+            <div>
+              <input
+                className="search-input"
+                placeholder="Search MFI Partner"
+                onChange={event =>
+                  this.setState({
+                    filtered: [
+                      { id: 'partner_names', value: event.target.value }
+                    ]
+                  })}
+                // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
+              />
+            </div>
+          </Col>
+          <Col sm={6} md={6}>
+            <h2>
+              {' '}
+              <small> Add Partner: </small>{' '}
+            </h2>
 
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Add Partner: </small>{' '}
-          </h2>
+            <TextField
+              id=""
+              hint="Add MFI Partner"
+              typeVal="String"
+              limit="5000"
+              ref="addpartnername"
+            />
 
-          <TextField
-            id=""
-            hint="Add MFI Partner"
-            typeVal="String"
-            limit="5000"
-            ref="addpartnername"
-          />
-        </Form>
+            <Button
+              name="Add "
+              url="partnerlist"
+              onClickHandler={() => {
+                this.addPartner(this.refs.addpartnername.state.textBody)
+              }}
+            />
+          </Col>
+        </Row>
 
-        <Button
-          name="Add "
-          url="partnerlist"
-          onClickHandler={() => {
-            this.addPartner(this.refs.addpartnername.state.textBody)
-          }}
-        />
+        <Row>
+          <Col sm={12} md={12}>
+            {this.state.addshow == true ? (
+              <Alert bsStyle="success">
+                <h4>Add Successful!</h4>
+              </Alert>
+            ) : null}
 
-        {this.state.addshow == true ? (
-          <Alert bsStyle="success">
-            <h4>Add Successful!</h4>
-          </Alert>
-        ) : null}
+            {this.state.removeshow == true ? (
+              <Alert bsStyle="danger">
+                <h4>Partner Removed!</h4>
+              </Alert>
+            ) : null}
+          </Col>
+        </Row>
 
-        {this.state.removeshow == true ? (
-          <Alert bsStyle="danger">
-            <h4>Partner Removed!</h4>
-          </Alert>
-        ) : null}
-
-        <br />
-
-        <ReactTable
-          data={this.state.data}
-          columns={[
-            {
-              Header: 'MFI Partner',
-              accessor: 'partner_names',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Edit',
-              id: 'edit-button',
-              width: 150,
-              Cell: props => <Button name="Edit" />
-            },
-            {
-              Header: 'Remove',
-              id: 'delete-button',
-              width: 150,
-              Cell: ({ row, original }) => {
-                // Generate row such that value of text field is rememebered to pass into remove loan function
-                return (
-                  <Button
-                    name="Remove"
-                    url="partnerlist"
-                    onClickHandler={() =>
-                      this.removeLoan(original.partner_names)} // Send text value to remove loan function
-                  />
-                )
-              }
-            }
-          ]}
-          defaultSorted={[
-            {
-              id: 'partner_names',
-              desc: false
-            }
-          ]}
-        />
-
-        <Button
-          name="Back"
-          url="adminmain"
-          onClickHandler={() => {
-            console.log('going to admin main screen')
-          }}
-        />
+        <Row>
+          <Col sm={12} md={12}>
+            <ReactTable
+              data={this.state.data}
+              columns={[
+                {
+                  Header: 'MFI Partner',
+                  accessor: 'partner_names',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Edit',
+                  id: 'edit-button',
+                  width: 150,
+                  Cell: props => <Button name="Edit" />
+                },
+                {
+                  Header: 'Remove',
+                  id: 'delete-button',
+                  width: 150,
+                  Cell: ({ row, original }) => {
+                    // Generate row such that value of text field is rememebered to pass into remove loan function
+                    return (
+                      <Button
+                        name="Remove"
+                        url="partnerlist"
+                        onClickHandler={() =>
+                          this.removeLoan(original.partner_names)} // Send text value to remove loan function
+                      />
+                    )
+                  }
+                }
+              ]}
+              defaultSorted={[
+                {
+                  id: 'partner_names',
+                  desc: false
+                }
+              ]}
+            />
+          </Col>
+        </Row>
       </Grid>
     )
   }
