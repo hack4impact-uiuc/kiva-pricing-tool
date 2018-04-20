@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Bootstrap from 'react-bootstrap'
 import axios from 'axios'
+import './../styles/textfield.css'
 
 class TextField extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class TextField extends Component {
     }
     return (
       <div id="className">
-        {this.props.id}:
+        {this.props.id}
         <input
           className="form-control input-sm"
           type={this.props.input_type}
@@ -81,7 +82,7 @@ class TextField extends Component {
           autofocus
         />
         <br />
-        <p>{this.state.error_message}</p>
+        <p className="error-message">{this.state.error_message}</p>
       </div>
     )
   }
