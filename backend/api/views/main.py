@@ -341,6 +341,7 @@ def get_product_entry():
         for value in db.session.query(Loan.product_type).distinct():
             product_list.append(value[0])
 
+
         # Return list of product types under given mfi name and theme id
         data = {'product_types' : [entry for entry in product_list]}
         return create_response(data = data, status = 200)

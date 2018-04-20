@@ -589,9 +589,11 @@ def update_repayment_schedule(origin_matrix, user_change, input_form):
     origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
     origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
 
+
     new_apr = cal_apr_manual_mode(origin_matrix, grace_period_balloon)
     origin_matrix = round_matrix(origin_matrix)
     return new_apr, origin_matrix
+
 
 def round_matrix(origin_matrix):
     for row_idx in range(PRINCIPAL_DISBURSED_IDX, CASH_FLOW_IDX+1):

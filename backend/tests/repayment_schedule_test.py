@@ -286,12 +286,14 @@ def on_days_change(origin_matrix, changes_on_days, changes_on_date, installment_
 
     return new_date_arr, new_day_num_arr
 
+
 def cal_apr_manual_mode(origin_matrix, grace_period_balloon):
     test = [(-10000, '1-Jan-2008'),(2750, '1-Mar-2008'),(4250, '30-Oct-2008'),(3250, '15-Feb-2009'),(2750, '1-Apr-2009')]
     date_col = origin_matrix[DATE_IDX]
     cash_flow = origin_matrix[CASH_FLOW_IDX]
     date_cash_list = []
     print (len(origin_matrix[0]))
+   
     for idx in range(len(origin_matrix[0])):
         date = datetime.datetime.strptime(date_col[idx], '%d-%b-%Y')
         date_cash_list.append((date, cash_flow[idx]))
@@ -300,6 +302,32 @@ def cal_apr_manual_mode(origin_matrix, grace_period_balloon):
     period_num = len(origin_matrix[0])
     # convert from EIR to APR 
     return (period_num * ((1+EIR)**(1/period_num)-1))
+
+# def xirr1(transactions):
+#     years = [(ta[0] - transactions[0][0]).days / 365.0 for ta in transactions]
+#     residual = 1
+#     step = 0.05
+#     guess = 0.05
+#     epsilon = 0.0001
+#     limit = 10000
+#     while abs(residual) > epsilon and limit > 0:
+#         limit -= 1
+#         residual = 0.0
+#         for i, ta in enumerate(transactions):
+#             print ((guess, years[i]))
+#             residual += ta[1] / pow(guess, years[i])
+#         print ('***')
+#         print (guess)
+#         print (residual)
+#         if abs(residual) > epsilon:
+#             if residual > 0:
+#                 guess += step
+#             else:
+#                 guess -= step
+#                 step /= 2.0
+#     return guess-1
+
+
 
 #########
 # NOTE each ROW correspond to an column in the excel tool. 
@@ -315,6 +343,7 @@ user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(objec
 #     for j in range(len(origin_matrix[1])):
 #         user_change[i][j] = None
 user_change[:] = None
+
 
 user_change[PRINCIPAL_PAID_IDX][4] = 100
 # user_change[PRINCIPAL_PAID_IDX][5] = 100
@@ -364,5 +393,7 @@ for row_idx in range(PRINCIPAL_DISBURSED_IDX, CASH_FLOW_IDX+1):
 
 
 print (origin_matrix)
+
 print (cal_apr_manual_mode(origin_matrix, grace_period_balloon))
+
 print ('{0}%'.format(round_float(np.irr(origin_matrix[CASH_FLOW_IDX]) * periods_per_year[installments_period_dict[installment_time_period]]*100, 2)))

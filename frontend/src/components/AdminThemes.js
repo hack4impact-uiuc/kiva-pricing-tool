@@ -24,7 +24,9 @@ class AdminThemes extends Component {
     axios.get('http://127.0.0.1:3453/getAllLT').then(response => {
       // Loop through response array to insert correctly formatted data into state.data array ( {loan_theme: THEME NAME} )
       for (let theme of response.data.result.loan_theme) {
-        this.setState({ data: this.state.data.concat({ loan_theme: theme }) })
+        this.setState({
+          data: this.state.data.concat({ loan_theme: theme })
+        })
       }
     })
   }
