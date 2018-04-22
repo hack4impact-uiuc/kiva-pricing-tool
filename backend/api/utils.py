@@ -6,6 +6,7 @@ from calendar import monthrange
 import calendar
 from api.util_xirr import *
 
+PERIOD_IDX = 0
 DATE_IDX = 1
 DAY_IDX = 2
 PRINCIPAL_DISBURSED_IDX = 3
