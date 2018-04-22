@@ -214,7 +214,7 @@ class APRInputs extends Component {
                 />
               </Col>
             </Row>
-            <Row>
+            <Row className="vertical-margin-item">
               <Col sm={4} md={4}>
                 <TextField
                   id="Loan Amount"
@@ -228,7 +228,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <TextField
-                  id="Number of Terms"
+                  id="Number of Installments"
                   reduxId="installment"
                   hint="ex. 12"
                   typeVal="int"
@@ -257,7 +257,7 @@ class APRInputs extends Component {
                 />
               </Col>
             </Row>
-            <Row>
+            <Row className="vertical-margin-item">
               <Col sm={6} md={6}>
                 <TextField
                   id="Nominal Interest Rate"
@@ -290,7 +290,7 @@ class APRInputs extends Component {
               </Col>
             </Row>
 
-            <Row>
+            <Row className="vertical-margin-item">
               <Col sm={3} md={3}>
                 <TextField
                   id="Grace and Prepay"
@@ -304,6 +304,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={3} md={3}>
                 <TextField
+                  className="preserve-id"
+                  id=""
                   reduxId="gracePeriodInterestPay"
                   hint="Int Pmt"
                   typeVal="float"
@@ -314,6 +316,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={3} md={3}>
                 <TextField
+                  className="preserve-id"
+                  id=""
                   reduxId="gracePeriodInterestCalculate"
                   hint="Int Calc"
                   typeVal="float"
@@ -324,6 +328,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={3} md={3}>
                 <TextField
+                  className="preserve-id"
+                  id=""
                   reduxId="gracePeriodBalloon"
                   hint="Balloon"
                   typeVal="float"
@@ -399,10 +405,17 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={12} md={12}>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield placeholder-textfield"
+                  id="On Fees"
+                  hint="PLACEHOLDER"
+                />
+              </Col>
+              <Col sm={6} md={6}>
                 <TextField
                   className="inline-textfield"
-                  id="Value Added Tax % on Fees"
+                  hint="Ongoing %"
                   reduxId="taxPercentFees"
                   typeVal="float"
                   limit="100"
@@ -412,10 +425,17 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={12} md={12}>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield placeholder-textfield"
+                  id="On Interest"
+                  hint="PLACEHOLDER"
+                />
+              </Col>
+              <Col sm={6} md={6}>
                 <TextField
                   className="inline-textfield"
-                  id="Value Added Tax % on Interest"
+                  hint="Ongoing %"
                   reduxId="taxPercentInterest"
                   typeVal="float"
                   limit="100"
@@ -541,10 +561,18 @@ class APRInputs extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={12} md={12}>
+              <Col sm={6} md={6} className="bs-button-right">
                 <TextField
+                  className="inline-textfield placeholder-textfield"
                   id="Interest Paid on Deposit"
+                  hint="placeholder"
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
                   reduxId="interestPaidOnDepositPercent"
+                  hint="Ongoing %"
                   typeVal="float"
                   limit="900000000"
                   textBody={formDataReducer.interestPaidOnDepositPercent}
@@ -554,7 +582,7 @@ class APRInputs extends Component {
             </Row>
           </Row>
 
-          <Row>
+          <Row className="vertical-margin-item">
             <Col xs={6} sm={6} md={6}>
               <Button
                 className="button-fancy"

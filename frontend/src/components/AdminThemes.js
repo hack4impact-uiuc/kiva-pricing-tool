@@ -113,7 +113,7 @@ class AdminThemes extends Component {
               />
             </div>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={5} md={5}>
             <h2>
               {' '}
               <small> Add Loan Theme: </small>{' '}
@@ -126,9 +126,11 @@ class AdminThemes extends Component {
               limit="100"
               ref="addloantheme"
             />
-
+          </Col>
+          <Col sm={1} md={1}>
             <Button
-              name="Add "
+              className="button-image-add"
+              name="Add"
               url="themelist"
               onClickHandler={() => {
                 this.addLoan(this.refs.addloantheme.state.textBody)
@@ -163,7 +165,9 @@ class AdminThemes extends Component {
                   Header: 'Edit',
                   id: 'edit-button',
                   width: 150,
-                  Cell: props => <Button name="Edit" />
+                  Cell: props => (
+                    <Button className="button-image-edit" name="Edit" />
+                  )
                 },
                 {
                   Header: 'Remove',
@@ -173,6 +177,7 @@ class AdminThemes extends Component {
                     // Generate row such that value of text field is rememebered to pass into remove loan function
                     return (
                       <Button
+                        className="button-image-remove"
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
