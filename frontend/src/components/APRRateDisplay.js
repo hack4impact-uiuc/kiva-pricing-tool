@@ -278,7 +278,7 @@ class APRRateDisplay extends Component {
     createDownloadLink.click();
   }
 
-  createChart(paramVisual) {
+  changeChart(paramVisual) {
     		this.setState({visualType: paramVisual})
 		switch (paramVisual){
 			case 'bar':
