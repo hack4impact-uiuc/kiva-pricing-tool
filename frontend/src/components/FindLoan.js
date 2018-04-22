@@ -383,6 +383,7 @@ class FindLoan extends Component {
           <Row>
             <Col xs={6} sm={6} md={6}>
               <Button
+                className="button-fancy"
                 name="Back"
                 url=""
                 onClickHandler={() => resetFormData()}
@@ -390,6 +391,7 @@ class FindLoan extends Component {
             </Col>
             <Col xs={6} sm={6} md={6} className="bs-button-right">
               <Button
+                className="button-fancy"
                 disable={!this.inputsEntered()}
                 name="Duplicate"
                 url="form1"

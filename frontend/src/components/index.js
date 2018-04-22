@@ -6,7 +6,6 @@ import Bootstrap from 'react-bootstrap'
 import IntroPage from './../containers/IntroPage'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
-import LargeTextInput from './LargeTextInput.js'
 import TextField from './TextField.js'
 import APRInputs from './../containers/APRInputs'
 import NewLoan from './../containers/NewLoan'
@@ -22,7 +21,6 @@ import { BrowserRouter } from 'react-router-dom'
 export {
   Navbar,
   Button,
-  LargeTextInput,
   Dropdown,
   TextField,
   APRInputs,
