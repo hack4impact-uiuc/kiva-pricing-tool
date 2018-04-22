@@ -121,7 +121,7 @@ class AdminPartners extends Component {
               />
             </div>
           </Col>
-          <Col sm={6} md={6}>
+          <Col sm={5} md={5}>
             <h2>
               {' '}
               <small> Add Partner: </small>{' '}
@@ -134,8 +134,10 @@ class AdminPartners extends Component {
               limit="5000"
               ref="addpartnername"
             />
-
+          </Col>
+          <Col sm={1} md={1}>
             <Button
+              className="button-image-add"
               name="Add "
               url="partnerlist"
               onClickHandler={() => {
@@ -175,7 +177,9 @@ class AdminPartners extends Component {
                   Header: 'Edit',
                   id: 'edit-button',
                   width: 150,
-                  Cell: props => <Button name="Edit" />
+                  Cell: props => (
+                    <Button className="button-image-edit" name="Edit" />
+                  )
                 },
                 {
                   Header: 'Remove',
@@ -185,6 +189,7 @@ class AdminPartners extends Component {
                     // Generate row such that value of text field is rememebered to pass into remove loan function
                     return (
                       <Button
+                        className="button-image-remove"
                         name="Remove"
                         url="partnerlist"
                         onClickHandler={() =>
