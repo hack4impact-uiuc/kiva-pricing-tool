@@ -27,12 +27,14 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
+
       addconfirm: false,
       adderror: false,
       removeshow: false,
       savesuccess: false,
       editing: false,
-      edited_partners: []
+      edited_partners: [],
+      addshow: false
     }
     this.renderEditable = this.renderEditable.bind(this)
   }
@@ -139,6 +141,15 @@ class AdminPartners extends Component {
       this.setState({ addshow: true })
     }
   }
+
+  //     this.setState({ addshow: true })
+  //     let data = { partner_name: partner_name }
+  //     axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
+  //       this.setState({
+  //         data: this.state.data.concat({ partner_names: partner_name })
+  //       })
+  //     })
+  //   }
 
   removePartner(partner_name) {
     this.setState({ removeshow: true })

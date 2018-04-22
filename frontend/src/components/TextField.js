@@ -10,7 +10,7 @@ class TextField extends Component {
       id: this.props.text,
       error_message: '',
       type: this.props.typeVal,
-      textBody: ''
+      textBody: this.props.textBody ? this.props.textBody : ''
     }
   }
 
@@ -58,6 +58,9 @@ class TextField extends Component {
       this.setState({ error_message: '' })
     }
     this.setState({ textBody: value })
+    // console.log(this.props.reduxId, value)
+    // console.log(this.props.onTextInputChange)
+    this.props.onTextInputChange(this.props.reduxId, value)
   }
 
   render() {
@@ -73,6 +76,7 @@ class TextField extends Component {
           id={this.props.text}
           placeholder={this.props.hint}
           onChange={event => this.handleChange(event)}
+          value={this.state.textBody}
           required
           autofocus
         />
