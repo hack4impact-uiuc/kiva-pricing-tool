@@ -36,6 +36,193 @@ class FindLoan extends Component {
     router: PropTypes.object.isRequired
   }
 
+  getTables() {
+    const { formDataReducer, changedFormData } = this.props
+    let data = {
+      partner_name: formDataReducer.mfi[0],
+      loan_theme: formDataReducer.loanType[0],
+      product_type: formDataReducer.productType[0],
+      version_num: formDataReducer.versionNum[0]
+    }
+
+    axios
+      .post('http://127.0.0.1:3453/findLoan', data)
+      .then(response => {
+        const apr = response.data.result.nominal_apr
+        const orig_matrix = response.data.result.original_matrix
+        const user_matrix = response.data.result.user_matrix
+        const calc_matrix = response.data.result.calc_matrix
+        changedFormData('aprRate', apr)
+        changedFormData(
+          'installmentTimePeriod',
+          response.data.result.installment_time_period
+        )
+        changedFormData('repaymentType', response.data.result.repayment_type)
+        changedFormData(
+          'interestTimePeriod',
+          response.data.result.interest_time_period
+        )
+        changedFormData(
+          'interestPaymentType',
+          response.data.result.interest_payment_type
+        )
+        changedFormData(
+          'interestCalculationType',
+          response.data.result.interest_calculation_type
+        )
+        changedFormData('loanAmount', response.data.result.loan_amount)
+        changedFormData('installment', response.data.result.installment)
+        changedFormData(
+          'nominalInterestRate',
+          response.data.result.nominal_interest_rate
+        )
+        changedFormData(
+          'gracePeriodPrincipal',
+          response.data.result.grace_period_principal
+        )
+        changedFormData(
+          'gracePeriodInterestPay',
+          response.data.result.grace_period_interest_pay
+        )
+        changedFormData(
+          'gracePeriodInterestCalculate',
+          response.data.result.grace_period_interest_calculate
+        )
+        changedFormData(
+          'gracePeriodBalloon',
+          response.data.result.grace_period_balloon
+        )
+        changedFormData(
+          'feePercentUpfront',
+          response.data.result.fee_percent_upfront
+        )
+        changedFormData(
+          'feePercentOngoing',
+          response.data.result.fee_percent_ongoing
+        )
+        changedFormData(
+          'feeFixedUpfront',
+          response.data.result.fee_fixed_upfront
+        )
+        changedFormData(
+          'feeFixedOngoing',
+          response.data.result.fee_fixed_ongoing
+        )
+        changedFormData(
+          'xPercentFees',
+          response.data.result.insurance_percent_upfront
+        )
+        changedFormData(
+          'xPercentInterest',
+          response.data.result.insurance_percent_ongoing
+        )
+        changedFormData(
+          'insurancePercentUpfront',
+          response.data.result.insurance_fixed_upfront
+        )
+        changedFormData(
+          'insurancePercentOngoing',
+          response.data.result.insurance_fixed_ongoing
+        )
+        changedFormData(
+          'insuranceFixedUpfront',
+          response.data.result.tax_percent_fees
+        )
+        changedFormData(
+          'insuranceFixedOngoing',
+          response.data.result.tax_percent_interest
+        )
+        changedFormData(
+          'securityDepositPercentUpfront',
+          response.data.result.security_deposit_percent_upfront
+        )
+        changedFormData(
+          'securityDepositPercentOngoing',
+          response.data.result.security_deposit_percent_ongoing
+        )
+        changedFormData(
+          'securityDepositFixedUpfront',
+          response.data.result.security_deposit_fixed_upfront
+        )
+        changedFormData(
+          'securityDepositFixedOngoing',
+          response.data.result.security_deposit_fixed_ongoing
+        )
+        changedFormData(
+          'interestPaidOnDepositPercent',
+          response.data.result.interest_paid_on_deposit_percent
+        )
+        let reformatted_matrix = []
+        let reformatted_user_matrix = []
+        let reformatted_calc_matrix = []
+        if (orig_matrix != null && user_matrix != null && calc_matrix != null) {
+          for (let i = 0; i < orig_matrix[0].length; i++) {
+            reformatted_matrix.push({
+              period_num: orig_matrix[0][i],
+              payment_due_date: orig_matrix[1][i],
+              days: orig_matrix[2][i],
+              amount_due: orig_matrix[3][i],
+              principal_payment: orig_matrix[4][i],
+              balance: orig_matrix[5][i],
+              interest: orig_matrix[6][i],
+              fees: orig_matrix[7][i],
+              insurance: orig_matrix[8][i],
+              taxes: orig_matrix[9][i],
+              security_deposit: orig_matrix[10][i],
+              security_interest_paid: orig_matrix[11][i],
+              deposit_withdrawal: orig_matrix[12][i],
+              deposit_balance: orig_matrix[13][i],
+              total_cashflow: orig_matrix[14][i]
+            })
+            reformatted_user_matrix.push({
+              period_num: user_matrix[0][i],
+              payment_due_date: user_matrix[1][i],
+              days: user_matrix[2][i],
+              amount_due: user_matrix[3][i],
+              principal_payment: user_matrix[4][i],
+              balance: user_matrix[5][i],
+              interest: user_matrix[6][i],
+              fees: user_matrix[7][i],
+              insurance: user_matrix[8][i],
+              taxes: user_matrix[9][i],
+              security_deposit: user_matrix[10][i],
+              security_interest_paid: user_matrix[11][i],
+              deposit_withdrawal: user_matrix[12][i],
+              deposit_balance: user_matrix[13][i],
+              total_cashflow: user_matrix[14][i]
+            })
+            reformatted_calc_matrix.push({
+              period_num: calc_matrix[0][i],
+              payment_due_date: calc_matrix[1][i],
+              days: calc_matrix[2][i],
+              amount_due: calc_matrix[3][i],
+              principal_payment: calc_matrix[4][i],
+              balance: calc_matrix[5][i],
+              interest: calc_matrix[6][i],
+              fees: calc_matrix[7][i],
+              insurance: calc_matrix[8][i],
+              taxes: calc_matrix[9][i],
+              security_deposit: calc_matrix[10][i],
+              security_interest_paid: calc_matrix[11][i],
+              deposit_withdrawal: calc_matrix[12][i],
+              deposit_balance: calc_matrix[13][i],
+              total_cashflow: calc_matrix[14][i]
+            })
+          }
+        }
+        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
+        calc_matrix[0]['period_num'] = 'Disbursement Info'
+        changedFormData('original_repayment_schedule', reformatted_matrix)
+        changedFormData('user_repayment_schedule', reformatted_user_matrix)
+        changedFormData('calc_repayment_schedule', reformatted_calc_matrix)
+      })
+      .catch(function(error) {
+        console.log(
+          error + ' there was an error with the request' + data.start_name
+        )
+      })
+  }
+
   componentDidMount() {
     const { resetFormData } = this.props
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
@@ -156,8 +343,11 @@ class FindLoan extends Component {
               <Button
                 disable={!this.inputsEntered()}
                 name="Continue"
-                url="form1"
-                onClickHandler={() => changedFormData('back', 'findloan')}
+                url="output"
+                onClickHandler={() => {
+                  changedFormData('back', 'findloan')
+                  this.getTables()
+                }}
               />
             </Col>
           </Row>

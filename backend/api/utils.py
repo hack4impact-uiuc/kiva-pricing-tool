@@ -4,6 +4,7 @@ import numpy as np
 import datetime
 from calendar import monthrange
 import calendar
+from api.util_xirr import *
 
 DATE_IDX = 1
 DAY_IDX = 2
@@ -59,7 +60,7 @@ class InvalidUsage(Exception):
         return rv
 
 def round_float(f, n):
-    return np.floor(f * 10 ** n + 0.5) / 10**n
+    return np.floor(float(f) * 10 ** n + 0.5) / 10**n
 
 #TODO: add rounding before json
 #TODO: add commits
@@ -127,7 +128,7 @@ def cal_apr_helper(input_json):
                     print('impossible repayment_type')
                     exit(1)
 
-                
+
                 if repayment_type == 'equal installments (amortized)':
                     principal_paid_arr[idx] = monthly_payment - interest_paid_arr[idx]
                 elif repayment_type == 'equal principal payments':
@@ -140,7 +141,7 @@ def cal_apr_helper(input_json):
             principal_paid_arr[-1] = loan_amount
 
         if interest_calculation_type == 'initial amount or flat':
-            interest_paid_arr[1:] = balance_arr[0] * scaled_interest 
+            interest_paid_arr[1:] = balance_arr[0] * scaled_interest
 
         # for grace period interest calculation
         for idx in range(1, grace_period_interest_calculate+1):
@@ -205,7 +206,7 @@ def cal_apr_helper(input_json):
 
         result = np.zeros(installment + 1)
         result[0] = loan_amount
-        result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + principal_paid_arr + security_deposit) 
+        result += -1 * (fees_paid + insurance_paid + taxes + interest_paid_arr + principal_paid_arr + security_deposit)
 
         #### below is experimental
         if grace_period_balloon != 0:
@@ -244,13 +245,13 @@ def cal_apr_helper(input_json):
             security_deposit_balance[idx] = np.sum(security_deposit[:idx+1]) + np.sum(security_deposit_interest_paid[:idx+1])
         security_deposit_balance[-1] = 0
         schedule_matrix.append(security_deposit_balance)
-        schedule_matrix.append(result) 
+        schedule_matrix.append(result)
         schedule_matrix = np.array(schedule_matrix)
 
         return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
 
     except:
-        #TODO status code not sure 
+        #TODO status code not sure
         return None
 
 #  helper function for calculate the number of days in the specified period
@@ -302,7 +303,7 @@ def calc_origin_days(day, month, year, installment_time_period, num_installment)
 #######
 # Below are functions for repayment schedule change
 #######
-# recalculate the days column on repayment schedule 
+# recalculate the days column on repayment schedule
 
 def on_principal_change(origin_matrix, changes_on_principal, grace_period_balloon):
     aggreg = 0
@@ -313,7 +314,7 @@ def on_principal_change(origin_matrix, changes_on_principal, grace_period_balloo
         if changes_on_principal[idx] != None:
             aggreg += changes_on_principal[idx] - new_principal_paid[idx]
             new_principal_paid[idx] = changes_on_principal[idx]
-    
+
     # check if user has changed the last row of principal paid column
     if changes_on_principal[-1-grace_period_balloon] != None:
         new_principal_paid[-1-grace_period_balloon] = changes_on_principal[-1-grace_period_balloon]
@@ -395,7 +396,7 @@ def update_interest(origin_matrix, interest_calculation_type, scaled_interest, g
         new_interest_paid_arr[idx] = balance[idx-1] * scaled_interest
 
     if interest_calculation_type == 'initial amount or flat':
-        new_interest_paid_arr[1:] = balance[0] * scaled_interest 
+        new_interest_paid_arr[1:] = balance[0] * scaled_interest
 
     # for grace period interest calculation
     for idx in range(1, grace_period_interest_calculate+1):
@@ -458,7 +459,7 @@ def on_interest_change(origin_matrix, changes_on_interest, grace_period_balloon)
             # check if the change is made on last row
             if idx != len(new_interest)-1-grace_period_balloon:
                 new_interest[idx+1] += new_interest[idx] - changes_on_interest[idx]
-            
+
             new_interest[idx] = changes_on_interest[idx]
     return new_interest
 
@@ -541,35 +542,52 @@ def cal_apr_manual_mode(origin_matrix, grace_period_balloon):
     date_col = origin_matrix[DATE_IDX]
     cash_flow = origin_matrix[CASH_FLOW_IDX]
     date_cash_list = []
-    print (len(origin_matrix[0]))
+    # print (len(origin_matrix[0]))
     for idx in range(len(origin_matrix[0])):
         date = datetime.datetime.strptime(date_col[idx], '%d-%b-%Y')
         date_cash_list.append((date, cash_flow[idx]))
-    print (date_cash_list)
+    # print (date_cash_list)
     EIR = xirr(date_cash_list)
     period_num = len(origin_matrix[0])
-    # convert from EIR to APR 
+    # convert from EIR to APR
     return (period_num * ((1+EIR)**(1/period_num)-1))
 
 def update_repayment_schedule(origin_matrix, user_change, input_form):
     installment_time_period = input_form['installment_time_period']
-    grace_period_balloon = input_form['grace_period_balloon']
-    security_deposit_percent_ongoing = input_form['security_deposit_percent_ongoing']
-    security_deposit_fixed_ongoing = input_form['security_deposit_fixed_ongoing']
-    fee_percent_ongoing = input_form['fee_percent_ongoing']
-    fee_fixed_ongoing = input_form['fee_percent_ongoing']
-    insurance_fixed_ongoing = input_form['insurance_fixed_ongoing']
-    insurance_percent_ongoing = input_form['insurance_percent_ongoing']
+    grace_period_balloon = int(input_form['grace_period_balloon'])
+    security_deposit_percent_ongoing = float(input_form['security_deposit_percent_ongoing'])/ 100
+    security_deposit_fixed_ongoing = float(input_form['security_deposit_fixed_ongoing'])
+    fee_percent_ongoing = float(input_form['fee_percent_ongoing']) / 100
+    fee_fixed_ongoing = float(input_form['fee_fixed_ongoing'])
+    insurance_percent_ongoing = float(input_form['insurance_percent_ongoing']) / 100
+    insurance_fixed_ongoing  = float(input_form['insurance_fixed_ongoing'])
     interest_calculation_type = input_form['interest_calculation_type']
-    grace_period_interest_calculate = input_form['grace_period_interest_calculate']
-    grace_period_interest_pay = input_form['grace_period_interest_pay']
-    tax_percent_fees = input_form['tax_percent_fees']
-    tax_percent_interest = input_form['tax_percent_interest']
+    grace_period_interest_calculate = int(input_form['grace_period_interest_calculate'])
+    grace_period_interest_pay = int(input_form['grace_period_interest_pay'])
+    tax_percent_fees = float(input_form['tax_percent_fees']) / 100
+    tax_percent_interest = float(input_form['tax_percent_interest']) / 100
 
-    nominal_interest_rate = input_form['nominal_interest_rate']
+    nominal_interest_rate = float(input_form['nominal_interest_rate']) / 100
     interest_time_period = input_form['interest_time_period']
-    interest_paid_on_deposit_percent = input_form['interest_paid_on_deposit_percent']
+    interest_paid_on_deposit_percent = float(input_form['interest_paid_on_deposit_percent'])/ 100
+    new_matrix = []
+    for i in range(len(user_change)):
+        if i in [0,2]:
+            new_matrix.append(origin_matrix[i].astype(int))
+        elif i != 1:
+            new_matrix.append(origin_matrix[i].astype(float))
+        else:
+            new_matrix.append(origin_matrix[i])
+        for j in range(len(user_change[0])):
+            if i in [0,2]:
+                if user_change[i][j] != None:
+                    user_change[i][j] = int(user_change[i][j])
+            elif i != 1:
+                if user_change[i][j] != None:
+                    user_change[i][j] = float(user_change[i][j])
 
+    origin_matrix = new_matrix
+    origin_matrix[0] = list(range(len(origin_matrix[0])))
     scaled_interest, security_deposit_scaled_interest = cal_scaled_interest(nominal_interest_rate, installment_time_period, interest_time_period, interest_paid_on_deposit_percent)
 
     origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], installment_time_period)
@@ -588,8 +606,6 @@ def update_repayment_schedule(origin_matrix, user_change, input_form):
     origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix, grace_period_balloon)
     origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
     origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
-
-
     new_apr = cal_apr_manual_mode(origin_matrix, grace_period_balloon)
     origin_matrix = round_matrix(origin_matrix)
     return new_apr, origin_matrix

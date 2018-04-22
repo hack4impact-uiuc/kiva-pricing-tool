@@ -55,8 +55,12 @@ class APRRateDisplay extends Component {
     if (
       formDataReducer.calc_repayment_schedule[cellInfo.index][
         cellInfo.column.id
-      ] !== e.target.innerHTML
+      ].toString() !== e.target.innerHTML
     ) {
+      formDataReducer.user_repayment_schedule[cellInfo.index][
+        cellInfo.column.id
+      ] =
+        e.target.innerHTML
       let inputs = {
         partner_name: formDataReducer.mfi[0],
         loan_theme: formDataReducer.loanType[0],
@@ -98,43 +102,65 @@ class APRRateDisplay extends Component {
         interest_paid_on_deposit_percent:
           formDataReducer.interestPaidOnDepositPercent[0]
       }
-      let user_change = [[], [], [], [], [], [], [], [], [], [], [], [], []]
-      for (let i = 0; i < formDataReducer.calc_repayment_schedule.length; i++) {
+      let user_change = [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+      for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
         user_change[0].push(
-          formDataReducer.calc_repayment_schedule[i]['period_num']
+          formDataReducer.user_repayment_schedule[i]['period_num']
         )
         user_change[1].push(
-          formDataReducer.calc_repayment_schedule[i]['payment_due_date']
+          formDataReducer.user_repayment_schedule[i]['payment_due_date']
         )
-        user_change[2].push(formDataReducer.calc_repayment_schedule[i]['days'])
+        user_change[2].push(formDataReducer.user_repayment_schedule[i]['days'])
         user_change[3].push(
-          formDataReducer.calc_repayment_schedule[i]['amount_due']
+          formDataReducer.user_repayment_schedule[i]['amount_due']
         )
         user_change[4].push(
-          formDataReducer.calc_repayment_schedule[i]['principal_payment']
+          formDataReducer.user_repayment_schedule[i]['principal_payment']
         )
         user_change[5].push(
-          formDataReducer.calc_repayment_schedule[i]['interest']
+          formDataReducer.user_repayment_schedule[i]['interest']
         )
-        user_change[6].push(formDataReducer.calc_repayment_schedule[i]['fees'])
+        user_change[6].push(formDataReducer.user_repayment_schedule[i]['fees'])
         user_change[7].push(
-          formDataReducer.calc_repayment_schedule[i]['insurance']
+          formDataReducer.user_repayment_schedule[i]['insurance']
         )
-        user_change[8].push(formDataReducer.calc_repayment_schedule[i]['taxes'])
+        user_change[8].push(formDataReducer.user_repayment_schedule[i]['taxes'])
         user_change[9].push(
-          formDataReducer.calc_repayment_schedule[i]['security_deposit']
+          formDataReducer.user_repayment_schedule[i]['security_deposit']
         )
         user_change[10].push(
-          formDataReducer.calc_repayment_schedule[i]['security_interest_paid']
+          formDataReducer.user_repayment_schedule[i]['security_interest_paid']
         )
         user_change[11].push(
-          formDataReducer.calc_repayment_schedule[i]['balance']
+          formDataReducer.user_repayment_schedule[i]['balance']
         )
         user_change[12].push(
-          formDataReducer.calc_repayment_schedule[i]['deposit_balance']
+          formDataReducer.user_repayment_schedule[i]['deposit_withdrawal']
+        )
+        user_change[13].push(
+          formDataReducer.user_repayment_schedule[i]['deposit_balance']
+        )
+        user_change[14].push(
+          formDataReducer.user_repayment_schedule[i]['total_cashflow']
         )
       }
-      user_change[0][0] = '0'
+      // user_change[0][0] = '0'
       let data = {
         input_form: inputs,
         user_change: user_change
@@ -159,7 +185,9 @@ class APRRateDisplay extends Component {
               taxes: recal_matrix[9][i],
               security_deposit: recal_matrix[10][i],
               security_interest_paid: recal_matrix[11][i],
-              deposit_balance: recal_matrix[12][i]
+              deposit_withdrawal: recal_matrix[12][i],
+              deposit_balance: recal_matrix[13][i],
+              total_cashflow: recal_matrix[14][i]
             })
           }
         }
@@ -174,9 +202,10 @@ class APRRateDisplay extends Component {
       cellInfo.column.id !== 'period_num' &&
       cellInfo.column.id !== 'amount_due' &&
       cellInfo.column.id !== 'balance' &&
-      cellInfo.column.id !== 'security_deposit' &&
+      cellInfo.column.id !== 'deposit_withdrawal' &&
       cellInfo.column.id !== 'security_interest_paid' &&
-      cellInfo.column.id !== 'deposit_balance'
+      cellInfo.column.id !== 'deposit_balance' &&
+      cellInfo.column.id !== 'total_cashflow'
     return (
       <div
         style={
@@ -375,8 +404,18 @@ class APRRateDisplay extends Component {
               Cell: this.renderEditable
             },
             {
+              Header: 'Deposit Withdrawal',
+              accessor: 'deposit_withdrawal',
+              Cell: this.renderEditable
+            },
+            {
               Header: 'Deposit Balance',
               accessor: 'deposit_balance',
+              Cell: this.renderEditable
+            },
+            {
+              Header: 'Total Cashflow',
+              accessor: 'total_cashflow',
               Cell: this.renderEditable
             }
           ]}

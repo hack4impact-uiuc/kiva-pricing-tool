@@ -143,7 +143,9 @@ class APRInputs extends Component {
               taxes: matrix[9][i],
               security_deposit: matrix[10][i],
               security_interest_paid: matrix[11][i],
-              deposit_balance: matrix[12][i]
+              deposit_withdrawal: matrix[12][i],
+              deposit_balance: matrix[13][i],
+              total_cashflow: matrix[14][i]
             })
             user_matrix.push({
               period_num: null,
@@ -158,7 +160,9 @@ class APRInputs extends Component {
               taxes: null,
               security_deposit: null,
               security_interest_paid: null,
-              deposit_balance: null
+              deposit_withdrawal: null,
+              deposit_balance: null,
+              total_cashflow: null
             })
             calc_matrix.push({
               period_num: matrix[0][i],
@@ -173,7 +177,9 @@ class APRInputs extends Component {
               taxes: matrix[9][i],
               security_deposit: matrix[10][i],
               security_interest_paid: matrix[11][i],
-              deposit_balance: matrix[12][i]
+              deposit_withdrawal: matrix[12][i],
+              deposit_balance: matrix[13][i],
+              total_cashflow: matrix[14][i]
             })
           }
         }

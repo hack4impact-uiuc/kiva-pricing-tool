@@ -51,10 +51,13 @@ def cal_apr():
     payload = {}
     apr, matrix = cal_apr_helper(input_json)
     matrix = round_matrix(matrix)
+    matrix_list = []
+    for a in matrix:
+        matrix_list.append(list(a))
     if apr == None:
         return create_response({}, status=400, message='missing components for calculating apr rate')
     else:
-        return create_response(data={'apr':apr, 'matrix':matrix}, status=200)
+        return create_response(data={'apr':apr, 'matrix':matrix_list}, status=200)
 
 @app.route(RECALCULATE_URL, methods=['POST'])
 def cal_repayment():
@@ -65,14 +68,18 @@ def cal_repayment():
     input_json = request.get_json()
     input_form = input_json['input_form']
     user_change = input_json['user_change']
-    payload = {}
+
     try:
-        apr, origin_matrix = cal_apr(input_form)
+        apr, origin_matrix = cal_apr_helper(input_form)
         apr, recal_matrix = update_repayment_schedule(origin_matrix, user_change, input_form)
-        payload['apr'] =  apr 
-        payload['recal_matrix'] = recal_matrix
-        return create_response(payload)
+        matrix_list = []
+        for a in recal_matrix:
+            matrix_list.append(list(a))
+        payload = {'apr': apr, 'recal_matrix': matrix_list}
+        print(payload)
+        return create_response(data=payload, status=200)
     except Exception as e:
+        print(str(e))
         return create_response(message=str(e), status=400)
 
 @app.route(GET_VERSION_NUM)
@@ -330,7 +337,7 @@ def get_product_entry():
         # Get partner name and loan theme from passed args
         mfi_name = request.args['partner_name']
         theme_name = request.args['loan_theme']
-        
+
         # Get corresponding ids for partner and loan theme
         mfi_id = Partner.query.filter_by(partner_name = mfi_name).first().id
         theme_id = Theme.query.filter_by(loan_theme = theme_name).first().id
@@ -391,6 +398,71 @@ def get_loan():
         # Get corresponding row from RETURNED IDs and names & return data
         id_string = "" + str(mfi_id) + "_" + str(theme_id) + "_" + product_type + "_" + str(version)
         entry = Loan.query.get(id_string)
+        rows = RepaymentSchedule.query.filter_by(id_string).all()
+        sorted_rows = sorted(rows, key=lambda x: x.period_num)
+        orig_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+        user_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+        calc_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+        for row in sorted_rows:
+            orig_matrix[0].append(row.period_num)
+            user_matrix[0].append(row.period_num_user)
+            calc_matrix[0].append(row.period_num_calc)
+
+            orig_matrix[1].append(row.payment_due_date)
+            user_matrix[1].append(row.payment_due_date_user)
+            calc_matrix[1].append(row.payment_due_date_calc)
+
+            orig_matrix[2].append(row.days)
+            user_matrix[2].append(row.days_user)
+            calc_matrix[2].append(row.days_calc)
+
+            orig_matrix[3].append(row.amount_due)
+            user_matrix[3].append(row.amount_due_user)
+            calc_matrix[3].append(row.amount_due_calc)
+
+            orig_matrix[4].append(row.principal_payment)
+            user_matrix[4].append(row.principal_payment_user)
+            calc_matrix[4].append(row.principal_payment_calc)
+
+            orig_matrix[5].append(row.balance)
+            user_matrix[5].append(row.balance_user)
+            calc_matrix[5].append(row.balance_calc)
+
+            orig_matrix[6].append(row.interest)
+            user_matrix[6].append(row.interest_user)
+            calc_matrix[6].append(row.interest_calc)
+
+            orig_matrix[7].append(row.fees)
+            user_matrix[7].append(row.fees_user)
+            calc_matrix[7].append(row.fees_calc)
+
+            orig_matrix[8].append(row.insurance)
+            user_matrix[8].append(row.insurance_user)
+            calc_matrix[8].append(row.insurance_calc)
+
+            orig_matrix[9].append(row.taxes)
+            user_matrix[9].append(row.taxes_user)
+            calc_matrix[9].append(row.taxes_calc)
+
+            orig_matrix[10].append(row.security_deposit)
+            user_matrix[10].append(row.security_deposit_user)
+            calc_matrix[10].append(row.security_deposit_calc)
+
+            orig_matrix[11].append(row.security_interest_paid)
+            user_matrix[11].append(row.security_interest_paid_user)
+            calc_matrix[11].append(row.security_interest_paid_calc)
+
+            orig_matrix[12].append(row.deposit_withdrawal)
+            user_matrix[12].append(row.deposit_withdrawal_user)
+            calc_matrix[12].append(row.deposit_withdrawal_calc)
+
+            orig_matrix[13].append(row.deposit_balance)
+            user_matrix[13].append(row.deposit_balance_user)
+            calc_matrix[13].append(row.deposit_balance_calc)
+
+            orig_matrix[14].append(row.total_cashflow)
+            user_matrix[14].append(row.total_cashflow_user)
+            calc_matrix[14].append(row.total_cashflow_calc)
         data = {
             'partner' : partner_name,
             'loan_theme' : theme_name,
@@ -427,11 +499,11 @@ def get_loan():
             'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing,
             'security_deposit_fixed_upfront' : entry.security_deposit_fixed_upfront,
             'security_deposit_fixed_ongoing' : entry.security_deposit_fixed_ongoing,
-            'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent
+            'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent,
+            'original_matrix' : orig_matrix,
+            'user_matrix' : user_matrix,
+            'calc_matrix' : calc_matrix
         }
         return create_response(data = data, status = 200)
     except:
         return create_response({}, status=400, message='missing arguments for GET')
-
-
-

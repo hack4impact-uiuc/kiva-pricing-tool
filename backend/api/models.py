@@ -169,7 +169,7 @@ class RepaymentSchedule(db.Model):
     """RepaymentSchedule"""
     __tablename__ = "repayment_schedule"
 
-    id = db.Column(db.String,db.ForeignKey('loan.id', ondelete='SET NULL'), unique=True, primary_key=True) #MFI_Partner + Loan_theme + Product_type + Version_num
+    id = db.Column(db.String,db.ForeignKey('loan.id', ondelete='SET NULL'), primary_key=True) #MFI_Partner + Loan_theme + Product_type + Version_num
     period_num = db.Column(db.Integer, nullable = False)
 
     payment_due_date = db.Column(db.Date, nullable=False)
@@ -182,8 +182,10 @@ class RepaymentSchedule(db.Model):
     taxes = db.Column(db.Float, nullable=False)
     security_deposit = db.Column(db.Float, nullable=False)
     security_interest_paid = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=True)
-    deposit_balance = db.Column(db.Float, nullable=True)
+    balance = db.Column(db.Float, nullable=False)
+    deposit_withdrawal = db.Column(db.Float, nullable=False)
+    deposit_balance = db.Column(db.Float, nullable=False)
+    total_cashflow = db.Column(db.Float, nullable=False)
 
     payment_due_date_user = db.Column(db.Date, nullable=True)
     days_user = db.Column(db.Integer, nullable=True)
@@ -194,9 +196,11 @@ class RepaymentSchedule(db.Model):
     insurance_user = db.Column(db.Float, nullable=True)
     taxes_user = db.Column(db.Float, nullable=True)
     security_deposit_user = db.Column(db.Float, nullable=True)
-    security_interest_paid_user = db.Column(db.Float, nullable=False)
-    balance_user = db.Column(db.Float, nullable=False)
-    deposit_balance_user = db.Column(db.Float, nullable=False)
+    security_interest_paid_user = db.Column(db.Float, nullable=True)
+    balance_user = db.Column(db.Float, nullable=True)
+    deposit_withdrawal_user = db.Column(db.Float, nullable=True)
+    deposit_balance_user = db.Column(db.Float, nullable=True)
+    total_cashflow_user = db.Column(db.Float, nullable=True)
 
     payment_due_date_calc = db.Column(db.Date, nullable=False)
     days_calc = db.Column(db.Integer, nullable=False)
@@ -208,8 +212,10 @@ class RepaymentSchedule(db.Model):
     taxes_calc = db.Column(db.Float, nullable=False)
     security_deposit_calc = db.Column(db.Float, nullable=False)
     security_interest_paid_calc = db.Column(db.Float, nullable=False)
-    balance_calc = db.Column(db.Float, nullable=True)
-    deposit_balance_calc = db.Column(db.Float, nullable=True)
+    balance_calc = db.Column(db.Float, nullable=False)
+    deposit_withdrawal_calc = db.Column(db.Float, nullable=False)
+    deposit_balance_calc = db.Column(db.Float, nullable=False)
+    total_cashflow_calc = db.Column(db.Float, nullable=False)
 
     def __init__(self, email):
         if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','payment_due_date','days','amount_due','principal_payment','interest',
