@@ -15,6 +15,11 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
 import ReactDOM from 'react-dom'
+import { ToastContainer, ToastMessage } from 'react-toastr'
+//import "./../demo.css"
+import 'react-toastr/demo.css'
+//require("./../demo.css");
+let container
 
 class AdminPartners extends Component {
   constructor(props) {
@@ -73,18 +78,20 @@ class AdminPartners extends Component {
           this.setState({ data })
           if (original != update) {
             //add
-            let update_partner = { partner_name: update }
+            let partner = { partner_name: update }
+            console.log(partner.partner_name + 'hi')
             axios
-              .post('http://127.0.0.1:3453/addMFI', update_partner)
-              .then(response => {
-                this.setState({
-                  data: this.state.data.concat({
-                    partner_names: update_partner
-                  })
-                })
-              })
+              .post('http://127.0.0.1:3453/addMFI', partner)
+              // .then(
+              //         response => {
+              //   this.setState({
+              //     data: this.state.data.concat({
+              //       partner_names: update
+              //     })
+              //   })
+              // })
               .catch(function(error) {
-                console.log('error with adding' + error + update_partner)
+                console.log('error with adding' + error + partner)
               })
 
             //remove
@@ -118,6 +125,7 @@ class AdminPartners extends Component {
       partner_name != ' '
     ) {
       let data = { partner_name: partner_name }
+      console.log(data.partner_name + 'helo')
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
         .then(response => {
@@ -151,9 +159,19 @@ class AdminPartners extends Component {
       })
   }
 
+  savePartner() {
+    this.setState({ editing: false })
+    console.log('yay')
+  }
+
   render() {
     return (
       <Grid>
+        <ToastContainer
+          ref={ref => (container = ref)}
+          className="toast-top-right"
+        />
+
         <PageHeader>Admin Partners List</PageHeader>
 
         <Form inline>
@@ -220,6 +238,15 @@ class AdminPartners extends Component {
           }}
         />
 
+        <Button
+          name="TEST"
+          url="partnerlist"
+          onClickHandler={() =>
+            container.success(`hi! Now is ${new Date()}`, `///title\\\\\\`, {
+              closeButton: true
+            })} // Send text value to remove loan function
+        />
+
         <ReactTable
           data={this.state.data}
           columns={[
@@ -227,6 +254,23 @@ class AdminPartners extends Component {
               Header: 'MFI Partner',
               accessor: 'partner_names',
               Cell: this.state.editing ? this.renderEditable : null
+            },
+            {
+              Header: '',
+              id: 'save-button',
+              width: 150,
+              Cell: ({ row, original }) => {
+                // Generate row such that value of text field is rememebered to pass into remove loan function
+                if (this.state.editing) {
+                  return (
+                    <Button
+                      name="Save"
+                      url="partnerlist"
+                      onClickHandler={() => this.setState({ editing: false })}
+                    />
+                  )
+                }
+              }
             },
             {
               Header: 'Remove',
@@ -252,20 +296,6 @@ class AdminPartners extends Component {
             }
           ]}
         />
-
-        <Button
-          name="Save Changes"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ savesuccess: true })
-          }}
-        />
-
-        {this.state.savesuccess == true ? (
-          <Alert bsStyle="success">
-            <h4>You have successfully saved {this.state.edited_partners}</h4>
-          </Alert>
-        ) : null}
       </Grid>
     )
   }
