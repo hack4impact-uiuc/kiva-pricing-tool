@@ -26,7 +26,8 @@ class FindLoan extends Component {
     this.state = {
       partner_names: [],
       loan_themes: [],
-      versions: ['1', '2', '3'],
+      product_types: [],
+      versions: [],
       disableButton: '',
       errorMessage: ''
     }
@@ -39,14 +40,16 @@ class FindLoan extends Component {
   getTables() {
     const { formDataReducer, changedFormData } = this.props
     let data = {
-      partner_name: formDataReducer.mfi[0],
-      loan_theme: formDataReducer.loanType[0],
-      product_type: formDataReducer.productType[0],
-      version_num: formDataReducer.versionNum[0]
+      params: {
+        partner_name: formDataReducer.mfi[0],
+        loan_theme: formDataReducer.loanType[0],
+        product_type: formDataReducer.productType[0],
+        version_num: formDataReducer.versionNum[0]
+      }
     }
 
     axios
-      .post('http://127.0.0.1:3453/findLoan', data)
+      .get('http://127.0.0.1:3453/findLoan', data)
       .then(response => {
         const apr = response.data.result.nominal_apr
         const orig_matrix = response.data.result.original_matrix
@@ -108,13 +111,10 @@ class FindLoan extends Component {
           'feeFixedOngoing',
           response.data.result.fee_fixed_ongoing
         )
+        changedFormData('taxPercentFees', response.data.result.tax_percent_fees)
         changedFormData(
-          'xPercentFees',
-          response.data.result.insurance_percent_upfront
-        )
-        changedFormData(
-          'xPercentInterest',
-          response.data.result.insurance_percent_ongoing
+          'taxPercentInterest',
+          response.data.result.tax_percent_interest
         )
         changedFormData(
           'insurancePercentUpfront',
@@ -126,11 +126,11 @@ class FindLoan extends Component {
         )
         changedFormData(
           'insuranceFixedUpfront',
-          response.data.result.tax_percent_fees
+          response.data.result.insurance_fixed_upfront
         )
         changedFormData(
           'insuranceFixedOngoing',
-          response.data.result.tax_percent_interest
+          response.data.result.insurance_fixed_ongoing
         )
         changedFormData(
           'securityDepositPercentUpfront',
@@ -209,12 +209,12 @@ class FindLoan extends Component {
               total_cashflow: calc_matrix[14][i]
             })
           }
+          reformatted_matrix[0]['period_num'] = 'Disbursement Info'
+          calc_matrix[0]['period_num'] = 'Disbursement Info'
+          changedFormData('original_repayment_schedule', reformatted_matrix)
+          changedFormData('user_repayment_schedule', reformatted_user_matrix)
+          changedFormData('calc_repayment_schedule', reformatted_calc_matrix)
         }
-        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-        calc_matrix[0]['period_num'] = 'Disbursement Info'
-        changedFormData('original_repayment_schedule', reformatted_matrix)
-        changedFormData('user_repayment_schedule', reformatted_user_matrix)
-        changedFormData('calc_repayment_schedule', reformatted_calc_matrix)
       })
       .catch(function(error) {
         console.log(
@@ -225,9 +225,8 @@ class FindLoan extends Component {
 
   componentDidMount() {
     const { resetFormData } = this.props
-    axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
+    axios.get('http://127.0.0.1:3453/getMFIEntry').then(response => {
       this.setState({ partner_names: response.data.result.partners })
-      this.setState({ loan_themes: response.data.result.themes })
     })
 
     // this._unblock = this.context.router.history.block(() => {
@@ -287,6 +286,17 @@ class FindLoan extends Component {
                   onChange={e => {
                     changedFormData('mfi', e)
                     changedFormData('backRoute', 'findloan')
+                    axios
+                      .get('http://127.0.0.1:3453/getLTEntry', {
+                        params: {
+                          partner_name: e[0]
+                        }
+                      })
+                      .then(response => {
+                        this.setState({
+                          loan_themes: response.data.result.themes
+                        })
+                      })
                   }}
                 />
 
@@ -294,11 +304,24 @@ class FindLoan extends Component {
                   className="vertical-margin-item"
                   ref="loan"
                   label="loan"
+                  disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   options={this.state.loan_themes}
                   placeholder="Select Loan Type"
                   selected={formDataReducer.loanType}
                   onChange={e => {
                     changedFormData('loanType', e)
+                    axios
+                      .get('http://127.0.0.1:3453/getPTEntry', {
+                        params: {
+                          partner_name: formDataReducer.mfi[0],
+                          loan_theme: e[0]
+                        }
+                      })
+                      .then(response => {
+                        this.setState({
+                          product_types: response.data.result.product_types
+                        })
+                      })
                   }}
                 />
 
@@ -306,13 +329,32 @@ class FindLoan extends Component {
                   className="vertical-margin-item"
                   ref="product"
                   label="product"
-                  options={['Small Business', 'Entrepreneur', 'Education']}
+                  disabled={
+                    !(
+                      !this.isNullOrEmpty(formDataReducer.mfi) &&
+                      !this.isNullOrEmpty(formDataReducer.loanType)
+                    )
+                  }
+                  options={this.state.product_types}
                   placeholder="Search Products i.e. small loan"
                   typeVal="String"
                   limit={100}
                   selected={formDataReducer.productType}
                   onChange={e => {
                     changedFormData('productType', e)
+                    axios
+                      .get('http://127.0.0.1:3453/getVersionNumEntry', {
+                        params: {
+                          partner_name: formDataReducer.mfi[0],
+                          loan_theme: formDataReducer.loanType[0],
+                          product_type: e[0]
+                        }
+                      })
+                      .then(response => {
+                        this.setState({
+                          versions: response.data.result.version_nums
+                        })
+                      })
                   }}
                 />
 
@@ -320,6 +362,13 @@ class FindLoan extends Component {
                   className="vertical-margin-item"
                   ref="version"
                   label="version"
+                  disabled={
+                    !(
+                      !this.isNullOrEmpty(formDataReducer.mfi) &&
+                      !this.isNullOrEmpty(formDataReducer.loanType) &&
+                      !this.isNullOrEmpty(formDataReducer.productType)
+                    )
+                  }
                   options={this.state.versions}
                   selected={formDataReducer.versionNum}
                   placeholder="Search Versions:"
@@ -340,6 +389,15 @@ class FindLoan extends Component {
               />
             </Col>
             <Col xs={6} sm={6} md={6} className="bs-button-right">
+              <Button
+                disable={!this.inputsEntered()}
+                name="Duplicate"
+                url="form1"
+                onClickHandler={() => {
+                  this.getTables()
+                  // changedFormData('versionNum', this.state.versions.length + 1)
+                }}
+              />
               <Button
                 disable={!this.inputsEntered()}
                 name="Continue"

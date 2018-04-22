@@ -621,6 +621,7 @@ class APRInputs extends Component {
               disable={!this.inputsEntered()}
               url={'output'}
               onClickHandler={e => {
+                changedFormData('back', 'form1')
                 this.postData()
               }}
             />
