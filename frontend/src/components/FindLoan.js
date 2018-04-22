@@ -384,14 +384,6 @@ class FindLoan extends Component {
             <Col xs={6} sm={6} md={6}>
               <Button
                 className="button-fancy"
-                name="Back"
-                url=""
-                onClickHandler={() => resetFormData()}
-              />
-            </Col>
-            <Col xs={6} sm={6} md={6} className="bs-button-right">
-              <Button
-                className="button-fancy"
                 disable={!this.inputsEntered()}
                 name="Duplicate"
                 url="form1"
@@ -400,7 +392,10 @@ class FindLoan extends Component {
                   changedFormData('versionNum', this.state.versions.length + 1)
                 }}
               />
+            </Col>
+            <Col xs={6} sm={6} md={6} className="bs-button-right">
               <Button
+                className="button-fancy"
                 disable={!this.inputsEntered()}
                 name="Continue"
                 url="output"
