@@ -395,7 +395,7 @@ class FindLoan extends Component {
                 url="form1"
                 onClickHandler={() => {
                   this.getTables()
-                  // changedFormData('versionNum', this.state.versions.length + 1)
+                  changedFormData('versionNum', this.state.versions.length + 1)
                 }}
               />
               <Button
