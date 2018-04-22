@@ -158,6 +158,7 @@ class APRInputs extends Component {
                   limit="100"
                   textBody={formDataReducer.startName}
                   onTextInputChange={this.handleTextChange}
+                  //doesn't allow spaces ** need to fix
                 />
               </Form>
             </Col>
