@@ -57,10 +57,16 @@ class APRRateDisplay extends Component {
         cellInfo.column.id
       ].toString() !== e.target.innerHTML
     ) {
-      formDataReducer.user_repayment_schedule[cellInfo.index][
-        cellInfo.column.id
-      ] =
-        e.target.innerHTML
+      if (e.target.innerHTML === '') {
+        formDataReducer.user_repayment_schedule[cellInfo.index][
+          cellInfo.column.id
+        ] = null
+      } else {
+        formDataReducer.user_repayment_schedule[cellInfo.index][
+          cellInfo.column.id
+        ] =
+          e.target.innerHTML
+      }
       let inputs = {
         partner_name: formDataReducer.mfi[0],
         loan_theme: formDataReducer.loanType[0],

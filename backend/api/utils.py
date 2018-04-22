@@ -537,8 +537,9 @@ def cal_scaled_interest(nominal_interest_rate, installment_time_period, interest
     security_deposit_scaled_interest = interest_paid_on_deposit_percent / periods_per_year[installments_period_dict[installment_time_period]]
     return scaled_interest, security_deposit_scaled_interest
 
-def cal_apr_manual_mode(origin_matrix, grace_period_balloon):
-    test = [(-10000, '1-Jan-2008'),(2750, '1-Mar-2008'),(4250, '30-Oct-2008'),(3250, '15-Feb-2009'),(2750, '1-Apr-2009')]
+def cal_apr_manual_mode(origin_matrix, grace_period_balloon, installment_time_period):
+    periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
+    installments_period_dict = {'days':0, 'weeks':1, 'two-weeks':2, '15 days':3, '4 weeks':4, 'months':5, 'quarters':6, 'half-years':7, 'years':8}
     date_col = origin_matrix[DATE_IDX]
     cash_flow = origin_matrix[CASH_FLOW_IDX]
     date_cash_list = []
@@ -548,9 +549,9 @@ def cal_apr_manual_mode(origin_matrix, grace_period_balloon):
         date_cash_list.append((date, cash_flow[idx]))
     # print (date_cash_list)
     EIR = xirr(date_cash_list)
-    period_num = len(origin_matrix[0])
+    period_num = periods_per_year[installments_period_dict[installment_time_period]]
     # convert from EIR to APR
-    return (period_num * ((1+EIR)**(1/period_num)-1))
+    return (period_num * ((1+EIR)**(1/period_num)-1) * 100)
 
 def update_repayment_schedule(origin_matrix, user_change, input_form):
     installment_time_period = input_form['installment_time_period']
@@ -606,8 +607,9 @@ def update_repayment_schedule(origin_matrix, user_change, input_form):
     origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix, grace_period_balloon)
     origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
     origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
-    new_apr = cal_apr_manual_mode(origin_matrix, grace_period_balloon)
+    new_apr = cal_apr_manual_mode(origin_matrix, grace_period_balloon, installment_time_period)
     origin_matrix = round_matrix(origin_matrix)
+    new_apr = round_float(new_apr,2)
     return new_apr, origin_matrix
 
 
