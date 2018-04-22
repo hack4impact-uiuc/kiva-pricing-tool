@@ -238,19 +238,25 @@ class APRRateDisplay extends Component {
     )
   }
   getCSV() {
-    axios
-      .get('http://127.0.0.1:3453/getCSV')
-      .then(response => {
-        console.log(response)
-        // aprRate: apr,
-        // saveData: data
-      })
-      .catch(function(error) {
-        console
-          .log
-          // error + ' there was an error with the request' + data.start_name
-          ()
-      })
+      const { formDataReducer, contNewLoan, changedFormData } = this.props
+    	let csv = [['Period Number,Date,Days,Principal Disbursed,Principal Paid,Balance,Interest Paid,Fees Paid,Insurance Paid,Taxes Paid,Security Deposit,Interest Paid on Security,Deposit Withdrawal,Deposit Balance,Total Cashflow\n']];
+      let i;
+      let j;
+      let row = "";
+      for (j = 0; j < 13; j++) {
+      for (i = 0; i < 15; i++) {
+        row += formDataReducer.original_repayment_schedule[i][j] + ',';
+      }
+      row+='\n';
+      csv.push(row);
+      row = '';
+      }
+      let blob = new Blob(csv,{type: 'text/csv;charset=utf-8;'});
+      let url = URL.createObjectURL(blob);
+      let pom = document.createElement('a');
+      pom.href = url;
+      pom.setAttribute('download', 'output.csv');
+      pom.click();
   }
   createChart(paramVisual) {
     this.setState({ visualType: paramVisual })
