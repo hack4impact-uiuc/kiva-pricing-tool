@@ -16,6 +16,7 @@ import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
+import ReactDOM from 'react-dom'
 
 class AdminPartners extends Component {
   constructor(props) {
@@ -23,10 +24,28 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
-      addshow: false,
-      removeshow: false
+
+      addconfirm: false,
+      adderror: false,
+      removeshow: false,
+      savesuccess: false,
+      editing: false,
+      edited_partners: [],
+      addshow: false
     }
     this.renderEditable = this.renderEditable.bind(this)
+  }
+
+  cleanList() {
+    for (var i = 0; i < this.state.data.length; i++) {
+      console.log(this.state.data[i])
+      if (this.state.data[i].partner_names === '') {
+        //Remove element in place, return array with element removed
+        this.setState({
+          data: this.state.data.slice(0, i).concat(this.state.data.slice(i + 1))
+        })
+      }
+    }
   }
 
   componentDidMount() {
@@ -41,6 +60,8 @@ class AdminPartners extends Component {
   }
 
   renderEditable(cellInfo) {
+    var original = null
+    var update = null
     return (
       <div
         style={{ backgroundColor: '#fafafa' }}
@@ -48,8 +69,44 @@ class AdminPartners extends Component {
         suppressContentEditableWarning
         onBlur={e => {
           const data = [...this.state.data]
+          original = data[cellInfo.index][cellInfo.column.id]
+          console.log(original)
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
+          update = data[cellInfo.index][cellInfo.column.id]
+          console.log(update)
           this.setState({ data })
+          if (original != update) {
+            //add
+            let update_partner = { partner_name: update }
+            axios
+              .post('http://127.0.0.1:3453/addMFI', update_partner)
+              .then(response => {
+                this.setState({
+                  data: this.state.data.concat({
+                    partner_names: update_partner
+                  })
+                })
+              })
+              .catch(function(error) {
+                console.log('error with adding' + error + update_partner)
+              })
+
+            //remove
+            axios
+              .delete('http://127.0.0.1:3453/removeMFI/' + original)
+              .then(response => {
+                for (var i = 0; i < this.state.data.length; i++) {
+                  if (this.state.data[i].partner_names === original) {
+                    // Remove element in place, return array with element removed
+                    this.setState({
+                      data: this.state.data
+                        .slice(0, i)
+                        .concat(this.state.data.slice(i + 1))
+                    })
+                  }
+                }
+              })
+          }
         }}
         dangerouslySetInnerHTML={{
           __html: this.state.data[cellInfo.index][cellInfo.column.id]
@@ -59,16 +116,39 @@ class AdminPartners extends Component {
   }
 
   addPartner(partner_name) {
-    this.setState({ addshow: true })
-    let data = { partner_name: partner_name }
-    axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
-      this.setState({
-        data: this.state.data.concat({ partner_names: partner_name })
-      })
-    })
+
+    if (
+      partner_name != null &&
+      partner_name.length != 0 &&
+      partner_name != ' '
+    ) {
+      let data = { partner_name: partner_name }
+      axios
+        .post('http://127.0.0.1:3453/addMFI', data)
+        .then(response => {
+          this.setState({
+            data: this.state.data.concat({ partner_names: partner_name })
+          })
+        })
+        .catch(function(error) {
+          console.log('error with adding')
+        })
+      this.setState({ addshow: true })
+    }
   }
 
-  removeLoan(partner_name) {
+//     this.setState({ addshow: true })
+//     let data = { partner_name: partner_name }
+//     axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
+//       this.setState({
+//         data: this.state.data.concat({ partner_names: partner_name })
+//       })
+//     })
+//   }
+
+
+
+  removePartner(partner_name) {
     this.setState({ removeshow: true })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
@@ -88,8 +168,6 @@ class AdminPartners extends Component {
   }
 
   render() {
-    const listdata = this.state.data
-
     return (
       <Grid className="padded-element-vertical">
         <Row>
@@ -208,6 +286,7 @@ class AdminPartners extends Component {
             />
           </Col>
         </Row>
+
       </Grid>
     )
   }
