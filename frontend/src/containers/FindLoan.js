@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { changedFormData, resetFormData } from './../actions'
+import { changedFormData, resetFormData, searchLoan } from './../actions'
 import FindLoan from './../components/FindLoan'
 
 function mapStateToProps(state) {
@@ -14,7 +14,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       changedFormData,
-      resetFormData
+      resetFormData,
+      searchLoan
     },
     dispatch
   )

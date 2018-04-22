@@ -11,7 +11,7 @@ class TextField extends Component {
       valid: true,
       id: this.props.text,
       error_message: '',
-      type: this.props.typeVal,
+      type: this.props.typeVal
       // textBody: this.props.textBody ? this.props.textBody : ''
     }
   }
@@ -30,7 +30,7 @@ class TextField extends Component {
   handleChange(e) {
     const { formDataReducer, changedFormData } = this.props
     let value = e.target.value
-    
+
     if (this.props.typeVal.toLowerCase() == 'int') {
       let tryInt = parseInt(value)
       let limit = parseInt(this.props.limit)
@@ -94,7 +94,7 @@ class TextField extends Component {
           onChange={event => this.handleChange(event)}
           value={this.props.textBody}
           required
-          autofocus
+          // autofocus
         />
         <br />
         <p>{this.state.error_message}</p>

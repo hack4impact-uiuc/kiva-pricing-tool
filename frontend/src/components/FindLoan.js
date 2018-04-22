@@ -8,6 +8,7 @@ import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { Api } from './../utils'
 import PropTypes from 'prop-types'
 
 class FindLoan extends Component {
@@ -20,8 +21,7 @@ class FindLoan extends Component {
       loan_themes: [],
       product_types: [],
       versions: [],
-      disableButton: '',
-      errorMessage: ''
+      error: false
     }
   }
 
@@ -30,10 +30,17 @@ class FindLoan extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
-      this.setState({ partner_names: response.data.result.partners })
-      this.setState({ loan_themes: response.data.result.themes })
-    })
+    const { changedFormData } = this.props
+    changedFormData('back', 'findloan')
+    axios
+      .get('http://127.0.0.1:3453/partnerThemeLists')
+      .then(response => {
+        this.setState({ partner_names: response.data.result.partners })
+        this.setState({ loan_themes: response.data.result.themes })
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
   }
 
   getProductType() {
@@ -55,6 +62,9 @@ class FindLoan extends Component {
           )
           .then(response => {
             this.setState({ product_types: response.data.result.product_types })
+          })
+          .catch(function(error) {
+            console.log(error)
           })
       }
     }
@@ -89,6 +99,9 @@ class FindLoan extends Component {
               versions: response.data.result.version_nums.map(String)
             })
           })
+          .catch(function(error) {
+            console.log(error)
+          })
       }
     }
   }
@@ -104,64 +117,42 @@ class FindLoan extends Component {
     // onsave post
   }
 
-  searchLoan() {
-    const { formDataReducer, changedFormData } = this.props
-    changedFormData('back', 'findloan')
-    if (this.inputsEntered()) {
-      axios
-        .get(
-          'http://127.0.0.1:3453/findLoan?partner_name=' +
-            formDataReducer.mfi[0] +
-            '&loan_theme=' +
-            formDataReducer.loanType[0] +
-            '&product_type=' +
-            formDataReducer.productType[0] +
-            '&version_num=' +
-            formDataReducer.versionNum[0]
-        )
-        .then(response => {
-          for (const key of Object.keys(response.data.result)) {
-            console.log(this.camelCase(key), response.data.result[key])
-            changedFormData(this.camelCase(key), [
-              response.data.result[key].toString()
-            ])
-          }
-        })
-    }
-  }
-
-  camelCase(key) {
-    let terms = key.split('_')
-    if (terms.length == 1) return terms
-
-    for (var i = 1; i < terms.length; i++) {
-      terms[i] = terms[i].charAt(0).toUpperCase() + terms[i].slice(1)
-    }
-
-    return terms.join('')
-  }
-
-  handleTextChange = (name, value) => {
-    const { changedFormData } = this.props
-    changedFormData([name], [value])
-  }
-
   inputsEntered() {
     const { formDataReducer } = this.props
-    return (
+    if (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
       !this.isNullOrEmpty(formDataReducer.productType) &&
       !this.isNullOrEmpty(formDataReducer.versionNum)
+    ) {
+      let x = Api.searchLoan(
+        formDataReducer.mfi[0],
+        formDataReducer.loanType[0],
+        formDataReducer.productType[0],
+        formDataReducer.versionNum[0]
+      )
+      console.log('WOO', x !== false)
+    }
+    return (
+      !this.isNullOrEmpty(formDataReducer.mfi) &&
+      !this.isNullOrEmpty(formDataReducer.loanType) &&
+      !this.isNullOrEmpty(formDataReducer.productType) &&
+      !this.isNullOrEmpty(formDataReducer.versionNum) &&
+      Api.searchLoan(
+        formDataReducer.mfi[0],
+        formDataReducer.loanType[0],
+        formDataReducer.productType[0],
+        formDataReducer.versionNum[0]
+      ) !== false
     )
   }
 
   isNullOrEmpty(input) {
-    return input == null || input.length == 0
+    return input === null || input.length === 0
   }
 
   render() {
-    const { formDataReducer, changedFormData, resetFormData } = this.props
+    const { formDataReducer, changedFormData, searchLoan } = this.props
 
     return (
       <Grid>
@@ -218,24 +209,38 @@ class FindLoan extends Component {
           />
           <br />
 
-          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
-          <Button
-            disable={!this.inputsEntered()}
-            name="Continue"
-            url="form1"
-            onClickHandler={() => changedFormData('back', 'findloan')}
-          />
+          <Button name="Back" url="" />
           <Button
             name="Edit"
             disable={!this.inputsEntered()}
             url="output"
-            onClickHandler={() => this.searchLoan()}
+            onClickHandler={() => {
+              changedFormData('back', 'findloan')
+              Api.searchLoan(
+                formDataReducer.mfi[0],
+                formDataReducer.loanType[0],
+                formDataReducer.productType[0],
+                formDataReducer.versionNum[0]
+              ).then(value => {
+                searchLoan(value)
+              })
+            }}
           />
           <Button
             name="Duplicate"
             disable={!this.inputsEntered()}
             url="form1"
-            onClickHandler={() => changedFormData('back', 'findloan')}
+            onClickHandler={() => {
+              changedFormData('back', 'findloan')
+              Api.searchLoan(
+                formDataReducer.mfi[0],
+                formDataReducer.loanType[0],
+                formDataReducer.productType[0],
+                formDataReducer.versionNum[0]
+              ).then(value => {
+                searchLoan(value)
+              })
+            }}
           />
         </Form>
       </Grid>

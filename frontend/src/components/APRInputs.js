@@ -41,7 +41,7 @@ class APRInputs extends Component {
         )
         .then(response => {
           for (const key of Object.keys(response.data.result)) {
-            console.log(this.camelCase(key), response.data.result[key])
+            // console.log(this.camelCase(key), response.data.result[key])
             changedFormData(this.camelCase(key), [
               response.data.result[key].toString()
             ])
@@ -168,7 +168,7 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
-    console.log('RENDERING', formDataReducer, formDataReducer.installment)
+    // console.log('RENDERING', formDataReducer, formDataReducer.installment)
     return (
       <Grid>
         <PageHeader>User Information</PageHeader>

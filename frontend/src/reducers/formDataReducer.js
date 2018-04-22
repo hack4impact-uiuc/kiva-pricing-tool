@@ -1,5 +1,5 @@
 import initialState from './initialState'
-import { FIELD_CHANGED, RESET } from './../actions/actionTypes'
+import { FIELD_CHANGED, RESET, SEARCH } from './../actions/actionTypes'
 
 export default function formDataReducer(state = initialState.formData, action) {
   switch (action.type) {
@@ -10,7 +10,16 @@ export default function formDataReducer(state = initialState.formData, action) {
         [action.payload.field]: action.payload.value
       }
     case RESET:
-      return {}
+      return initialState.formData
+    case SEARCH:
+      let prevState = { ...state }
+      for (var key in action.payload.results) {
+        prevState = {
+          ...prevState,
+          [key]: action.payload.results[key]
+        }
+      }
+      return prevState
     default:
       return {
         ...state

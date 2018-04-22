@@ -13,7 +13,6 @@ class NewLoan extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -34,16 +33,7 @@ class NewLoan extends Component {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
-
-    // this._unblock = this.context.router.history.block(() => {
-    //   resetFormData()
-    // })
   }
-
-  // componentWillUnmount() {
-  //   // When the component unmounts, call the function
-  //   this._unblock()
-  // }
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
@@ -65,7 +55,7 @@ class NewLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData, resetFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     return (
       <Grid>
         <Form>
@@ -99,10 +89,9 @@ class NewLoan extends Component {
             typeVal="String"
             limit={100}
             textBody={formDataReducer.productType}
-            // onTextInputChange={this.handleTextChange}
           />
 
-          <Button name="Back" url="" onClickHandler={() => resetFormData()} />
+          <Button name="Back" url="" />
 
           <Button
             disable={!this.inputsEntered()}

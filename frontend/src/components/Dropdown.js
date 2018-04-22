@@ -9,7 +9,7 @@ class Dropdown extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    state = {
+    this.state = {
       value: this.props.selected ? this.props.selected : this.props.title
     }
   }
@@ -28,8 +28,8 @@ class Dropdown extends Component {
               // Get value of selected item, change state and update title
               onSelect={() => {
                 // if (this.props.onTextInputChange)
-                  // this.props.onTextInputChange(this.props.reduxId, item.value)
-                  changedFormData(this.props.reduxId, item.value)
+                // this.props.onTextInputChange(this.props.reduxId, item.value)
+                changedFormData(this.props.reduxId, item.value)
                 // this.setState({ value: item.value })
               }}
             >

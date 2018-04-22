@@ -17,7 +17,6 @@ class IntroPage extends Component {
     return (
       <Grid>
         <Button name="Enter New Loan" url="newloan" />
-
         <Button name="Find Loan" url="findloan" />
       </Grid>
     )
