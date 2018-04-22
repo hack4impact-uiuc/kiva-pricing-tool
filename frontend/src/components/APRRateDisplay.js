@@ -2,7 +2,7 @@
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { Dropdown, Button, TextField /*, KivaChart*/ } from './'
-import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
+import { DropdownButton, MenuItem, Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.css'
 import axios from 'axios'
@@ -17,8 +17,29 @@ class APRRateDisplay extends Component {
       // data: this.convertMatrix(),
       id: null,
       partner_names: [],
-      visualtype: 'bar',
-      data: []
+      visualtype: 'bar',      
+  	 	barclass: "active",
+	  	lineclass: "",
+   		pieclass: "",
+		  areaclass: "",
+		  data: [],
+		  data2: [
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      ["1-Jan-2012", "2-Jan-2012", "3-Jan-2012", "4-Jan-2012", "5-Jan-2012", "6-Jan-2012", "7-Jan-2012", "8-Jan-2012", "9-Jan-2012", "10-Jan-2012", "11-Jan-2012", "12-Jan-2012", "13-Jan-2012"],
+      [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 0, 0],
+      [0, 0, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 0],
+      [51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+      [51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 0, 0],
+      [0.51, 0.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 0],
+      [51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+      [0, 0.0013972602739726028, 0.001424695815349972, 0.0014521321083860088, 0.0014795691531013073, 0.0015070069495164607, 0.0015344454976520638, 0.0015618847975287118, 0.0015893248491670002, 0.0016167656525875253, 0.001644207207810884, 0.0016716495148576733, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61.01687894181993],
+      [51, 52.001397260273976, 53.00282195608932, 54.00427408819771, 55.00575365735081, 56.007260664300325, 57.00879510979798, 58.010356994595504, 59.011946319444675, 60.01356308509726, 61.01520729230507, 61.01687894181993, 0],
+      [4846.49, -53.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -545.99312105818, 0],
+      ]
     }
     // this.convertMatrix = this.convertMatrix.bind(this)
     this.renderEditable = this.renderEditable.bind(this)
@@ -259,7 +280,33 @@ class APRRateDisplay extends Component {
       pom.click();
   }
   createChart(paramVisual) {
-    this.setState({ visualType: paramVisual })
+    		this.setState({visualType: paramVisual})
+		switch (paramVisual){
+			case 'bar':
+				this.setState({barclass: "active"});
+				this.setState({lineclass: ""});
+				this.setState({areaclass: ""});
+				this.setState({pieclass: ""});
+				break;
+			case 'line':
+				this.setState({lineclass: "active"});
+				this.setState({barclass: ""});
+				this.setState({areaclass: ""});
+				this.setState({pieclass: ""});
+				break;
+			case 'area':
+				this.setState({areaclass: "active"});
+				this.setState({lineclass: ""});
+				this.setState({barclass: ""});
+				this.setState({pieclass: ""});
+				break;
+			case 'pie':
+				this.setState({pieclass: "active"});
+				this.setState({lineclass: ""});
+				this.setState({areaclass: ""});
+				this.setState({barclass: ""});
+				break;			
+		}
   }
   saveData() {
     const { formDataReducer, changedFormData } = this.props
@@ -522,21 +569,15 @@ class APRRateDisplay extends Component {
           }}
           disable={true}
         />
-        {/*<div class="col-lg-4 pull-right">
-          <ul class="nav nav-pills nav-stacked">
-            <button onClick={() => this.createChart('bar')}>Bar Chart</button>
-            <button onClick={() => this.createChart('pie')}>Pie Chart</button>
-            <button onClick={() => this.createChart('line')}>Line Chart</button>
-            <button onClick={() => this.createChart('tree')}>TreeMap</button>
-            <li role="presentation" class="active">
-              <a href="#">Line Chart</a>
-            </li>
-            <li role="presentation">
-              <a href="#">Pie Chart</a>
-            </li>
-          </ul>
-        </div>
-        <KivaChart visualType={this.state.visualType} />*/}
+        <div class = "col-lg-4 pull-right">
+		<ul class = "nav nav-pills nav-stacked">
+			<li role = "presentation" class={this.state.barclass}><a onClick={()=>this.changeChart("bar")}>Bar</a></li>
+			<li role = "presentation" class={this.state.lineclass}><a onClick={()=>this.changeChart("line")}>Line</a></li>
+			<li role = "presentation" class={this.state.pieclass}><a onClick={()=>this.changeChart("pie")}>Pie</a></li>
+			<li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
+		</ul>
+		</div>
+		<KivaChart visualType={this.state.visualType} data={this.state.data2} />
         <br />
         <Button name="Cancel" url="" />
         <Button name="Back" url={formDataReducer.back} />
