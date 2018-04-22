@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Button, TextField /*, KivaChart*/ } from './'
+import { Dropdown, Button, TextField, KivaChart } from './'
 import { DropdownButton, MenuItem, Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
 import Bootstrap from 'react-bootstrap'
 import './../styles/app.css'
@@ -17,7 +17,7 @@ class APRRateDisplay extends Component {
       // data: this.convertMatrix(),
       id: null,
       partner_names: [],
-      visualtype: 'bar',      
+      visualType: 'bar',      
   	 	barclass: "active",
 	  	lineclass: "",
    		pieclass: "",
@@ -577,7 +577,7 @@ class APRRateDisplay extends Component {
 			<li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
 		</ul>
 		</div>
-		<KivaChart visualType={this.state.visualType} data={this.state.data2} />
+	    <KivaChart visualType={this.state.visualType} data={this.state.data2} />
         <br />
         <Button name="Cancel" url="" />
         <Button name="Back" url={formDataReducer.back} />
