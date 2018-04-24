@@ -34,7 +34,7 @@ class IntroPage extends Component {
         <Row>
           <Col sm={4} md={4} className="padded-element-vertical">
             <div className="img-container-center">
-              <img src={editimage} />
+              <img src={editimage} alt="New Loan" />
             </div>
             <PageHeader className="page-header-montserrat padded-element-vertical bs-center">
               Create a Loan
@@ -56,7 +56,7 @@ class IntroPage extends Component {
 
           <Col sm={4} md={4} className="padded-element-vertical">
             <div className="img-container-center">
-              <img src={magnifyingglassimage} />
+              <img src={magnifyingglassimage} alt="Find Loan" />
             </div>
             <PageHeader className="page-header-montserrat padded-element-vertical bs-center">
               Find a Loan
@@ -78,7 +78,7 @@ class IntroPage extends Component {
 
           <Col sm={4} md={4} className="padded-element-vertical">
             <div className="img-container-center">
-              <img src={toolsimage} />
+              <img src={toolsimage} alt="Admin Tools" />
             </div>
             <PageHeader className="page-header-montserrat padded-element-vertical bs-center">
               Admin Tools

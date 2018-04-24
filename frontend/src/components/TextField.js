@@ -15,8 +15,8 @@ class TextField extends Component {
   handleChange(e) {
     let value = e.target.value
     if (this.props.typeVal.toLowerCase() === 'int') {
-      let tryInt = parseInt(value)
-      let limit = parseInt(this.props.limit)
+      let tryInt = parseInt(value, 10)
+      let limit = parseInt(this.props.limit, 10)
       if (isNaN(tryInt)) {
         this.setState({ error_message: 'error in input: should be an integer' })
       } else {
@@ -30,7 +30,7 @@ class TextField extends Component {
 
     if (this.props.typeVal.toLowerCase() === 'float') {
       let tryFloat = parseFloat(value)
-      let limit = parseInt(this.props.limit)
+      let limit = parseInt(this.props.limit, 10)
       if (isNaN(tryFloat)) {
         this.setState({ error_message: 'error in input: should be a decimal' })
       } else {
@@ -43,7 +43,7 @@ class TextField extends Component {
     }
 
     if (this.props.typeVal.toLowerCase() === 'string') {
-      let tryString = /^[a-zA-Z]+$/.test(value)
+      let tryString = /^[a-zA-Z ]+$/.test(value)
       if (!tryString) {
         this.setState({
           error_message: 'error in input: should only have letters'
