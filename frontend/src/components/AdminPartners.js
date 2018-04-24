@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Form, Alert, Row, Col } from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
@@ -104,11 +104,7 @@ class AdminPartners extends Component {
   }
 
   addPartner(partner_name) {
-    if (
-      partner_name !== null &&
-      partner_name.length !== 0 &&
-      partner_name !== ' '
-    ) {
+    if (partner_name && partner_name.length) {
       let data = { partner_name: partner_name }
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
@@ -200,13 +196,13 @@ class AdminPartners extends Component {
         </Row>
         <Row>
           <Col sm={12} md={12}>
-            {this.state.addshow == true ? (
+            {this.state.addshow === true ? (
               <Alert bsStyle="success">
                 <h4>Add Successful!</h4>
               </Alert>
             ) : null}
 
-            {this.state.removeshow == true ? (
+            {this.state.removeshow === true ? (
               <Alert bsStyle="danger">
                 <h4>Partner Removed!</h4>
               </Alert>

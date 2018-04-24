@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import { Dropdown, Button, TextField } from './'
-import { Grid, PageHeader, Form, FormGroup, Row, Col } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 
 import './../styles/app.css'

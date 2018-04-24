@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Form, Row, Col } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
@@ -49,7 +49,7 @@ class AdminThemes extends Component {
   }
 
   addLoan(theme_name) {
-    if (theme_name !== null && theme_name.length !== 0 && theme_name !== ' ') {
+    if (theme_name && theme_name.length) {
       let data = { loan_theme: theme_name }
       axios
         .post('http://127.0.0.1:3453/addLT', data)
