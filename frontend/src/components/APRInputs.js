@@ -1,18 +1,7 @@
 // @flow
-import React, { Component, View, StyleSheet } from 'react'
-import { connect } from 'react-redux'
-import { Link, Route, withRouter } from 'react-router-dom'
-import { Dropdown, Button, TextField, APRRateDisplay } from './'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Form,
-  Bootstrap,
-  FormGroup,
-  Row,
-  Col
-} from 'react-bootstrap'
+import React, { Component } from 'react'
+import { Dropdown, Button, TextField } from './'
+import { Grid, PageHeader, Form, FormGroup, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 
 import './../styles/app.css'
@@ -72,7 +61,7 @@ class APRInputs extends Component {
   }
 
   isNullOrEmpty(input) {
-    return input == null || input.length == 0
+    return input === null || input.length === 0
   }
 
   postData() {
@@ -137,7 +126,7 @@ class APRInputs extends Component {
   }
 
   render() {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer } = this.props
     // console.log('hello' + this.state.back)
     return (
       <Grid fluid>

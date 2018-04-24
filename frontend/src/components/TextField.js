@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import Bootstrap from 'react-bootstrap'
-import axios from 'axios'
 
 class TextField extends Component {
   constructor(props) {
@@ -16,7 +14,7 @@ class TextField extends Component {
 
   handleChange(e) {
     let value = e.target.value
-    if (this.props.typeVal.toLowerCase() == 'int') {
+    if (this.props.typeVal.toLowerCase() === 'int') {
       let tryInt = parseInt(value)
       let limit = parseInt(this.props.limit)
       if (isNaN(tryInt)) {
@@ -30,7 +28,7 @@ class TextField extends Component {
       }
     }
 
-    if (this.props.typeVal.toLowerCase() == 'float') {
+    if (this.props.typeVal.toLowerCase() === 'float') {
       let tryFloat = parseFloat(value)
       let limit = parseInt(this.props.limit)
       if (isNaN(tryFloat)) {
@@ -44,7 +42,7 @@ class TextField extends Component {
       }
     }
 
-    if (this.props.typeVal.toLowerCase() == 'string') {
+    if (this.props.typeVal.toLowerCase() === 'string') {
       let tryString = /^[a-zA-Z]+$/.test(value)
       if (!tryString) {
         this.setState({
@@ -54,19 +52,14 @@ class TextField extends Component {
         this.setState({ error_message: '' })
       }
     }
-    if (value == '') {
+    if (value === '') {
       this.setState({ error_message: '' })
     }
     this.setState({ textBody: value })
-    // console.log(this.props.reduxId, value)
-    // console.log(this.props.onTextInputChange)
     this.props.onTextInputChange(this.props.reduxId, value)
   }
 
   render() {
-    if (!this.state.valid) {
-      let error = this.state.error_message
-    }
     return (
       <div id="className">
         {this.props.id}:
@@ -78,7 +71,7 @@ class TextField extends Component {
           onChange={event => this.handleChange(event)}
           value={this.state.textBody}
           required
-          autofocus
+          autoFocus
         />
         <br />
         <p>{this.state.error_message}</p>

@@ -1,13 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Bootstrap,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import editimage from './../media/edit.jpg'
 import magnifyingglassimage from './../media/magnifying-glass.jpg'
@@ -15,10 +7,6 @@ import toolsimage from './../media/tools.jpg'
 import Button from './Button'
 
 class IntroPage extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     const { resetFormData } = this.props
     resetFormData()

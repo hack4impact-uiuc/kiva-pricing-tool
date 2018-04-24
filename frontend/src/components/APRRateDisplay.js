@@ -1,18 +1,13 @@
 // @flow
-import React, { Component, View, StyleSheet } from 'react'
-import { Link } from 'react-router-dom'
-import { Dropdown, Button, TextField } from './'
-import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
-import Bootstrap from 'react-bootstrap'
+import React, { Component } from 'react'
+import { Button } from './'
+import { Grid, PageHeader } from 'react-bootstrap'
 import './../styles/app.css'
 import axios from 'axios'
 
 class APRRateDisplay extends Component {
-  constructor(props) {
-    super(props)
-  }
   saveData() {
-    const { formDataReducer, changedFormData } = this.props
+    const { formDataReducer } = this.props
     let data = {
       partner_name: formDataReducer.mfi[0],
       loan_theme: formDataReducer.loanType[0],
@@ -66,7 +61,7 @@ class APRRateDisplay extends Component {
   }
 
   render() {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer } = this.props
     return (
       <Grid>
         <PageHeader> APR Rate: {formDataReducer.aprRate}%</PageHeader>
