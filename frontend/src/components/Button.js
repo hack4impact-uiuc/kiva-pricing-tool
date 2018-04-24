@@ -7,7 +7,7 @@ class Button extends Component {
       <Route
         render={({ history }) => (
           <button
-            className="button-fancy"
+            className={this.props.className}
             type="button"
             onClick={() => {
               if (this.props.onClickHandler) this.props.onClickHandler()

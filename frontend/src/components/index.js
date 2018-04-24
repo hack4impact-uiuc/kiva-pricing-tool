@@ -3,6 +3,7 @@ import Navbar from './../containers/Navbar'
 import Dropdown from './Dropdown.js'
 import Button from './Button.js'
 import TextField from './TextField.js'
+import KivaChart from './KivaChart.js'
 // Our Pages
 import IntroPage from './../containers/IntroPage'
 import NewLoan from './../containers/NewLoan'
@@ -18,6 +19,7 @@ export {
   Dropdown,
   TextField,
   APRInputs,
+  KivaChart,
   NewLoan,
   APRRateDisplay,
   IntroPage,

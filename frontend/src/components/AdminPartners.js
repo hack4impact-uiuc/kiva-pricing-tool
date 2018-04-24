@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Form, Alert } from 'react-bootstrap'
+import { Grid, PageHeader, Form, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
@@ -145,141 +145,132 @@ class AdminPartners extends Component {
 
   render() {
     return (
-      <Grid>
-        <PageHeader>Admin Partners List</PageHeader>
+      <Grid className="padded-element-vertical">
+        <Row>
+          <Col sm={12} md={12}>
+            <PageHeader className="page-header-montserrat bs-center">
+              Admin Partners List
+            </PageHeader>
+          </Col>
+        </Row>
 
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Search Partners: </small>{' '}
-          </h2>
-
-          <div>
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <h2>
+              {' '}
+              <small> Search Partners: </small>{' '}
+            </h2>
+            <div>
+              <input
+                className="search-input"
+                placeholder="Search MFI Partner"
+                onChange={event =>
+                  this.setState({
+                    filtered: [
+                      { id: 'partner_names', value: event.target.value }
+                    ]
+                  })
+                }
+                // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
+              />
+            </div>
+          </Col>
+          <Col sm={5} md={5}>
+            <h2>
+              {' '}
+              <small> Add Partner: </small>{' '}
+            </h2>
             <input
-              placeholder="Search MFI Partner"
-              onChange={event =>
-                this.setState({
-                  filtered: [{ id: 'partner_names', value: event.target.value }]
-                })
-              }
+              type="text"
+              label="Text"
+              placeholder="Add MFI Partner"
+              ref="addpartnername"
             />
-          </div>
-        </Form>
+          </Col>
+          <Col sm={1} md={1}>
+            <Button
+              className="button-image-add"
+              name="Add "
+              url="partnerlist"
+              onClickHandler={() => {
+                this.addPartner(this.refs.addpartnername.value)
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={12}>
+            {this.state.addshow == true ? (
+              <Alert bsStyle="success">
+                <h4>Add Successful!</h4>
+              </Alert>
+            ) : null}
 
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Add Partner: </small>{' '}
-          </h2>
+            {this.state.removeshow == true ? (
+              <Alert bsStyle="danger">
+                <h4>Partner Removed!</h4>
+              </Alert>
+            ) : null}
+          </Col>
+        </Row>
 
-          <input
-            type="text"
-            label="Text"
-            placeholder="Add MFI Partner"
-            ref="addpartnername"
-          />
-        </Form>
-
-        <Button
-          name="Add "
-          url="partnerlist"
-          onClickHandler={() => {
-            console.log(this.refs.addpartnername.value)
-            this.addPartner(this.refs.addpartnername.value)
-          }}
-        />
-
-        {this.state.addshow === true ? (
-          <Alert bsStyle="success" closeLabel="close">
-            <h4>Add Successful</h4>
-          </Alert>
-        ) : null}
-
-        {this.state.adderror === true ? (
-          <Alert bsStyle="warning">
-            <h4>Partner Already Exists</h4>
-          </Alert>
-        ) : null}
-
-        {this.state.removeshow === true ? (
-          <Alert bsStyle="warning" closeLabel="close">
-            <h4>Partner Removed</h4>
-          </Alert>
-        ) : null}
-
-        <Button
-          name="Edit List"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ editing: true })
-            this.cleanList()
-          }}
-        />
-
-        <ReactTable
-          data={this.state.data}
-          columns={[
-            {
-              Header: 'MFI Partner',
-              accessor: 'partner_names',
-              Cell: this.state.editing ? this.renderEditable : null,
-              filterMethod: (
-                filter,
-                row // Custom filter method for case insensitive filtering
-              ) =>
-                row[filter.id]
-                  .toLowerCase()
-                  .startsWith(filter.value.toLowerCase()) ||
-                row[filter.id]
-                  .toLowerCase()
-                  .endsWith(filter.value.toLowerCase())
-            },
-            {
-              Header: 'Edit',
-              id: 'edit-button',
-              width: 150,
-              Cell: props => <Button name="Edit" />
-            },
-            {
-              Header: 'Remove',
-              id: 'delete-button',
-              width: 150,
-              Cell: ({ row, original }) => {
-                // Generate row such that value of text field is rememebered to pass into remove loan function
-                return (
-                  <Button
-                    name="Remove"
-                    url="partnerlist"
-                    onClickHandler={() =>
-                      this.removePartner(original.partner_names)
-                    } // Send text value to remove loan function
-                  />
-                )
-              }
-            }
-          ]}
-          filtered={this.state.filtered}
-          defaultSorted={[
-            {
-              id: 'partner_names',
-              desc: false
-            }
-          ]}
-        />
-
-        <Button
-          name="Save Changes"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ savesuccess: true })
-          }}
-        />
-
-        {this.state.savesuccess === true ? (
-          <Alert bsStyle="success">
-            <h4>You have successfully saved {this.state.edited_partners}</h4>
-          </Alert>
-        ) : null}
+        <Row>
+          <Col sm={12} md={12}>
+            <ReactTable
+              data={this.state.data}
+              columns={[
+                {
+                  Header: 'MFI Partner',
+                  accessor: 'partner_names',
+                  Cell: this.renderEditable,
+                  filterMethod: (
+                    filter,
+                    row // Custom filter method for case insensitive filtering
+                  ) =>
+                    row[filter.id]
+                      .toLowerCase()
+                      .startsWith(filter.value.toLowerCase()) ||
+                    row[filter.id]
+                      .toLowerCase()
+                      .endsWith(filter.value.toLowerCase())
+                },
+                {
+                  Header: 'Edit',
+                  id: 'edit-button',
+                  width: 150,
+                  Cell: props => (
+                    <Button className="button-image-edit" name="Edit" />
+                  )
+                },
+                {
+                  Header: 'Remove',
+                  id: 'delete-button',
+                  width: 150,
+                  Cell: ({ row, original }) => {
+                    // Generate row such that value of text field is rememebered to pass into remove loan function
+                    return (
+                      <Button
+                        className="button-image-remove"
+                        name="Remove"
+                        url="partnerlist"
+                        onClickHandler={() =>
+                          this.removeLoan(original.partner_names)
+                        } // Send text value to remove loan function
+                      />
+                    )
+                  }
+                }
+              ]}
+              filtered={this.state.filtered}
+              defaultSorted={[
+                {
+                  id: 'partner_names',
+                  desc: false
+                }
+              ]}
+            />
+          </Col>
+        </Row>
       </Grid>
     )
   }
