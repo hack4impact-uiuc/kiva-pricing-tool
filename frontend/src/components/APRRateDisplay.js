@@ -266,7 +266,7 @@ class APRRateDisplay extends Component {
     for (let j = 0; j < 13; j++) {
       let row = "";
       for (let i = 0; i < 15; i++) {
-	  row += formDataReducer.original_repayment_schedule[i][j] + ',';
+	  row += formDataReducer.calc_repayment_schedule[i][j] + ',';
       }
       row+='\n';
       csv.push(row);
@@ -350,7 +350,7 @@ class APRRateDisplay extends Component {
 
   createChart() {
     const { formDataReducer } = this.props
-    this.setState({data: formDataReducer.original_repayment_schedule});	
+    this.setState({data: formDataReducer.calc_repayment_schedule});	
     this.setState({isHidden: true});
   }
 
