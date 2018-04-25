@@ -162,10 +162,10 @@ def save_loan():
         }
 
         # for repayment schedule
-        partner_name : request_json['partner_name'],
-        loan_theme : request_json['loan_theme'],
-        product_type : request_json['product_type'],
-        version_num : request_json['version_num']
+        partner_name = request_json['partner_name']
+        loan_theme = request_json['loan_theme']
+        product_type = request_json['product_type']
+        version_num = request_json['version_num']
         origin_matrix = request_json['origin_matrix']
         user_change_matrix = request_json['user_change_matrix']
         recal_matrix = request_json['repay_matrix']
@@ -187,54 +187,54 @@ def save_loan():
             cur_recal_col = repay_matrix[:,col_idx]
 
             new_repay_row = {
-                    'id' = repay_id
-                    'period_num' = int(cur_origin_col[PERIOD_IDX])
-                    'payment_due_date' = datetime.datetime.strptime(cur_origin_col[DATE_IDX], '%d-%b-%Y')
-                    'days' = int(cur_origin_col[DAY_IDX])
-                    'amount_due' = float(cur_origin_col[PRINCIPAL_DISBURSED_IDX])
-                    'principal_payment' = float(cur_origin_col[PRINCIPAL_PAID_IDX])
-                    'interest' = float(cur_origin_col[INTEREST_PAID_IDX])
-                    'fees' = float(cur_origin_col[FEES_IDX])
-                    'insurance' = float(cur_origin_col[INSURANCE_IDX])
-                    'taxes' = float(cur_origin_col[TAXES_IDX])
-                    'security_deposit' = float(cur_origin_col[SECURITY_DEPOSIT_IDX])
-                    'security_interest_paid' = float(cur_origin_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
-                    'balance' = float(cur_origin_col[BALANCE_IDX])
-                    'deposit_balance' = float(cur_origin_col[SECURITY_DEPOSIT_BALANCE_IDX])
-                    'deposit_withdrawal' = float(cur_origin_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
-                    'total_cashflow' = float(cur_origin_col[CASH_FLOW_IDX])
+                    'id' : repay_id,
+                    'period_num' : int(cur_origin_col[PERIOD_IDX]),
+                    'payment_due_date' : datetime.datetime.strptime(cur_origin_col[DATE_IDX], '%d-%b-%Y'),
+                    'days' : int(cur_origin_col[DAY_IDX]),
+                    'amount_due' : float(cur_origin_col[PRINCIPAL_DISBURSED_IDX]),
+                    'principal_payment' : float(cur_origin_col[PRINCIPAL_PAID_IDX]),
+                    'interest' : float(cur_origin_col[INTEREST_PAID_IDX]),
+                    'fees' : float(cur_origin_col[FEES_IDX]),
+                    'insurance' : float(cur_origin_col[INSURANCE_IDX]),
+                    'taxes' : float(cur_origin_col[TAXES_IDX]),
+                    'security_deposit' : float(cur_origin_col[SECURITY_DEPOSIT_IDX]),
+                    'security_interest_paid' : float(cur_origin_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
+                    'balance' : float(cur_origin_col[BALANCE_IDX]),
+                    'deposit_balance' : float(cur_origin_col[SECURITY_DEPOSIT_BALANCE_IDX]),
+                    'deposit_withdrawal' : float(cur_origin_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
+                    'total_cashflow' : float(cur_origin_col[CASH_FLOW_IDX]),
 
-                    'period_num_user' = int(cur_user_change_col[PERIOD_IDX])
-                    'payment_due_date_user' = datetime.datetime.strptime(cur_user_change_col[DATE_IDX], '%d-%b-%Y')
-                    'days_user' = int(cur_user_change_col[DAY_IDX])
-                    'amount_due_user' = float(cur_user_change_col[PRINCIPAL_DISBURSED_IDX])
-                    'principal_payment_user' = float(cur_user_change_col[PRINCIPAL_PAID_IDX])
-                    'interest_user' = float(cur_user_change_col[INTEREST_PAID_IDX])
-                    'fees_user' = float(cur_user_change_col[FEES_IDX])
-                    'insurance_user' = float(cur_user_change_col[INSURANCE_IDX])
-                    'taxes_user' = float(cur_user_change_col[TAXES_IDX])
-                    'security_deposit_uesr' = float(cur_user_change_col[SECURITY_DEPOSIT_IDX])
-                    'security_interest_paid_user' = float(cur_user_change_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
-                    'balance_user' = float(cur_user_change_col[BALANCE_IDX])
-                    'deposit_balance_user' = float(cur_user_change_col[SECURITY_DEPOSIT_BALANCE_IDX])
-                    'deposit_withdrawal_user' = float(cur_user_change_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
-                    'total_cashflow_user' = float(cur_user_change_col[CASH_FLOW_IDX])
+                    'period_num_user' : int(cur_user_change_col[PERIOD_IDX]),
+                    'payment_due_date_user' : datetime.datetime.strptime(cur_user_change_col[DATE_IDX], '%d-%b-%Y'),
+                    'days_user' : int(cur_user_change_col[DAY_IDX]),
+                    'amount_due_user' : float(cur_user_change_col[PRINCIPAL_DISBURSED_IDX]),
+                    'principal_payment_user' : float(cur_user_change_col[PRINCIPAL_PAID_IDX]),
+                    'interest_user' : float(cur_user_change_col[INTEREST_PAID_IDX]),
+                    'fees_user' : float(cur_user_change_col[FEES_IDX]),
+                    'insurance_user' : float(cur_user_change_col[INSURANCE_IDX]),
+                    'taxes_user' : float(cur_user_change_col[TAXES_IDX]),
+                    'security_deposit_uesr' : float(cur_user_change_col[SECURITY_DEPOSIT_IDX]),
+                    'security_interest_paid_user' : float(cur_user_change_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
+                    'balance_user' : float(cur_user_change_col[BALANCE_IDX]),
+                    'deposit_balance_user' : float(cur_user_change_col[SECURITY_DEPOSIT_BALANCE_IDX]),
+                    'deposit_withdrawal_user' : float(cur_user_change_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
+                    'total_cashflow_user' : float(cur_user_change_col[CASH_FLOW_IDX]),
 
-                    'period_num_calc' = int(cur_recal_col[PERIOD_IDX])
-                    'payment_due_date_calc' = datetime.datetime.strptime(cur_recal_col[DATE_IDX], '%d-%b-%Y')
-                    'days_calc' = int(cur_recal_col[DAY_IDX])
-                    'amount_due_calc' = float(cur_recal_col[PRINCIPAL_DISBURSED_IDX])
-                    'principal_payment_calc' = float(cur_recal_col[PRINCIPAL_PAID_IDX])
-                    'interest_calc' = float(cur_recal_col[INTEREST_PAID_IDX])
-                    'fees_calc' = float(cur_recal_col[FEES_IDX])
-                    'insurance_calc' = float(cur_recal_col[INSURANCE_IDX])
-                    'taxes_calc' = float(cur_recal_col[TAXES_IDX])
-                    'security_deposit_calc' = float(cur_recal_col[SECURITY_DEPOSIT_IDX])
-                    'security_interest_paid_calc' = float(cur_recal_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
-                    'balance_calc' = float(cur_recal_col[BALANCE_IDX])
-                    'deposit_balance_calc' = float(cur_recal_col[SECURITY_DEPOSIT_BALANCE_IDX])
-                    'deposit_withdrawal_calc' = float(cur_recal_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
-                    'total_cashflow_calc' = float(cur_recal_col[CASH_FLOW_IDX])
+                    'period_num_calc' : int(cur_recal_col[PERIOD_IDX]),
+                    'payment_due_date_calc' : datetime.datetime.strptime(cur_recal_col[DATE_IDX], '%d-%b-%Y'),
+                    'days_calc' : int(cur_recal_col[DAY_IDX]),
+                    'amount_due_calc' : float(cur_recal_col[PRINCIPAL_DISBURSED_IDX]),
+                    'principal_payment_calc' : float(cur_recal_col[PRINCIPAL_PAID_IDX]),
+                    'interest_calc' : float(cur_recal_col[INTEREST_PAID_IDX]),
+                    'fees_calc' : float(cur_recal_col[FEES_IDX]),
+                    'insurance_calc' : float(cur_recal_col[INSURANCE_IDX]),
+                    'taxes_calc' : float(cur_recal_col[TAXES_IDX]),
+                    'security_deposit_calc' : float(cur_recal_col[SECURITY_DEPOSIT_IDX]),
+                    'security_interest_paid_calc' : float(cur_recal_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
+                    'balance_calc' : float(cur_recal_col[BALANCE_IDX]),
+                    'deposit_balance_calc' : float(cur_recal_col[SECURITY_DEPOSIT_BALANCE_IDX]),
+                    'deposit_withdrawal_calc' : float(cur_recal_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
+                    'total_cashflow_calc' : float(cur_recal_col[CASH_FLOW_IDX])
                 }
             repay_schedule = RepaymentSchedule(new_repay_row)
             db.session.add(repay_schedule)

@@ -12,8 +12,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 * [Docs for Setting up](https://github.com/tko22/flask-boilerplate/blob/master/docs/regular-setup.md)
 
 ## Design Resources
-* [Figma for Wireframes](https://www.figma.com/file/0jmf44vrazZ8C2vkTCwnroMF/Kiva)
-* [Figma for Final Design]()
+* [Figma for Mockups](https://www.figma.com/file/0jmf44vrazZ8C2vkTCwnroMF/Kiva)
 
 ## Frontend Resources
 
@@ -65,7 +64,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 * [Article on Promises](https://gist.github.com/domenic/3889970)
 
 ## Backend Resources
-[Database Schema](https://docs.google.com/document/d/1qriyM0TZ51yHTynVHcDXwpPW9GKJDdjv6Nk0JDInJho/edit?usp=sharing)
+[Database Schema](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/api_docs.md)
 
 **SQL Alchemy**
 * What is SQL Alchemy?

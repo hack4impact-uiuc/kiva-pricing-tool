@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import {
   Grid,
   Navbar as BootstrapNavbar,
@@ -8,42 +7,45 @@ import {
   NavDropdown,
   MenuItem
 } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import { Link } from 'react-router-dom'
 import './../styles/navbar.css'
 
+// note: changed NavItem's component class because we cannot have nested <a>
 class Navbar extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { resetFormData } = this.props
     return (
       <Grid>
         <BootstrapNavbar fixedTop fluid className="custom-navbar-styles">
           <BootstrapNavbar.Toggle />
+
           <BootstrapNavbar.Collapse>
             <Nav>
-              <NavItem className="hover-fancy">
-                <Link className="nav-white-link link-no-effect" to="/">
-                  Home
-                </Link>
-              </NavItem>
-
-              <NavItem className="hover-fancy">
-                <Link className="nav-white-link link-no-effect" to="newloan">
+              <LinkContainer className="nav-white-link link-no-effect" to="/">
+                <NavItem className="hover-fancy">Home</NavItem>
+              </LinkContainer>
+              <LinkContainer
+                className="nav-white-link link-no-effect"
+                to="newloan"
+              >
+                <NavItem className="hover-fancy nav-white-link">
                   New Loan
-                </Link>
-              </NavItem>
+                </NavItem>
+              </LinkContainer>
+              <LinkContainer
+                className="nav-white-link link-no-effect"
+                to="findloan"
+              >
+                <NavItem className="hover-fancy">Find Loan</NavItem>
+              </LinkContainer>
 
-              <NavItem className="hover-fancy">
-                <Link className="nav-white-link link-no-effect" to="findloan">
-                  Find Loan
-                </Link>
-              </NavItem>
-
-              <NavDropdown className="hover-fancy" title="Admin Tools">
-                <MenuItem>
+              <NavDropdown
+                className="hover-fancy"
+                id="adminToolNav"
+                title="Admin Tools"
+              >
+                <MenuItem componentClass="span">
                   <Link
                     className="link-no-effect dropdown-link"
                     to="partnerlist"
@@ -51,7 +53,8 @@ class Navbar extends Component {
                     Partner List
                   </Link>
                 </MenuItem>
-                <MenuItem>
+
+                <MenuItem componentClass="span">
                   <Link className="link-no-effect dropdown-link" to="themelist">
                     Loan Theme List
                   </Link>
@@ -64,5 +67,4 @@ class Navbar extends Component {
     )
   }
 }
-// onClick={resetFormData}
 export default Navbar
