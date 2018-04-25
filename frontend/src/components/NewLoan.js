@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { Api } from './../utils'
 import './../styles/app.css'
 import TextField from './TextField'
 import LiveSearch from './LiveSearch'
@@ -28,16 +29,12 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData } = this.props
+    const { resetFormData, changedFormData } = this.props
+    changedFormData('back', 'newloan')
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
-  }
-
-  handleTextChange = (name, value) => {
-    const { changedFormData } = this.props
-    changedFormData([name], [value])
   }
 
   inputsEntered() {
@@ -45,8 +42,7 @@ class NewLoan extends Component {
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType) &&
-      !this.isNullOrEmpty(formDataReducer.versionNum)
+      !this.isNullOrEmpty(formDataReducer.productType)
     )
   }
 
@@ -63,10 +59,9 @@ class NewLoan extends Component {
             label="mfi"
             options={this.state.partner_names}
             placeholder="Select MFI Partner"
-            typeVal="String"
             limit={100}
             selected={formDataReducer.mfi}
-            onChange={e => {
+            onInputChange={e => {
               changedFormData('mfi', e)
             }}
           />
@@ -76,7 +71,7 @@ class NewLoan extends Component {
             options={this.state.loan_themes}
             placeholder="Select Loan Type"
             selected={formDataReducer.loanType}
-            onChange={e => {
+            onInputChange={e => {
               changedFormData('loanType', e)
             }}
           />
@@ -90,7 +85,6 @@ class NewLoan extends Component {
             limit={100}
             textBody={formDataReducer.productType}
           />
-
           <Button name="Back" url="" />
 
           <Button
@@ -98,22 +92,29 @@ class NewLoan extends Component {
             name="Continue"
             url="form1"
             onClickHandler={() => {
-              axios
-                .get(
-                  'http://127.0.0.1:3453/getVersionNum?partner_name=' +
-                    formDataReducer.mfi +
-                    '&theme=' +
-                    formDataReducer.loanType +
-                    '&product=' +
-                    formDataReducer.loanProduct
-                )
-                .then(response => {
-                  changedFormData('versionNum', [
-                    response.data.result['version'].toString()
-                  ])
-                })
-
-              changedFormData('back', 'newloan')
+              Api.getVersionNum(
+                formDataReducer.mfi,
+                formDataReducer.loanType,
+                formDataReducer.productType
+              ).then(response => {
+                changedFormData('versionNum', [
+                  response.data.result['version'].toString()
+                ])
+              })
+              // axios
+              //   .get(
+              //     'http://127.0.0.1:3453/getVersionNum?partner_name=' +
+              //       formDataReducer.mfi +
+              //       '&theme=' +
+              //       formDataReducer.loanType +
+              //       '&product=' +
+              //       formDataReducer.loanProduct
+              //   )
+              //   .then(response => {
+              //     changedFormData('versionNum', [
+              //       response.data.result['version'].toString()
+              //     ])
+              //   })
             }}
           />
         </Form>

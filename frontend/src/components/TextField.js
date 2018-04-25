@@ -18,6 +18,7 @@ class TextField extends Component {
   handleChange(e) {
     const { formDataReducer, changedFormData } = this.props
     let value = e.target.value
+    console.log(changedFormData, formDataReducer)
 
     if (this.props.typeVal.toLowerCase() == 'int') {
       let tryInt = parseInt(value)

@@ -162,7 +162,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100"
             textBody={formDataReducer.nominalInterestRate}
-            // onTextInputChange={this.handleTextChange}
           />
         </Form>
 
