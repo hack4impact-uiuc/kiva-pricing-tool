@@ -63,7 +63,7 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (update != null && update.length != 0 && update != ' ') {
+          if (original !== update && update && update.length != 0 && update != ' ') {
             this.setState({
               edited_partners: this.state.edited_partners.concat({
                 original: original,
@@ -211,6 +211,7 @@ class AdminPartners extends Component {
               <small> Add Partner: </small>{' '}
             </h2>
             <input
+              className="expand-width"
               type="text"
               label="Text"
               placeholder="Add MFI Partner"

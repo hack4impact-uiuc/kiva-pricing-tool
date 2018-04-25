@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
@@ -59,7 +59,7 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (update != null && update.length != 0 && update != ' ') {
+          if (original !== update && update && update.length != 0 && update != ' ') {
             this.setState({
               edited_loans: this.state.edited_loans.concat({
                 original: original,
@@ -246,8 +246,6 @@ class AdminThemes extends Component {
           <Col sm={12} md={12}>
             <ReactTable
               data={this.state.data}
-              noDataText="No Results Found." // Text displayed when no data is in the table
-              loadingText="Loading themes...This may take a moment." // Text displayed when data is being loaded
               columns={[
                 {
                   Header: 'Loan Theme',
@@ -276,16 +274,14 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.removeLoan(original.loan_theme)} // Send text value to remove loan function
+                          this.removeTheme(original.loan_theme)} // Send text value to remove loan function
                       />
                     )
                   }
                 }
               ]}
-              // Allow react table to use state.filterable to filter correct column based on state.filterable id and value
               filtered={this.state.filtered}
               defaultSorted={[
-                // Sort table alphabetically
                 {
                   id: 'loan_theme',
                   desc: false
