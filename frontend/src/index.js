@@ -1,8 +1,8 @@
 // @flow
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-theme.css'
-import 'typeface-raleway'
-import 'typeface-montserrat'
+// import 'typeface-raleway'
+// import 'typeface-montserrat'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'

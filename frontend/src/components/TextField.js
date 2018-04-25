@@ -60,7 +60,7 @@ class TextField extends Component {
     this.setState({ textBody: value })
     // console.log(this.props.reduxId, value)
     // console.log(this.props.onTextInputChange)
-    this.props.onTextInputChange(this.props.reduxId, value)
+    this.props.onTextInputChange(this.props.reduxId.value)
   }
 
   render() {

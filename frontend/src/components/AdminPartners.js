@@ -16,9 +16,7 @@ import 'react-table/react-table.css'
 import axios from 'axios'
 import ReactDOM from 'react-dom'
 import { ToastContainer, ToastMessage } from 'react-toastr'
-//import "./../demo.css"
-import 'react-toastr/demo.css'
-//require("./../demo.css");
+require('./../styles/react-toastr.css')
 let container
 
 class AdminPartners extends Component {
@@ -27,7 +25,6 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
-
       addconfirm: false,
       adderror: false,
       removeshow: false,
@@ -78,20 +75,17 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (original != update) {
+          if (
+            original != update &&
+            update != null &&
+            update.length != 0 &&
+            update != ' '
+          ) {
             //add
             let partner = { partner_name: update }
             console.log(partner.partner_name + 'hi')
             axios
               .post('http://127.0.0.1:3453/addMFI', partner)
-              // .then(
-              //         response => {
-              //   this.setState({
-              //     data: this.state.data.concat({
-              //       partner_names: update
-              //     })
-              //   })
-              // })
               .catch(function(error) {
                 console.log('error with adding' + error + partner)
               })
@@ -111,6 +105,16 @@ class AdminPartners extends Component {
                   }
                 }
               })
+            container.success(``, 'Your changes have been saved', {
+              closeButton: true
+            })
+          } else {
+            // ADD ALERT
+            container.warning(
+              'Please refresh and use remove instead.',
+              'Cannot add empty partner name.',
+              {}
+            )
           }
         }}
         dangerouslySetInnerHTML={{
@@ -139,17 +143,11 @@ class AdminPartners extends Component {
           console.log('error with adding')
         })
       this.setState({ addshow: true })
+      container.success(``, 'Partner successfully added', {
+        closeButton: true
+      })
     }
   }
-
-  //     this.setState({ addshow: true })
-  //     let data = { partner_name: partner_name }
-  //     axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
-  //       this.setState({
-  //         data: this.state.data.concat({ partner_names: partner_name })
-  //       })
-  //     })
-  //   }
 
   removePartner(partner_name) {
     this.setState({ removeshow: true })
@@ -168,11 +166,6 @@ class AdminPartners extends Component {
           }
         }
       })
-  }
-
-  savePartner() {
-    this.setState({ editing: false })
-    console.log('yay')
   }
 
   render() {
@@ -217,28 +210,9 @@ class AdminPartners extends Component {
         <Button
           name="Add "
           url="partnerlist"
-          onClickHandler={() => {
-            this.addPartner(this.refs.addpartnername.state.textBody)
-          }}
+          onClickHandler={() =>
+            this.addPartner(this.refs.addpartnername.state.textBody)}
         />
-
-        {this.state.addshow == true ? (
-          <Alert bsStyle="success" closeLabel="close">
-            <h4>Add Successful</h4>
-          </Alert>
-        ) : null}
-
-        {this.state.adderror == true ? (
-          <Alert bsStyle="warning">
-            <h4>Partner Already Exists</h4>
-          </Alert>
-        ) : null}
-
-        {this.state.removeshow == true ? (
-          <Alert bsStyle="warning" closeLabel="close">
-            <h4>Partner Removed</h4>
-          </Alert>
-        ) : null}
 
         <Button
           name="Edit List"
@@ -247,15 +221,6 @@ class AdminPartners extends Component {
             this.setState({ editing: true })
             this.cleanList()
           }}
-        />
-
-        <Button
-          name="TEST"
-          url="partnerlist"
-          onClickHandler={() =>
-            container.success(`hi! Now is ${new Date()}`, `///title\\\\\\`, {
-              closeButton: true
-            })} // Send text value to remove loan function
         />
 
         <ReactTable
