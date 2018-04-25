@@ -250,7 +250,8 @@ def cal_apr_helper(input_json):
         security_deposit_balance[-1] = 0
         schedule_matrix.append(security_deposit_balance)
         schedule_matrix.append(result)
-        schedule_matrix = np.array(schedule_matrix)
+        for idx in range(len(schedule_matrix)):
+            schedule_matrix[idx] = list(schedule_matrix[idx])
 
         return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
 
