@@ -18,27 +18,27 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'bar',      
-  	 	barclass: "active",
-	  	lineclass: "",
-   		pieclass: "",
-		  areaclass: "",
-		  data: [],
-		  data2: [
-      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      ["1-Jan-2012", "2-Jan-2012", "3-Jan-2012", "4-Jan-2012", "5-Jan-2012", "6-Jan-2012", "7-Jan-2012", "8-Jan-2012", "9-Jan-2012", "10-Jan-2012", "11-Jan-2012", "12-Jan-2012", "13-Jan-2012"],
-      [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 0, 0],
-      [0, 0, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 0],
-      [51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-      [51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 0, 0],
-      [0.51, 0.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 0],
-      [51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-      [0, 0.0013972602739726028, 0.001424695815349972, 0.0014521321083860088, 0.0014795691531013073, 0.0015070069495164607, 0.0015344454976520638, 0.0015618847975287118, 0.0015893248491670002, 0.0016167656525875253, 0.001644207207810884, 0.0016716495148576733, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61.01687894181993],
-      [51, 52.001397260273976, 53.00282195608932, 54.00427408819771, 55.00575365735081, 56.007260664300325, 57.00879510979798, 58.010356994595504, 59.011946319444675, 60.01356308509726, 61.01520729230507, 61.01687894181993, 0],
-      [4846.49, -53.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -545.99312105818, 0],
+      barclass: "active",
+      lineclass: "",
+      pieclass: "",
+      areaclass: "",
+      data: [],
+      testData: [
+      	[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      	["1-Jan-2012", "2-Jan-2012", "3-Jan-2012", "4-Jan-2012", "5-Jan-2012", "6-Jan-2012", "7-Jan-2012", "8-Jan-2012", "9-Jan-2012", "10-Jan-2012", "11-Jan-2012", "12-Jan-2012", "13-Jan-2012"],
+      	[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      	[5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      	[5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 0, 0],
+      	[0, 0, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 0],
+      	[51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+      	[51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 0, 0],
+      	[0.51, 0.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 0],
+      	[51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+      	[0, 0.0013972602739726028, 0.001424695815349972, 0.0014521321083860088, 0.0014795691531013073, 0.0015070069495164607, 0.0015344454976520638, 0.0015618847975287118, 0.0015893248491670002, 0.0016167656525875253, 0.001644207207810884, 0.0016716495148576733, 0],
+      	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61.01687894181993],
+      	[51, 52.001397260273976, 53.00282195608932, 54.00427408819771, 55.00575365735081, 56.007260664300325, 57.00879510979798, 58.010356994595504, 59.011946319444675, 60.01356308509726, 61.01520729230507, 61.01687894181993, 0],
+      	[4846.49, -53.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -545.99312105818, 0],
       ]
     }
     // this.convertMatrix = this.convertMatrix.bind(this)
@@ -263,12 +263,12 @@ class APRRateDisplay extends Component {
     const { formDataReducer } = this.props
     let csv = [['Period Number,Date,Days,Principal Disbursed,Principal Paid,Balance,Interest Paid,Fees Paid,Insurance Paid,Taxes Paid,Security Deposit,Interest Paid on Security,Deposit Withdrawal,Deposit Balance,Total Cashflow\n']];
     for (let j = 0; j < 13; j++) {
-    let row = "";
-        for (let i = 0; i < 15; i++) {
-	    row += formDataReducer.original_repayment_schedule[i][j] + ',';
-	}
-    row+='\n';
-    csv.push(row);
+      let row = "";
+      for (let i = 0; i < 15; i++) {
+	  row += formDataReducer.original_repayment_schedule[i][j] + ',';
+      }
+      row+='\n';
+      csv.push(row);
     }
     let csvFile = new Blob(csv,{type: 'text/csv;charset=utf-8;'});
     let url = URL.createObjectURL(csvFile);
@@ -278,35 +278,36 @@ class APRRateDisplay extends Component {
     createDownloadLink.click();
   }
 
-  changeChart(paramVisual) {
-    		this.setState({visualType: paramVisual})
-		switch (paramVisual){
-			case 'bar':
-				this.setState({barclass: "active"});
-				this.setState({lineclass: ""});
-				this.setState({areaclass: ""});
-				this.setState({pieclass: ""});
-				break;
-			case 'line':
-				this.setState({lineclass: "active"});
-				this.setState({barclass: ""});
-				this.setState({areaclass: ""});
-				this.setState({pieclass: ""});
-				break;
-			case 'area':
-				this.setState({areaclass: "active"});
-				this.setState({lineclass: ""});
-				this.setState({barclass: ""});
-				this.setState({pieclass: ""});
-				break;
-			case 'pie':
-				this.setState({pieclass: "active"});
-				this.setState({lineclass: ""});
-				this.setState({areaclass: ""});
-				this.setState({barclass: ""});
-				break;			
-		}
+  changeChart(paramVisual) {	
+    this.setState({visualType: paramVisual})
+      switch (paramVisual){
+        case 'bar':
+	  this.setState({barclass: "active"});
+	  this.setState({lineclass: ""});
+	  this.setState({areaclass: ""});
+	  this.setState({pieclass: ""});
+	break;
+	case 'line':
+	  this.setState({lineclass: "active"});
+	  this.setState({barclass: ""});
+	  this.setState({areaclass: ""});
+	  this.setState({pieclass: ""});
+	break;
+	case 'area':
+	  this.setState({areaclass: "active"});
+	  this.setState({lineclass: ""});
+	  this.setState({barclass: ""});
+	  this.setState({pieclass: ""});
+	break;
+	case 'pie':
+	  this.setState({pieclass: "active"});
+	  this.setState({lineclass: ""});
+	  this.setState({areaclass: ""});
+	  this.setState({barclass: ""});
+	break;			
+      }
   }
+
   saveData() {
     const { formDataReducer, changedFormData } = this.props
     let orig_matrix = [
@@ -503,7 +504,7 @@ class APRRateDisplay extends Component {
       loan_amount: formDataReducer.loanAmount[0],
       installment: formDataReducer.installment[0],
       nominal_interest_rate: formDataReducer.nominalInterestRate[0],
-      grace_period_principal: formDataReducer.gracePeriodPrincipal[0],
+       grace_period_principal: formDataReducer.gracePeriodPrincipal[0],
       grace_period_interest_pay: formDataReducer.gracePeriodInterestPay[0],
       grace_period_interest_calculate:
         formDataReducer.gracePeriodInterestCalculate[0],
@@ -539,7 +540,7 @@ class APRRateDisplay extends Component {
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    axios
+   axios
       .post('http://127.0.0.1:3453/saveNewLoan', payload)
       .then(response => {
         console.log(response)
@@ -569,14 +570,14 @@ class APRRateDisplay extends Component {
           disable={true}
         />
         <div class = "col-lg-4 pull-right">
-		<ul class = "nav nav-pills nav-stacked">
-			<li role = "presentation" class={this.state.barclass}><a onClick={()=>this.changeChart("bar")}>Bar</a></li>
-			<li role = "presentation" class={this.state.lineclass}><a onClick={()=>this.changeChart("line")}>Line</a></li>
-			<li role = "presentation" class={this.state.pieclass}><a onClick={()=>this.changeChart("pie")}>Pie</a></li>
-			<li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
-		</ul>
-		</div>
-	    <KivaChart visualType={this.state.visualType} data={this.state.data2} />
+	  <ul class = "nav nav-pills nav-stacked">
+	    <li role = "presentation" class={this.state.barclass}><a onClick={()=>this.changeChart("bar")}>Bar</a></li>
+	    <li role = "presentation" class={this.state.lineclass}><a onClick={()=>this.changeChart("line")}>Line</a></li>
+	    <li role = "presentation" class={this.state.pieclass}><a onClick={()=>this.changeChart("pie")}>Pie</a></li>
+	    <li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
+	  </ul>
+    	</div>
+	<KivaChart visualType={this.state.visualType} data={this.state.testData} />
         <br />
         <Button name="Cancel" url="" />
         <Button name="Back" url={formDataReducer.back} />
