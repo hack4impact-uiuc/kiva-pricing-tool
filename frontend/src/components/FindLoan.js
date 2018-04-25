@@ -20,8 +20,7 @@ class FindLoan extends Component {
       partner_names: [],
       loan_themes: [],
       product_types: [],
-      versions: [],
-      error: false
+      versions: []
     }
   }
 
@@ -51,21 +50,12 @@ class FindLoan extends Component {
         this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
       let validLoanTheme =
         this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
-      console.log(formDataReducer.mfi[0], formDataReducer.loanType[0])
+
       if (validPartnerName && validLoanTheme) {
-        axios
-          .get(
-            'http://127.0.0.1:3453/getPTEntry?partner_name=' +
-              formDataReducer.mfi[0] +
-              '&loan_theme=' +
-              formDataReducer.loanType[0]
-          )
-          .then(response => {
-            this.setState({ product_types: response.data.result.product_types })
-          })
-          .catch(function(error) {
-            console.log(error)
-          })
+        Api.getProductType(
+          formDataReducer.mfi[0],
+          formDataReducer.loanType[0]
+        ).then(response => this.setState({ product_types: response }))
       }
     }
   }
@@ -85,23 +75,11 @@ class FindLoan extends Component {
         this.state.product_types.indexOf(formDataReducer.productType[0]) != -1
 
       if (validPartnerName && validLoanTheme && validProductType) {
-        axios
-          .get(
-            'http://127.0.0.1:3453/getVersionNumEntry?partner_name=' +
-              formDataReducer.mfi[0] +
-              '&loan_theme=' +
-              formDataReducer.loanType[0] +
-              '&product_type=' +
-              formDataReducer.productType[0]
-          )
-          .then(response => {
-            this.setState({
-              versions: response.data.result.version_nums.map(String)
-            })
-          })
-          .catch(function(error) {
-            console.log(error)
-          })
+        Api.getVersionNum(
+          formDataReducer.mfi[0],
+          formDataReducer.loanType[0],
+          formDataReducer.productType[0]
+        ).then(response => this.setState({ versions: response }))
       }
     }
   }
