@@ -57,7 +57,6 @@ class TextField extends Component {
       this.setState({ error_message: '' })
     }
     this.setState({ textBody: value })
-    this.props.onTextInputChange(this.props.reduxId, value)
   }
 
   render() {

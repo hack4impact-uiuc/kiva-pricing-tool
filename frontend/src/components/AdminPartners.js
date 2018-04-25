@@ -5,6 +5,10 @@ import Button from './Button'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
+import { ToastContainer, ToastMessage } from 'react-toastr'
+require('./../styles/react-toastr.css')
+let container
+
 
 class AdminPartners extends Component {
   constructor(props) {
@@ -63,20 +67,15 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (original !== update) {
+
+          if (original !== update &&  update && update.length)) {
             //add
-            let update_partner = { partner_name: update }
+            let partner = { partner_name: update }
+            console.log(partner.partner_name + 'hi')
             axios
-              .post('http://127.0.0.1:3453/addMFI', update_partner)
-              .then(response => {
-                this.setState({
-                  data: this.state.data.concat({
-                    partner_names: update_partner
-                  })
-                })
-              })
+              .post('http://127.0.0.1:3453/addMFI', partner)
               .catch(function(error) {
-                console.log('error with adding' + error + update_partner)
+                console.log('error with adding' + error + partner)
               })
 
             //remove
@@ -94,6 +93,16 @@ class AdminPartners extends Component {
                   }
                 }
               })
+            container.success(``, 'Your changes have been saved', {
+              closeButton: true
+            })
+          } else {
+            // ADD ALERT
+            container.warning(
+              'Please refresh and use remove instead.',
+              'Cannot add empty partner name.',
+              {}
+            )
           }
         }}
         dangerouslySetInnerHTML={{
@@ -106,6 +115,7 @@ class AdminPartners extends Component {
   addPartner(partner_name) {
     if (partner_name && partner_name.length) {
       let data = { partner_name: partner_name }
+      console.log(data.partner_name + 'helo')
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
         .then(response => {
@@ -117,6 +127,9 @@ class AdminPartners extends Component {
           console.log('error with adding')
         })
       this.setState({ addshow: true })
+      container.success(``, 'Partner successfully added', {
+        closeButton: true
+      })
     }
   }
 
@@ -142,6 +155,11 @@ class AdminPartners extends Component {
   render() {
     return (
       <Grid className="padded-element-vertical">
+        <ToastContainer
+          ref={ref => (container = ref)}
+          className="toast-top-right"
+        />
+
         <Row>
           <Col sm={12} md={12}>
             <PageHeader className="page-header-montserrat bs-center">
@@ -192,21 +210,6 @@ class AdminPartners extends Component {
                 this.addPartner(this.refs.addpartnername.value)
               }}
             />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={12}>
-            {this.state.addshow === true ? (
-              <Alert bsStyle="success">
-                <h4>Add Successful!</h4>
-              </Alert>
-            ) : null}
-
-            {this.state.removeshow === true ? (
-              <Alert bsStyle="danger">
-                <h4>Partner Removed!</h4>
-              </Alert>
-            ) : null}
           </Col>
         </Row>
 
