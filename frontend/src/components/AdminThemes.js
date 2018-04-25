@@ -1,27 +1,39 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
+import { ToastContainer, ToastMessage } from 'react-toastr'
+require('./../styles/react-toastr.css')
+let container
 
 class AdminThemes extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: [], // Data retrieved from db
-      filtered: [] // ID and text data used for filtering react table
+      data: [],
+      filtered: [], // ID and text data used for filtering react table
+      editing: false
     }
-
-    this.renderUneditable = this.renderUneditable.bind(this)
+    this.renderEditable = this.renderEditable.bind(this)
   }
 
-  // ------------------------------------------------------ HELPER METHODS --------------------------------------------------------
+  cleanList() {
+    for (var i = 0; i < this.state.data.length; i++) {
+      console.log(this.state.data[i])
+      if (this.state.data[i].loan_theme === '') {
+        //Remove element in place, return array with element removed
+        this.setState({
+          data: this.state.data.slice(0, i).concat(this.state.data.slice(i + 1))
+        })
+      }
+    }
+  }
+
   componentDidMount() {
-    // Get all loan themes from database, populate data in state if response successful
     axios.get('http://127.0.0.1:3453/getAllLT').then(response => {
-      // Loop through response array to insert correctly formatted data into state.data array ( {loan_theme: THEME NAME} )
       for (let theme of response.data.result.loan_theme) {
         this.setState({
           data: this.state.data.concat({ loan_theme: theme })
@@ -30,7 +42,88 @@ class AdminThemes extends Component {
     })
   }
 
-  removeLoan(theme_name) {
+  renderEditable(cellInfo) {
+    var original = null
+    var update = null
+    return (
+      <div
+        style={{ backgroundColor: '#fafafa' }}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          const data = [...this.state.data]
+          original = data[cellInfo.index][cellInfo.column.id]
+          console.log(original)
+          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
+          update = data[cellInfo.index][cellInfo.column.id]
+          console.log(update)
+          this.setState({ data })
+
+          if (original !== update && update && update.length) {
+            //add
+            let theme = { loan_theme: update }
+            axios
+              .post('http://127.0.0.1:3453/addLT', theme)
+              .catch(function(error) {
+                console.log('error with adding' + error + theme)
+              })
+
+            //remove
+            axios
+              .delete('http://127.0.0.1:3453/removeLT/' + original)
+              .then(response => {
+                for (var i = 0; i < this.state.data.length; i++) {
+                  if (this.state.data[i].loan_theme === original) {
+                    // Remove element in place, return array with element removed
+                    this.setState({
+                      data: this.state.data
+                        .slice(0, i)
+                        .concat(this.state.data.slice(i + 1))
+                    })
+                  }
+                }
+              })
+            container.success(``, 'Your changes have been saved', {
+              closeButton: true
+            })
+          } else {
+            // ADD ALERT
+            container.warning(
+              'Please refresh and use remove instead.',
+              'Cannot add empty theme name.',
+              {}
+            )
+          }
+        }}
+        dangerouslySetInnerHTML={{
+          __html: this.state.data[cellInfo.index][cellInfo.column.id]
+        }}
+      />
+    )
+  }
+
+  addTheme(theme_name) {
+    if (theme_name && theme_name.length) {
+      let data = { loan_theme: theme_name }
+      axios
+        .post('http://127.0.0.1:3453/addLT', data)
+        .then(response => {
+          this.setState({
+            data: this.state.data.concat({ loan_theme: theme_name })
+          })
+        })
+        .catch(function(error) {
+          console.log('error with adding')
+        })
+      this.setState({ addshow: true })
+      container.success(``, 'Theme successfully added', {
+        closeButton: true
+      })
+    }
+  }
+
+  removeTheme(theme_name) {
+    this.setState({ removeshow: true })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
       .delete('http://127.0.0.1:3453/removeLT/' + theme_name)
@@ -48,48 +141,18 @@ class AdminThemes extends Component {
       })
   }
 
-  addLoan(theme_name) {
-    if (theme_name && theme_name.length) {
-      let data = { loan_theme: theme_name }
-      axios
-        .post('http://127.0.0.1:3453/addLT', data)
-        .then(response => {
-          this.setState({
-            data: this.state.data.concat({ loan_themes: theme_name })
-          })
-        })
-        .catch(function(error) {
-          console.log('error with adding')
-        })
-      this.setState({ addshow: true })
-    }
-  }
-
-  renderUneditable(cellInfo) {
-    return (
-      <div
-        //style={{ backgroundColor: '#fafafa' }}
-        suppressContentEditableWarning
-        onBlur={e => {
-          const data = [...this.state.data]
-          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
-          this.setState({ data })
-        }}
-        dangerouslySetInnerHTML={{
-          __html: this.state.data[cellInfo.index][cellInfo.column.id]
-        }}
-      />
-    )
-  }
-
-  // ------------------------------------------------------ RENDER ELEMENTS --------------------------------------------------------
   render() {
     return (
       <Grid className="padded-element-vertical">
+        <ToastContainer
+          ref={ref => (container = ref)}
+          className="toast-top-right"
+        />
+
         <Row>
           <Col sm={12} md={12}>
             <PageHeader className="page-header-montserrat bs-center">
-              Loan Theme List
+              Admin Theme List
             </PageHeader>
           </Col>
         </Row>
@@ -98,9 +161,8 @@ class AdminThemes extends Component {
           <Col sm={6} md={6}>
             <h2>
               {' '}
-              <small> Search Themes: </small>{' '}
+              <small> Search Loan Themes: </small>{' '}
             </h2>
-
             <div>
               <input
                 className="search-input"
@@ -108,8 +170,7 @@ class AdminThemes extends Component {
                 onChange={event =>
                   this.setState({
                     filtered: [{ id: 'loan_theme', value: event.target.value }]
-                  })
-                }
+                  })}
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -117,39 +178,46 @@ class AdminThemes extends Component {
           <Col sm={5} md={5}>
             <h2>
               {' '}
-              <small> Add Loan Theme: </small>{' '}
+              <small> Add Theme: </small>{' '}
             </h2>
-
             <input
+              className="expand-width"
               type="text"
               label="Text"
               placeholder="Add Loan Theme"
-              ref="addloantheme"
+              ref="addTheme"
             />
           </Col>
           <Col sm={1} md={1}>
             <Button
               className="button-image-add"
-              name="Add"
+              name="Add "
               url="themelist"
               onClickHandler={() => {
-                this.addLoan(this.refs.addloantheme.value)
+                this.addTheme(this.refs.addpartnername.value)
               }}
             />
           </Col>
         </Row>
 
+        <Button
+          name="Edit List"
+          url="themelist"
+          onClickHandler={() => {
+            this.setState({ editing: true })
+            this.cleanList()
+          }}
+        />
+
         <Row>
           <Col sm={12} md={12}>
             <ReactTable
               data={this.state.data}
-              noDataText="No Results Found." // Text displayed when no data is in the table
-              loadingText="Loading themes...This may take a moment." // Text displayed when data is being loaded
               columns={[
                 {
                   Header: 'Loan Theme',
                   accessor: 'loan_theme',
-                  Cell: this.renderUneditable,
+                  Cell: this.state.editing ? this.renderEditable : null,
                   filterMethod: (
                     filter,
                     row // Custom filter method for case insensitive filtering
@@ -162,12 +230,22 @@ class AdminThemes extends Component {
                       .endsWith(filter.value.toLowerCase())
                 },
                 {
-                  Header: 'Edit',
-                  id: 'edit-button',
+                  Header: '',
+                  id: 'save-button',
                   width: 150,
-                  Cell: props => (
-                    <Button className="button-image-edit" name="Edit" />
-                  )
+                  Cell: ({ row, original }) => {
+                    // Generate row such that value of text field is rememebered to pass into remove loan function
+                    if (this.state.editing) {
+                      return (
+                        <Button
+                          name="Save"
+                          url="themelist"
+                          onClickHandler={() =>
+                            this.setState({ editing: false })}
+                        />
+                      )
+                    }
+                  }
                 },
                 {
                   Header: 'Remove',
@@ -181,17 +259,14 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.removeLoan(original.loan_theme)
-                        } // Send text value to remove loan function
+                          this.removeTheme(original.loan_theme)} // Send text value to remove loan function
                       />
                     )
                   }
                 }
               ]}
-              // Allow react table to use state.filterable to filter correct column based on state.filterable id and value
               filtered={this.state.filtered}
               defaultSorted={[
-                // Sort table alphabetically
                 {
                   id: 'loan_theme',
                   desc: false

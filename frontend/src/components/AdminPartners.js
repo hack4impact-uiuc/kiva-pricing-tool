@@ -16,13 +16,7 @@ class AdminPartners extends Component {
       partner_names: [],
       data: [],
       filtered: [], // ID and text data used for filtering react table
-      addconfirm: false,
-      adderror: false,
-      removeshow: false,
-      savesuccess: false,
-      editing: false,
-      edited_partners: [],
-      addshow: false
+      editing: false
     }
     this.renderEditable = this.renderEditable.bind(this)
   }
@@ -192,6 +186,7 @@ class AdminPartners extends Component {
               <small> Add Partner: </small>{' '}
             </h2>
             <input
+              className="expand-width"
               type="text"
               label="Text"
               placeholder="Add MFI Partner"
