@@ -19,6 +19,7 @@ class AdminThemes extends Component {
       edited_loans: []
     }
     this.renderEditable = this.renderEditable.bind(this)
+    this.saveAllTheme = this.saveAllTheme.bind(this)
   }
 
   cleanList() {
@@ -59,7 +60,12 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (original !== update && update && update.length != 0 && update != ' ') {
+          if (
+            original !== update &&
+            update &&
+            update.length != 0 &&
+            update != ' '
+          ) {
             this.setState({
               edited_loans: this.state.edited_loans.concat({
                 original: original,
@@ -238,7 +244,7 @@ class AdminThemes extends Component {
           url="themelist"
           onClickHandler={() => {
             this.setState({ editing: false })
-            this.saveAllLoans()
+            this.saveAllTheme()
           }}
         />
 
