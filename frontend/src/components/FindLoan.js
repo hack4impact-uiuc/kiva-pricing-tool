@@ -341,6 +341,7 @@ class FindLoan extends Component {
 
                 <Typeahead
                   className="vertical-margin-item"
+                  disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   label="loan"
                   options={this.state.loan_themes}
@@ -354,6 +355,10 @@ class FindLoan extends Component {
 
                 <Typeahead
                   className="vertical-margin-item"
+                  disabled={
+                    !this.isNullOrEmpty(formDataReducer.mfi) &&
+                    !this.isNullOrEmpty(formDataReducer.loanType)
+                  }
                   ref="product"
                   label="product"
                   options={this.state.product_types}
@@ -371,6 +376,13 @@ class FindLoan extends Component {
                   className="vertical-margin-item"
                   ref="version"
                   label="version"
+                  disabled={
+                    !(
+                      !this.isNullOrEmpty(formDataReducer.mfi) &&
+                      !this.isNullOrEmpty(formDataReducer.loanType) &&
+                      !this.isNullOrEmpty(formDataReducer.productType)
+                    )
+                  }
                   options={this.state.versions}
                   selected={formDataReducer.versionNum}
                   placeholder="Search Versions:"
