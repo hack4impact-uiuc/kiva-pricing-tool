@@ -10,18 +10,19 @@
 
 **REPAYMENT SCHEDULE**
 
-|   id  |   payment_due_date    |   days    |   amount_due  |   principal_payment   |   interest    |   fees    |   insurance   |   taxes   |   security_deposit    |
+|   id  |   period_num  |   payment_due_date    |   days    |   amount_due  |   principal_payment   |   interest    |   fees    |   insurance   |   taxes   |   security_deposit    |   security_interest_paid  |   balance |   deposit_withdrawal  
+|   deposit_balance |   total_cashflow  |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 
 **PARTNER**
 
-|   partner_name   |  last_modified |
-|:------:|:-------:|
+|   id  |   partner_name   |  last_modified |   active  |
+|:------:|:-------:|:------:|:-------:|
 
 **THEME**
 
-|   loan_theme   | last_modified | 
-|:------:|:---------:|
+|   id  |   loan_theme   | last_modified |  active  |
+|:------:|:---------:|:------:|:---------:|
 
 ## Endpoints Documentation 
 
