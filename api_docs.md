@@ -168,8 +168,6 @@ Puts a new loan in the database.
       result: {}
     }
 
-TODO'S
-
 ### Endpoint
 
     GET /getMFIEntry
