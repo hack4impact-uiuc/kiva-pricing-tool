@@ -15,7 +15,8 @@ class AdminThemes extends Component {
     this.state = {
       data: [],
       filtered: [], // ID and text data used for filtering react table
-      editing: false
+      editing: false,
+      edited_loans: []
     }
     this.renderEditable = this.renderEditable.bind(this)
   }
@@ -58,40 +59,18 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-
-          if (original !== update && update && update.length) {
-            //add
-            let theme = { loan_theme: update }
-            axios
-              .post('http://127.0.0.1:3453/addLT', theme)
-              .catch(function(error) {
-                console.log('error with adding' + error + theme)
+          if (original !== update && update && update.length != 0 && update != ' ') {
+            this.setState({
+              edited_loans: this.state.edited_loans.concat({
+                original: original,
+                update: update
               })
-
-            //remove
-            axios
-              .delete('http://127.0.0.1:3453/removeLT/' + original)
-              .then(response => {
-                for (var i = 0; i < this.state.data.length; i++) {
-                  if (this.state.data[i].loan_theme === original) {
-                    // Remove element in place, return array with element removed
-                    this.setState({
-                      data: this.state.data
-                        .slice(0, i)
-                        .concat(this.state.data.slice(i + 1))
-                    })
-                  }
-                }
-              })
-            container.success(``, 'Your changes have been saved', {
-              closeButton: true
             })
           } else {
-            // ADD ALERT
             container.warning(
-              'Please refresh and use remove instead.',
-              'Cannot add empty theme name.',
-              {}
+              'Please refresh page and remove.',
+              'Cannot edit empty cell',
+              { closeButton: true }
             )
           }
         }}
@@ -100,6 +79,45 @@ class AdminThemes extends Component {
         }}
       />
     )
+  }
+
+  saveAllTheme() {
+    var updated_name = null
+    if (this.state.edited_loans.length === 0) {
+      container.warning(
+        'There are no changes to edit',
+        'Please edit before saving.',
+        { closeButton: true }
+      )
+    } else {
+      for (var i = 0; i < this.state.edited_loans.length; i++) {
+        updated_name = {
+          updated_partner_name: this.state.edited_loans[i].update
+        }
+        axios
+          .put(
+            'http://127.0.0.1:3453/editMFI/' +
+              this.state.edited_loans[i].original,
+            updated_name
+          )
+          .then(response => {
+            for (var j = 0; i < this.state.edited_loans.length; j++) {
+              if (
+                this.state.edited_loans[j].update ===
+                this.state.edited_loans[j].update
+              ) {
+                // Remove element in place, return array with element removed
+                this.setState({
+                  edited_loans: this.state.edited_loans
+                    .slice(0, j)
+                    .concat(this.state.data.slice(j + 1))
+                })
+              }
+            }
+          })
+      }
+      container.success('Saved all themes', 'SUCCESS', { closeButton: true })
+    }
   }
 
   addTheme(theme_name) {
@@ -119,11 +137,14 @@ class AdminThemes extends Component {
       container.success(``, 'Theme successfully added', {
         closeButton: true
       })
+    } else {
+      container.warning('Please enter a name.', 'Cannot add empty name', {
+        closeButton: true
+      })
     }
   }
 
   removeTheme(theme_name) {
-    this.setState({ removeshow: true })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
       .delete('http://127.0.0.1:3453/removeLT/' + theme_name)
@@ -139,6 +160,9 @@ class AdminThemes extends Component {
           }
         }
       })
+    container.error('You have removed ' + theme_name, 'Theme Removed', {
+      closeButton: true
+    })
   }
 
   render() {
@@ -209,6 +233,15 @@ class AdminThemes extends Component {
           }}
         />
 
+        <Button
+          name="Save List"
+          url="themelist"
+          onClickHandler={() => {
+            this.setState({ editing: false })
+            this.saveAllLoans()
+          }}
+        />
+
         <Row>
           <Col sm={12} md={12}>
             <ReactTable
@@ -228,24 +261,6 @@ class AdminThemes extends Component {
                     row[filter.id]
                       .toLowerCase()
                       .endsWith(filter.value.toLowerCase())
-                },
-                {
-                  Header: '',
-                  id: 'save-button',
-                  width: 150,
-                  Cell: ({ row, original }) => {
-                    // Generate row such that value of text field is rememebered to pass into remove loan function
-                    if (this.state.editing) {
-                      return (
-                        <Button
-                          name="Save"
-                          url="themelist"
-                          onClickHandler={() =>
-                            this.setState({ editing: false })}
-                        />
-                      )
-                    }
-                  }
                 },
                 {
                   Header: 'Remove',
