@@ -1,0 +1,26 @@
+.error-message {
+	color: red;
+	font-family: Raleway, sans-serif;
+}
+
+.inline-textfield .input-label, .inline-textfield .textfield-component {
+	display: inline-block;
+}
+
+.inline-textfield .input-label:after {
+	content: "   ";
+	white-space: pre;
+}
+
+.preserve-id .input-label:after {
+	content: " ";
+	white-space: pre;
+}
+
+.placeholder-textfield .textfield-component {
+	visibility: hidden;
+}
+
+#className {
+	white-space: nowrap;
+}

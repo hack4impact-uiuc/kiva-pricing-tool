@@ -1,23 +1,14 @@
 import React, { Component } from 'react'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Bootstrap,
-  Form,
-  Alert
-} from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
-import LiveSearch from './LiveSearch'
-import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
-import ReactDOM from 'react-dom'
 import { ToastContainer, ToastMessage } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
+
 
 class AdminPartners extends Component {
   constructor(props) {
@@ -25,6 +16,7 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
+      filtered: [], // ID and text data used for filtering react table
       addconfirm: false,
       adderror: false,
       removeshow: false,
@@ -75,12 +67,8 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (
-            original != update &&
-            update != null &&
-            update.length != 0 &&
-            update != ' '
-          ) {
+
+          if (original !== update &&  update && update.length)) {
             //add
             let partner = { partner_name: update }
             console.log(partner.partner_name + 'hi')
@@ -125,11 +113,7 @@ class AdminPartners extends Component {
   }
 
   addPartner(partner_name) {
-    if (
-      partner_name != null &&
-      partner_name.length != 0 &&
-      partner_name != ' '
-    ) {
+    if (partner_name && partner_name.length) {
       let data = { partner_name: partner_name }
       console.log(data.partner_name + 'helo')
       axios
@@ -170,108 +154,122 @@ class AdminPartners extends Component {
 
   render() {
     return (
-      <Grid>
+      <Grid className="padded-element-vertical">
         <ToastContainer
           ref={ref => (container = ref)}
           className="toast-top-right"
         />
 
-        <PageHeader>Admin Partners List</PageHeader>
+        <Row>
+          <Col sm={12} md={12}>
+            <PageHeader className="page-header-montserrat bs-center">
+              Admin Partners List
+            </PageHeader>
+          </Col>
+        </Row>
 
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Search Partners: </small>{' '}
-          </h2>
-
-          <LiveSearch
-            ref="partner_names"
-            label="partner_names"
-            list={this.state.data}
-            hint="Search MFI Partner"
-          />
-        </Form>
-
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Add Partner: </small>{' '}
-          </h2>
-
-          <TextField
-            id=""
-            hint="Add MFI Partner"
-            typeVal="String"
-            limit="5000"
-            ref="addpartnername"
-          />
-        </Form>
-
-        <Button
-          name="Add "
-          url="partnerlist"
-          onClickHandler={() =>
-            this.addPartner(this.refs.addpartnername.state.textBody)}
-        />
-
-        <Button
-          name="Edit List"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ editing: true })
-            this.cleanList()
-          }}
-        />
-
-        <ReactTable
-          data={this.state.data}
-          columns={[
-            {
-              Header: 'MFI Partner',
-              accessor: 'partner_names',
-              Cell: this.state.editing ? this.renderEditable : null
-            },
-            {
-              Header: '',
-              id: 'save-button',
-              width: 150,
-              Cell: ({ row, original }) => {
-                // Generate row such that value of text field is rememebered to pass into remove loan function
-                if (this.state.editing) {
-                  return (
-                    <Button
-                      name="Save"
-                      url="partnerlist"
-                      onClickHandler={() => this.setState({ editing: false })}
-                    />
-                  )
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <h2>
+              {' '}
+              <small> Search Partners: </small>{' '}
+            </h2>
+            <div>
+              <input
+                className="search-input"
+                placeholder="Search MFI Partner"
+                onChange={event =>
+                  this.setState({
+                    filtered: [
+                      { id: 'partner_names', value: event.target.value }
+                    ]
+                  })
                 }
-              }
-            },
-            {
-              Header: 'Remove',
-              id: 'delete-button',
-              width: 150,
-              Cell: ({ row, original }) => {
-                // Generate row such that value of text field is rememebered to pass into remove loan function
-                return (
-                  <Button
-                    name="Remove"
-                    url="partnerlist"
-                    onClickHandler={() =>
-                      this.removePartner(original.partner_names)} // Send text value to remove loan function
-                  />
-                )
-              }
-            }
-          ]}
-          defaultSorted={[
-            {
-              id: 'partner_names',
-              desc: false
-            }
-          ]}
-        />
+                // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
+              />
+            </div>
+          </Col>
+          <Col sm={5} md={5}>
+            <h2>
+              {' '}
+              <small> Add Partner: </small>{' '}
+            </h2>
+            <input
+              type="text"
+              label="Text"
+              placeholder="Add MFI Partner"
+              ref="addpartnername"
+            />
+          </Col>
+          <Col sm={1} md={1}>
+            <Button
+              className="button-image-add"
+              name="Add "
+              url="partnerlist"
+              onClickHandler={() => {
+                this.addPartner(this.refs.addpartnername.value)
+              }}
+            />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col sm={12} md={12}>
+            <ReactTable
+              data={this.state.data}
+              columns={[
+                {
+                  Header: 'MFI Partner',
+                  accessor: 'partner_names',
+                  Cell: this.renderEditable,
+                  filterMethod: (
+                    filter,
+                    row // Custom filter method for case insensitive filtering
+                  ) =>
+                    row[filter.id]
+                      .toLowerCase()
+                      .startsWith(filter.value.toLowerCase()) ||
+                    row[filter.id]
+                      .toLowerCase()
+                      .endsWith(filter.value.toLowerCase())
+                },
+                {
+                  Header: 'Edit',
+                  id: 'edit-button',
+                  width: 150,
+                  Cell: props => (
+                    <Button className="button-image-edit" name="Edit" />
+                  )
+                },
+                {
+                  Header: 'Remove',
+                  id: 'delete-button',
+                  width: 150,
+                  Cell: ({ row, original }) => {
+                    // Generate row such that value of text field is rememebered to pass into remove loan function
+                    return (
+                      <Button
+                        className="button-image-remove"
+                        name="Remove"
+                        url="partnerlist"
+                        onClickHandler={() =>
+                          this.removeLoan(original.partner_names)
+                        } // Send text value to remove loan function
+                      />
+                    )
+                  }
+                }
+              ]}
+              filtered={this.state.filtered}
+              defaultSorted={[
+                {
+                  id: 'partner_names',
+                  desc: false
+                }
+              ]}
+            />
+          </Col>
+        </Row>
       </Grid>
     )
   }

@@ -45,7 +45,6 @@ def xnpv(rate,cashflows):
 
     chron_order = sorted(cashflows, key = lambda x: x[0])
     t0 = chron_order[0][0] #t0 is the date of the first cash flow
-
     return sum([cf/(1+rate)**((t-t0).days/365.0) for (t,cf) in chron_order])
 
 def xirr(cashflows,guess=0.1):
@@ -66,5 +65,5 @@ def xirr(cashflows,guess=0.1):
     * For users that do not have the scipy module installed, there is an alternate version (commented out) that uses the secant_method function defined in the module rather than the scipy.optimize module's numerical solver. Both use the same method of calculation so there should be no difference in performance, but the secant_method function does not fail gracefully in cases where there is no solution, so the scipy.optimize.newton version is preferred.
     """
     
-    #return secant_method(0.0001,lambda r: xnpv(r,cashflows),guess)
+    # return secant_method(0.0001,lambda r: xnpv(r,cashflows),guess)
     return optimize.newton(lambda r: xnpv(r,cashflows),guess)

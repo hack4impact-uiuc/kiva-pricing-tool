@@ -37,7 +37,7 @@ tax_percent_fees = 0.1
 grace_period_principal = 0
 grace_period_interest_pay = 0
 grace_period_interest_calculate = 0
-grace_period_balloon = 0
+grace_period_balloon = 4
 security_deposit_percent_ongoing = 0.1
 security_deposit_percent_upfront = 0.1
 security_deposit_fixed_upfront = 10
@@ -286,16 +286,22 @@ def on_days_change(origin_matrix, changes_on_days, changes_on_date, installment_
 
     return new_date_arr, new_day_num_arr
 
-def cal_xirr(origin_matrix, grace_period_balloon):
+
+def cal_apr_manual_mode(origin_matrix, grace_period_balloon):
+    test = [(-10000, '1-Jan-2008'),(2750, '1-Mar-2008'),(4250, '30-Oct-2008'),(3250, '15-Feb-2009'),(2750, '1-Apr-2009')]
     date_col = origin_matrix[DATE_IDX]
     cash_flow = origin_matrix[CASH_FLOW_IDX]
     date_cash_list = []
     print (len(origin_matrix[0]))
-    for idx in range(len(origin_matrix[0])-grace_period_balloon):
+   
+    for idx in range(len(origin_matrix[0])):
         date = datetime.datetime.strptime(date_col[idx], '%d-%b-%Y')
         date_cash_list.append((date, cash_flow[idx]))
     print (date_cash_list)
-    return xirr(date_cash_list)
+    EIR = xirr(date_cash_list)
+    period_num = len(origin_matrix[0])
+    # convert from EIR to APR 
+    return (period_num * ((1+EIR)**(1/period_num)-1))
 
 # def xirr1(transactions):
 #     years = [(ta[0] - transactions[0][0]).days / 365.0 for ta in transactions]
@@ -322,6 +328,7 @@ def cal_xirr(origin_matrix, grace_period_balloon):
 #     return guess-1
 
 
+
 #########
 # NOTE each ROW correspond to an column in the excel tool. 
 
@@ -337,7 +344,8 @@ user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(objec
 #         user_change[i][j] = None
 user_change[:] = None
 
-# user_change[PRINCIPAL_PAID_IDX][4] = 100
+
+user_change[PRINCIPAL_PAID_IDX][4] = 100
 # user_change[PRINCIPAL_PAID_IDX][5] = 100
 # user_change[PRINCIPAL_PAID_IDX][6] = 100
 # user_change[FEES_IDX][4] = 200
@@ -350,7 +358,7 @@ user_change[:] = None
 # user_change[TAXES_IDX][8] = 10
 # user_change[SECURITY_DEPOSIT_IDX][6] = 10
 # user_change[SECURITY_DEPOSIT_IDX][8] = 10
-# user_change[DAY_IDX][4] = 60
+user_change[DAY_IDX][4] = 60
 # user_change[DAY_IDX][5] = 60
 # user_change[DATE_IDX][4] = '10-Mar-2012'
 # user_change[DATE_IDX][6] = '18-Aug-2012'
@@ -385,5 +393,7 @@ for row_idx in range(PRINCIPAL_DISBURSED_IDX, CASH_FLOW_IDX+1):
 
 
 print (origin_matrix)
-print (cal_xirr(origin_matrix, grace_period_balloon))
+
+print (cal_apr_manual_mode(origin_matrix, grace_period_balloon))
+
 print ('{0}%'.format(round_float(np.irr(origin_matrix[CASH_FLOW_IDX]) * periods_per_year[installments_period_dict[installment_time_period]]*100, 2)))
