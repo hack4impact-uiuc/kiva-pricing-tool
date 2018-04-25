@@ -28,7 +28,12 @@ class NewLoan extends Component {
 
   componentDidMount() {
     const { resetFormData, changedFormData } = this.props
+    resetFormData()
     changedFormData('back', 'newloan')
+    axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
+      this.setState({ partner_names: response.data.result.partners })
+      this.setState({ loan_themes: response.data.result.themes })
+    })
   }
 
   inputsEntered() {
@@ -66,10 +71,9 @@ class NewLoan extends Component {
                 label="mfi"
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
-                typeVal="String"
                 limit={100}
                 selected={formDataReducer.mfi}
-                onChange={e => {
+                onInputChange={e => {
                   changedFormData('mfi', e)
                 }}
               />
@@ -80,7 +84,7 @@ class NewLoan extends Component {
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
                 selected={formDataReducer.loanType}
-                onChange={e => {
+                onInputChange={e => {
                   changedFormData('loanType', e)
                 }}
               />
@@ -88,8 +92,8 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                text="product"
-                hint="Loan Product (i.e. small loan)"
+                id="Loan Product"
+                hint="i.e. small loan"
                 typeVal="String"
                 limit={100}
                 textBody={formDataReducer.productType}
@@ -98,12 +102,7 @@ class NewLoan extends Component {
 
             <Row>
               <Col xs={6} sm={6} md={6}>
-                <Button
-                  className="button-fancy"
-                  name="Back"
-                  url=""
-                  onClickHandler={() => resetFormData()}
-                />
+                <Button className="button-fancy" name="Back" url="" />
               </Col>
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
@@ -117,7 +116,10 @@ class NewLoan extends Component {
                       formDataReducer.loanType,
                       formDataReducer.productType
                     ).then(response => {
-                      changedFormData('versionNum', response['version'].toString())
+                      changedFormData(
+                        'versionNum',
+                        response['version'].toString()
+                      )
                     })
                   }}
                 />

@@ -212,13 +212,13 @@ class FindLoan extends Component {
   }
 
   componentDidMount() {
-    const { changedFormData } = this.props
+    const { changedFormData, resetFormData } = this.props
+    resetFormData()
     changedFormData('back', 'findloan')
     axios
-      .get('http://127.0.0.1:3453/partnerThemeLists')
+      .get('http://127.0.0.1:3453/getMFIEntry')
       .then(response => {
         this.setState({ partner_names: response.data.result.partners })
-        this.setState({ loan_themes: response.data.result.themes })
       })
       .catch(function(error) {
         console.log(error)
@@ -301,7 +301,6 @@ class FindLoan extends Component {
     const { formDataReducer, changedFormData, searchLoan } = this.props
 
     return (
-
       <div className="page-body-grey">
         <Grid
           fluid
@@ -326,8 +325,19 @@ class FindLoan extends Component {
                   onInputChange={e => {
                     changedFormData('mfi', e)
                     this.getProductType()
+                    axios
+                      .get('http://127.0.0.1:3453/getLTEntry', {
+                        params: {
+                          partner_name: e
+                        }
+                      })
+                      .then(response => {
+                        this.setState({
+                          loan_themes: response.data.result.themes
+                        })
+                      })
                   }}
-                 />
+                />
 
                 <Typeahead
                   className="vertical-margin-item"
