@@ -188,6 +188,7 @@ class APRInputs extends Component {
         changedFormData('original_repayment_schedule', reformatted_matrix)
         changedFormData('user_repayment_schedule', user_matrix)
         changedFormData('calc_repayment_schedule', calc_matrix)
+     		changedFormData('new_repayment_schedule', matrix)
 
         // aprRate: apr,
         // saveData: data
