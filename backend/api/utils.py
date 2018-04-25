@@ -61,7 +61,6 @@ class InvalidUsage(Exception):
         return rv
 
 def round_float(f, n):
-<<<<<<< HEAD
     try: 
         ret = np.floor(f * 10 ** n + 0.5) / 10**n
         return ret
@@ -69,10 +68,6 @@ def round_float(f, n):
         print(e)
         print(f)
         return None
-    
-=======
-    return np.floor(float(f) * 10 ** n + 0.5) / 10**n
->>>>>>> dc6338eea1bc484b38e479e66d416880e588d249
 
 #TODO: add rounding before json
 #TODO: add commits
@@ -257,16 +252,10 @@ def cal_apr_helper(input_json):
             security_deposit_balance[idx] = np.sum(security_deposit[:idx+1]) + np.sum(security_deposit_interest_paid[:idx+1])
         security_deposit_balance[-1] = 0
         schedule_matrix.append(security_deposit_balance)
-<<<<<<< HEAD
         schedule_matrix.append(result) 
         # schedule_matrix = np.array(schedule_matrix, dtype=object)
         for idx in range(len(schedule_matrix)):
            schedule_matrix[idx] = list(schedule_matrix[idx])
-=======
-        schedule_matrix.append(result)
-        schedule_matrix = np.array(schedule_matrix)
-
->>>>>>> dc6338eea1bc484b38e479e66d416880e588d249
         return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
 
     except:
