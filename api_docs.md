@@ -48,13 +48,13 @@ ADMIN TOOLS PARTNERS:
 * GET /getAllMFI
 * PUT /editMFI/<partner_name>
 * POST /addMFI
-* PUT /removeMFI/<partner_name>
+* DELETE /removeMFI/<partner_name>
 
 ADMIN TOOLS THEMES:
 * GET /getAllLT
 * PUT /editLT/<loan_theme>
 * POST /addLT
-* PUT /removeLT/<loan_theme>
+* DELETE /removeLT/<loan_theme>
 
 
 
@@ -176,12 +176,17 @@ Puts a new loan in the database.
 
 Get all partner entries saved in the database.
 
-**Parameters**
-
 **Response**
-    
-    
-    
+
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        partners: [...]
+      }
+    }
+  
 ### Endpoint
 
     GET /getLTEntry
@@ -192,9 +197,21 @@ Get all loan theme entries corresponding to the correct partner saved in the dat
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   partner_name    | string | **Required** | description 
+
 **Response**
 
-
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        themes: [...]
+      }
+    }
+  
 
 ### Endpoint
 
@@ -206,10 +223,22 @@ Get all product type entries corresponding to the correct partner and loan theme
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   partner_name    | string | **Required** | description 
+|   loan_theme  | string | **Required** | description 
+
 **Response**
 
-
-
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        product_types: [...]
+      }
+    }
+  
 ### Endpoint
 
     GET /getVersionNumEntry
@@ -220,10 +249,23 @@ Get all version number entries corresponding to the correct partner, loan theme,
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   partner_name    | string | **Required** | description 
+|   loan_theme  | string | **Required** | description 
+|   product_type    | string | **Required** | description 
+
 **Response**
 
-
-
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        version_nums: [...]
+      }
+    }
+  
 ### Endpoint
 
     GET /findLoan
@@ -234,9 +276,61 @@ Get all version number entries corresponding to the correct partner, loan theme,
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   partner_name    | string | **Required** | description 
+|   loan_theme  | string | **Required** | description 
+|   product_type    | string | **Required** | description 
+|   version_num | number | **Required** | description 
+
 **Response**
 
-
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        partner,
+        loan_theme,
+        product_type,
+        version_num,
+        start_date,
+        update_date,
+        start_name,
+        update_name,
+        nominal_apr,
+        installment_time_period,
+        repayment_type,
+        interest_time_period,
+        interest_payment_type,
+        interest_calculation_type,
+        loan_amount,
+        installment,
+        nominal_interest_rate,
+        grace_period_principal,
+        grace_period_interest_pay,
+        grace_period_interest_calculate,
+        grace_period_balloon,
+        fee_percent_upfront,
+        fee_percent_ongoing,
+        fee_fixed_upfront,
+        fee_fixed_ongoing,
+        insurance_percent_upfront,
+        insurance_percent_ongoing,
+        insurance_fixed_upfront,
+        insurance_fixed_ongoing,
+        tax_percent_fees,
+        tax_percent_interest,
+        security_deposit_percent_upfront,
+        security_deposit_percent_ongoing,
+        security_deposit_fixed_upfront,
+        security_deposit_fixed_ongoing,
+        interest_paid_on_deposit_percent,
+        original_matrix,
+        user_matrix,
+        calc_matrix
+      }
+    }
 
 ### Endpoint
 
@@ -314,12 +408,17 @@ Recalculate repayment schedule based on user inputs.
 
 Gets list of active partners.
 
-**Parameters**
-
 **Response**
 
-
-
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        partners: [...]
+      }
+    }
+  
 ### Endpoint
 
     PUT /editMFI/<partner_name>
@@ -330,10 +429,19 @@ Edit a current partner.
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   updated_partner_name | string | **Required** | description 
+
 **Response**
 
-
-
+    {
+      success: true,
+      code: 200,
+      message: 'Update Successful',
+      result: {}
+    }
+    
 ### Endpoint
 
     POST /addMFI
@@ -344,37 +452,54 @@ Add a partner to the list.
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   partner_name | string | **Required** | description 
+
 **Response**
 
-
-
+    {
+      success: true,
+      code: 200,
+      message: 'Post Successful',
+      result: {}
+    }
+    
 ### Endpoint
 
-    PUT /removeMFI/<partner_name>
+    DELETE /removeMFI/<partner_name>
     
 **Description**
 
 Set a partner's status to inactive and "remove" it from the list.
 
-**Parameters**
-
 **Response**
 
-
-
+    {
+      success: true,
+      code: 200,
+      message: 'Update Successful',
+      result: {}
+    }
+    
 ### Endpoint
 
     GET /getAllLT
     
 **Description**
 
-Gets list of active partners.
-
-**Parameters**
+Gets list of active loan themes.
 
 **Response**
 
-
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        loan_theme: [...]
+      }
+    }
 
 ### Endpoint
 
@@ -386,9 +511,18 @@ Edit a current loan theme.
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   updated_loan_theme | string | **Required** | description 
+
 **Response**
 
-
+    {
+      success: true,
+      code: 200,
+      message: 'Update Successful',
+      result: {}
+    }
 
 ### Endpoint
 
@@ -400,18 +534,32 @@ Add a loan theme to the list.
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   updated_loan_theme | string | **Required** | description 
+
 **Response**
 
-
+    {
+      success: true,
+      code: 200,
+      message: 'Post Successful',
+      result: {}
+    }
 
 ### Endpoint
 
-    PUT /removeLT/<loan_theme>
+    DELETE /removeLT/<loan_theme>
     
 **Description**
 
 Set a loan theme's status to inactive and "remove" it from the list.
 
-**Parameters**
-
 **Response**
+
+    {
+      success: true,
+      code: 200,
+      message: 'Update Successful',
+      result: {}
+    }
