@@ -4,9 +4,7 @@ import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { Api } from './../utils'
 import './../styles/app.css'
-import TextField from './TextField'
-import LiveSearch from './LiveSearch'
-import Button from './Button'
+import { TextField, Button } from './'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 
@@ -79,7 +77,6 @@ class NewLoan extends Component {
           <TextField
             reduxId="productType"
             id="Loan Product"
-            text="product"
             hint="i.e. small loan"
             typeVal="String"
             limit={100}

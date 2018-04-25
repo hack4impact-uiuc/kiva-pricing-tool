@@ -4,6 +4,7 @@ import { changedFormData } from './../actions'
 import NewLoan from './../components/NewLoan'
 
 function mapStateToProps(state) {
+  // console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }
