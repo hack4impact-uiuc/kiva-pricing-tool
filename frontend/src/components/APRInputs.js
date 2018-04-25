@@ -1,11 +1,8 @@
 // @flow
-import React, { Component, View, StyleSheet } from 'react'
-import { connect } from 'react-redux'
-import { Link, Route, withRouter } from 'react-router-dom'
-import { Dropdown, Button, TextField, APRRateDisplay } from './'
-import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
+import React, { Component } from 'react'
+import { Dropdown, Button, TextField } from './'
+import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-
 import './../styles/app.scss'
 import { Api } from '../utils'
 
@@ -64,11 +61,12 @@ class APRInputs extends Component {
   }
 
   isNullOrEmpty(input) {
-    return input == null || input.length == 0
+    return input === null || input.length === 0
   }
 
   postData() {
     const { formDataReducer, changedFormData } = this.props
+
     this.inputsEntered() &&
       Api.postData(formDataReducer).then(apr => {
         changedFormData('nominalApr', apr)
@@ -76,334 +74,449 @@ class APRInputs extends Component {
   }
 
   render() {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer } = this.props
+    // console.log('hello' + this.state.back)
     return (
-      <Grid>
-        <PageHeader>User Information</PageHeader>
-        <Form inline>
-          <TextField
-            id="Full Name"
-            reduxId="startName"
-            hint="ex. John"
-            typeVal="String"
-            limit="100"
-            textBody={formDataReducer.startName}
-          />
-        </Form>
+      <div className="page-body-grey padded-element-vertical overpad-shrink">
+        <Grid
+          fluid
+          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-all round-corners-large solid-background"
+        >
+          <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>User Information</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <TextField
+                  className="inline-textfield"
+                  id="Full Name"
+                  reduxId="startName"
+                  hint="ex. John"
+                  typeVal="String"
+                  limit="100"
+                  textBody={formDataReducer.startName}
+                />
+              </Col>
+            </Row>
+          </Row>
 
-        <PageHeader>Basic Loan Conditions</PageHeader>
+          <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Basic Loan Conditions</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={4} md={4} className="bs-center">
+                <Dropdown
+                  title="Repayment Type:"
+                  reduxId="repaymentType"
+                  items={[
+                    //must match backend! IMPORTANT
+                    { id: '1', value: 'equal principal payments' },
+                    { id: '2', value: 'equal installments (amortized)' },
+                    { id: '3', value: 'single end-term principal payment' }
+                  ]}
+                  onTextInputChange={this.handleTextChange}
+                  selected={formDataReducer.repaymentType}
+                />
+              </Col>
+              <Col sm={4} md={4} className="bs-center">
+                <Dropdown
+                  title="Interest Payment:"
+                  reduxId="interestPaymentType"
+                  items={[
+                    { id: '1', value: 'Multiple Installments' },
+                    { id: '2', value: 'Single End-Term Payments' }
+                  ]}
+                  onTextInputChange={this.handleTextChange}
+                  selected={formDataReducer.interestPaymentType}
+                />
+              </Col>
+              <Col sm={4} md={4} className="bs-center">
+                <Dropdown
+                  title="Interest Calculation:"
+                  reduxId="interestCalculationType"
+                  items={[
+                    { id: '1', value: 'initial amount or flat' },
+                    // { id: '2', value: 'Flat' },
+                    { id: '2', value: 'declining balance' }
+                  ]}
+                  onTextInputChange={this.handleTextChange}
+                  selected={formDataReducer.interestCalculationType}
+                />
+              </Col>
+            </Row>
+            <Row className="vertical-margin-item">
+              <Col sm={4} md={4}>
+                <TextField
+                  id="Loan Amount"
+                  reduxId="loanAmount"
+                  hint="ex. 5000"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.loanAmount}
+                />
+              </Col>
+              <Col sm={4} md={4}>
+                <TextField
+                  id="Number of Installments"
+                  reduxId="installment"
+                  hint="ex. 12"
+                  typeVal="int"
+                  limit="180"
+                  textBody={formDataReducer.installment}
+                />
+              </Col>
+              <Col sm={4} md={4} className="bs-center">
+                <Dropdown
+                  title="Time Period:"
+                  reduxId="installmentTimePeriod"
+                  items={[
+                    { id: '1', value: 'days' },
+                    { id: '7', value: 'weeks' },
+                    { id: '14', value: 'two-weeks' },
+                    { id: '15', value: '15 days' },
+                    { id: '28', value: '4 weeks' },
+                    { id: '30', value: 'months' },
+                    { id: '90', value: 'quarters' },
+                    { id: '180', value: 'half-years' },
+                    { id: '365', value: 'years' }
+                  ]}
+                  onTextInputChange={this.handleTextChange}
+                  selected={formDataReducer.installmentTimePeriod}
+                />
+              </Col>
+            </Row>
+            <Row className="vertical-margin-item">
+              <Col sm={6} md={6}>
+                <TextField
+                  id="Nominal Interest Rate"
+                  reduxId="nominalInterestRate"
+                  hint="ex. 12"
+                  typeVal="int"
+                  limit="100"
+                  textBody={formDataReducer.nominalInterestRate}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <Dropdown
+                  title="Time Period:"
+                  reduxId="interestTimePeriod"
+                  items={[
+                    { id: '0', value: 'day' },
+                    { id: '1', value: 'week' },
+                    { id: '2', value: 'two-weeks' },
+                    { id: '3', value: '15 days' },
+                    { id: '4', value: '4 weeks' },
+                    { id: '5', value: 'month' },
+                    { id: '6', value: 'quarter' },
+                    { id: '7', value: 'half-year' },
+                    { id: '8', value: 'year' }
+                  ]}
+                  onTextInputChange={this.handleTextChange}
+                  selected={formDataReducer.interestTimePeriod}
+                />
+              </Col>
+            </Row>
 
-        <Form inline>
-          <Dropdown
-            title="Repayment Type:"
-            reduxId="repaymentType"
-            items={[
-              //must match backend! IMPORTANT
-              { id: '1', value: 'equal principal payments' },
-              { id: '2', value: 'equal installments (amortized)' },
-              { id: '3', value: 'single end-term principal payment' }
-            ]}
-            onTextInputChange={this.handleTextChange}
-            selected={
-              formDataReducer.repaymentType
-                ? formDataReducer.repaymentType[0]
-                : null
-            }
-          />
-          <Dropdown
-            title="Interest Payment:"
-            reduxId="interestPaymentType"
-            items={[
-              { id: '1', value: 'Multiple Installments' },
-              { id: '2', value: 'Single End-Term Payments' }
-            ]}
-            onTextInputChange={this.handleTextChange}
-            selected={
-              formDataReducer.interestPaymentType
-                ? formDataReducer.interestPaymentType[0]
-                : null
-            }
-          />
-          <Dropdown
-            title="Interest Calculation:"
-            reduxId="interestCalculationType"
-            items={[
-              { id: '1', value: 'initial amount or flat' },
-              { id: '2', value: 'declining balance' }
-            ]}
-            onTextInputChange={this.handleTextChange}
-            selected={
-              formDataReducer.interestCalculationType
-                ? formDataReducer.interestCalculationType[0]
-                : null
-            }
-          />
-        </Form>
+            <Row className="vertical-margin-item">
+              <Col sm={3} md={3}>
+                <TextField
+                  id="Grace and Prepay"
+                  reduxId="gracePeriodPrincipal"
+                  hint="Capital"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodPrincipal}
+                />
+              </Col>
+              <Col sm={3} md={3}>
+                <TextField
+                  className="preserve-id"
+                  id=""
+                  reduxId="gracePeriodInterestPay"
+                  hint="Int Pmt"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodInterestPay}
+                />
+              </Col>
+              <Col sm={3} md={3}>
+                <TextField
+                  className="preserve-id"
+                  id=""
+                  reduxId="gracePeriodInterestCalculate"
+                  hint="Int Calc"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodInterestCalculate}
+                />
+              </Col>
+              <Col sm={3} md={3}>
+                <TextField
+                  className="preserve-id"
+                  id=""
+                  reduxId="gracePeriodBalloon"
+                  hint="Balloon"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.gracePeriodBalloon}
+                />
+              </Col>
+            </Row>
+          </Row>
+          <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Fees</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield"
+                  id="Fee%"
+                  reduxId="feePercentUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.feePercentUpfront}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  reduxId="feePercentOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="180"
+                  textBody={formDataReducer.feePercentOngoing}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield"
+                  id="Fee (fixed amt)"
+                  reduxId="feeFixedUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="100000000"
+                  textBody={formDataReducer.feeFixedUpfront}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  reduxId="feeFixedOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="100000000"
+                  textBody={formDataReducer.feeFixedOngoing}
+                />
+              </Col>
+            </Row>
+          </Row>
+          <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Taxes</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield placeholder-textfield"
+                  id="On Fees"
+                  hint="PLACEHOLDER"
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  hint="Ongoing %"
+                  reduxId="taxPercentFees"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.taxPercentFees}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield placeholder-textfield"
+                  id="On Interest"
+                  hint="PLACEHOLDER"
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  hint="Ongoing %"
+                  reduxId="taxPercentInterest"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.taxPercentInterest}
+                />
+              </Col>
+            </Row>
+          </Row>
 
-        <br />
-        <Form inline>
-          <TextField
-            id="Loan Amount"
-            reduxId="loanAmount"
-            hint="ex. 5000"
-            typeVal="float"
-            limit="900000000"
-            textBody={formDataReducer.loanAmount}
-          />
-          <TextField
-            id="Number of Terms"
-            reduxId="installment"
-            hint="ex. 12"
-            typeVal="float"
-            limit="180"
-            textBody={formDataReducer.installment}
-          />
-          <TextField
-            id="Nominal Interest Rate"
-            reduxId="nominalInterestRate"
-            hint="ex. 12"
-            typeVal="float"
-            limit="100"
-            textBody={formDataReducer.nominalInterestRate}
-          />
-        </Form>
+          <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Insurance</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield"
+                  id="Insurance %"
+                  reduxId="insurancePercentUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.insurancePercentUpfront}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  reduxId="insurancePercentOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.insurancePercentOngoing}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield"
+                  id="Insurance (fixed amt)"
+                  reduxId="insuranceFixedUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.insuranceFixedUpfront}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  reduxId="insuranceFixedOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.insuranceFixedOngoing}
+                />
+              </Col>
+            </Row>
+          </Row>
 
-        <Form inline>
-          <Dropdown
-            title="Time Period:"
-            reduxId="installmentTimePeriod"
-            items={[
-              { id: '1', value: 'days' },
-              { id: '7', value: 'weeks' },
-              { id: '14', value: 'two-weeks' },
-              { id: '15', value: '15 days' },
-              { id: '28', value: '4 weeks' },
-              { id: '30', value: 'months' },
-              { id: '90', value: 'quarters' },
-              { id: '180', value: 'half-years' },
-              { id: '365', value: 'years' }
-            ]}
-            onTextInputChange={this.handleTextChange}
-            selected={
-              formDataReducer.installmentTimePeriod
-                ? formDataReducer.installmentTimePeriod[0]
-                : null
-            }
-          />
-          <Dropdown
-            title="Time Period:"
-            reduxId="interestTimePeriod"
-            items={[
-              { id: '0', value: 'day' },
-              { id: '1', value: 'week' },
-              { id: '2', value: 'two-weeks' },
-              { id: '3', value: '15 days' },
-              { id: '4', value: '4 weeks' },
-              { id: '5', value: 'month' },
-              { id: '6', value: 'quarter' },
-              { id: '7', value: 'half-year' },
-              { id: '8', value: 'year' }
-            ]}
-            onTextInputChange={this.handleTextChange}
-            selected={
-              formDataReducer.interestTimePeriod
-                ? formDataReducer.interestTimePeriod[0]
-                : null
-            }
-          />
-        </Form>
+          <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>Security Deposit</PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield"
+                  id="Security Deposit %"
+                  reduxId="securityDepositPercentUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.securityDepositPercentUpfront}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  reduxId="securityDepositPercentOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="100"
+                  textBody={formDataReducer.securityDepositPercentOngoing}                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield"
+                  id="Security Deposit (fixed amt)"
+                  reduxId="securityDepositFixedUpfront"
+                  hint="Upfront"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.securityDepositFixedUpfront}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  reduxId="securityDepositFixedOngoing"
+                  hint="Ongoing"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.securityDepositFixedOngoing}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6} md={6} className="bs-button-right">
+                <TextField
+                  className="inline-textfield placeholder-textfield"
+                  id="Interest Paid on Deposit"
+                  hint="placeholder"
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <TextField
+                  className="inline-textfield"
+                  reduxId="interestPaidOnDepositPercent"
+                  hint="Ongoing %"
+                  typeVal="float"
+                  limit="900000000"
+                  textBody={formDataReducer.interestPaidOnDepositPercent}
+                />
+              </Col>
+            </Row>
+          </Row>
 
-        <h2>
-          <small> Grace or Prepay </small>
-        </h2>
-        <Form inline>
-          <TextField
-            id="Capital"
-            reduxId="gracePeriodPrincipal"
-            hint="ex. 1"
-            typeVal="float"
-            limit="180"
-            textBody={formDataReducer.gracePeriodPrincipal}
-          />
-          <TextField
-            id="Int Pmt"
-            reduxId="gracePeriodInterestPay"
-            hint="ex. 1"
-            typeVal="float"
-            limit="180"
-            textBody={formDataReducer.gracePeriodInterestPay}
-          />
-          <TextField
-            id="Int Calc"
-            reduxId="gracePeriodInterestCalculate"
-            hint="ex. 1"
-            typeVal="float"
-            limit="180"
-            textBody={formDataReducer.gracePeriodInterestCalculate}
-          />
-          <TextField
-            id="Balloon"
-            reduxId="gracePeriodBalloon"
-            hint="ex. 1"
-            typeVal="float"
-            limit="180"
-            textBody={formDataReducer.gracePeriodBalloon}
-          />
-        </Form>
 
-        <PageHeader>Fees and Taxes</PageHeader>
-
-        <h2>
-          <small> Fees </small>
-        </h2>
-
-        <Form inline>
-          <TextField
-            id="Fee%"
-            reduxId="feePercentUpfront"
-            hint="Upfront"
-            typeVal="float"
-            limit="180"
-            textBody={formDataReducer.feePercentUpfront}
-          />
-          <TextField
-            id="Fee%"
-            reduxId="feePercentOngoing"
-            hint="Ongoing"
-            typeVal="float"
-            limit="180"
-            textBody={formDataReducer.feePercentOngoing}
-          />
-          <TextField
-            id="Fee (fixed amt)"
-            reduxId="feeFixedUpfront"
-            hint="Upfront"
-            typeVal="float"
-            limit="100000000"
-            textBody={formDataReducer.feeFixedUpfront}
-          />
-          <TextField
-            id="Fee (fixed amt)"
-            reduxId="feeFixedOngoing"
-            hint="Ongoing"
-            typeVal="float"
-            limit="100000000"
-            textBody={formDataReducer.feeFixedOngoing}
-          />
-        </Form>
-
-        <h2>
-          <small> Taxes </small>
-        </h2>
-
-        <Form inline>
-          <TextField
-            id="Value Added Tax % on Fees"
-            reduxId="taxPercentFees"
-            typeVal="float"
-            limit="100"
-            textBody={formDataReducer.taxPercentFees}
-          />
-          <TextField
-            id="Value Added Tax % on Interest"
-            reduxId="taxPercentInterest"
-            typeVal="float"
-            limit="100"
-            textBody={formDataReducer.taxPercentInterest}
-          />
-        </Form>
-
-        <PageHeader>Insurance</PageHeader>
-
-        <Form inline>
-          <TextField
-            id="Insurance %"
-            reduxId="insurancePercentUpfront"
-            hint="Upfront"
-            typeVal="float"
-            limit="100"
-            textBody={formDataReducer.insurancePercentUpfront}
-          />
-          <TextField
-            id="Insurance %"
-            reduxId="insurancePercentOngoing"
-            hint="Ongoing"
-            typeVal="float"
-            limit="100"
-            textBody={formDataReducer.insurancePercentOngoing}
-          />
-          <TextField
-            id="Insurance (fixed amt)"
-            reduxId="insuranceFixedUpfront"
-            hint="Upfront"
-            typeVal="float"
-            limit="900000000"
-            textBody={formDataReducer.insuranceFixedUpfront}
-          />
-          <TextField
-            id="Insurance (fixed amt)"
-            reduxId="insuranceFixedOngoing"
-            hint="Ongoing"
-            typeVal="float"
-            limit="900000000"
-            textBody={formDataReducer.insuranceFixedOngoing}
-          />
-        </Form>
-
-        <PageHeader>Security Deposit</PageHeader>
-
-        <Form inline>
-          <TextField
-            id="Security Deposit %"
-            reduxId="securityDepositPercentUpfront"
-            hint="Upfront"
-            typeVal="float"
-            limit="100"
-            textBody={formDataReducer.securityDepositPercentUpfront}
-          />
-          <TextField
-            id="Security Deposit %"
-            reduxId="securityDepositPercentOngoing"
-            hint="Ongoing"
-            typeVal="float"
-            limit="100"
-            textBody={formDataReducer.securityDepositPercentOngoing}
-          />
-          <TextField
-            id="Security Deposit (fixed amt)"
-            reduxId="securityDepositFixedUpfront"
-            hint="Upfront"
-            typeVal="float"
-            limit="900000000"
-            textBody={formDataReducer.securityDepositFixedUpfront}
-          />
-          <TextField
-            id="Security Deposit (fixed amt)"
-            reduxId="securityDepositFixedOngoing"
-            hint="Ongoing"
-            typeVal="float"
-            limit="900000000"
-            textBody={formDataReducer.securityDepositFixedOngoing}
-          />
-          <TextField
-            id="Interest Paid on Deposit"
-            reduxId="interestPaidOnDepositPercent"
-            typeVal="float"
-            limit="900000000"
-            textBody={formDataReducer.interestPaidOnDepositPercent}
-          />
-        </Form>
-
-        <Button name="Back" url={this.state.back} />
-        <Button
-          name="Next"
-          disable={!this.inputsEntered()}
-          url={'output'}
-          onClickHandler={e => {
-            this.postData()
-          }}
-        />
-      </Grid>
+          <Row className="vertical-margin-item">
+            <Col xs={6} sm={6} md={6}>
+              <Button
+                className="button-fancy"
+                name="Back"
+                url={this.state.back}
+              />
+            </Col>
+            <Col xs={6} sm={6} md={6} className="bs-button-right">
+              <Button
+                className="button-fancy"
+                name="Next"
+                disable={!this.inputsEntered()}
+                url={'output'}
+                onClickHandler={e => {
+                  this.postData()
+                }}
+              />
+            </Col>
+          </Row>
+        </Grid>
+      </div>
     )
   }
 }

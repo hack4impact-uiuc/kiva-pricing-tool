@@ -4,7 +4,6 @@ import { resetFormData } from './../actions'
 import IntroPage from './../components/IntroPage'
 
 function mapStateToProps(state) {
-  // console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }

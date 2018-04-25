@@ -1,30 +1,30 @@
-// @flow
 
-import Navbar from './Navbar'
-import Bootstrap from 'react-bootstrap'
-
-import IntroPage from './../containers/IntroPage'
-import Dropdown from './../containers/Dropdown.js'
+// Our lower components
+import Navbar from './../containers/Navbar'
+import Dropdown from './Dropdown.js'
 import Button from './Button.js'
-import LargeTextInput from './LargeTextInput.js'
 import TextField from './../containers/TextField.js'
-import APRInputs from './../containers/APRInputs'
+import KivaChart from './KivaChart.js'
+// Our Pages
+import IntroPage from './../containers/IntroPage'
 import NewLoan from './../containers/NewLoan'
-import LiveSearch from './LiveSearch.js'
-import APRRateDisplay from './../containers/APRDisplay'
 import FindLoan from './../containers/FindLoan'
-import { BrowserRouter } from 'react-router-dom'
+import APRRateDisplay from './../containers/APRDisplay'
+import APRInputs from './../containers/APRInputs'
+import AdminPartners from './AdminPartners.js'
+import AdminThemes from './AdminThemes.js'
 
 export {
   Navbar,
   Button,
-  LargeTextInput,
   Dropdown,
   TextField,
   APRInputs,
+  KivaChart,
   NewLoan,
-  LiveSearch,
   APRRateDisplay,
   IntroPage,
-  FindLoan
+  FindLoan,
+  AdminPartners,
+  AdminThemes
 }

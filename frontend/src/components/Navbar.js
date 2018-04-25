@@ -1,27 +1,51 @@
 import React, { Component } from 'react'
-// import { connect } from 'react-redux'
-import { Grid, Navbar as BootstrapNavbar } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-class Navbar extends Component {
-  constructor(props) {
-    super(props)
-  }
+import {
+  Grid,
+  Navbar as BootstrapNavbar,
+  Nav,
+  NavItem,
+  NavDropdown,
+  MenuItem
+} from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import './../styles/navbar.css'
 
+// note: changed NavItem's component class because we cannot have nested <a>
+class Navbar extends Component {
   render() {
     const { resetFormData } = this.props
     return (
-      <BootstrapNavbar inverse fixedTop>
-        <Grid>
-          <BootstrapNavbar.Header>
-            <BootstrapNavbar.Brand>
-              <Link to="/">APR Pricing Tool</Link>
-            </BootstrapNavbar.Brand>
-            <BootstrapNavbar.Toggle />
-          </BootstrapNavbar.Header>
-        </Grid>
-      </BootstrapNavbar>
+      <Grid>
+        <BootstrapNavbar fixedTop fluid className="custom-navbar-styles">
+          <BootstrapNavbar.Toggle />
+          <BootstrapNavbar.Collapse>
+            <Nav>
+              <LinkContainer to="/">
+                <NavItem>Home</NavItem>
+              </LinkContainer>
+
+              <LinkContainer to="newloan">
+                <NavItem>New Loan</NavItem>
+              </LinkContainer>
+
+              <LinkContainer to="findloan">
+                <NavItem>Find Loan</NavItem>
+              </LinkContainer>
+
+              <NavDropdown id="adminToolNav" title="Admin Tools">
+                <LinkContainer to="partnerlist">
+                  <MenuItem>Partner List</MenuItem>
+                </LinkContainer>
+
+                <LinkContainer to="themelist">
+                  <MenuItem>Loan Theme List</MenuItem>
+                </LinkContainer>
+              </NavDropdown>
+            </Nav>
+          </BootstrapNavbar.Collapse>
+        </BootstrapNavbar>
+      </Grid>
     )
   }
 }
-// onClick={resetFormData}
 export default Navbar
