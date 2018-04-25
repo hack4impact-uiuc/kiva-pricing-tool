@@ -230,23 +230,30 @@ class AdminThemes extends Component {
           </Col>
         </Row>
 
-        <Button
-          name="Edit List"
-          url="themelist"
-          onClickHandler={() => {
-            this.setState({ editing: true })
-            this.cleanList()
-          }}
-        />
-
-        <Button
-          name="Save List"
-          url="themelist"
-          onClickHandler={() => {
-            this.setState({ editing: false })
-            this.saveAllTheme()
-          }}
-        />
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <Button
+              className="button-fancy"
+              name="Edit List"
+              url="themelist"
+              onClickHandler={() => {
+                this.setState({ editing: true })
+                this.cleanList()
+              }}
+            />
+          </Col>
+          <Col sm={6} md={6} className="bs-button-right">
+            <Button
+              className="button-fancy"
+              name="Save List"
+              url="themelist"
+              onClickHandler={() => {
+                this.setState({ editing: false })
+                this.saveAllTheme()
+              }}
+            />
+          </Col>
+        </Row>
 
         <Row>
           <Col sm={12} md={12}>
