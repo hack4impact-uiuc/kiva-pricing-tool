@@ -264,13 +264,14 @@ class APRRateDisplay extends Component {
   getCSV() {
     const { formDataReducer } = this.props
     let csv = [['Period Number,Date,Days,Principal Disbursed,Principal Paid,Balance,Interest Paid,Fees Paid,Insurance Paid,Taxes Paid,Security Deposit,Interest Paid on Security,Deposit Withdrawal,Deposit Balance,Total Cashflow\n']];
+    let row;
     for (let j = 0; j < 13; j++) {
-      let row = "";
+    row = "";
       for (let i = 0; i < 15; i++) {
-	  row += formDataReducer.calc_repayment_schedule[i][j] + ',';
+        row += formDataReducer.original_repayment_schedule[i][j] + ',';
       }
-      row+='\n';
-      csv.push(row);
+    row+='\n';
+    csv.push(row);
     }
     row = '\n\n'
     csv.push(row);
@@ -339,8 +340,7 @@ class APRRateDisplay extends Component {
     row = "security_deposit_fixed_ongoing:," + formDataReducer.securityDepositFixedOngoing[0]+ "\n";
     csv.push(row);
     row = "interest_paid_on_deposit_percent:," + formDataReducer.interestPaidOnDepositPercent[0]+ "\n";
-    csv.push(row);
-    
+    csv.push(row);        
     let csvFile = new Blob(csv,{type: 'text/csv;charset=utf-8;'});
     let url = URL.createObjectURL(csvFile);
     let createDownloadLink = document.createElement('a');
