@@ -9,7 +9,6 @@ import { ToastContainer, ToastMessage } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
 
-
 class AdminPartners extends Component {
   constructor(props) {
     super(props)
@@ -68,10 +67,9 @@ class AdminPartners extends Component {
           console.log(update)
           this.setState({ data })
 
-          if (original !== update &&  update && update.length)) {
+          if (original !== update && update && update.length) {
             //add
             let partner = { partner_name: update }
-            console.log(partner.partner_name + 'hi')
             axios
               .post('http://127.0.0.1:3453/addMFI', partner)
               .catch(function(error) {
@@ -183,8 +181,7 @@ class AdminPartners extends Component {
                     filtered: [
                       { id: 'partner_names', value: event.target.value }
                     ]
-                  })
-                }
+                  })}
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -253,8 +250,7 @@ class AdminPartners extends Component {
                         name="Remove"
                         url="partnerlist"
                         onClickHandler={() =>
-                          this.removeLoan(original.partner_names)
-                        } // Send text value to remove loan function
+                          this.removeLoan(original.partner_names)} // Send text value to remove loan function
                       />
                     )
                   }
