@@ -449,7 +449,7 @@ class APRRateDisplay extends Component {
       version_num: '1',
       update_name: formDataReducer.startName[0],
       start_name: formDataReducer.startName[0],
-      nominal_apr: formDataReducer.aprRate,
+      nominal_apr: formDataReducer.nominalApr,
       installment_time_period: formDataReducer.installmentTimePeriod[0],
       repayment_type: formDataReducer.repaymentType[0],
       interest_time_period: formDataReducer.interestTimePeriod[0],

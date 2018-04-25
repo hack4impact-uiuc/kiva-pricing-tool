@@ -2,8 +2,7 @@ from api import app, db
 from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
-from api.utils import create_response, InvalidUsage, round_float, cal_apr_helper, update_repayment_schedule, round_matrix
-from api.utils import PERIOD_IDX, DATE_IDX, DAY_IDX, PRINCIPAL_DISBURSED_IDX, PRINCIPAL_PAID_IDX, BALANCE_IDX, INTEREST_PAID_IDX, FEES_IDX, INSURANCE_IDX, TAXES_IDX, SECURITY_DEPOSIT_IDX, SECURITY_DEPOSIT_INTEREST_PAID_IDX, SECURITY_DEPOSIT_WITHDRAW_IDX, SECURITY_DEPOSIT_BALANCE_IDX, CASH_FLOW_IDX
+from api.utils import create_response, InvalidUsage, cal_apr_helper, update_repayment_schedule, round_matrix
 import numpy as np
 
 mod = Blueprint('main', __name__)
@@ -72,8 +71,8 @@ def cal_repayment():
     user_change = input_json['user_change']
 
     try:
-        apr, origin_matrix = cal_apr_helper(input_form)
-        apr, recal_matrix = update_repayment_schedule(origin_matrix, user_change, input_form)
+        # apr, origin_matrix = cal_apr_helper(input_form)
+        apr, recal_matrix = update_repayment_schedule(user_change, input_form)
         matrix_list = []
         for a in recal_matrix:
             matrix_list.append(list(a))

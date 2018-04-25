@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { changedFormData, resetFormData, searchLoan } from './../actions'
-import FindLoan from './../components/FindLoan'
+import { changedFormData } from './../actions'
+import TextField from './../components/TextField'
 
 function mapStateToProps(state) {
   return {
@@ -12,12 +12,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      changedFormData,
-      resetFormData,
-      searchLoan
+      changedFormData
     },
     dispatch
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FindLoan)
+export default connect(mapStateToProps, mapDispatchToProps)(TextField)
