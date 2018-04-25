@@ -16,7 +16,7 @@ export default function formDataReducer(state = initialState.formData, action) {
       for (var key in action.payload.results) {
         prevState = {
           ...prevState,
-          [key]: action.payload.results[key]
+          [key]: [action.payload.results[key]]
         }
       }
       return prevState
