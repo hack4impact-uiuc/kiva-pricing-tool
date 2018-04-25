@@ -7,6 +7,7 @@ import {
   NavDropdown,
   MenuItem
 } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import { Link } from 'react-router-dom'
 import './../styles/navbar.css'
 
@@ -21,23 +22,23 @@ class Navbar extends Component {
 
           <BootstrapNavbar.Collapse>
             <Nav>
-              <NavItem className="hover-fancy" componentClass="span">
-                <Link className="nav-white-link link-no-effect" to="/">
-                  Home
-                </Link>
-              </NavItem>
-
-              <NavItem className="hover-fancy" componentClass="span">
-                <Link className="nav-white-link link-no-effect" to="newloan">
+              <LinkContainer className="nav-white-link link-no-effect" to="/">
+                <NavItem className="hover-fancy">Home</NavItem>
+              </LinkContainer>
+              <LinkContainer
+                className="nav-white-link link-no-effect"
+                to="newloan"
+              >
+                <NavItem className="hover-fancy nav-white-link">
                   New Loan
-                </Link>
-              </NavItem>
-
-              <NavItem className="hover-fancy" componentClass="span">
-                <Link className="nav-white-link link-no-effect" to="findloan">
-                  Find Loan
-                </Link>
-              </NavItem>
+                </NavItem>
+              </LinkContainer>
+              <LinkContainer
+                className="nav-white-link link-no-effect"
+                to="findloan"
+              >
+                <NavItem className="hover-fancy">Find Loan</NavItem>
+              </LinkContainer>
 
               <NavDropdown
                 className="hover-fancy"
