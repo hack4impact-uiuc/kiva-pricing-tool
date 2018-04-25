@@ -12,20 +12,8 @@ class TextField extends Component {
       id: this.props.text,
       error_message: '',
       type: this.props.typeVal
-      // textBody: this.props.textBody ? this.props.textBody : ''
     }
   }
-
-  // componentWillReceiveProps(nextProps){
-  //   this.setState({ textBody: nextProps.textBody })
-  // }
-
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   return {
-  //     ...prevState,
-  //     ...nextProps
-  //   }
-  // }
 
   handleChange(e) {
     const { formDataReducer, changedFormData } = this.props
@@ -73,9 +61,6 @@ class TextField extends Component {
       this.setState({ error_message: '' })
     }
     this.setState({ textBody: value })
-    // console.log(this.props.reduxId, value)
-    // console.log(this.props.onTextInputChange)
-    // this.props.onTextInputChange(this.props.reduxId, value)
     changedFormData(this.props.reduxId, value)
   }
 
@@ -92,7 +77,7 @@ class TextField extends Component {
           id={this.props.text}
           placeholder={this.props.hint}
           onChange={event => this.handleChange(event)}
-          value={this.props.textBody}
+          value={this.props.textBody === null ? '' : this.props.textBody}
           required
           // autofocus
         />

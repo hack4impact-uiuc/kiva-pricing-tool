@@ -12,8 +12,8 @@ class Button extends Component {
             className="button"
             type="button"
             onClick={() => {
-              var runnable =
-                this.props.disable == null ? true : !this.props.disable
+              let runnable =
+                this.props.disable === null ? true : !this.props.disable
               if (runnable) {
                 if (this.props.onClickHandler) this.props.onClickHandler()
                 history.push('/' + this.props.url)

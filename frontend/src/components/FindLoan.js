@@ -106,17 +106,6 @@ class FindLoan extends Component {
     }
   }
 
-  editLoan() {
-    // search a loan
-    // onsave put
-  }
-
-  duplicateLoan() {
-    // need to search a loan
-    // call versionnumber endpoint
-    // onsave post
-  }
-
   inputsEntered() {
     const { formDataReducer } = this.props
     if (
@@ -125,26 +114,22 @@ class FindLoan extends Component {
       !this.isNullOrEmpty(formDataReducer.productType) &&
       !this.isNullOrEmpty(formDataReducer.versionNum)
     ) {
-      let x = Api.searchLoan(
-        formDataReducer.mfi[0],
-        formDataReducer.loanType[0],
-        formDataReducer.productType[0],
-        formDataReducer.versionNum[0]
+      let validPartnerName =
+        this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
+      let validLoanTheme =
+        this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
+      let validProductType =
+        this.state.product_types.indexOf(formDataReducer.productType[0]) != -1
+      let validVersionNum =
+        this.state.versions.indexOf(formDataReducer.versionNum[0]) != -1
+      return (
+        validPartnerName &&
+        validLoanTheme &&
+        validProductType &&
+        validVersionNum
       )
-      console.log('WOO', x !== false)
     }
-    return (
-      !this.isNullOrEmpty(formDataReducer.mfi) &&
-      !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType) &&
-      !this.isNullOrEmpty(formDataReducer.versionNum) &&
-      Api.searchLoan(
-        formDataReducer.mfi[0],
-        formDataReducer.loanType[0],
-        formDataReducer.productType[0],
-        formDataReducer.versionNum[0]
-      ) !== false
-    )
+    return false
   }
 
   isNullOrEmpty(input) {
@@ -163,7 +148,7 @@ class FindLoan extends Component {
             options={this.state.partner_names}
             selected={formDataReducer.mfi}
             onInputChange={e => {
-              changedFormData('mfi', [e])
+              changedFormData('mfi', e)
               this.getProductType()
             }}
           />
@@ -176,7 +161,7 @@ class FindLoan extends Component {
             placeholder="Select Loan Type"
             selected={formDataReducer.loanType}
             onInputChange={e => {
-              changedFormData('loanType', [e])
+              changedFormData('loanType', e)
               this.getProductType()
             }}
           />
@@ -190,7 +175,7 @@ class FindLoan extends Component {
             limit={100}
             selected={formDataReducer.productType}
             onInputChange={e => {
-              changedFormData('productType', [e])
+              changedFormData('productType', e)
               this.getVersionNum()
             }}
           />
@@ -204,7 +189,7 @@ class FindLoan extends Component {
             selected={formDataReducer.versionNum}
             placeholder="Search Versions:"
             onInputChange={e => {
-              changedFormData('versionNum', [e])
+              changedFormData('versionNum', e)
             }}
           />
           <br />

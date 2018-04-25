@@ -7,7 +7,7 @@ export default function formDataReducer(state = initialState.formData, action) {
       return {
         ...state,
 
-        [action.payload.field]: action.payload.value
+        [action.payload.field]: [action.payload.value]
       }
     case RESET:
       return initialState.formData

@@ -30,7 +30,7 @@ class Dropdown extends Component {
                 // if (this.props.onTextInputChange)
                 // this.props.onTextInputChange(this.props.reduxId, item.value)
                 changedFormData(this.props.reduxId, item.value)
-                // this.setState({ value: item.value })
+                this.setState({ value: item.value })
               }}
             >
               {item.value}

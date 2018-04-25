@@ -7,6 +7,7 @@ import { Grid, Jumbotron, PageHeader, Form, Bootstrap } from 'react-bootstrap'
 import axios from 'axios'
 
 import './../styles/app.scss'
+import { Api } from '../utils'
 
 class APRInputs extends Component {
   constructor(props) {
@@ -22,44 +23,6 @@ class APRInputs extends Component {
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
     changedFormData([name], [value])
-  }
-
-  componentWillMount() {
-    const { formDataReducer, changedFormData } = this.props
-    if (formDataReducer.back == 'findloan') {
-      console.log('mounting')
-      axios
-        .get(
-          'http://127.0.0.1:3453/findLoan?partner_name=' +
-            formDataReducer.mfi[0] +
-            '&loan_theme=' +
-            formDataReducer.loanType[0] +
-            '&product_type=' +
-            formDataReducer.productType[0] +
-            '&version_num=' +
-            formDataReducer.versionNum[0]
-        )
-        .then(response => {
-          for (const key of Object.keys(response.data.result)) {
-            // console.log(this.camelCase(key), response.data.result[key])
-            changedFormData(this.camelCase(key), [
-              response.data.result[key].toString()
-            ])
-          }
-          this.setState({ saveData: response.data.result })
-        })
-    }
-  }
-
-  camelCase(key) {
-    let terms = key.split('_')
-    if (terms.length == 1) return terms
-
-    for (var i = 1; i < terms.length; i++) {
-      terms[i] = terms[i].charAt(0).toUpperCase() + terms[i].slice(1)
-    }
-
-    return terms.join('')
   }
 
   inputsEntered() {
@@ -105,70 +68,12 @@ class APRInputs extends Component {
   }
 
   postData() {
-    const { formDataReducer, changedFormData } = this.props
-    if (!this.inputsEntered()) {
-      // something is blank in the form
-      return
-    }
-    let data = {
-      partner_name: formDataReducer.mfi[0],
-      loan_theme: formDataReducer.loanType[0],
-      product_type: formDataReducer.productType[0],
-      version_num: formDataReducer.versionNum[0],
-      update_name: formDataReducer.updateName,
-      start_name: formDataReducer.startName[0],
-      installment_time_period: formDataReducer.installmentTimePeriod[0],
-      repayment_type: formDataReducer.repaymentType[0],
-      interest_time_period: formDataReducer.interestTimePeriod[0],
-      interest_payment_type: formDataReducer.interestPaymentType[0],
-      interest_calculation_type: formDataReducer.interestCalculationType[0],
-      loan_amount: formDataReducer.loanAmount[0],
-      installment: formDataReducer.installment[0],
-      nominal_interest_rate: formDataReducer.nominalInterestRate[0],
-      grace_period_principal: formDataReducer.gracePeriodPrincipal[0],
-      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay[0],
-      grace_period_interest_calculate:
-        formDataReducer.gracePeriodInterestCalculate[0],
-      grace_period_balloon: formDataReducer.gracePeriodBalloon[0],
-      fee_percent_upfront: formDataReducer.feePercentUpfront[0],
-      fee_percent_ongoing: formDataReducer.feePercentOngoing[0],
-      fee_fixed_upfront: formDataReducer.feeFixedUpfront[0],
-      fee_fixed_ongoing: formDataReducer.feeFixedOngoing[0],
-      tax_percent_fees: formDataReducer.taxPercentFees[0],
-      tax_percent_interest: formDataReducer.taxPercentInterest[0],
-      insurance_percent_upfront: formDataReducer.insurancePercentUpfront[0],
-      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing[0],
-      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront[0],
-      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing[0],
-      security_deposit_percent_upfront:
-        formDataReducer.securityDepositPercentUpfront[0],
-      security_deposit_percent_ongoing:
-        formDataReducer.securityDepositPercentOngoing[0],
-      security_deposit_fixed_upfront:
-        formDataReducer.securityDepositFixedUpfront[0],
-      security_deposit_fixed_ongoing:
-        formDataReducer.securityDepositFixedOngoing[0],
-      interest_paid_on_deposit_percent:
-        formDataReducer.interestPaidOnDepositPercent[0]
-    }
-
-    axios
-      .post('http://127.0.0.1:3453/calculateAPR', data)
-      .then(response => {
-        const apr = response.data.result.apr
-        data['nominal_apr'] = apr.toString()
-        changedFormData('nominalApr', apr)
-      })
-      .catch(function(error) {
-        console.log(
-          error + ' there was an error with the request' + data.start_name
-        )
-      })
+    const { formDataReducer } = this.props
+    this.inputsEntered() && Api.postData(formDataReducer)
   }
 
   render() {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
-    // console.log('RENDERING', formDataReducer, formDataReducer.installment)
     return (
       <Grid>
         <PageHeader>User Information</PageHeader>
@@ -180,7 +85,6 @@ class APRInputs extends Component {
             typeVal="String"
             limit="100"
             textBody={formDataReducer.startName}
-            // onTextInputChange={this.handleTextChange}
           />
         </Form>
 
@@ -222,7 +126,6 @@ class APRInputs extends Component {
             reduxId="interestCalculationType"
             items={[
               { id: '1', value: 'initial amount or flat' },
-              // { id: '2', value: 'Flat' },
               { id: '2', value: 'declining balance' }
             ]}
             onTextInputChange={this.handleTextChange}
@@ -243,28 +146,20 @@ class APRInputs extends Component {
             typeVal="float"
             limit="900000000"
             textBody={formDataReducer.loanAmount}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Number of Terms"
             reduxId="installment"
             hint="ex. 12"
-            typeVal="int"
+            typeVal="float"
             limit="180"
-            textBody={
-              // console.log("FUCKING FORM REDUCER", formDataReducer.installment)
-              // formDataReducer.installment
-              formDataReducer.installment
-                ? formDataReducer.installment[0]
-                : null
-            }
-            // onTextInputChange={this.handleTextChange}
+            textBody={formDataReducer.installment}
           />
           <TextField
             id="Nominal Interest Rate"
             reduxId="nominalInterestRate"
             hint="ex. 12"
-            typeVal="int"
+            typeVal="float"
             limit="100"
             textBody={formDataReducer.nominalInterestRate}
             // onTextInputChange={this.handleTextChange}
