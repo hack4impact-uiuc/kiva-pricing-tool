@@ -4,9 +4,8 @@
 
 **LOAN**
 
-|   id  |   partner_name    |   loan_theme  |   product_type    |   version_num |   start_date  |   update_date |   start_name  |   update_name |   nominal_apr |   installment_time_period |   repayment_type  |   interest_time_period    | interest_payment    |   interest_calculation_type   |   loan_amount |   installment |   nominal_interest_rate   |   grace_period_principal  | grace_period_interest_pay   |   grace_period_interest_calculate |   grace_period_balloon    |   fee_percent_upfront | fee_percent_ongoing |   fee_fixed_upfront   |   fee_fixed_ongoing   |   insurance_percent_upfront   | insurance_percent_ongoing   |   insurance_fixed_upfront |   insurance_fixed_ongoing |   tax_percent_fees    | tax_percent_interest    |   security_deposit_percent_upfront    |   security_deposit_percent_ongoing    | security_deposit_fixed_upfront  |   security_deposit_fixed_ongoing  |   interest_paid_on_deposit_percent    |
+|   id  |   partner_id    |   theme_id  |   product_type    |   version_num |   start_date  |   update_date |   start_name  |   update_name |   nominal_apr |   installment_time_period |   repayment_type  |   interest_time_period    | interest_payment    |   interest_calculation_type   |   loan_amount |   installment |   nominal_interest_rate   |   grace_period_principal  | grace_period_interest_pay   |   grace_period_interest_calculate |   grace_period_balloon    |   fee_percent_upfront | fee_percent_ongoing |   fee_fixed_upfront   |   fee_fixed_ongoing   |   insurance_percent_upfront   | insurance_percent_ongoing   |   insurance_fixed_upfront |   insurance_fixed_ongoing |   tax_percent_fees    | tax_percent_interest    |   security_deposit_percent_upfront    |   security_deposit_percent_ongoing    | security_deposit_fixed_upfront  |   security_deposit_fixed_ongoing  |   interest_paid_on_deposit_percent    |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-
 
 **REPAYMENT SCHEDULE**
 
@@ -23,18 +22,41 @@
 |   id  |   loan_theme   | last_modified |  active  |
 |:------:|:---------:|:------:|:---------:|
 
+
+
 ## Endpoints Documentation 
 
-PARTNER AND THEME: 
-* GET /partnerThemeLists
+PARTNER AND THEME LISTS: 
+* GET /partnerThemeLists | done
 
-LOANS: 
-* GET /getVersionNum
-* POST /saveNewLoan
-* GET /getCSV
+CREATE AND SAVE LOAN: 
+* GET /getVersionNum | done
+* POST /saveNewLoan | done
 
-OTHER:
-* POST /calculateAPR
+FIND LOAN:
+* GET /getMFIEntry
+* GET /getLTEntry
+* GET /getPTEntry
+* GET /getVersionNumEntry
+* GET /findLoan
+
+CALCULATE REPAYMENT SCHEDULE AND APR:
+* POST /calculateAPR | done
+* POST /recalculate
+
+ADMIN TOOLS PARTNERS:
+* GET /getAllMFI
+* PUT /editMFI/<partner_name>
+* POST /addMFI
+* PUT /removeMFI/<partner_name>
+
+ADMIN TOOLS THEMES:
+* GET /getAllLT
+* PUT /editLT/<loan_theme>
+* POST /addLT
+* PUT /removeLT/<loan_theme>
+
+
 
 ## Conventions
 This API will follow the [H4I REST API Spec](https://github.com/hack4impact-uiuc/wiki/wiki/Our-REST-API-Specification).
@@ -43,56 +65,6 @@ All `GET` request parameters should be query parameters.
 
 All `POST` and `PUT` request parameters should be body parameters.
 
-## POIs:
-
-### Endpoint
-
-    GET /getVersionNum
-    
-**Description**
-
-Get loan data for a specified loan in CSV format.
-
-**Parameters**
-
-|   Name    |  Type  | Required                      | Description               |
-|:---------:|:------:|:-----------------------------:|:-------------------------:|
-| partner_name  | string | **Required** | Filter Loans by Partner 
-| theme  | string | **Required** | Filter Loans by Theme 
-| product  | string | **Required** | Filter Loans by Product 
-
-**Response**
-    
-    {
-      success: true,
-      code: 200,
-      message: '',
-      result: {
-        version_num: 4
-      }
-    }
-
-### Endpoint
-
-    GET /getCSV
-    
-**Description**
-
-Get loan data for a specified loan in CSV format.
-
-**Parameters**
-
-|   Name    |  Type  | Required                      | Description               |
-|:---------:|:------:|:-----------------------------:|:-------------------------:|
-| partner_name  | string | **Required** | Filter Loans by Partner 
-| theme  | string | **Required** | Filter Loans by Theme 
-| product  | string | **Required** | Filter Loans by Product 
-| version_num  | number | **Required** | Filter Loans by Theme 
-
-**Response**
-    
-csv file: first row - attribute names, second row - values for loan
-    
 ### Endpoint
 
     GET /partnerThemeLists
@@ -110,6 +82,33 @@ Get a list of all MFI Partners and Loan Themes
       result: {
         themes: [...],
         partners: [...]
+      }
+    }
+
+### Endpoint
+
+    GET /getVersionNum
+    
+**Description**
+
+Get loan data for a specified loan in CSV format.
+
+**Parameters**
+
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+| partner_namE  | string | **Required** | Filter Loans by Partner 
+| theme  | string | **Required** | Filter Loans by Theme 
+| product  | string | **Required** | Filter Loans by Product 
+
+**Response**
+    
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        version_num: 4
       }
     }
  
@@ -169,6 +168,78 @@ Puts a new loan in the database.
       result: {}
     }
 
+TODO'S
+
+### Endpoint
+
+    GET /getMFIEntry
+    
+**Description**
+
+Get all partner entries saved in the database.
+
+**Parameters**
+
+**Response**
+    
+    
+    
+### Endpoint
+
+    GET /getLTEntry
+    
+**Description**
+
+Get all loan theme entries corresponding to the correct partner saved in the database.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    GET /getPTEntry
+    
+**Description**
+
+Get all product type entries corresponding to the correct partner and loan theme saved in the database.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    GET /getVersionNumEntry
+    
+**Description**
+
+Get all version number entries corresponding to the correct partner, loan theme, and product type saved in the database.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    GET /findLoan
+    
+**Description**
+
+Get all version number entries corresponding to the correct partner, loan theme, and product type saved in the database.
+
+**Parameters**
+
+**Response**
+
+
+
 ### Endpoint
 
     POST /calculateAPR
@@ -220,3 +291,129 @@ Calculate APR rate based on given entries.
       }
     }
 
+
+
+### Endpoint
+
+    GET /recalculate
+    
+**Description**
+
+Recalculate repayment schedule based on user inputs.
+
+**Parameters**
+
+**Response**
+
+
+
+
+### Endpoint
+
+    GET /getAllMFI
+    
+**Description**
+
+Gets list of active partners.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    PUT /editMFI/<partner_name>
+    
+**Description**
+
+Edit a current partner.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    POST /addMFI
+    
+**Description**
+
+Add a partner to the list.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    PUT /removeMFI/<partner_name>
+    
+**Description**
+
+Set a partner's status to inactive and "remove" it from the list.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    GET /getAllLT
+    
+**Description**
+
+Gets list of active partners.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    PUT /editLT/<loan_theme>
+    
+**Description**
+
+Edit a current loan theme.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    POST /addLT
+    
+**Description**
+
+Add a loan theme to the list.
+
+**Parameters**
+
+**Response**
+
+
+
+### Endpoint
+
+    PUT /removeLT/<loan_theme>
+    
+**Description**
+
+Set a loan theme's status to inactive and "remove" it from the list.
+
+**Parameters**
+
+**Response**
