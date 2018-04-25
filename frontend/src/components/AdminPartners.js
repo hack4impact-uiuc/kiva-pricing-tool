@@ -15,7 +15,8 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
-      filtered: [] // ID and text data used for filtering react table
+      filtered: [], // ID and text data used for filtering react table
+      editing: false
     }
     this.renderEditable = this.renderEditable.bind(this)
   }
@@ -174,8 +175,7 @@ class AdminPartners extends Component {
                     filtered: [
                       { id: 'partner_names', value: event.target.value }
                     ]
-                  })
-                }
+                  })}
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -186,6 +186,7 @@ class AdminPartners extends Component {
               <small> Add Partner: </small>{' '}
             </h2>
             <input
+              className="expand-width"
               type="text"
               label="Text"
               placeholder="Add MFI Partner"
@@ -244,8 +245,7 @@ class AdminPartners extends Component {
                         name="Remove"
                         url="partnerlist"
                         onClickHandler={() =>
-                          this.removeLoan(original.partner_names)
-                        } // Send text value to remove loan function
+                          this.removeLoan(original.partner_names)} // Send text value to remove loan function
                       />
                     )
                   }
