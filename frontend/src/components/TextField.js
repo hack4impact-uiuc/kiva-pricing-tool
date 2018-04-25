@@ -4,17 +4,19 @@ import './../styles/textfield.css'
 class TextField extends Component {
   constructor(props) {
     super(props)
+    const { formDataReducer } = this.props
     this.state = {
       valid: true,
       id: this.props.text,
       error_message: '',
-      type: this.props.typeVal,
-      textBody: this.props.textBody ? this.props.textBody : ''
+      type: this.props.typeVal
     }
   }
 
   handleChange(e) {
+    const { formDataReducer, changedFormData } = this.props
     let value = e.target.value
+
     if (this.props.typeVal.toLowerCase() === 'int') {
       let tryInt = parseInt(value, 10)
       let limit = parseInt(this.props.limit, 10)
@@ -57,6 +59,7 @@ class TextField extends Component {
       this.setState({ error_message: '' })
     }
     this.setState({ textBody: value })
+    changedFormData(this.props.reduxId, value)
   }
 
   render() {

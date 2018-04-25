@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Grid, PageHeader, Form, Row, Col } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { Api } from './../utils'
 import './../styles/app.css'
+import { TextField, Button } from './'
 import './../styles/button.css'
-import TextField from './TextField'
-import Button from './Button'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 
@@ -27,15 +27,8 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
-      this.setState({ partner_names: response.data.result.partners })
-      this.setState({ loan_themes: response.data.result.themes })
-    })
-  }
-
-  handleTextChange = (name, value) => {
-    const { changedFormData } = this.props
-    changedFormData([name], [value])
+    const { resetFormData, changedFormData } = this.props
+    changedFormData('back', 'newloan')
   }
 
   inputsEntered() {
@@ -52,7 +45,7 @@ class NewLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData, resetFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     return (
       <div className="page-body-grey overflow-handler">
         <Grid
@@ -100,7 +93,6 @@ class NewLoan extends Component {
                 typeVal="String"
                 limit={100}
                 textBody={formDataReducer.productType}
-                onTextInputChange={this.handleTextChange}
               />
             </Form>
 
@@ -120,21 +112,13 @@ class NewLoan extends Component {
                   name="Continue"
                   url="form1"
                   onClickHandler={() => {
-                    axios
-                      .get(
-                        'http://127.0.0.1:3453/getVersionNum?partner_name=' +
-                          formDataReducer.mfi +
-                          '&theme=' +
-                          formDataReducer.loanType +
-                          '&product=' +
-                          formDataReducer.loanProduct
-                      )
-                      .then(response => {
-                        changedFormData('versionNum', [
-                          response.data.result['version'].toString()
-                        ])
-                      })
-                    changedFormData('back', 'newloan')
+                    Api.getVersionNum(
+                      formDataReducer.mfi,
+                      formDataReducer.loanType,
+                      formDataReducer.productType
+                    ).then(response => {
+                      changedFormData('versionNum', response['version'].toString())
+                    })
                   }}
                 />
               </Col>

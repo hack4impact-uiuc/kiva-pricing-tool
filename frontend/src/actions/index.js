@@ -1,4 +1,4 @@
 // @flow
-import { changedFormData, resetFormData } from './formData.action'
+import { changedFormData, resetFormData, searchLoan } from './formData.action'
 
-export { changedFormData, resetFormData }
+export { changedFormData, resetFormData, searchLoan }

@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import { Dropdown, Button, TextField } from './'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-
-import './../styles/app.css'
+import './../styles/app.scss'
+import { Api } from '../utils'
 
 class APRInputs extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class APRInputs extends Component {
     this.state = {
       aprRate: '',
       saveData: {},
-      back: formDataReducer.backRoute
+      back: formDataReducer.back
     }
   }
 
@@ -66,125 +66,10 @@ class APRInputs extends Component {
 
   postData() {
     const { formDataReducer, changedFormData } = this.props
-    let data = {
-      partner_name: formDataReducer.mfi[0],
-      loan_theme: formDataReducer.loanType[0],
-      product_type: formDataReducer.productType[0],
-      version_num: formDataReducer.versionNum[0],
-      update_name: formDataReducer.updateName,
-      start_name: formDataReducer.startName[0],
-      installment_time_period: formDataReducer.installmentTimePeriod[0],
-      repayment_type: formDataReducer.repaymentType[0],
-      interest_time_period: formDataReducer.interestTimePeriod[0],
-      interest_payment_type: formDataReducer.interestPaymentType[0],
-      interest_calculation_type: formDataReducer.interestCalculationType[0],
-      loan_amount: formDataReducer.loanAmount[0],
-      installment: formDataReducer.installment[0],
-      nominal_interest_rate: formDataReducer.nominalInterestRate[0],
-      grace_period_principal: formDataReducer.gracePeriodPrincipal[0],
-      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay[0],
-      grace_period_interest_calculate:
-        formDataReducer.gracePeriodInterestCalculate[0],
-      grace_period_balloon: formDataReducer.gracePeriodBalloon[0],
-      fee_percent_upfront: formDataReducer.feePercentUpfront[0],
-      fee_percent_ongoing: formDataReducer.feePercentOngoing[0],
-      fee_fixed_upfront: formDataReducer.feeFixedUpfront[0],
-      fee_fixed_ongoing: formDataReducer.feeFixedOngoing[0],
-      tax_percent_fees: formDataReducer.taxPercentFees[0],
-      tax_percent_interest: formDataReducer.taxPercentInterest[0],
-      insurance_percent_upfront: formDataReducer.insurancePercentUpfront[0],
-      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing[0],
-      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront[0],
-      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing[0],
-      security_deposit_percent_upfront:
-        formDataReducer.securityDepositPercentUpfront[0],
-      security_deposit_percent_ongoing:
-        formDataReducer.securityDepositPercentOngoing[0],
-      security_deposit_fixed_upfront:
-        formDataReducer.securityDepositFixedUpfront[0],
-      security_deposit_fixed_ongoing:
-        formDataReducer.securityDepositFixedOngoing[0],
-      interest_paid_on_deposit_percent:
-        formDataReducer.interestPaidOnDepositPercent[0]
-    }
 
-    axios
-      .post('http://127.0.0.1:3453/calculateAPR', data)
-      .then(response => {
-        const apr = response.data.result.apr
-        const matrix = response.data.result.matrix
-        changedFormData('aprRate', apr)
-        let reformatted_matrix = []
-        let user_matrix = []
-        let calc_matrix = []
-        if (matrix != null) {
-          for (let i = 0; i < matrix[0].length; i++) {
-            reformatted_matrix.push({
-              period_num: matrix[0][i],
-              payment_due_date: matrix[1][i],
-              days: matrix[2][i],
-              amount_due: matrix[3][i],
-              principal_payment: matrix[4][i],
-              balance: matrix[5][i],
-              interest: matrix[6][i],
-              fees: matrix[7][i],
-              insurance: matrix[8][i],
-              taxes: matrix[9][i],
-              security_deposit: matrix[10][i],
-              security_interest_paid: matrix[11][i],
-              deposit_withdrawal: matrix[12][i],
-              deposit_balance: matrix[13][i],
-              total_cashflow: matrix[14][i]
-            })
-            user_matrix.push({
-              period_num: null,
-              payment_due_date: null,
-              days: null,
-              amount_due: null,
-              principal_payment: null,
-              balance: null,
-              interest: null,
-              fees: null,
-              insurance: null,
-              taxes: null,
-              security_deposit: null,
-              security_interest_paid: null,
-              deposit_withdrawal: null,
-              deposit_balance: null,
-              total_cashflow: null
-            })
-            calc_matrix.push({
-              period_num: matrix[0][i],
-              payment_due_date: matrix[1][i],
-              days: matrix[2][i],
-              amount_due: matrix[3][i],
-              principal_payment: matrix[4][i],
-              balance: matrix[5][i],
-              interest: matrix[6][i],
-              fees: matrix[7][i],
-              insurance: matrix[8][i],
-              taxes: matrix[9][i],
-              security_deposit: matrix[10][i],
-              security_interest_paid: matrix[11][i],
-              deposit_withdrawal: matrix[12][i],
-              deposit_balance: matrix[13][i],
-              total_cashflow: matrix[14][i]
-            })
-          }
-        }
-        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-        calc_matrix[0]['period_num'] = 'Disbursement Info'
-        changedFormData('original_repayment_schedule', reformatted_matrix)
-        changedFormData('user_repayment_schedule', user_matrix)
-        changedFormData('calc_repayment_schedule', calc_matrix)
-
-        // aprRate: apr,
-        // saveData: data
-      })
-      .catch(function(error) {
-        console.log(
-          error + ' there was an error with the request' + data.start_name
-        )
+    this.inputsEntered() &&
+      Api.postData(formDataReducer).then(apr => {
+        changedFormData('nominalApr', apr)
       })
   }
 
@@ -213,7 +98,6 @@ class APRInputs extends Component {
                   typeVal="String"
                   limit="100"
                   textBody={formDataReducer.startName}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -275,7 +159,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   textBody={formDataReducer.loanAmount}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={4} md={4}>
@@ -286,7 +169,6 @@ class APRInputs extends Component {
                   typeVal="int"
                   limit="180"
                   textBody={formDataReducer.installment}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={4} md={4} className="bs-center">
@@ -318,7 +200,6 @@ class APRInputs extends Component {
                   typeVal="int"
                   limit="100"
                   textBody={formDataReducer.nominalInterestRate}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -351,7 +232,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="180"
                   textBody={formDataReducer.gracePeriodPrincipal}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={3} md={3}>
@@ -363,7 +243,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="180"
                   textBody={formDataReducer.gracePeriodInterestPay}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={3} md={3}>
@@ -375,7 +254,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="180"
                   textBody={formDataReducer.gracePeriodInterestCalculate}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={3} md={3}>
@@ -387,12 +265,10 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="180"
                   textBody={formDataReducer.gracePeriodBalloon}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
           </Row>
-
           <Row>
             <Row>
               <Col sm={12} md={12}>
@@ -409,7 +285,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="180"
                   textBody={formDataReducer.feePercentUpfront}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -420,7 +295,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="180"
                   textBody={formDataReducer.feePercentOngoing}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -434,7 +308,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="100000000"
                   textBody={formDataReducer.feeFixedUpfront}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -445,7 +318,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="100000000"
                   textBody={formDataReducer.feeFixedOngoing}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -472,7 +344,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="100"
                   textBody={formDataReducer.taxPercentFees}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -492,7 +363,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="100"
                   textBody={formDataReducer.taxPercentInterest}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -514,7 +384,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="100"
                   textBody={formDataReducer.insurancePercentUpfront}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -525,7 +394,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="100"
                   textBody={formDataReducer.insurancePercentOngoing}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -539,7 +407,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   textBody={formDataReducer.insuranceFixedUpfront}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -550,7 +417,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   textBody={formDataReducer.insuranceFixedOngoing}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -572,7 +438,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="100"
                   textBody={formDataReducer.securityDepositPercentUpfront}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -582,9 +447,7 @@ class APRInputs extends Component {
                   hint="Ongoing"
                   typeVal="float"
                   limit="100"
-                  textBody={formDataReducer.securityDepositPercentOngoing}
-                  onTextInputChange={this.handleTextChange}
-                />
+                  textBody={formDataReducer.securityDepositPercentOngoing}                />
               </Col>
             </Row>
             <Row>
@@ -597,7 +460,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   textBody={formDataReducer.securityDepositFixedUpfront}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -608,7 +470,6 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   textBody={formDataReducer.securityDepositFixedOngoing}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
@@ -628,11 +489,11 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   textBody={formDataReducer.interestPaidOnDepositPercent}
-                  onTextInputChange={this.handleTextChange}
                 />
               </Col>
             </Row>
           </Row>
+
 
           <Row className="vertical-margin-item">
             <Col xs={6} sm={6} md={6}>
