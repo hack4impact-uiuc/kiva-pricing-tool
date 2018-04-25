@@ -79,7 +79,7 @@ function searchLoan(mfi, loanType, productType, versionNum) {
 }
 
 function postData(reducerData) {
-  axios
+  return axios
     .post(
       'http://127.0.0.1:3453/calculateAPR',
       adapters.convertToApiLoan(reducerData)

@@ -34,7 +34,7 @@ function convertFromApiLoan(loan) {
     securityDepositFixedUpfront: loan.security_deposit_fixed_upfront,
     securityDepositFixedOngoing: loan.security_deposit_fixed_ongoing,
     interestPaidOnDepositPercent: loan.interest_paid_on_deposit_percent,
-    aprRate: loan.nominal_apr
+    nominalApr: loan.nominal_apr
   }
 }
 

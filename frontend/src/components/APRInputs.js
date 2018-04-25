@@ -68,8 +68,11 @@ class APRInputs extends Component {
   }
 
   postData() {
-    const { formDataReducer } = this.props
-    this.inputsEntered() && Api.postData(formDataReducer)
+    const { formDataReducer, changedFormData } = this.props
+    this.inputsEntered() &&
+      Api.postData(formDataReducer).then(apr => {
+        changedFormData('nominalApr', apr)
+      })
   }
 
   render() {
