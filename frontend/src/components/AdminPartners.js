@@ -15,7 +15,7 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
 import ReactDOM from 'react-dom'
-import { ToastContainer, ToastMessage } from 'react-toastr'
+import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
 
@@ -25,15 +25,12 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
-      addconfirm: false,
-      adderror: false,
-      removeshow: false,
-      savesuccess: false,
       editing: false,
       edited_partners: [],
-      addshow: false
+      filtered: []
     }
     this.renderEditable = this.renderEditable.bind(this)
+    this.saveAllPartners = this.saveAllPartners.bind(this)
   }
 
   cleanList() {
@@ -75,45 +72,18 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (
-            original != update &&
-            update != null &&
-            update.length != 0 &&
-            update != ' '
-          ) {
-            //add
-            let partner = { partner_name: update }
-            console.log(partner.partner_name + 'hi')
-            axios
-              .post('http://127.0.0.1:3453/addMFI', partner)
-              .catch(function(error) {
-                console.log('error with adding' + error + partner)
+          if (update != null && update.length != 0 && update != ' ') {
+            this.setState({
+              edited_partners: this.state.edited_partners.concat({
+                original: original,
+                update: update
               })
-
-            //remove
-            axios
-              .delete('http://127.0.0.1:3453/removeMFI/' + original)
-              .then(response => {
-                for (var i = 0; i < this.state.data.length; i++) {
-                  if (this.state.data[i].partner_names === original) {
-                    // Remove element in place, return array with element removed
-                    this.setState({
-                      data: this.state.data
-                        .slice(0, i)
-                        .concat(this.state.data.slice(i + 1))
-                    })
-                  }
-                }
-              })
-            container.success(``, 'Your changes have been saved', {
-              closeButton: true
             })
           } else {
-            // ADD ALERT
             container.warning(
-              'Please refresh and use remove instead.',
-              'Cannot add empty partner name.',
-              {}
+              'Please refresh page and remove.',
+              'Cannot edit empty cell',
+              { closeButton: true }
             )
           }
         }}
@@ -124,6 +94,45 @@ class AdminPartners extends Component {
     )
   }
 
+  saveAllPartners() {
+    var updated_name = null
+    if (this.state.edited_partners.length === 0) {
+      container.warning(
+        'There are no changes to edit',
+        'Please edit before saving.',
+        { closeButton: true }
+      )
+    } else {
+      for (var i = 0; i < this.state.edited_partners.length; i++) {
+        updated_name = {
+          updated_partner_name: this.state.edited_partners[i].update
+        }
+        axios
+          .put(
+            'http://127.0.0.1:3453/editMFI/' +
+              this.state.edited_partners[i].original,
+            updated_name
+          )
+          .then(response => {
+            for (var j = 0; i < this.state.edited_partners.length; j++) {
+              if (
+                this.state.edited_partners[j].update ===
+                this.state.edited_partners[j].update
+              ) {
+                // Remove element in place, return array with element removed
+                this.setState({
+                  edited_partners: this.state.edited_partners
+                    .slice(0, j)
+                    .concat(this.state.data.slice(j + 1))
+                })
+              }
+            }
+          })
+      }
+      container.success('Saved all partners', 'SUCCESS', { closeButton: true })
+    }
+  }
+
   addPartner(partner_name) {
     if (
       partner_name != null &&
@@ -131,7 +140,6 @@ class AdminPartners extends Component {
       partner_name != ' '
     ) {
       let data = { partner_name: partner_name }
-      console.log(data.partner_name + 'helo')
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
         .then(response => {
@@ -143,14 +151,17 @@ class AdminPartners extends Component {
           console.log('error with adding')
         })
       this.setState({ addshow: true })
-      container.success(``, 'Partner successfully added', {
+      container.success('', 'Partner successfully added', {
+        closeButton: true
+      })
+    } else {
+      container.warning('Please enter a name.', 'Cannot add empty name', {
         closeButton: true
       })
     }
   }
 
   removePartner(partner_name) {
-    this.setState({ removeshow: true })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
       .delete('http://127.0.0.1:3453/removeMFI/' + partner_name)
@@ -166,6 +177,9 @@ class AdminPartners extends Component {
           }
         }
       })
+    container.error('You have removed ' + partner_name, 'Partner Removed', {
+      closeButton: true
+    })
   }
 
   render() {
@@ -223,30 +237,32 @@ class AdminPartners extends Component {
           }}
         />
 
+        <Button
+          name="Save List"
+          url="partnerlist"
+          onClickHandler={() => {
+            this.setState({ editing: false })
+            this.saveAllPartners()
+          }}
+        />
+
         <ReactTable
           data={this.state.data}
           columns={[
             {
               Header: 'MFI Partner',
               accessor: 'partner_names',
-              Cell: this.state.editing ? this.renderEditable : null
-            },
-            {
-              Header: '',
-              id: 'save-button',
-              width: 150,
-              Cell: ({ row, original }) => {
-                // Generate row such that value of text field is rememebered to pass into remove loan function
-                if (this.state.editing) {
-                  return (
-                    <Button
-                      name="Save"
-                      url="partnerlist"
-                      onClickHandler={() => this.setState({ editing: false })}
-                    />
-                  )
-                }
-              }
+              Cell: this.state.editing ? this.renderEditable : null,
+              filterMethod: (
+                filter,
+                row // Custom filter method for case insensitive filtering
+              ) =>
+                row[filter.id]
+                  .toLowerCase()
+                  .startsWith(filter.value.toLowerCase()) ||
+                row[filter.id]
+                  .toLowerCase()
+                  .endsWith(filter.value.toLowerCase())
             },
             {
               Header: 'Remove',
@@ -265,6 +281,7 @@ class AdminPartners extends Component {
               }
             }
           ]}
+          filtered={this.state.filtered}
           defaultSorted={[
             {
               id: 'partner_names',
