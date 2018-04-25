@@ -222,6 +222,7 @@ class APRRateDisplay extends Component {
         calc_matrix[0]['period_num'] = 'Disbursement Info'
         changedFormData('calc_repayment_schedule', calc_matrix)
       })
+      this.createChart.bind(this)
     }
   }
   renderEditable(cellInfo) {
