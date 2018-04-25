@@ -22,7 +22,32 @@
 |   id  |   loan_theme   | last_modified |  active  |
 |:------:|:---------:|:------:|:---------:|
 
+## Conventions
+This API will follow the [H4I REST API Spec](https://github.com/hack4impact-uiuc/wiki/wiki/Our-REST-API-Specification).
 
+All `GET` request parameters should be query parameters.
+
+All `POST` and `PUT` request parameters should be body parameters.
+
+## Repayment Schedule Matrix Format in Endpoints
+
+All matrices used as inputs and outputs in the endpoints below are 2D arrays of the following form. Any matrix will have 15 rows. Each of these rows' length will be the number of periods plus one.
+
+* Row 1: Array of period numbers from 0 to # of periods
+* Row 2: Array of dates represented as strings
+* Row 3: Array of # of days in the period
+* Row 4: Array of principal disbursed for each period
+* Row 5: Array of principal paid for each period
+* Row 6: Array of balance for each period
+* Row 7: Array of interest paid for each period
+* Row 8: Array of fees for each period
+* Row 9: Array of insurance for each period
+* Row 10: Array of taxes for each period
+* Row 11: Array of security deposit for each period
+* Row 12: Array of security deposit interest for each period
+* Row 13: Array of security deposit withdraw for each period
+* Row 14: Array of security deposit balance for each period
+* Row 15: Array of total cashflow for each period
 
 ## Endpoints Documentation 
 
@@ -55,15 +80,6 @@ ADMIN TOOLS THEMES:
 * PUT /editLT/<loan_theme>
 * POST /addLT
 * DELETE /removeLT/<loan_theme>
-
-
-
-## Conventions
-This API will follow the [H4I REST API Spec](https://github.com/hack4impact-uiuc/wiki/wiki/Our-REST-API-Specification).
-
-All `GET` request parameters should be query parameters.
-
-All `POST` and `PUT` request parameters should be body parameters.
 
 ### Endpoint
 
@@ -290,45 +306,45 @@ Get all version number entries corresponding to the correct partner, loan theme,
       code: 200,
       message: '',
       result: {
-        partner,
-        loan_theme,
-        product_type,
-        version_num,
-        start_date,
-        update_date,
-        start_name,
-        update_name,
-        nominal_apr,
-        installment_time_period,
-        repayment_type,
-        interest_time_period,
-        interest_payment_type,
-        interest_calculation_type,
-        loan_amount,
-        installment,
-        nominal_interest_rate,
-        grace_period_principal,
-        grace_period_interest_pay,
-        grace_period_interest_calculate,
-        grace_period_balloon,
-        fee_percent_upfront,
-        fee_percent_ongoing,
-        fee_fixed_upfront,
-        fee_fixed_ongoing,
-        insurance_percent_upfront,
-        insurance_percent_ongoing,
-        insurance_fixed_upfront,
-        insurance_fixed_ongoing,
-        tax_percent_fees,
-        tax_percent_interest,
-        security_deposit_percent_upfront,
-        security_deposit_percent_ongoing,
-        security_deposit_fixed_upfront,
-        security_deposit_fixed_ongoing,
-        interest_paid_on_deposit_percent,
-        original_matrix,
-        user_matrix,
-        calc_matrix
+        partner: ___,
+        loan_theme: ___,
+        product_type: ___,
+        version_num: ___,
+        start_date: ___,
+        update_date: ___,
+        start_name: ___,
+        update_name: ___,
+        nominal_apr: ___,
+        installment_time_period: ___,
+        repayment_type: ___,
+        interest_time_period: ___,
+        interest_payment_type: ___,
+        interest_calculation_type: ___,
+        loan_amount: ___,
+        installment: ___,
+        nominal_interest_rate: ___,
+        grace_period_principal: ___,
+        grace_period_interest_pay: ___,
+        grace_period_interest_calculate: ___,
+        grace_period_balloon: ___,
+        fee_percent_upfront: ___,
+        fee_percent_ongoing: ___,
+        fee_fixed_upfront: ___,
+        fee_fixed_ongoing: ___,
+        insurance_percent_upfront: ___,
+        insurance_percent_ongoing: ___,
+        insurance_fixed_upfront: ___,
+        insurance_fixed_ongoing: ___,
+        tax_percent_fees: ___,
+        tax_percent_interest: ___,
+        security_deposit_percent_upfront: ___,
+        security_deposit_percent_ongoing: ___,
+        security_deposit_fixed_upfront: ___,
+        security_deposit_fixed_ongoing: ___,
+        interest_paid_on_deposit_percent: ___,
+        original_matrix: Matrix,
+        user_matrix: Matrix,
+        calc_matrix: Matrix
       }
     }
 
@@ -379,11 +395,10 @@ Calculate APR rate based on given entries.
       code: 200,
       message: '',
       result: {
-        apr: .0345
+        apr: .0345,
+        matrix: Matrix
       }
     }
-
-
 
 ### Endpoint
 
@@ -395,10 +410,54 @@ Recalculate repayment schedule based on user inputs.
 
 **Parameters**
 
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   input_form | JSON | **Required** | See contents for Input JSON below 
+|   user_change  | Matrix | **Required** | description
+
+**Input Form Parameters**
+
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
+|   installment_time_period | string | **Required** | description 
+|   repayment_type  | string | **Required** | description 
+|   interest_time_period    | string | **Required** | description 
+|   interest_payment    | string | **Required** | description 
+|   interest_calculation_type   | string | **Required** | description 
+|   loan_amount | number | **Required** | description 
+|   installment | number | **Required** | description 
+|   nominal_interest_rate   | number | **Required** | description 
+|   grace_period_principal  | number | **Required** | description 
+|   grace_period_interest_pay   | number | **Required** | description 
+|   grace_period_interest_calculate | number | **Required** | description 
+|   grace_period_balloon    | number | **Required** | description 
+|   fee_percent_upfront | number | **Required** | description 
+|   fee_percent_ongoing | number | **Required** | description 
+|   fee_fixed_upfront   | number | **Required** | description 
+|   fee_fixed_ongoing   | number | **Required** | description 
+|   insurance_percent_upfront   | number | **Required** | description 
+|   insurance_percent_ongoing   | number | **Required** | description 
+|   insurance_fixed_upfront | number | **Required** | description 
+|   insurance_fixed_ongoing | number | **Required** | description 
+|   tax_percent_fees    | number | **Required** | description 
+|   tax_percent_interest    | number | **Required** | description 
+|   security_deposit_percent_upfront    | number | **Required** | description 
+|   security_deposit_percent_ongoing    | number | **Required** | description 
+|   security_deposit_fixed_upfront  | number | **Required** | description 
+|   security_deposit_fixed_ongoing  | number | **Required** | description 
+|   interest_paid_on_deposit_percent    | number | **Required** | description 
+
 **Response**
-
-
-
+    
+    {
+      success: true,
+      code: 200,
+      message: '',
+      result: {
+        apr: .0345,
+        recal_matrix: Matrix
+      }
+    }
 
 ### Endpoint
 
