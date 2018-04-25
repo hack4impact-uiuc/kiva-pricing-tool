@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import Bootstrap from 'react-bootstrap'
-import axios from 'axios'
 import './../styles/textfield.css'
 
 class TextField extends Component {
@@ -17,9 +15,9 @@ class TextField extends Component {
 
   handleChange(e) {
     let value = e.target.value
-    if (this.props.typeVal.toLowerCase() == 'int') {
-      let tryInt = parseInt(value)
-      let limit = parseInt(this.props.limit)
+    if (this.props.typeVal.toLowerCase() === 'int') {
+      let tryInt = parseInt(value, 10)
+      let limit = parseInt(this.props.limit, 10)
       if (isNaN(tryInt)) {
         this.setState({ error_message: 'Error in input: should be an integer' })
       } else {
@@ -31,9 +29,9 @@ class TextField extends Component {
       }
     }
 
-    if (this.props.typeVal.toLowerCase() == 'float') {
+    if (this.props.typeVal.toLowerCase() === 'float') {
       let tryFloat = parseFloat(value)
-      let limit = parseInt(this.props.limit)
+      let limit = parseInt(this.props.limit, 10)
       if (isNaN(tryFloat)) {
         this.setState({ error_message: 'Error in input: should be a decimal' })
       } else {
@@ -45,8 +43,8 @@ class TextField extends Component {
       }
     }
 
-    if (this.props.typeVal.toLowerCase() == 'string') {
-      let tryString = /^[a-zA-Z]+$/.test(value)
+    if (this.props.typeVal.toLowerCase() === 'string') {
+      let tryString = /^[a-zA-Z ]+$/.test(value)
       if (!tryString) {
         this.setState({
           error_message: 'Error in input: should only have letters'
@@ -55,19 +53,14 @@ class TextField extends Component {
         this.setState({ error_message: '' })
       }
     }
-    if (value == '') {
+    if (value === '') {
       this.setState({ error_message: '' })
     }
     this.setState({ textBody: value })
-    console.log(this.props.reduxId, value)
-    console.log(this.props.onTextInputChange)
     this.props.onTextInputChange(this.props.reduxId, value)
   }
 
   render() {
-    if (!this.state.valid) {
-      let error = this.state.error_message
-    }
     return (
       <div id="className" className={this.props.className}>
         <div className="input-label">{this.props.id}</div>
@@ -80,7 +73,7 @@ class TextField extends Component {
             onChange={event => this.handleChange(event)}
             value={this.state.textBody}
             required
-            autofocus
+            autoFocus
           />
         </div>
         <p className="error-message">{this.state.error_message}</p>

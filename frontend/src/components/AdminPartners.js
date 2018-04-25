@@ -1,22 +1,10 @@
 import React, { Component } from 'react'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Bootstrap,
-  Form,
-  Alert,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
-import LiveSearch from './LiveSearch'
-import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
-import ReactDOM from 'react-dom'
 
 class AdminPartners extends Component {
   constructor(props) {
@@ -24,7 +12,7 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
-
+      filtered: [], // ID and text data used for filtering react table
       addconfirm: false,
       adderror: false,
       removeshow: false,
@@ -75,7 +63,7 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (original != update) {
+          if (original !== update) {
             //add
             let update_partner = { partner_name: update }
             axios
@@ -116,12 +104,7 @@ class AdminPartners extends Component {
   }
 
   addPartner(partner_name) {
-
-    if (
-      partner_name != null &&
-      partner_name.length != 0 &&
-      partner_name != ' '
-    ) {
+    if (partner_name && partner_name.length) {
       let data = { partner_name: partner_name }
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
@@ -136,17 +119,6 @@ class AdminPartners extends Component {
       this.setState({ addshow: true })
     }
   }
-
-//     this.setState({ addshow: true })
-//     let data = { partner_name: partner_name }
-//     axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
-//       this.setState({
-//         data: this.state.data.concat({ partner_names: partner_name })
-//       })
-//     })
-//   }
-
-
 
   removePartner(partner_name) {
     this.setState({ removeshow: true })
@@ -184,7 +156,6 @@ class AdminPartners extends Component {
               {' '}
               <small> Search Partners: </small>{' '}
             </h2>
-
             <div>
               <input
                 className="search-input"
@@ -194,7 +165,8 @@ class AdminPartners extends Component {
                     filtered: [
                       { id: 'partner_names', value: event.target.value }
                     ]
-                  })}
+                  })
+                }
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -204,12 +176,10 @@ class AdminPartners extends Component {
               {' '}
               <small> Add Partner: </small>{' '}
             </h2>
-
-            <TextField
-              id=""
-              hint="Add MFI Partner"
-              typeVal="String"
-              limit="5000"
+            <input
+              type="text"
+              label="Text"
+              placeholder="Add MFI Partner"
               ref="addpartnername"
             />
           </Col>
@@ -219,21 +189,20 @@ class AdminPartners extends Component {
               name="Add "
               url="partnerlist"
               onClickHandler={() => {
-                this.addPartner(this.refs.addpartnername.state.textBody)
+                this.addPartner(this.refs.addpartnername.value)
               }}
             />
           </Col>
         </Row>
-
         <Row>
           <Col sm={12} md={12}>
-            {this.state.addshow == true ? (
+            {this.state.addshow === true ? (
               <Alert bsStyle="success">
                 <h4>Add Successful!</h4>
               </Alert>
             ) : null}
 
-            {this.state.removeshow == true ? (
+            {this.state.removeshow === true ? (
               <Alert bsStyle="danger">
                 <h4>Partner Removed!</h4>
               </Alert>
@@ -249,7 +218,17 @@ class AdminPartners extends Component {
                 {
                   Header: 'MFI Partner',
                   accessor: 'partner_names',
-                  Cell: this.renderEditable
+                  Cell: this.renderEditable,
+                  filterMethod: (
+                    filter,
+                    row // Custom filter method for case insensitive filtering
+                  ) =>
+                    row[filter.id]
+                      .toLowerCase()
+                      .startsWith(filter.value.toLowerCase()) ||
+                    row[filter.id]
+                      .toLowerCase()
+                      .endsWith(filter.value.toLowerCase())
                 },
                 {
                   Header: 'Edit',
@@ -271,12 +250,14 @@ class AdminPartners extends Component {
                         name="Remove"
                         url="partnerlist"
                         onClickHandler={() =>
-                          this.removeLoan(original.partner_names)} // Send text value to remove loan function
+                          this.removeLoan(original.partner_names)
+                        } // Send text value to remove loan function
                       />
                     )
                   }
                 }
               ]}
+              filtered={this.state.filtered}
               defaultSorted={[
                 {
                   id: 'partner_names',
@@ -286,7 +267,6 @@ class AdminPartners extends Component {
             />
           </Col>
         </Row>
-
       </Grid>
     )
   }

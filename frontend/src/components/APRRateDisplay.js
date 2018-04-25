@@ -1,9 +1,6 @@
-// @flow
-import React, { Component, View, StyleSheet } from 'react'
-import { Link } from 'react-router-dom'
-import { Dropdown, Button, TextField /*, KivaChart*/ } from './'
-import { Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
-import Bootstrap from 'react-bootstrap'
+import React, { Component } from 'react'
+import { Grid, PageHeader } from 'react-bootstrap'
+import { Button /*, KivaChart*/ } from './'
 import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
@@ -51,7 +48,7 @@ class APRRateDisplay extends Component {
   //   return reformatted_matrix
   // }
   updateTable(e, cellInfo) {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     if (
       formDataReducer.calc_repayment_schedule[cellInfo.index][
         cellInfo.column.id
@@ -203,7 +200,7 @@ class APRRateDisplay extends Component {
     }
   }
   renderEditable(cellInfo) {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer } = this.props
     let editable =
       cellInfo.column.id !== 'period_num' &&
       cellInfo.column.id !== 'amount_due' &&
@@ -238,31 +235,35 @@ class APRRateDisplay extends Component {
     )
   }
   getCSV() {
-      const { formDataReducer, contNewLoan, changedFormData } = this.props
-    	let csv = [['Period Number,Date,Days,Principal Disbursed,Principal Paid,Balance,Interest Paid,Fees Paid,Insurance Paid,Taxes Paid,Security Deposit,Interest Paid on Security,Deposit Withdrawal,Deposit Balance,Total Cashflow\n']];
-      let i;
-      let j;
-      let row = "";
-      for (j = 0; j < 13; j++) {
+    const { formDataReducer } = this.props
+    let csv = [
+      [
+        'Period Number,Date,Days,Principal Disbursed,Principal Paid,Balance,Interest Paid,Fees Paid,Insurance Paid,Taxes Paid,Security Deposit,Interest Paid on Security,Deposit Withdrawal,Deposit Balance,Total Cashflow\n'
+      ]
+    ]
+    let i
+    let j
+    let row = ''
+    for (j = 0; j < 13; j++) {
       for (i = 0; i < 15; i++) {
-        row += formDataReducer.original_repayment_schedule[i][j] + ',';
+        row += formDataReducer.original_repayment_schedule[i][j] + ','
       }
-      row+='\n';
-      csv.push(row);
-      row = '';
-      }
-      let blob = new Blob(csv,{type: 'text/csv;charset=utf-8;'});
-      let url = URL.createObjectURL(blob);
-      let pom = document.createElement('a');
-      pom.href = url;
-      pom.setAttribute('download', 'output.csv');
-      pom.click();
+      row += '\n'
+      csv.push(row)
+      row = ''
+    }
+    let blob = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
+    let url = URL.createObjectURL(blob)
+    let pom = document.createElement('a')
+    pom.href = url
+    pom.setAttribute('download', 'output.csv')
+    pom.click()
   }
   createChart(paramVisual) {
     this.setState({ visualType: paramVisual })
   }
   saveData() {
-    const { formDataReducer, changedFormData } = this.props
+    const { formDataReducer } = this.props
     let orig_matrix = [
       [],
       [],
@@ -504,7 +505,7 @@ class APRRateDisplay extends Component {
   }
 
   render() {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer } = this.props
     return (
       <Grid>
         <PageHeader> APR Rate: {formDataReducer.aprRate}%</PageHeader>

@@ -1,16 +1,7 @@
 import React, { Component } from 'react'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Bootstrap,
-  Form,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
-import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
@@ -58,13 +49,20 @@ class AdminThemes extends Component {
   }
 
   addLoan(theme_name) {
-    // Add loan to database and data table, add to state.data array if response successful
-    let data = { loan_theme: theme_name }
-    axios.post('http://127.0.0.1:3453/addLT', data).then(response => {
-      this.setState({
-        data: this.state.data.concat({ loan_theme: theme_name })
-      })
-    })
+    if (theme_name && theme_name.length) {
+      let data = { loan_theme: theme_name }
+      axios
+        .post('http://127.0.0.1:3453/addLT', data)
+        .then(response => {
+          this.setState({
+            data: this.state.data.concat({ loan_themes: theme_name })
+          })
+        })
+        .catch(function(error) {
+          console.log('error with adding')
+        })
+      this.setState({ addshow: true })
+    }
   }
 
   renderUneditable(cellInfo) {
@@ -110,7 +108,8 @@ class AdminThemes extends Component {
                 onChange={event =>
                   this.setState({
                     filtered: [{ id: 'loan_theme', value: event.target.value }]
-                  })}
+                  })
+                }
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -121,11 +120,10 @@ class AdminThemes extends Component {
               <small> Add Loan Theme: </small>{' '}
             </h2>
 
-            <TextField
-              id=""
-              hint="Add Loan Theme"
-              typeVal="String"
-              limit="100"
+            <input
+              type="text"
+              label="Text"
+              placeholder="Add Loan Theme"
               ref="addloantheme"
             />
           </Col>
@@ -135,7 +133,7 @@ class AdminThemes extends Component {
               name="Add"
               url="themelist"
               onClickHandler={() => {
-                this.addLoan(this.refs.addloantheme.state.textBody)
+                this.addLoan(this.refs.addloantheme.value)
               }}
             />
           </Col>
@@ -183,7 +181,8 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.removeLoan(original.loan_theme)} // Send text value to remove loan function
+                          this.removeLoan(original.loan_theme)
+                        } // Send text value to remove loan function
                       />
                     )
                   }
