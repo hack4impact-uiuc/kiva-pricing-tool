@@ -60,7 +60,7 @@ class FindLoan extends Component {
     }
   }
 
-  getVersionNum() {
+  getVersionNumEntries() {
     const { formDataReducer } = this.props
     if (
       formDataReducer.mfi &&
@@ -75,7 +75,7 @@ class FindLoan extends Component {
         this.state.product_types.indexOf(formDataReducer.productType[0]) != -1
 
       if (validPartnerName && validLoanTheme && validProductType) {
-        Api.getVersionNum(
+        Api.getVersionNumEntries(
           formDataReducer.mfi[0],
           formDataReducer.loanType[0],
           formDataReducer.productType[0]
@@ -154,7 +154,7 @@ class FindLoan extends Component {
             selected={formDataReducer.productType}
             onInputChange={e => {
               changedFormData('productType', e)
-              this.getVersionNum()
+              this.getVersionNumEntries()
             }}
           />
 

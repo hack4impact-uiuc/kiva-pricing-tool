@@ -221,7 +221,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="180"
             textBody={formDataReducer.gracePeriodPrincipal}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Int Pmt"
@@ -230,7 +229,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="180"
             textBody={formDataReducer.gracePeriodInterestPay}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Int Calc"
@@ -239,7 +237,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="180"
             textBody={formDataReducer.gracePeriodInterestCalculate}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Balloon"
@@ -248,7 +245,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="180"
             textBody={formDataReducer.gracePeriodBalloon}
-            // onTextInputChange={this.handleTextChange}
           />
         </Form>
 
@@ -266,7 +262,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="180"
             textBody={formDataReducer.feePercentUpfront}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Fee%"
@@ -275,7 +270,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="180"
             textBody={formDataReducer.feePercentOngoing}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Fee (fixed amt)"
@@ -284,7 +278,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100000000"
             textBody={formDataReducer.feeFixedUpfront}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Fee (fixed amt)"
@@ -293,7 +286,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100000000"
             textBody={formDataReducer.feeFixedOngoing}
-            // onTextInputChange={this.handleTextChange}
           />
         </Form>
 
@@ -308,7 +300,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100"
             textBody={formDataReducer.taxPercentFees}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Value Added Tax % on Interest"
@@ -316,7 +307,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100"
             textBody={formDataReducer.taxPercentInterest}
-            // onTextInputChange={this.handleTextChange}
           />
         </Form>
 
@@ -330,7 +320,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100"
             textBody={formDataReducer.insurancePercentUpfront}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Insurance %"
@@ -339,7 +328,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100"
             textBody={formDataReducer.insurancePercentOngoing}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Insurance (fixed amt)"
@@ -348,7 +336,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="900000000"
             textBody={formDataReducer.insuranceFixedUpfront}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Insurance (fixed amt)"
@@ -357,7 +344,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="900000000"
             textBody={formDataReducer.insuranceFixedOngoing}
-            // onTextInputChange={this.handleTextChange}
           />
         </Form>
 
@@ -371,7 +357,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100"
             textBody={formDataReducer.securityDepositPercentUpfront}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Security Deposit %"
@@ -380,7 +365,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="100"
             textBody={formDataReducer.securityDepositPercentOngoing}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Security Deposit (fixed amt)"
@@ -389,7 +373,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="900000000"
             textBody={formDataReducer.securityDepositFixedUpfront}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Security Deposit (fixed amt)"
@@ -398,7 +381,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="900000000"
             textBody={formDataReducer.securityDepositFixedOngoing}
-            // onTextInputChange={this.handleTextChange}
           />
           <TextField
             id="Interest Paid on Deposit"
@@ -406,7 +388,6 @@ class APRInputs extends Component {
             typeVal="float"
             limit="900000000"
             textBody={formDataReducer.interestPaidOnDepositPercent}
-            // onTextInputChange={this.handleTextChange}
           />
         </Form>
 

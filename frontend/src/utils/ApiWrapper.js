@@ -18,7 +18,7 @@ function getProductType(mfi, loanType) {
     })
 }
 
-function getVersionNum(mfi, loanType, productType) {
+function getVersionNumEntries(mfi, loanType, productType) {
   return axios
     .get(
       'http://127.0.0.1:3453/getVersionNumEntry?partner_name=' +
@@ -30,6 +30,25 @@ function getVersionNum(mfi, loanType, productType) {
     )
     .then(response => {
       return response.data.result.version_nums.map(String)
+    })
+    .catch(function(error) {
+      console.log('ERROR: ', error)
+      return null
+    })
+}
+
+function getVersionNum(mfi, loanType, productType) {
+  return axios
+    .get(
+      'http://127.0.0.1:3453/getVersionNum?partner_name=' +
+        mfi +
+        '&theme=' +
+        loanType +
+        '&product=' +
+        productType
+    )
+    .then(response => {
+      return response.data.result
     })
     .catch(function(error) {
       console.log('ERROR: ', error)
@@ -75,6 +94,7 @@ function postData(reducerData) {
 
 export default {
   getProductType,
+  getVersionNumEntries,
   getVersionNum,
   searchLoan,
   postData

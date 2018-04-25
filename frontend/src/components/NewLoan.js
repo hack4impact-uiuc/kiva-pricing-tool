@@ -94,24 +94,8 @@ class NewLoan extends Component {
                 formDataReducer.loanType,
                 formDataReducer.productType
               ).then(response => {
-                changedFormData('versionNum', [
-                  response.data.result['version'].toString()
-                ])
+                changedFormData('versionNum', response['version'].toString())
               })
-              // axios
-              //   .get(
-              //     'http://127.0.0.1:3453/getVersionNum?partner_name=' +
-              //       formDataReducer.mfi +
-              //       '&theme=' +
-              //       formDataReducer.loanType +
-              //       '&product=' +
-              //       formDataReducer.loanProduct
-              //   )
-              //   .then(response => {
-              //     changedFormData('versionNum', [
-              //       response.data.result['version'].toString()
-              //     ])
-              //   })
             }}
           />
         </Form>
