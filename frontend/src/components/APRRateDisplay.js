@@ -645,11 +645,13 @@ class APRRateDisplay extends Component {
 	  <ul class = "nav nav-pills nav-stacked">
 	    <li role = "presentation" class={this.state.barclass}><a onClick={()=>this.changeChart("bar")}>Bar</a></li>
 	    <li role = "presentation" class={this.state.lineclass}><a onClick={()=>this.changeChart("line")}>Line</a></li>
-	    <li role = "presentation" class={this.state.pieclass}><a onClick={()=>this.changeChart("pie")}>Pie</a></li>
 	    <li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
 	  </ul>
     	</div>
-	<KivaChart visualType={this.state.visualType} data={this.state.data} />
+	{this.state.isHidden && <KivaChart visualType={this.state.visualType} data={this.state.data}></KivaChart>}
+
+		
+		
         <br />
         <Button name="Cancel" url="" />
         <Button name="Back" url={formDataReducer.back} />
