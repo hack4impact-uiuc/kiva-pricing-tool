@@ -356,8 +356,10 @@ class FindLoan extends Component {
                 <Typeahead
                   className="vertical-margin-item"
                   disabled={
-                    !this.isNullOrEmpty(formDataReducer.mfi) &&
-                    !this.isNullOrEmpty(formDataReducer.loanType)
+                    !(
+                      !this.isNullOrEmpty(formDataReducer.mfi) &&
+                      !this.isNullOrEmpty(formDataReducer.loanType)
+                    )
                   }
                   ref="product"
                   label="product"
