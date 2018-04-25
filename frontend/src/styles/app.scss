@@ -15,7 +15,7 @@ $color-text: #333;
 	width: 100vw;
 	height: 100vh;
 	background-color: #E8E8E8;
-	overflow: hidden;
+	overflow: auto;
 }
 
 .solid-background {
@@ -46,6 +46,10 @@ $color-text: #333;
 	padding-right: 4%;
 }
 
+.padded-element-all {
+	padding: 4%;
+}
+
 .padded-element-horizontal-lg {
 	padding-left: 8%;
 	padding-right: 8%;
@@ -53,6 +57,10 @@ $color-text: #333;
 
 .padded-element-shrink {
 	padding: 6% 10%;
+}
+
+.overpad-shrink {
+	padding-top: 0;
 }
 
 .round-corners-large {
@@ -72,8 +80,16 @@ $color-text: #333;
 	text-align: right;
 }
 
+.bs-justify {
+	text-align: justify;
+}
+
 .vertical-margin-item {
 	margin: 2% 0%;
+}
+
+.search-input {
+	width: 100%;
 }
 
 .page-header-montserrat {

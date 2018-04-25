@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
@@ -81,7 +81,7 @@ class AdminThemes extends Component {
     )
   }
 
-  saveAllLoans() {
+  saveAllTheme() {
     var updated_name = null
     if (this.state.edited_loans.length === 0) {
       container.warning(
@@ -116,7 +116,7 @@ class AdminThemes extends Component {
             }
           })
       }
-      container.success('Saved all partners', 'SUCCESS', { closeButton: true })
+      container.success('Saved all themes', 'SUCCESS', { closeButton: true })
     }
   }
 
@@ -160,7 +160,7 @@ class AdminThemes extends Component {
           }
         }
       })
-    container.error('You have removed ' + theme_name, 'Partner Removed', {
+    container.error('You have removed ' + theme_name, 'Theme Removed', {
       closeButton: true
     })
   }
@@ -246,6 +246,8 @@ class AdminThemes extends Component {
           <Col sm={12} md={12}>
             <ReactTable
               data={this.state.data}
+              noDataText="No Results Found." // Text displayed when no data is in the table
+              loadingText="Loading themes...This may take a moment." // Text displayed when data is being loaded
               columns={[
                 {
                   Header: 'Loan Theme',
@@ -274,14 +276,16 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.removeTheme(original.loan_theme)} // Send text value to remove loan function
+                          this.removeLoan(original.loan_theme)} // Send text value to remove loan function
                       />
                     )
                   }
                 }
               ]}
+              // Allow react table to use state.filterable to filter correct column based on state.filterable id and value
               filtered={this.state.filtered}
               defaultSorted={[
+                // Sort table alphabetically
                 {
                   id: 'loan_theme',
                   desc: false

@@ -1,19 +1,9 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Form,
-  Bootstrap,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Form, Row, Col } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import './../styles/app.css'
 import './../styles/button.css'
 import TextField from './TextField'
-import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
 import PropTypes from 'prop-types'
@@ -22,7 +12,6 @@ class NewLoan extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -38,21 +27,11 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData } = this.props
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
-
-    // this._unblock = this.context.router.history.block(() => {
-    //   resetFormData()
-    // })
   }
-
-  // componentWillUnmount() {
-  //   // When the component unmounts, call the function
-  //   this._unblock()
-  // }
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
@@ -64,19 +43,18 @@ class NewLoan extends Component {
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType) &&
-      !this.isNullOrEmpty(formDataReducer.versionNum)
+      !this.isNullOrEmpty(formDataReducer.productType)
     )
   }
 
   isNullOrEmpty(input) {
-    return input == null || input.length == 0
+    return !input || !input.length
   }
 
   render() {
     const { formDataReducer, changedFormData, resetFormData } = this.props
     return (
-      <div className="page-body-grey">
+      <div className="page-body-grey overflow-handler">
         <Grid
           fluid
           className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
@@ -117,9 +95,8 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                id="Loan Product"
                 text="product"
-                hint="i.e. small loan"
+                hint="Loan Product (i.e. small loan)"
                 typeVal="String"
                 limit={100}
                 textBody={formDataReducer.productType}
@@ -130,6 +107,7 @@ class NewLoan extends Component {
             <Row>
               <Col xs={6} sm={6} md={6}>
                 <Button
+                  className="button-fancy"
                   name="Back"
                   url=""
                   onClickHandler={() => resetFormData()}
@@ -137,7 +115,7 @@ class NewLoan extends Component {
               </Col>
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
-                  className="button-default"
+                  className="button-fancy"
                   disable={!this.inputsEntered()}
                   name="Continue"
                   url="form1"
@@ -156,7 +134,6 @@ class NewLoan extends Component {
                           response.data.result['version'].toString()
                         ])
                       })
-
                     changedFormData('back', 'newloan')
                   }}
                 />

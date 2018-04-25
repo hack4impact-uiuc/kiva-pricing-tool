@@ -1,16 +1,7 @@
 import React, { Component } from 'react'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Bootstrap,
-  Form,
-  Alert
-} from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
-import LiveSearch from './LiveSearch'
-import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
@@ -134,11 +125,7 @@ class AdminPartners extends Component {
   }
 
   addPartner(partner_name) {
-    if (
-      partner_name != null &&
-      partner_name.length != 0 &&
-      partner_name != ' '
-    ) {
+    if (partner_name && partner_name.length) {
       let data = { partner_name: partner_name }
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
@@ -184,58 +171,63 @@ class AdminPartners extends Component {
 
   render() {
     return (
-      <Grid>
+      <Grid className="padded-element-vertical">
         <ToastContainer
           ref={ref => (container = ref)}
           className="toast-top-right"
         />
 
-        <PageHeader>Admin Partners List</PageHeader>
+        <Row>
+          <Col sm={12} md={12}>
+            <PageHeader className="page-header-montserrat bs-center">
+              Admin Partners List
+            </PageHeader>
+          </Col>
+        </Row>
 
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Search Partners: </small>{' '}
-          </h2>
-
-          <LiveSearch
-            ref="partner_names"
-            label="partner_names"
-            list={this.state.data}
-            hint="Search MFI Partner"
-          />
-        </Form>
-
-        <Form inline>
-          <h2>
-            {' '}
-            <small> Add Partner: </small>{' '}
-          </h2>
-
-          <TextField
-            id=""
-            hint="Add MFI Partner"
-            typeVal="String"
-            limit="5000"
-            ref="addpartnername"
-          />
-        </Form>
-
-        <Button
-          name="Add "
-          url="partnerlist"
-          onClickHandler={() =>
-            this.addPartner(this.refs.addpartnername.state.textBody)}
-        />
-
-        <Button
-          name="Edit List"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ editing: true })
-            this.cleanList()
-          }}
-        />
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <h2>
+              {' '}
+              <small> Search Partners: </small>{' '}
+            </h2>
+            <div>
+              <input
+                className="search-input"
+                placeholder="Search MFI Partner"
+                onChange={event =>
+                  this.setState({
+                    filtered: [
+                      { id: 'partner_names', value: event.target.value }
+                    ]
+                  })}
+                // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
+              />
+            </div>
+          </Col>
+          <Col sm={5} md={5}>
+            <h2>
+              {' '}
+              <small> Add Partner: </small>{' '}
+            </h2>
+            <input
+              type="text"
+              label="Text"
+              placeholder="Add MFI Partner"
+              ref="addpartnername"
+            />
+          </Col>
+          <Col sm={1} md={1}>
+            <Button
+              className="button-image-add"
+              name="Add "
+              url="partnerlist"
+              onClickHandler={() => {
+                this.addPartner(this.refs.addpartnername.value)
+              }}
+            />
+          </Col>
+        </Row>
 
         <Button
           name="Save List"
