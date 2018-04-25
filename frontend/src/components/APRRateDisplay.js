@@ -46,32 +46,7 @@ class APRRateDisplay extends Component {
     this.renderEditable = this.renderEditable.bind(this)
     this.updateTable = this.updateTable.bind(this)
   }
-  // convertMatrix() {
-  //   const { formDataReducer, contNewLoan, changedFormData } = this.props
-  //   let reformatted_matrix = []
-  //   console.log(formDataReducer.aprRate)
-  //   console.log(formDataReducer.original_repayment_schedule)
-  //   if (formDataReducer.original_repayment_schedule != null){
-  //     for (let i = 0; i < formDataReducer.original_repayment_schedule[0].length; i++){
-  //       reformatted_matrix.push({
-  //         period_num: formDataReducer.original_repayment_schedule[0][i],
-  //         payment_due_date: formDataReducer.original_repayment_schedule[1][i],
-  //         days: formDataReducer.original_repayment_schedule[2][i],
-  //         amount_due: formDataReducer.original_repayment_schedule[3][i],
-  //         principal_payment: formDataReducer.original_repayment_schedule[4][i],
-  //         interest: formDataReducer.original_repayment_schedule[5][i],
-  //         fees: formDataReducer.original_repayment_schedule[6][i],
-  //         insurance: formDataReducer.original_repayment_schedule[7][i],
-  //         taxes: formDataReducer.original_repayment_schedule[8][i],
-  //         security_deposit: formDataReducer.original_repayment_schedule[9][i],
-  //         security_interest_paid: formDataReducer.original_repayment_schedule[10][i],
-  //         balance: formDataReducer.original_repayment_schedule[11][i],
-  //         deposit_balance: formDataReducer.original_repayment_schedule[12][i]
-  //       })
-  //     }
-  //   }
-  //   return reformatted_matrix
-  // }
+ 
   updateTable(e, cellInfo) {
     const { formDataReducer, contNewLoan, changedFormData } = this.props
     if (
@@ -196,6 +171,7 @@ class APRRateDisplay extends Component {
       axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
         const apr = response.data.result.apr
         const recal_matrix = response.data.result.recal_matrix
+	changedFormData('new_repayment_schedule', recal_matrix)
         changedFormData('aprRate', apr)
         let calc_matrix = []
         if (recal_matrix != null) {
@@ -268,7 +244,7 @@ class APRRateDisplay extends Component {
     for (let j = 0; j < 13; j++) {
     row = "";
       for (let i = 0; i < 15; i++) {
-        row += formDataReducer.original_repayment_schedule[i][j] + ',';
+        row += formDataReducer.new_repayment_schedule[i][j] + ',';
       }
     row+='\n';
     csv.push(row);
@@ -351,7 +327,7 @@ class APRRateDisplay extends Component {
 
   createChart() {
     const { formDataReducer } = this.props
-    this.setState({data: formDataReducer.calc_repayment_schedule});	
+    this.setState({data: formDataReducer.new_repayment_schedule});	
     this.setState({isHidden: true});
   }
 
