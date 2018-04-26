@@ -66,7 +66,6 @@ class APRInputs extends Component {
 
   postData() {
     const { formDataReducer, changedFormData } = this.props
-
     this.inputsEntered() &&
       Api.postData(formDataReducer).then(apr => {
         changedFormData('nominalApr', apr)
@@ -121,7 +120,11 @@ class APRInputs extends Component {
                     { id: '3', value: 'single end-term principal payment' }
                   ]}
                   onTextInputChange={this.handleTextChange}
-                  selected={formDataReducer.repaymentType}
+                  selected={
+                    formDataReducer.repaymentType
+                      ? formDataReducer.repaymentType[0]
+                      : null
+                  }
                 />
               </Col>
               <Col sm={4} md={4} className="bs-center">
@@ -133,7 +136,11 @@ class APRInputs extends Component {
                     { id: '2', value: 'Single End-Term Payments' }
                   ]}
                   onTextInputChange={this.handleTextChange}
-                  selected={formDataReducer.interestPaymentType}
+                  selected={
+                    formDataReducer.interestPaymentType
+                      ? formDataReducer.interestPaymentType[0]
+                      : null
+                  }
                 />
               </Col>
               <Col sm={4} md={4} className="bs-center">
@@ -146,7 +153,11 @@ class APRInputs extends Component {
                     { id: '2', value: 'declining balance' }
                   ]}
                   onTextInputChange={this.handleTextChange}
-                  selected={formDataReducer.interestCalculationType}
+                  selected={
+                    formDataReducer.interestCalculationType
+                      ? formDataReducer.interestCalculationType[0]
+                      : null
+                  }
                 />
               </Col>
             </Row>
@@ -187,7 +198,11 @@ class APRInputs extends Component {
                     { id: '365', value: 'years' }
                   ]}
                   onTextInputChange={this.handleTextChange}
-                  selected={formDataReducer.installmentTimePeriod}
+                  selected={
+                    formDataReducer.installmentTimePeriod
+                      ? formDataReducer.installmentTimePeriod[0]
+                      : null
+                  }
                 />
               </Col>
             </Row>
@@ -218,7 +233,11 @@ class APRInputs extends Component {
                     { id: '8', value: 'year' }
                   ]}
                   onTextInputChange={this.handleTextChange}
-                  selected={formDataReducer.interestTimePeriod}
+                  selected={
+                    formDataReducer.interestTimePeriod
+                      ? formDataReducer.interestTimePeriod[0]
+                      : null
+                  }
                 />
               </Col>
             </Row>
@@ -447,7 +466,8 @@ class APRInputs extends Component {
                   hint="Ongoing"
                   typeVal="float"
                   limit="100"
-                  textBody={formDataReducer.securityDepositPercentOngoing}                />
+                  textBody={formDataReducer.securityDepositPercentOngoing}
+                />
               </Col>
             </Row>
             <Row>
@@ -493,7 +513,6 @@ class APRInputs extends Component {
               </Col>
             </Row>
           </Row>
-
 
           <Row className="vertical-margin-item">
             <Col xs={6} sm={6} md={6}>

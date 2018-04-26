@@ -1,4 +1,5 @@
 function convertFromApiLoan(loan) {
+  console.log(loan)
   return {
     mfi: loan.partner,
     loanType: loan.loan_theme,
