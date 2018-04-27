@@ -85,7 +85,7 @@ function postData(reducerData) {
       adapters.convertToApiLoan(reducerData)
     )
     .then(response => {
-      return response.data.result.apr.toString()
+      return response.data.result
     })
     .catch(function(error) {
       console.log(error + ' there was an error with the request')

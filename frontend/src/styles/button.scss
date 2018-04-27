@@ -1,31 +1,33 @@
+@import "./variables.scss";
+
 .button-default:hover {
-  background-color: grey;
-  color: white;
+  background-color: $button-default-background-hover;
+  color: $button-font;
 }
 
 .button-default {
-	background-color: white;
+	background-color: $button-default-background;
     padding: 2% 6%;
     font-size: 12pt;
 }
 
 .button-fancy {
-    background-color: #44807A;
-    color: white;
+    background-color: $button-fancy-background;
+    color: $button-font;
     padding: 2% 6%;
     font-size: 12pt;
-    border: 2px solid #44807A;
-    border-bottom: 4px solid #2E6A64;
+    border: 2px solid $button-fancy-background;
+    border-bottom: 4px solid $button-fancy-border;
     border-radius: 5px;
     letter-spacing: 1px;
 }
 
 .button-fancy:hover {
-	background-color: black;
-	color: white;
+	background-color: $button-fancy-hover;
+	color: $button-font;
     padding: 2% 6%;
     font-size: 12pt;
-    border: 2px solid black;
+    border: 2px solid $button-fancy-border-hover;
     border-radius: 5px;
     -webkit-transition: all 0.15s ease-in;
     -moz-transition: all 0.15s ease-in;

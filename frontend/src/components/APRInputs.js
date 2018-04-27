@@ -72,8 +72,75 @@ class APRInputs extends Component {
   postData() {
     const { formDataReducer, changedFormData } = this.props
     this.inputsEntered() &&
-      Api.postData(formDataReducer).then(apr => {
-        changedFormData('nominalApr', apr)
+      Api.postData(formDataReducer).then(r => {
+        changedFormData('nominalApr', r.apr)
+        const matrix = r.matrix
+        let reformatted_matrix = []
+        let user_matrix = []
+        let calc_matrix = []
+        if (matrix != null) {
+          for (let i = 0; i < matrix[0].length; i++) {
+            reformatted_matrix.push({
+              period_num: matrix[0][i],
+              payment_due_date: matrix[1][i],
+              days: matrix[2][i],
+              amount_due: matrix[3][i],
+              principal_payment: matrix[4][i],
+              balance: matrix[5][i],
+              interest: matrix[6][i],
+              fees: matrix[7][i],
+              insurance: matrix[8][i],
+              taxes: matrix[9][i],
+              security_deposit: matrix[10][i],
+              security_interest_paid: matrix[11][i],
+              deposit_withdrawal: matrix[12][i],
+              deposit_balance: matrix[13][i],
+              total_cashflow: matrix[14][i]
+            })
+            user_matrix.push({
+              period_num: null,
+              payment_due_date: null,
+              days: null,
+              amount_due: null,
+              principal_payment: null,
+              balance: null,
+              interest: null,
+              fees: null,
+              insurance: null,
+              taxes: null,
+              security_deposit: null,
+              security_interest_paid: null,
+              deposit_withdrawal: null,
+              deposit_balance: null,
+              total_cashflow: null
+            })
+            calc_matrix.push({
+              period_num: matrix[0][i],
+              payment_due_date: matrix[1][i],
+              days: matrix[2][i],
+              amount_due: matrix[3][i],
+              principal_payment: matrix[4][i],
+              balance: matrix[5][i],
+              interest: matrix[6][i],
+              fees: matrix[7][i],
+              insurance: matrix[8][i],
+              taxes: matrix[9][i],
+              security_deposit: matrix[10][i],
+              security_interest_paid: matrix[11][i],
+              deposit_withdrawal: matrix[12][i],
+              deposit_balance: matrix[13][i],
+              total_cashflow: matrix[14][i]
+            })
+          }
+        }
+        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
+        calc_matrix[0]['period_num'] = 'Disbursement Info'
+        console.log(reformatted_matrix)
+        changedFormData('original_repayment_schedule', reformatted_matrix)
+        changedFormData('user_repayment_schedule', user_matrix)
+        changedFormData('calc_repayment_schedule', calc_matrix)
+        changedFormData('new_repayment_schedule', matrix)
+        changedFormData('back', 'form1')
       })
   }
 
@@ -127,7 +194,7 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={
                     formDataReducer.repaymentType
-                      ? formDataReducer.repaymentType[0]
+                      ? formDataReducer.repaymentType
                       : null
                   }
                 />
@@ -143,7 +210,7 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={
                     formDataReducer.interestPaymentType
-                      ? formDataReducer.interestPaymentType[0]
+                      ? formDataReducer.interestPaymentType
                       : null
                   }
                 />
@@ -160,13 +227,13 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={
                     formDataReducer.interestCalculationType
-                      ? formDataReducer.interestCalculationType[0]
+                      ? formDataReducer.interestCalculationType
                       : null
                   }
                 />
               </Col>
             </Row>
-            <Row className="vertical-margin-item">
+            <Row className="vertical-margin-item flex-align-center">
               <Col sm={4} md={4}>
                 <TextField
                   id="Loan Amount"
@@ -176,6 +243,11 @@ class APRInputs extends Component {
                   limit="900000000"
                   textBody={formDataReducer.loanAmount}
                 />
+              </Col>
+              <Col sm={2} md={2} className="bs-center">
+                <div>
+                  <p className="vertical-margin-item">Paid Over: </p>
+                </div>
               </Col>
               <Col sm={4} md={4}>
                 <TextField
@@ -187,7 +259,7 @@ class APRInputs extends Component {
                   textBody={formDataReducer.installment}
                 />
               </Col>
-              <Col sm={4} md={4} className="bs-center">
+              <Col sm={2} md={2} className="bs-center">
                 <Dropdown
                   title="Time Period:"
                   reduxId="installmentTimePeriod"
@@ -205,13 +277,13 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={
                     formDataReducer.installmentTimePeriod
-                      ? formDataReducer.installmentTimePeriod[0]
+                      ? formDataReducer.installmentTimePeriod
                       : null
                   }
                 />
               </Col>
             </Row>
-            <Row className="vertical-margin-item">
+            <Row className="vertical-margin-item flex-align-center">
               <Col sm={6} md={6}>
                 <TextField
                   id="Nominal Interest Rate"
@@ -222,7 +294,12 @@ class APRInputs extends Component {
                   textBody={formDataReducer.nominalInterestRate}
                 />
               </Col>
-              <Col sm={6} md={6}>
+              <Col sm={2} md={2} className="bs-center">
+                <div>
+                  <p className="vertical-margin-item">Every: </p>
+                </div>
+              </Col>
+              <Col sm={4} md={4}>
                 <Dropdown
                   title="Time Period:"
                   reduxId="interestTimePeriod"
@@ -240,7 +317,7 @@ class APRInputs extends Component {
                   onTextInputChange={this.handleTextChange}
                   selected={
                     formDataReducer.interestTimePeriod
-                      ? formDataReducer.interestTimePeriod[0]
+                      ? formDataReducer.interestTimePeriod
                       : null
                   }
                 />
@@ -503,7 +580,7 @@ class APRInputs extends Component {
                 <TextField
                   className="inline-textfield placeholder-textfield"
                   id="Interest Paid on Deposit"
-                  hint="placeholder"
+                  hint="PLACEHOLDER"
                 />
               </Col>
               <Col sm={6} md={6}>
