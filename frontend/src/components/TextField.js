@@ -22,11 +22,14 @@ class TextField extends Component {
       let limit = parseInt(this.props.limit, 10)
       if (isNaN(tryInt)) {
         this.setState({ error_message: 'Error in input: should be an integer' })
+        changedFormData('error', true)
       } else {
         if (tryInt > limit) {
           this.setState({ error_message: 'input limit succeeded' })
+          changedFormData('error', true)
         } else {
           this.setState({ error_message: '' })
+          changedFormData('error', false)
         }
       }
     }
@@ -36,11 +39,14 @@ class TextField extends Component {
       let limit = parseInt(this.props.limit, 10)
       if (isNaN(tryFloat)) {
         this.setState({ error_message: 'Error in input: should be a decimal' })
+        changedFormData('error', true)
       } else {
         if (tryFloat > limit) {
           this.setState({ error_message: 'input limit succeeded' })
+          changedFormData('error', true)
         } else {
           this.setState({ error_message: '' })
+          changedFormData('error', false)
         }
       }
     }
@@ -51,12 +57,15 @@ class TextField extends Component {
         this.setState({
           error_message: 'Error in input: should only have letters'
         })
+        changedFormData('error', true)
       } else {
         this.setState({ error_message: '' })
+        changedFormData('error', false)
       }
     }
     if (value === '') {
       this.setState({ error_message: '' })
+      changedFormData('error', false)
     }
     this.setState({ textBody: value })
     changedFormData(this.props.reduxId, value)

@@ -17,6 +17,11 @@ class APRInputs extends Component {
     }
   }
 
+  componentDidMount() {
+    const { changedFormData } = this.props
+    changedFormData('error', false)
+  }
+
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
     changedFormData([name], [value])
