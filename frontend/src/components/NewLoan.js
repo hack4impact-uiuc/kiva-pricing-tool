@@ -52,7 +52,7 @@ class NewLoan extends Component {
   render() {
     const { formDataReducer, changedFormData } = this.props
     return (
-      <div className="page-body-grey overflow-handler">
+      <div className="page-body-grey">
         <Grid
           fluid
           className="query-form-center padded-element-shrink round-corners-large solid-background"
