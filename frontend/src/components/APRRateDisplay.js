@@ -898,7 +898,7 @@ class APRRateDisplay extends Component {
             <Button
               className="button-fancy"
               name="Submit"
-              url="output"
+              url=""
               onClickHandler={() => {
                 this.saveData()
               }}

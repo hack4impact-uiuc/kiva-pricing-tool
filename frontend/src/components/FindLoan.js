@@ -236,10 +236,9 @@ class FindLoan extends Component {
         this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
 
       if (validPartnerName && validLoanTheme) {
-        Api.getProductType(
-          formDataReducer.mfi,
-          formDataReducer.loanType
-        ).then(response => this.setState({ product_types: response }))
+        Api.getProductType(formDataReducer.mfi, formDataReducer.loanType).then(
+          response => this.setState({ product_types: response })
+        )
       }
     }
   }
@@ -322,7 +321,7 @@ class FindLoan extends Component {
                   label="mfi"
                   placeholder="Select MFI Partner"
                   options={this.state.partner_names}
-                  selected={formDataReducer.mfi}
+                  selected={[formDataReducer.mfi]}
                   onInputChange={e => {
                     changedFormData('mfi', e)
                     this.getProductType()
@@ -347,7 +346,7 @@ class FindLoan extends Component {
                   label="loan"
                   options={this.state.loan_themes}
                   placeholder="Select Loan Type"
-                  selected={formDataReducer.loanType}
+                  selected={[formDataReducer.loanType]}
                   onInputChange={e => {
                     changedFormData('loanType', e)
                     this.getProductType()
@@ -368,7 +367,7 @@ class FindLoan extends Component {
                   placeholder="Search Products i.e. small loan"
                   typeVal="String"
                   limit={100}
-                  selected={formDataReducer.productType}
+                  selected={[formDataReducer.productType]}
                   onInputChange={e => {
                     changedFormData('productType', e)
                     this.getVersionNumEntries()
@@ -387,7 +386,7 @@ class FindLoan extends Component {
                     )
                   }
                   options={this.state.versions}
-                  selected={formDataReducer.versionNum}
+                  selected={[formDataReducer.versionNum]}
                   placeholder="Search Versions:"
                   onInputChange={e => {
                     changedFormData('versionNum', e)
