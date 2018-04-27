@@ -1,20 +1,10 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Form,
-  Bootstrap,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Form, Row, Col } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { Api } from './../utils'
 import './../styles/app.css'
+import { TextField, Button } from './'
 import './../styles/button.css'
-import TextField from './TextField'
-import LiveSearch from './LiveSearch'
-import Button from './Button'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 
@@ -22,7 +12,6 @@ class NewLoan extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -38,25 +27,13 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData } = this.props
+    const { resetFormData, changedFormData } = this.props
+    resetFormData()
+    changedFormData('back', 'newloan')
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
-
-    // this._unblock = this.context.router.history.block(() => {
-    //   resetFormData()
-    // })
-  }
-
-  // componentWillUnmount() {
-  //   // When the component unmounts, call the function
-  //   this._unblock()
-  // }
-
-  handleTextChange = (name, value) => {
-    const { changedFormData } = this.props
-    changedFormData([name], [value])
   }
 
   inputsEntered() {
@@ -64,19 +41,18 @@ class NewLoan extends Component {
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType) &&
-      !this.isNullOrEmpty(formDataReducer.versionNum)
+      !this.isNullOrEmpty(formDataReducer.productType)
     )
   }
 
   isNullOrEmpty(input) {
-    return input == null || input.length == 0
+    return !input || !input.length
   }
 
   render() {
-    const { formDataReducer, changedFormData, resetFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     return (
-      <div className="page-body-grey">
+      <div className="page-body-grey overflow-handler">
         <Grid
           fluid
           className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
@@ -95,10 +71,9 @@ class NewLoan extends Component {
                 label="mfi"
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
-                typeVal="String"
                 limit={100}
                 selected={formDataReducer.mfi}
-                onChange={e => {
+                onInputChange={e => {
                   changedFormData('mfi', e)
                 }}
               />
@@ -109,7 +84,7 @@ class NewLoan extends Component {
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
                 selected={formDataReducer.loanType}
-                onChange={e => {
+                onInputChange={e => {
                   changedFormData('loanType', e)
                 }}
               />
@@ -118,46 +93,34 @@ class NewLoan extends Component {
                 className="vertical-margin-item"
                 reduxId="productType"
                 id="Loan Product"
-                text="product"
                 hint="i.e. small loan"
                 typeVal="String"
                 limit={100}
                 textBody={formDataReducer.productType}
-                onTextInputChange={this.handleTextChange}
               />
             </Form>
 
             <Row>
               <Col xs={6} sm={6} md={6}>
-                <Button
-                  name="Back"
-                  url=""
-                  onClickHandler={() => resetFormData()}
-                />
+                <Button className="button-fancy" name="Back" url="" />
               </Col>
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
-                  className="button-default"
+                  className="button-fancy"
                   disable={!this.inputsEntered()}
                   name="Continue"
                   url="form1"
                   onClickHandler={() => {
-                    axios
-                      .get(
-                        'http://127.0.0.1:3453/getVersionNum?partner_name=' +
-                          formDataReducer.mfi +
-                          '&theme=' +
-                          formDataReducer.loanType +
-                          '&product=' +
-                          formDataReducer.loanProduct
+                    Api.getVersionNum(
+                      formDataReducer.mfi,
+                      formDataReducer.loanType,
+                      formDataReducer.productType
+                    ).then(response => {
+                      changedFormData(
+                        'versionNum',
+                        response['version'].toString()
                       )
-                      .then(response => {
-                        changedFormData('versionNum', [
-                          response.data.result['version'].toString()
-                        ])
-                      })
-
-                    changedFormData('back', 'newloan')
+                    })
                   }}
                 />
               </Col>

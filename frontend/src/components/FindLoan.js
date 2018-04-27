@@ -1,28 +1,16 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Form,
-  Bootstrap,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Form, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
-import TextField from './TextField'
-import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { Api } from './../utils'
 import PropTypes from 'prop-types'
 
 class FindLoan extends Component {
   constructor(props) {
     super(props)
-    const { formDataReducer } = this.props
-    // console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -225,42 +213,93 @@ class FindLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData } = this.props
-    axios.get('http://127.0.0.1:3453/getMFIEntry').then(response => {
-      this.setState({ partner_names: response.data.result.partners })
-    })
-
-    // this._unblock = this.context.router.history.block(() => {
-    //   resetFormData()
-    // })
+    const { changedFormData, resetFormData } = this.props
+    resetFormData()
+    changedFormData('back', 'findloan')
+    axios
+      .get('http://127.0.0.1:3453/getMFIEntry')
+      .then(response => {
+        this.setState({ partner_names: response.data.result.partners })
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
   }
 
-  // componentWillUnmount() {
-  //   // When the component unmounts, call the function
-  //   this._unblock()
-  // }
+  getProductType() {
+    const { formDataReducer } = this.props
 
-  handleTextChange = (name, value) => {
-    const { changedFormData } = this.props
-    changedFormData([name], [value])
+    if (formDataReducer.mfi && formDataReducer.loanType) {
+      let validPartnerName =
+        this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
+      let validLoanTheme =
+        this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
+
+      if (validPartnerName && validLoanTheme) {
+        Api.getProductType(
+          formDataReducer.mfi[0],
+          formDataReducer.loanType[0]
+        ).then(response => this.setState({ product_types: response }))
+      }
+    }
+  }
+
+  getVersionNumEntries() {
+    const { formDataReducer } = this.props
+    if (
+      formDataReducer.mfi &&
+      formDataReducer.loanType &&
+      formDataReducer.productType
+    ) {
+      let validPartnerName =
+        this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
+      let validLoanTheme =
+        this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
+      let validProductType =
+        this.state.product_types.indexOf(formDataReducer.productType[0]) != -1
+
+      if (validPartnerName && validLoanTheme && validProductType) {
+        Api.getVersionNumEntries(
+          formDataReducer.mfi[0],
+          formDataReducer.loanType[0],
+          formDataReducer.productType[0]
+        ).then(response => this.setState({ versions: response }))
+      }
+    }
   }
 
   inputsEntered() {
     const { formDataReducer } = this.props
-    return (
+    if (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
       !this.isNullOrEmpty(formDataReducer.productType) &&
       !this.isNullOrEmpty(formDataReducer.versionNum)
-    )
+    ) {
+      let validPartnerName =
+        this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
+      let validLoanTheme =
+        this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
+      let validProductType =
+        this.state.product_types.indexOf(formDataReducer.productType[0]) != -1
+      let validVersionNum =
+        this.state.versions.indexOf(formDataReducer.versionNum[0]) != -1
+      return (
+        validPartnerName &&
+        validLoanTheme &&
+        validProductType &&
+        validVersionNum
+      )
+    }
+    return false
   }
 
   isNullOrEmpty(input) {
-    return input == null || input.length == 0
+    return !input || !input.length
   }
 
   render() {
-    const { formDataReducer, changedFormData, resetFormData } = this.props
+    const { formDataReducer, changedFormData, searchLoan } = this.props
 
     return (
       <div className="page-body-grey">
@@ -284,13 +323,13 @@ class FindLoan extends Component {
                   placeholder="Select MFI Partner"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi}
-                  onChange={e => {
+                  onInputChange={e => {
                     changedFormData('mfi', e)
-                    changedFormData('backRoute', 'findloan')
+                    this.getProductType()
                     axios
                       .get('http://127.0.0.1:3453/getLTEntry', {
                         params: {
-                          partner_name: e[0]
+                          partner_name: e
                         }
                       })
                       .then(response => {
@@ -303,59 +342,36 @@ class FindLoan extends Component {
 
                 <Typeahead
                   className="vertical-margin-item"
+                  disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   label="loan"
-                  disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   options={this.state.loan_themes}
                   placeholder="Select Loan Type"
                   selected={formDataReducer.loanType}
-                  onChange={e => {
+                  onInputChange={e => {
                     changedFormData('loanType', e)
-                    axios
-                      .get('http://127.0.0.1:3453/getPTEntry', {
-                        params: {
-                          partner_name: formDataReducer.mfi[0],
-                          loan_theme: e[0]
-                        }
-                      })
-                      .then(response => {
-                        this.setState({
-                          product_types: response.data.result.product_types
-                        })
-                      })
+                    this.getProductType()
                   }}
                 />
 
                 <Typeahead
                   className="vertical-margin-item"
-                  ref="product"
-                  label="product"
                   disabled={
                     !(
                       !this.isNullOrEmpty(formDataReducer.mfi) &&
                       !this.isNullOrEmpty(formDataReducer.loanType)
                     )
                   }
+                  ref="product"
+                  label="product"
                   options={this.state.product_types}
                   placeholder="Search Products i.e. small loan"
                   typeVal="String"
                   limit={100}
                   selected={formDataReducer.productType}
-                  onChange={e => {
+                  onInputChange={e => {
                     changedFormData('productType', e)
-                    axios
-                      .get('http://127.0.0.1:3453/getVersionNumEntry', {
-                        params: {
-                          partner_name: formDataReducer.mfi[0],
-                          loan_theme: formDataReducer.loanType[0],
-                          product_type: e[0]
-                        }
-                      })
-                      .then(response => {
-                        this.setState({
-                          versions: response.data.result.version_nums
-                        })
-                      })
+                    this.getVersionNumEntries()
                   }}
                 />
 
@@ -373,7 +389,7 @@ class FindLoan extends Component {
                   options={this.state.versions}
                   selected={formDataReducer.versionNum}
                   placeholder="Search Versions:"
-                  onChange={e => {
+                  onInputChange={e => {
                     changedFormData('versionNum', e)
                   }}
                 />
@@ -384,28 +400,39 @@ class FindLoan extends Component {
           <Row>
             <Col xs={6} sm={6} md={6}>
               <Button
-                name="Back"
-                url=""
-                onClickHandler={() => resetFormData()}
+                className="button-fancy"
+                name="Edit"
+                disable={!this.inputsEntered()}
+                url="output"
+                onClickHandler={() => {
+                  changedFormData('back', 'findloan')
+                  Api.searchLoan(
+                    formDataReducer.mfi[0],
+                    formDataReducer.loanType[0],
+                    formDataReducer.productType[0],
+                    formDataReducer.versionNum[0]
+                  ).then(value => {
+                    searchLoan(value)
+                  })
+                }}
               />
             </Col>
             <Col xs={6} sm={6} md={6} className="bs-button-right">
               <Button
-                disable={!this.inputsEntered()}
+                className="button-fancy"
                 name="Duplicate"
+                disable={!this.inputsEntered()}
                 url="form1"
                 onClickHandler={() => {
-                  this.getTables()
-                  changedFormData('versionNum', this.state.versions.length + 1)
-                }}
-              />
-              <Button
-                disable={!this.inputsEntered()}
-                name="Continue"
-                url="output"
-                onClickHandler={() => {
                   changedFormData('back', 'findloan')
-                  this.getTables()
+                  Api.searchLoan(
+                    formDataReducer.mfi[0],
+                    formDataReducer.loanType[0],
+                    formDataReducer.productType[0],
+                    formDataReducer.versionNum[0]
+                  ).then(value => {
+                    searchLoan(value)
+                  })
                 }}
               />
             </Col>

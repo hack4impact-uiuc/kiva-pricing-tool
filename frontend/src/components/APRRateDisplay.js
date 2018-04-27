@@ -1,9 +1,13 @@
+
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, Button, TextField, KivaChart } from './'
-import { DropdownButton, MenuItem, Grid, Jumbotron, PageHeader, Form } from 'react-bootstrap'
+import { Button, TextField, KivaChart } from './'
 import Bootstrap from 'react-bootstrap'
+=======
+import React, { Component } from 'react'
+import { Grid, PageHeader } from 'react-bootstrap'
+
 import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
@@ -48,7 +52,7 @@ class APRRateDisplay extends Component {
   }
  
   updateTable(e, cellInfo) {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     if (
       formDataReducer.calc_repayment_schedule[cellInfo.index][
         cellInfo.column.id
@@ -202,7 +206,7 @@ class APRRateDisplay extends Component {
     }
   }
   renderEditable(cellInfo) {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer } = this.props
     let editable =
       cellInfo.column.id !== 'period_num' &&
       cellInfo.column.id !== 'amount_due' &&
@@ -323,6 +327,7 @@ class APRRateDisplay extends Component {
     createDownloadLink.href = url;
     createDownloadLink.setAttribute('download', formDataReducer.mfi[0] + "_" + formDataReducer.loanType[0] + "_" + formDataReducer.productType[0] + "_" + formDataReducer.versionNum[0] + ".csv");
     createDownloadLink.click();
+
   }
 
   createChart() {
@@ -362,7 +367,7 @@ class APRRateDisplay extends Component {
   }
 
   saveData() {
-    const { formDataReducer, changedFormData } = this.props
+    const { formDataReducer } = this.props
     let orig_matrix = [
       [],
       [],
@@ -414,133 +419,133 @@ class APRRateDisplay extends Component {
       [],
       []
     ]
-    for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
-      user_change[0].push(
-        formDataReducer.user_repayment_schedule[i]['period_num']
-      )
-      user_change[1].push(
-        formDataReducer.user_repayment_schedule[i]['payment_due_date']
-      )
-      user_change[2].push(formDataReducer.user_repayment_schedule[i]['days'])
-      user_change[3].push(
-        formDataReducer.user_repayment_schedule[i]['amount_due']
-      )
-      user_change[4].push(
-        formDataReducer.user_repayment_schedule[i]['principal_payment']
-      )
-      user_change[5].push(
-        formDataReducer.user_repayment_schedule[i]['interest']
-      )
-      user_change[6].push(formDataReducer.user_repayment_schedule[i]['fees'])
-      user_change[7].push(
-        formDataReducer.user_repayment_schedule[i]['insurance']
-      )
-      user_change[8].push(formDataReducer.user_repayment_schedule[i]['taxes'])
-      user_change[9].push(
-        formDataReducer.user_repayment_schedule[i]['security_deposit']
-      )
-      user_change[10].push(
-        formDataReducer.user_repayment_schedule[i]['security_interest_paid']
-      )
-      user_change[11].push(
-        formDataReducer.user_repayment_schedule[i]['balance']
-      )
-      user_change[12].push(
-        formDataReducer.user_repayment_schedule[i]['deposit_withdrawal']
-      )
-      user_change[13].push(
-        formDataReducer.user_repayment_schedule[i]['deposit_balance']
-      )
-      user_change[14].push(
-        formDataReducer.user_repayment_schedule[i]['total_cashflow']
-      )
+    // for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
+    //   user_change[0].push(
+    //     formDataReducer.user_repayment_schedule[i]['period_num']
+    //   )
+    //   user_change[1].push(
+    //     formDataReducer.user_repayment_schedule[i]['payment_due_date']
+    //   )
+    //   user_change[2].push(formDataReducer.user_repayment_schedule[i]['days'])
+    //   user_change[3].push(
+    //     formDataReducer.user_repayment_schedule[i]['amount_due']
+    //   )
+    //   user_change[4].push(
+    //     formDataReducer.user_repayment_schedule[i]['principal_payment']
+    //   )
+    //   user_change[5].push(
+    //     formDataReducer.user_repayment_schedule[i]['interest']
+    //   )
+    //   user_change[6].push(formDataReducer.user_repayment_schedule[i]['fees'])
+    //   user_change[7].push(
+    //     formDataReducer.user_repayment_schedule[i]['insurance']
+    //   )
+    //   user_change[8].push(formDataReducer.user_repayment_schedule[i]['taxes'])
+    //   user_change[9].push(
+    //     formDataReducer.user_repayment_schedule[i]['security_deposit']
+    //   )
+    //   user_change[10].push(
+    //     formDataReducer.user_repayment_schedule[i]['security_interest_paid']
+    //   )
+    //   user_change[11].push(
+    //     formDataReducer.user_repayment_schedule[i]['balance']
+    //   )
+    //   user_change[12].push(
+    //     formDataReducer.user_repayment_schedule[i]['deposit_withdrawal']
+    //   )
+    //   user_change[13].push(
+    //     formDataReducer.user_repayment_schedule[i]['deposit_balance']
+    //   )
+    //   user_change[14].push(
+    //     formDataReducer.user_repayment_schedule[i]['total_cashflow']
+    //   )
 
-      orig_matrix[0].push(
-        formDataReducer.original_repayment_schedule[i]['period_num']
-      )
-      orig_matrix[1].push(
-        formDataReducer.original_repayment_schedule[i]['payment_due_date']
-      )
-      orig_matrix[2].push(
-        formDataReducer.original_repayment_schedule[i]['days']
-      )
-      orig_matrix[3].push(
-        formDataReducer.original_repayment_schedule[i]['amount_due']
-      )
-      orig_matrix[4].push(
-        formDataReducer.original_repayment_schedule[i]['principal_payment']
-      )
-      orig_matrix[5].push(
-        formDataReducer.original_repayment_schedule[i]['interest']
-      )
-      orig_matrix[6].push(
-        formDataReducer.original_repayment_schedule[i]['fees']
-      )
-      orig_matrix[7].push(
-        formDataReducer.original_repayment_schedule[i]['insurance']
-      )
-      orig_matrix[8].push(
-        formDataReducer.original_repayment_schedule[i]['taxes']
-      )
-      orig_matrix[9].push(
-        formDataReducer.original_repayment_schedule[i]['security_deposit']
-      )
-      orig_matrix[10].push(
-        formDataReducer.original_repayment_schedule[i]['security_interest_paid']
-      )
-      orig_matrix[11].push(
-        formDataReducer.original_repayment_schedule[i]['balance']
-      )
-      orig_matrix[12].push(
-        formDataReducer.original_repayment_schedule[i]['deposit_withdrawal']
-      )
-      orig_matrix[13].push(
-        formDataReducer.original_repayment_schedule[i]['deposit_balance']
-      )
-      orig_matrix[14].push(
-        formDataReducer.original_repayment_schedule[i]['total_cashflow']
-      )
+    //   orig_matrix[0].push(
+    //     formDataReducer.original_repayment_schedule[i]['period_num']
+    //   )
+    //   orig_matrix[1].push(
+    //     formDataReducer.original_repayment_schedule[i]['payment_due_date']
+    //   )
+    //   orig_matrix[2].push(
+    //     formDataReducer.original_repayment_schedule[i]['days']
+    //   )
+    //   orig_matrix[3].push(
+    //     formDataReducer.original_repayment_schedule[i]['amount_due']
+    //   )
+    //   orig_matrix[4].push(
+    //     formDataReducer.original_repayment_schedule[i]['principal_payment']
+    //   )
+    //   orig_matrix[5].push(
+    //     formDataReducer.original_repayment_schedule[i]['interest']
+    //   )
+    //   orig_matrix[6].push(
+    //     formDataReducer.original_repayment_schedule[i]['fees']
+    //   )
+    //   orig_matrix[7].push(
+    //     formDataReducer.original_repayment_schedule[i]['insurance']
+    //   )
+    //   orig_matrix[8].push(
+    //     formDataReducer.original_repayment_schedule[i]['taxes']
+    //   )
+    //   orig_matrix[9].push(
+    //     formDataReducer.original_repayment_schedule[i]['security_deposit']
+    //   )
+    //   orig_matrix[10].push(
+    //     formDataReducer.original_repayment_schedule[i]['security_interest_paid']
+    //   )
+    //   orig_matrix[11].push(
+    //     formDataReducer.original_repayment_schedule[i]['balance']
+    //   )
+    //   orig_matrix[12].push(
+    //     formDataReducer.original_repayment_schedule[i]['deposit_withdrawal']
+    //   )
+    //   orig_matrix[13].push(
+    //     formDataReducer.original_repayment_schedule[i]['deposit_balance']
+    //   )
+    //   orig_matrix[14].push(
+    //     formDataReducer.original_repayment_schedule[i]['total_cashflow']
+    //   )
 
-      calc_matrix[0].push(
-        formDataReducer.calc_repayment_schedule[i]['period_num']
-      )
-      calc_matrix[1].push(
-        formDataReducer.calc_repayment_schedule[i]['payment_due_date']
-      )
-      calc_matrix[2].push(formDataReducer.calc_repayment_schedule[i]['days'])
-      calc_matrix[3].push(
-        formDataReducer.calc_repayment_schedule[i]['amount_due']
-      )
-      calc_matrix[4].push(
-        formDataReducer.calc_repayment_schedule[i]['principal_payment']
-      )
-      calc_matrix[5].push(
-        formDataReducer.calc_repayment_schedule[i]['interest']
-      )
-      calc_matrix[6].push(formDataReducer.calc_repayment_schedule[i]['fees'])
-      calc_matrix[7].push(
-        formDataReducer.calc_repayment_schedule[i]['insurance']
-      )
-      calc_matrix[8].push(formDataReducer.calc_repayment_schedule[i]['taxes'])
-      calc_matrix[9].push(
-        formDataReducer.calc_repayment_schedule[i]['security_deposit']
-      )
-      calc_matrix[10].push(
-        formDataReducer.calc_repayment_schedule[i]['security_interest_paid']
-      )
-      calc_matrix[11].push(
-        formDataReducer.calc_repayment_schedule[i]['balance']
-      )
-      calc_matrix[12].push(
-        formDataReducer.calc_repayment_schedule[i]['deposit_withdrawal']
-      )
-      calc_matrix[13].push(
-        formDataReducer.calc_repayment_schedule[i]['deposit_balance']
-      )
-      calc_matrix[14].push(
-        formDataReducer.calc_repayment_schedule[i]['total_cashflow']
-      )
-    }
+    //   calc_matrix[0].push(
+    //     formDataReducer.calc_repayment_schedule[i]['period_num']
+    //   )
+    //   calc_matrix[1].push(
+    //     formDataReducer.calc_repayment_schedule[i]['payment_due_date']
+    //   )
+    //   calc_matrix[2].push(formDataReducer.calc_repayment_schedule[i]['days'])
+    //   calc_matrix[3].push(
+    //     formDataReducer.calc_repayment_schedule[i]['amount_due']
+    //   )
+    //   calc_matrix[4].push(
+    //     formDataReducer.calc_repayment_schedule[i]['principal_payment']
+    //   )
+    //   calc_matrix[5].push(
+    //     formDataReducer.calc_repayment_schedule[i]['interest']
+    //   )
+    //   calc_matrix[6].push(formDataReducer.calc_repayment_schedule[i]['fees'])
+    //   calc_matrix[7].push(
+    //     formDataReducer.calc_repayment_schedule[i]['insurance']
+    //   )
+    //   calc_matrix[8].push(formDataReducer.calc_repayment_schedule[i]['taxes'])
+    //   calc_matrix[9].push(
+    //     formDataReducer.calc_repayment_schedule[i]['security_deposit']
+    //   )
+    //   calc_matrix[10].push(
+    //     formDataReducer.calc_repayment_schedule[i]['security_interest_paid']
+    //   )
+    //   calc_matrix[11].push(
+    //     formDataReducer.calc_repayment_schedule[i]['balance']
+    //   )
+    //   calc_matrix[12].push(
+    //     formDataReducer.calc_repayment_schedule[i]['deposit_withdrawal']
+    //   )
+    //   calc_matrix[13].push(
+    //     formDataReducer.calc_repayment_schedule[i]['deposit_balance']
+    //   )
+    //   calc_matrix[14].push(
+    //     formDataReducer.calc_repayment_schedule[i]['total_cashflow']
+    //   )
+    // }
     let data = {
       partner_name: formDataReducer.mfi[0],
       loan_theme: formDataReducer.loanType[0],
@@ -548,7 +553,7 @@ class APRRateDisplay extends Component {
       version_num: '1',
       update_name: formDataReducer.startName[0],
       start_name: formDataReducer.startName[0],
-      nominal_apr: formDataReducer.aprRate,
+      nominal_apr: formDataReducer.nominalApr,
       installment_time_period: formDataReducer.installmentTimePeriod[0],
       repayment_type: formDataReducer.repaymentType[0],
       interest_time_period: formDataReducer.interestTimePeriod[0],
@@ -587,7 +592,7 @@ class APRRateDisplay extends Component {
       partner_name: formDataReducer.mfi[0],
       loan_theme: formDataReducer.loanType[0],
       product_type: formDataReducer.productType[0],
-      version_num: formDataReducer.version_num[0],
+      version_num: formDataReducer.versionNum[0],
       inputs: data,
       origin_matrix: orig_matrix,
       user_change_matrix: user_change,
@@ -604,10 +609,10 @@ class APRRateDisplay extends Component {
   }
 
   render() {
-    const { formDataReducer, contNewLoan, changedFormData } = this.props
+    const { formDataReducer } = this.props
     return (
       <Grid>
-        <PageHeader> APR Rate: {formDataReducer.aprRate}%</PageHeader>
+        <PageHeader> APR Rate: {formDataReducer.nominalApr}%</PageHeader>
         <Button
           name="Submit"
           url=""
