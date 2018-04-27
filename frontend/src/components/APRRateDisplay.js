@@ -1,7 +1,7 @@
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { Grid, PageHeader } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import { Button, KivaChart } from './'
 import './../styles/app.css'
 import axios from 'axios'
@@ -748,120 +748,163 @@ class APRRateDisplay extends Component {
   render() {
     const { formDataReducer } = this.props
     return (
-      <Grid>
-        <PageHeader> APR Rate: {formDataReducer.nominalApr}%</PageHeader>
-        <Button
-          name="Submit"
-          url="output"
-          onClickHandler={() => {
-            this.saveData()
-          }}
-        />
-        <button onClick={this.createChart.bind(this)}>Generate Chart</button>
-        <button onClick={this.getCSV.bind(this)}>Download CSV</button>
-        <div class="col-lg-4 pull-right">
-          <ul class="nav nav-pills nav-stacked">
-            <li role="presentation" class={this.state.barclass}>
-              <a onClick={() => this.changeChart('bar')}>Bar</a>
-            </li>
-            <li role="presentation" class={this.state.lineclass}>
-              <a onClick={() => this.changeChart('line')}>Line</a>
-            </li>
-            <li role="presentation" class={this.state.areaclass}>
-              <a onClick={() => this.changeChart('area')}>Area</a>
-            </li>
-          </ul>
-        </div>
-        {this.state.isHidden && (
-          <KivaChart
-            visualType={this.state.visualType}
-            data={this.state.data}
-          />
-        )}
+      <Grid fluid className="padded-element-horizontal">
+        <Row>
+          <Col sm={12} md={12}>
+            <PageHeader> APR Rate: {formDataReducer.nominalApr}%</PageHeader>
+          </Col>
+        </Row>
+        <Row className="vertical-margin-item">
+          <Col sm={8} md={8}>
+            {this.state.isHidden && (
+              <KivaChart
+                visualType={this.state.visualType}
+                data={this.state.data}
+              />
+            )}
+          </Col>
+          <Col sm={4} md={4}>
+            <Row>
+              <Col sm={12} md={12}>
+                <ul class="nav nav-pills nav-stacked">
+                  <li role="presentation" class={this.state.barclass}>
+                    <a onClick={() => this.changeChart('bar')}>Bar</a>
+                  </li>
+                  <li role="presentation" class={this.state.lineclass}>
+                    <a onClick={() => this.changeChart('line')}>Line</a>
+                  </li>
+                  <li role="presentation" class={this.state.areaclass}>
+                    <a onClick={() => this.changeChart('area')}>Area</a>
+                  </li>
+                </ul>
+              </Col>
+            </Row>
+            <Row className="vertical-margin-item">
+              <Col sm={6} md={6}>
+                <button
+                  className="button-fancy"
+                  onClick={this.createChart.bind(this)}
+                >
+                  Generate Chart
+                </button>
+              </Col>
+              <Col sm={6} md={6} className="bs-button-right">
+                <button
+                  className="button-fancy"
+                  onClick={this.getCSV.bind(this)}
+                >
+                  Download CSV
+                </button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
 
-        <br />
-        <Button name="Cancel" url="" />
-        <Button name="Back" url={formDataReducer.back} />
-        <ReactTable
-          data={formDataReducer.calc_repayment_schedule}
-          columns={[
-            {
-              Header: 'Period Number',
-              accessor: 'period_num',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Payment Due Date',
-              accessor: 'payment_due_date',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Days',
-              accessor: 'days',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Amount Due',
-              accessor: 'amount_due',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Principal Payment',
-              accessor: 'principal_payment',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Balance',
-              accessor: 'balance',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Interest',
-              accessor: 'interest',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Fees',
-              accessor: 'fees',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Insurance',
-              accessor: 'insurance',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Taxes',
-              accessor: 'taxes',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Security Deposit',
-              accessor: 'security_deposit',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Security Interest Paid',
-              accessor: 'security_interest_paid',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Deposit Withdrawal',
-              accessor: 'deposit_withdrawal',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Deposit Balance',
-              accessor: 'deposit_balance',
-              Cell: this.renderEditable
-            },
-            {
-              Header: 'Total Cashflow',
-              accessor: 'total_cashflow',
-              Cell: this.renderEditable
-            }
-          ]}
-        />
+        <Row>
+          <Col sm={12} md={12}>
+            <ReactTable
+              data={formDataReducer.calc_repayment_schedule}
+              columns={[
+                {
+                  Header: 'Period Number',
+                  accessor: 'period_num',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Payment Due Date',
+                  accessor: 'payment_due_date',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Days',
+                  accessor: 'days',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Amount Due',
+                  accessor: 'amount_due',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Principal Payment',
+                  accessor: 'principal_payment',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Balance',
+                  accessor: 'balance',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Interest',
+                  accessor: 'interest',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Fees',
+                  accessor: 'fees',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Insurance',
+                  accessor: 'insurance',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Taxes',
+                  accessor: 'taxes',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Security Deposit',
+                  accessor: 'security_deposit',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Security Interest Paid',
+                  accessor: 'security_interest_paid',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Deposit Withdrawal',
+                  accessor: 'deposit_withdrawal',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Deposit Balance',
+                  accessor: 'deposit_balance',
+                  Cell: this.renderEditable
+                },
+                {
+                  Header: 'Total Cashflow',
+                  accessor: 'total_cashflow',
+                  Cell: this.renderEditable
+                }
+              ]}
+            />
+          </Col>
+        </Row>
+
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <Button className="button-fancy" name="Cancel" url="" />
+            <Button
+              className="button-fancy"
+              name="Back"
+              url={formDataReducer.back}
+            />
+          </Col>
+          <Col sm={6} md={6} className="bs-button-right">
+            <Button
+              className="button-fancy"
+              name="Submit"
+              url=""
+              onClickHandler={() => {
+                this.saveData()
+              }}
+            />
+          </Col>
+        </Row>
       </Grid>
     )
   }

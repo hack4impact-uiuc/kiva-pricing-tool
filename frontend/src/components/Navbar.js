@@ -7,7 +7,7 @@ import {
   NavDropdown,
   MenuItem
 } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
 import './../styles/navbar.css'
 
 // note: changed NavItem's component class because we cannot have nested <a>
@@ -20,24 +20,24 @@ class Navbar extends Component {
           <BootstrapNavbar.Toggle />
           <BootstrapNavbar.Collapse>
             <Nav>
-              <LinkContainer to="/">
+              <IndexLinkContainer to="/">
                 <NavItem>Home</NavItem>
-              </LinkContainer>
+              </IndexLinkContainer>
 
-              <LinkContainer to="newloan">
+              <LinkContainer to="/newloan">
                 <NavItem>New Loan</NavItem>
               </LinkContainer>
 
-              <LinkContainer to="findloan">
+              <LinkContainer to="/findloan">
                 <NavItem>Find Loan</NavItem>
               </LinkContainer>
 
               <NavDropdown id="adminToolNav" title="Admin Tools">
-                <LinkContainer to="partnerlist">
+                <LinkContainer to="/partnerlist">
                   <MenuItem>Partner List</MenuItem>
                 </LinkContainer>
 
-                <LinkContainer to="themelist">
+                <LinkContainer to="/themelist">
                   <MenuItem>Loan Theme List</MenuItem>
                 </LinkContainer>
               </NavDropdown>

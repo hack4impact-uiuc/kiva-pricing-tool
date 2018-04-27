@@ -30,6 +30,7 @@ class NewLoan extends Component {
     const { resetFormData, changedFormData } = this.props
     resetFormData()
     changedFormData('back', 'newloan')
+    changedFormData('error', false)
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
@@ -41,7 +42,8 @@ class NewLoan extends Component {
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType)
+      !this.isNullOrEmpty(formDataReducer.productType) &&
+      !formDataReducer.error // no error
     )
   }
 
@@ -51,11 +53,12 @@ class NewLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData } = this.props
+    console.log(this.inputsEntered(), 'error', formDataReducer)
     return (
-      <div className="page-body-grey overflow-handler">
+      <div className="page-body-grey">
         <Grid
           fluid
-          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+          className="query-form-center padded-element-shrink round-corners-large solid-background"
         >
           <Row>
             <Col sm={12} md={12} className="bs-center">
@@ -92,10 +95,12 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                id="Loan Product"
-                hint="i.e. small loan"
+                hint="Loan Product (i.e. small loan)"
                 typeVal="String"
                 limit={100}
+                onInputChange={e => {
+                  changedFormData('productType', e)
+                }}
                 textBody={formDataReducer.productType}
               />
             </Form>
