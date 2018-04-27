@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 $color-text: #333;
 
 .banner {
@@ -14,7 +16,7 @@ $color-text: #333;
 .page-body-grey {
 	width: 100vw;
 	height: 100vh;
-	background-color: #E8E8E8;
+	background-color: $page-background;
 	overflow: auto;
 }
 
@@ -23,7 +25,11 @@ $color-text: #333;
 }
 
 .solid-background-grey {
-	background-color: #E8E8E8;
+	background-color: $page-background;
+}
+
+.query-form-center {
+	margin: 11% 20% 0% 20%;
 }
 
 .screen-vertical-centered-grid {
@@ -31,8 +37,34 @@ $color-text: #333;
 }
 
 .screen-horizontal-centered {
-	margin-left: 20%;
-	margin-right: 20%;
+	margin-left: 13%;
+	margin-right: 13%;
+}
+
+@media screen and (max-width: 1050px) {
+	.query-form-center {
+		margin: 0% 20%;
+		margin-top: 25vh;
+	}
+
+	.screen-vertical-centered-grid {
+		margin-top: 5%;
+	}
+
+	.screen-horizontal-centered {
+		margin-left: 8%;
+		margin-right: 8%;
+	}
+}
+
+@media screen and (max-width: 950px) {
+	.screen-vertical-centered-grid {
+		margin-top: 5%;
+	}
+
+	.screen-horizontal-centered {
+		margin: 0;
+	}
 }
 
 /* specifies top and bottom to avoid overrides from other padding classes */
@@ -82,6 +114,16 @@ $color-text: #333;
 
 .bs-justify {
 	text-align: justify;
+}
+
+.flex-align-center {
+	display: flex;
+	align-items: center;
+}
+
+.flex-align-bottom {
+	display: flex;
+	align-items: flex-end;
 }
 
 .expand-width {

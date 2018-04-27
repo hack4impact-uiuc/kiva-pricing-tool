@@ -228,7 +228,7 @@ class APRInputs extends Component {
                 />
               </Col>
             </Row>
-            <Row className="vertical-margin-item">
+            <Row className="vertical-margin-item flex-align-center">
               <Col sm={4} md={4}>
                 <TextField
                   id="Loan Amount"
@@ -238,6 +238,11 @@ class APRInputs extends Component {
                   limit="900000000"
                   textBody={formDataReducer.loanAmount}
                 />
+              </Col>
+              <Col sm={2} md={2} className="bs-center">
+                <div>
+                  <p className="vertical-margin-item">Paid Over: </p>
+                </div>
               </Col>
               <Col sm={4} md={4}>
                 <TextField
@@ -249,7 +254,7 @@ class APRInputs extends Component {
                   textBody={formDataReducer.installment}
                 />
               </Col>
-              <Col sm={4} md={4} className="bs-center">
+              <Col sm={2} md={2} className="bs-center">
                 <Dropdown
                   title="Time Period:"
                   reduxId="installmentTimePeriod"
@@ -273,7 +278,7 @@ class APRInputs extends Component {
                 />
               </Col>
             </Row>
-            <Row className="vertical-margin-item">
+            <Row className="vertical-margin-item flex-align-center">
               <Col sm={6} md={6}>
                 <TextField
                   id="Nominal Interest Rate"
@@ -284,7 +289,12 @@ class APRInputs extends Component {
                   textBody={formDataReducer.nominalInterestRate}
                 />
               </Col>
-              <Col sm={6} md={6}>
+              <Col sm={2} md={2} className="bs-center">
+                <div>
+                  <p className="vertical-margin-item">Every: </p>
+                </div>
+              </Col>
+              <Col sm={4} md={4}>
                 <Dropdown
                   title="Time Period:"
                   reduxId="interestTimePeriod"
@@ -565,7 +575,7 @@ class APRInputs extends Component {
                 <TextField
                   className="inline-textfield placeholder-textfield"
                   id="Interest Paid on Deposit"
-                  hint="placeholder"
+                  hint="PLACEHOLDER"
                 />
               </Col>
               <Col sm={6} md={6}>

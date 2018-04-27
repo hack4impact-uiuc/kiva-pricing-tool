@@ -187,7 +187,7 @@ class AdminThemes extends Component {
           </Col>
         </Row>
 
-        <Row className="vertical-margin-item">
+        <Row className="vertical-margin-item flex-align-bottom">
           <Col sm={6} md={6}>
             <h2>
               {' '}
