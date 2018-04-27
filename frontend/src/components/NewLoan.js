@@ -72,7 +72,7 @@ class NewLoan extends Component {
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
                 limit={100}
-                selected={formDataReducer.mfi}
+                selected={[formDataReducer.mfi]}
                 onInputChange={e => {
                   changedFormData('mfi', e)
                 }}
@@ -83,7 +83,7 @@ class NewLoan extends Component {
                 label="loan"
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
-                selected={formDataReducer.loanType}
+                selected={[formDataReducer.loanType]}
                 onInputChange={e => {
                   changedFormData('loanType', e)
                 }}

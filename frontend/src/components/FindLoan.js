@@ -29,10 +29,10 @@ class FindLoan extends Component {
     const { formDataReducer, changedFormData } = this.props
     let data = {
       params: {
-        partner_name: formDataReducer.mfi[0],
-        loan_theme: formDataReducer.loanType[0],
-        product_type: formDataReducer.productType[0],
-        version_num: formDataReducer.versionNum[0]
+        partner_name: formDataReducer.mfi,
+        loan_theme: formDataReducer.loanType,
+        product_type: formDataReducer.productType,
+        version_num: formDataReducer.versionNum
       }
     }
 
@@ -231,14 +231,14 @@ class FindLoan extends Component {
 
     if (formDataReducer.mfi && formDataReducer.loanType) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
 
       if (validPartnerName && validLoanTheme) {
         Api.getProductType(
-          formDataReducer.mfi[0],
-          formDataReducer.loanType[0]
+          formDataReducer.mfi,
+          formDataReducer.loanType
         ).then(response => this.setState({ product_types: response }))
       }
     }
@@ -252,17 +252,17 @@ class FindLoan extends Component {
       formDataReducer.productType
     ) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
       let validProductType =
-        this.state.product_types.indexOf(formDataReducer.productType[0]) != -1
+        this.state.product_types.indexOf(formDataReducer.productType) != -1
 
       if (validPartnerName && validLoanTheme && validProductType) {
         Api.getVersionNumEntries(
-          formDataReducer.mfi[0],
-          formDataReducer.loanType[0],
-          formDataReducer.productType[0]
+          formDataReducer.mfi,
+          formDataReducer.loanType,
+          formDataReducer.productType
         ).then(response => this.setState({ versions: response }))
       }
     }
@@ -277,13 +277,13 @@ class FindLoan extends Component {
       !this.isNullOrEmpty(formDataReducer.versionNum)
     ) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi[0]) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType[0]) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
       let validProductType =
-        this.state.product_types.indexOf(formDataReducer.productType[0]) != -1
+        this.state.product_types.indexOf(formDataReducer.productType) != -1
       let validVersionNum =
-        this.state.versions.indexOf(formDataReducer.versionNum[0]) != -1
+        this.state.versions.indexOf(formDataReducer.versionNum) != -1
       return (
         validPartnerName &&
         validLoanTheme &&
@@ -407,10 +407,10 @@ class FindLoan extends Component {
                 onClickHandler={() => {
                   changedFormData('back', 'findloan')
                   Api.searchLoan(
-                    formDataReducer.mfi[0],
-                    formDataReducer.loanType[0],
-                    formDataReducer.productType[0],
-                    formDataReducer.versionNum[0]
+                    formDataReducer.mfi,
+                    formDataReducer.loanType,
+                    formDataReducer.productType,
+                    formDataReducer.versionNum
                   ).then(value => {
                     searchLoan(value)
                   })
@@ -426,10 +426,10 @@ class FindLoan extends Component {
                 onClickHandler={() => {
                   changedFormData('back', 'findloan')
                   Api.searchLoan(
-                    formDataReducer.mfi[0],
-                    formDataReducer.loanType[0],
-                    formDataReducer.productType[0],
-                    formDataReducer.versionNum[0]
+                    formDataReducer.mfi,
+                    formDataReducer.loanType,
+                    formDataReducer.productType,
+                    formDataReducer.versionNum
                   ).then(value => {
                     searchLoan(value)
                   })
