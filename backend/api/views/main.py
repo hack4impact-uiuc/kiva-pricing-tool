@@ -95,7 +95,7 @@ def cal_repayment():
             matrix_list.append(list(a))
         payload = {'apr': apr, 'recal_matrix': matrix_list}
         print(payload)
-        
+
         return create_response(data=payload, status=200)
     except Exception as e:
         print(str(e))
@@ -270,11 +270,9 @@ def save_loan():
             repay_schedule = RepaymentSchedule(new_repay_row)
             print(repay_schedule)
             db.session.add(repay_schedule)
-        print(newrow)
         loan = Loan(newrow)
-        print('b')
+        Loan.query.filter_by(id=repay_id).delete()
         db.session.add(Loan(newrow))
-        print('c')
         db.session.commit()
         return create_response(status=201)
     except Exception as ex:
@@ -314,11 +312,17 @@ def get_csv():
 
 @app.route(GET_ALL_MFI, methods=['GET'])
 def getAllMFI():
+    """
+        returns a list of all MFI
+    """
     partners = Partner.query.filter_by(active=True).all()
     return create_response({'partners': [x.partner_name for x in partners]}, status=200)
 
 @app.route(EDIT_MFI, methods=['PUT'])
 def editMFI(partner_name):
+    """
+        edits partner name
+    """
     data = request.get_json()
     partner = Partner.query.filter_by(partner_name=partner_name).first()
     if partner is None:
@@ -333,6 +337,9 @@ def editMFI(partner_name):
 
 @app.route(ADD_MFI, methods=['POST'])
 def addMFI():
+    """
+        adds new partner
+    """
     data = request.get_json()
     try:
         partner_name = data['partner_name']
@@ -353,6 +360,9 @@ def addMFI():
 
 @app.route(REMOVE_MFI, methods=['DELETE'])
 def removeMFI(partner_name):
+    """
+        Deletes partner (sets active to false)
+    """
     partner = Partner.query.filter_by(partner_name=partner_name).first()
     if partner is None or partner.active is False:
         return create_response(status=422, message="No such MFI Partner currently exists")
@@ -362,11 +372,17 @@ def removeMFI(partner_name):
 
 @app.route(GET_ALL_LT, methods=['GET'])
 def getAllLT():
+    """
+        Gets all loan themes
+    """
     themes = Theme.query.filter_by(active=True).all()
     return create_response({'loan_theme': [x.loan_theme for x in themes]}, status=200)
 
 @app.route(EDIT_LT, methods=['PUT'])
 def editLT(loan_theme):
+    """
+        Edits loan theme name
+    """
     data = request.get_json()
     theme = Theme.query.filter_by(loan_theme=loan_theme).first()
     if theme is None:
@@ -381,6 +397,9 @@ def editLT(loan_theme):
 
 @app.route(ADD_LT, methods=['POST'])
 def addLT():
+    """
+        Adds new loan theme
+    """
     data = request.get_json()
     try:
         loan_theme = data['loan_theme']
@@ -401,6 +420,9 @@ def addLT():
 
 @app.route(REMOVE_LT, methods=['DELETE'])
 def removeLT(loan_theme):
+    """
+        Deletes loan theme (sets active to false)
+    """
     theme = Theme.query.filter_by(loan_theme=loan_theme).first()
     if theme is None or theme.active is False:
         return create_response(status=422, message="No such Loan Theme currently exists")
