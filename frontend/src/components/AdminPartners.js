@@ -63,7 +63,12 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (original !== update && update && update.length != 0 && update != ' ') {
+          if (
+            original !== update &&
+            update &&
+            update.length != 0 &&
+            update != ' '
+          ) {
             this.setState({
               edited_partners: this.state.edited_partners.concat({
                 original: original,
@@ -230,14 +235,30 @@ class AdminPartners extends Component {
           </Col>
         </Row>
 
-        <Button
-          name="Save List"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ editing: false })
-            this.saveAllPartners()
-          }}
-        />
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <Button
+              className="button-fancy"
+              name="Edit List"
+              url="partnerlist"
+              onClickHandler={() => {
+                this.setState({ editing: true })
+                this.cleanList()
+              }}
+            />
+          </Col>
+          <Col sm={6} md={6} className="bs-button-right">
+            <Button
+              className="button-fancy"
+              name="Save List"
+              url="partnerlist"
+              onClickHandler={() => {
+                this.setState({ editing: false })
+                this.saveAllPartners()
+              }}
+            />
+          </Col>
+        </Row>
 
         <ReactTable
           data={this.state.data}
@@ -265,6 +286,7 @@ class AdminPartners extends Component {
                 // Generate row such that value of text field is rememebered to pass into remove loan function
                 return (
                   <Button
+                    className="button-image-remove"
                     name="Remove"
                     url="partnerlist"
                     onClickHandler={() =>
