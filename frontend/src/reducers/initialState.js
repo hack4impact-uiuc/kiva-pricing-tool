@@ -6,7 +6,7 @@ const initialState = {
     productType: '',
     versionNum: '',
 
-    backRoute: '',
+    back: '',
     updateName: '',
     startName: '',
     installmentTimePeriod: '',

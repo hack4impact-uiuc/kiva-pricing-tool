@@ -7,7 +7,7 @@ function convertFromApiLoan(loan) {
     versionNum: loan.version_num,
 
     updateName: loan.update_name,
-    startName: loan.start_name,
+    startName: loan.start_name, // duplicate: do not want this, edit: we want this
     installmentTimePeriod: loan.installment_time_period,
     repaymentType: loan.repayment_type,
     interestTimePeriod: loan.interest_time_period,

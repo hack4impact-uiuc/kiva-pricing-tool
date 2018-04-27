@@ -24,7 +24,7 @@ class APRInputs extends Component {
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
-    changedFormData(name, value)
+    changedFormData([name], value)
   }
 
   inputsEntered() {
@@ -147,7 +147,7 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer } = this.props
-    // console.log('hello' + this.state.back)
+    console.log(formDataReducer, this.inputsEntered())
     return (
       <div className="page-body-grey padded-element-vertical overpad-shrink">
         <Grid
@@ -192,12 +192,6 @@ class APRInputs extends Component {
                     { id: '2', value: 'equal installments (amortized)' },
                     { id: '3', value: 'single end-term principal payment' }
                   ]}
-                  onTextInputChange={this.handleTextChange}
-                  selected={
-                    formDataReducer.repaymentType
-                      ? formDataReducer.repaymentType
-                      : null
-                  }
                 />
               </Col>
               <Col sm={4} md={4} className="bs-center">
@@ -208,12 +202,6 @@ class APRInputs extends Component {
                     { id: '1', value: 'Multiple Installments' },
                     { id: '2', value: 'Single End-Term Payments' }
                   ]}
-                  onTextInputChange={this.handleTextChange}
-                  selected={
-                    formDataReducer.interestPaymentType
-                      ? formDataReducer.interestPaymentType
-                      : null
-                  }
                 />
               </Col>
               <Col sm={4} md={4} className="bs-center">
@@ -225,12 +213,6 @@ class APRInputs extends Component {
                     // { id: '2', value: 'Flat' },
                     { id: '2', value: 'declining balance' }
                   ]}
-                  onTextInputChange={this.handleTextChange}
-                  selected={
-                    formDataReducer.interestCalculationType
-                      ? formDataReducer.interestCalculationType
-                      : null
-                  }
                 />
               </Col>
             </Row>
@@ -275,12 +257,6 @@ class APRInputs extends Component {
                     { id: '180', value: 'half-years' },
                     { id: '365', value: 'years' }
                   ]}
-                  onTextInputChange={this.handleTextChange}
-                  selected={
-                    formDataReducer.installmentTimePeriod
-                      ? formDataReducer.installmentTimePeriod
-                      : null
-                  }
                 />
               </Col>
             </Row>
@@ -315,12 +291,6 @@ class APRInputs extends Component {
                     { id: '7', value: 'half-year' },
                     { id: '8', value: 'year' }
                   ]}
-                  onTextInputChange={this.handleTextChange}
-                  selected={
-                    formDataReducer.interestTimePeriod
-                      ? formDataReducer.interestTimePeriod
-                      : null
-                  }
                 />
               </Col>
             </Row>
