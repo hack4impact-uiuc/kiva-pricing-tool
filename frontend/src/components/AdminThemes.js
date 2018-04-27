@@ -1,12 +1,21 @@
+//-------------------------------------------------------------------------
+/**
+ * Admin page where users are able to edit the list of loan themes
+   within the database
+ */
 import React, { Component } from 'react'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
-import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
-import 'react-table/react-table.css'
 import axios from 'axios'
 import { ToastContainer, ToastMessage } from 'react-toastr'
+import './../styles/app.css'
+import 'react-table/react-table.css'
+
+//include to have proper Toastr formatting
 require('./../styles/react-toastr.css')
+
+//Toastr container that creates the ToastMessages
 let container
 
 class AdminThemes extends Component {
@@ -19,8 +28,13 @@ class AdminThemes extends Component {
       edited_loans: []
     }
     this.renderEditable = this.renderEditable.bind(this)
+    this.saveAllThemes = this.saveAllThemes.bind(this)
   }
 
+  //-------------------------------------------------------------------------
+  /**
+   * Removes empty values from the list when the user decides to edit
+   */
   cleanList() {
     for (var i = 0; i < this.state.data.length; i++) {
       console.log(this.state.data[i])
@@ -33,6 +47,11 @@ class AdminThemes extends Component {
     }
   }
 
+  //-------------------------------------------------------------------------
+  /**
+   * Populates the partner list in this component
+     with the partners in the database
+   */
   componentDidMount() {
     axios.get('http://127.0.0.1:3453/getAllLT').then(response => {
       for (let theme of response.data.result.loan_theme) {
@@ -43,6 +62,13 @@ class AdminThemes extends Component {
     })
   }
 
+  //-------------------------------------------------------------------------
+  /**
+   * Based on whether "editing" is true or false, renders each cell editable
+   When a cell is edited, it's original and updated value is added to the edited_partners
+   in the component
+   @param cellInfo current cell
+   */
   renderEditable(cellInfo) {
     var original = null
     var update = null
@@ -59,7 +85,12 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (update != null && update.length != 0 && update != ' ') {
+          if (
+            update != original &&
+            update != null &&
+            update.length != 0 &&
+            update != ' '
+          ) {
             this.setState({
               edited_loans: this.state.edited_loans.concat({
                 original: original,
@@ -81,7 +112,12 @@ class AdminThemes extends Component {
     )
   }
 
-  saveAllTheme() {
+  //-------------------------------------------------------------------------
+  /**
+   * Iterates through the edited themes and updates them in the database
+    with an axios put request
+   */
+  saveAllThemes() {
     var updated_name = null
     if (this.state.edited_loans.length === 0) {
       container.warning(
@@ -120,6 +156,11 @@ class AdminThemes extends Component {
     }
   }
 
+  //-------------------------------------------------------------------------
+  /**
+   * Adds theme into the database
+   @param theme_name name of partner
+   */
   addTheme(theme_name) {
     if (theme_name && theme_name.length) {
       let data = { loan_theme: theme_name }
@@ -144,6 +185,11 @@ class AdminThemes extends Component {
     }
   }
 
+  //-------------------------------------------------------------------------
+  /**
+   * removes partner from database
+   @param theme_name partner to remove
+   */
   removeTheme(theme_name) {
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
@@ -165,6 +211,10 @@ class AdminThemes extends Component {
     })
   }
 
+  //-------------------------------------------------------------------------
+  /**
+   * Renders elements on a page
+   */
   render() {
     return (
       <Grid className="padded-element-vertical">
@@ -238,7 +288,7 @@ class AdminThemes extends Component {
           url="themelist"
           onClickHandler={() => {
             this.setState({ editing: false })
-            this.saveAllLoans()
+            this.saveAllThemes()
           }}
         />
 
