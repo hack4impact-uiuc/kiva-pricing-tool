@@ -24,7 +24,7 @@ class APRInputs extends Component {
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
-    changedFormData([name], [value])
+    changedFormData(name, value)
   }
 
   inputsEntered() {
@@ -61,7 +61,8 @@ class APRInputs extends Component {
       !this.isNullOrEmpty(formDataReducer.securityDepositPercentOngoing) &&
       !this.isNullOrEmpty(formDataReducer.securityDepositFixedUpfront) &&
       !this.isNullOrEmpty(formDataReducer.securityDepositFixedOngoing) &&
-      !this.isNullOrEmpty(formDataReducer.interestPaidOnDepositPercent)
+      !this.isNullOrEmpty(formDataReducer.interestPaidOnDepositPercent) &&
+      !this.error
     )
   }
 
