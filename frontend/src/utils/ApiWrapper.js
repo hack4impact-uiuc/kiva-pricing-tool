@@ -57,7 +57,6 @@ function getVersionNum(mfi, loanType, productType) {
 }
 
 function searchLoan(mfi, loanType, productType, versionNum) {
-  let valid = false
   return axios
     .get(
       'http://127.0.0.1:3453/findLoan?partner_name=' +

@@ -11,13 +11,14 @@ import PropTypes from 'prop-types'
 class FindLoan extends Component {
   constructor(props) {
     super(props)
+    const { formDataReducer } = this.props
     this.state = {
       partner_names: [],
       loan_themes: [],
       product_types: [],
       versions: [],
-      disableButton: '',
-      errorMessage: ''
+      disableButton: ''
+      // errorMessage: formDataReducer.error
     }
   }
 
@@ -214,7 +215,7 @@ class FindLoan extends Component {
 
   componentDidMount() {
     const { changedFormData, resetFormData } = this.props
-    resetFormData()
+    // resetFormData()
     changedFormData('back', 'findloan')
     axios
       .get('http://127.0.0.1:3453/getMFIEntry')
@@ -224,6 +225,7 @@ class FindLoan extends Component {
       .catch(function(error) {
         console.log(error)
       })
+    console.log("it's me meghatron")
   }
 
   getProductType() {
@@ -300,7 +302,7 @@ class FindLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData, searchLoan } = this.props
-
+    console.log(this.state)
     return (
       <div className="page-body-grey">
         <Grid
@@ -319,7 +321,7 @@ class FindLoan extends Component {
               <Form>
                 <Typeahead
                   className="vertical-margin-item"
-                  label="mfi"
+                  // labelKey="mfi"
                   placeholder="Select MFI Partner"
                   options={this.state.partner_names}
                   selected={[formDataReducer.mfi]}
@@ -344,7 +346,7 @@ class FindLoan extends Component {
                   className="vertical-margin-item"
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
-                  label="loan"
+                  // labelKey="loan"
                   options={this.state.loan_themes}
                   placeholder="Select Loan Type"
                   selected={[formDataReducer.loanType]}
@@ -363,7 +365,7 @@ class FindLoan extends Component {
                     )
                   }
                   ref="product"
-                  label="product"
+                  // labelKey="product"
                   options={this.state.product_types}
                   placeholder="Search Products i.e. small loan"
                   typeVal="String"
@@ -378,7 +380,7 @@ class FindLoan extends Component {
                 <Typeahead
                   className="vertical-margin-item"
                   ref="version"
-                  label="version"
+                  // labelKey="version"
                   disabled={
                     !(
                       !this.isNullOrEmpty(formDataReducer.mfi) &&
@@ -405,7 +407,6 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="output"
                 onClickHandler={() => {
-                  changedFormData('back', 'findloan')
                   Api.searchLoan(
                     formDataReducer.mfi,
                     formDataReducer.loanType,
@@ -424,7 +425,6 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="form1"
                 onClickHandler={() => {
-                  changedFormData('back', 'findloan')
                   Api.searchLoan(
                     formDataReducer.mfi,
                     formDataReducer.loanType,
