@@ -39,6 +39,14 @@ function convertFromApiLoan(loan) {
   }
 }
 
+function zeroOrInput(input) {
+  if (!input) {
+    return 0
+  } else {
+    return input
+  }
+}
+
 function convertToApiLoan(reducer) {
   return {
     partner_name: reducer.mfi,
@@ -55,25 +63,37 @@ function convertToApiLoan(reducer) {
     loan_amount: reducer.loanAmount,
     installment: reducer.installment,
     nominal_interest_rate: reducer.nominalInterestRate,
-    grace_period_principal: reducer.gracePeriodPrincipal,
-    grace_period_interest_pay: reducer.gracePeriodInterestPay,
-    grace_period_interest_calculate: reducer.gracePeriodInterestCalculate,
-    grace_period_balloon: reducer.gracePeriodBalloon,
-    fee_percent_upfront: reducer.feePercentUpfront,
-    fee_percent_ongoing: reducer.feePercentOngoing,
-    fee_fixed_upfront: reducer.feeFixedUpfront,
-    fee_fixed_ongoing: reducer.feeFixedOngoing,
-    tax_percent_fees: reducer.taxPercentFees,
-    tax_percent_interest: reducer.taxPercentInterest,
-    insurance_percent_upfront: reducer.insurancePercentUpfront,
-    insurance_percent_ongoing: reducer.insurancePercentOngoing,
-    insurance_fixed_upfront: reducer.insuranceFixedUpfront,
-    insurance_fixed_ongoing: reducer.insuranceFixedOngoing,
-    security_deposit_percent_upfront: reducer.securityDepositPercentUpfront,
-    security_deposit_percent_ongoing: reducer.securityDepositPercentOngoing,
-    security_deposit_fixed_upfront: reducer.securityDepositFixedUpfront,
-    security_deposit_fixed_ongoing: reducer.securityDepositFixedOngoing,
-    interest_paid_on_deposit_percent: reducer.interestPaidOnDepositPercent
+    grace_period_principal: zeroOrInput(reducer.gracePeriodPrincipal),
+    grace_period_interest_pay: zeroOrInput(reducer.gracePeriodInterestPay),
+    grace_period_interest_calculate: zeroOrInput(
+      reducer.gracePeriodInterestCalculate
+    ),
+    grace_period_balloon: zeroOrInput(reducer.gracePeriodBalloon),
+    fee_percent_upfront: zeroOrInput(reducer.feePercentUpfront),
+    fee_percent_ongoing: zeroOrInput(reducer.feePercentOngoing),
+    fee_fixed_upfront: zeroOrInput(reducer.feeFixedUpfront),
+    fee_fixed_ongoing: zeroOrInput(reducer.feeFixedOngoing),
+    tax_percent_fees: zeroOrInput(reducer.taxPercentFees),
+    tax_percent_interest: zeroOrInput(reducer.taxPercentInterest),
+    insurance_percent_upfront: zeroOrInput(reducer.insurancePercentUpfront),
+    insurance_percent_ongoing: zeroOrInput(reducer.insurancePercentOngoing),
+    insurance_fixed_upfront: zeroOrInput(reducer.insuranceFixedUpfront),
+    insurance_fixed_ongoing: zeroOrInput(reducer.insuranceFixedOngoing),
+    security_deposit_percent_upfront: zeroOrInput(
+      reducer.securityDepositPercentUpfront
+    ),
+    security_deposit_percent_ongoing: zeroOrInput(
+      reducer.securityDepositPercentOngoing
+    ),
+    security_deposit_fixed_upfront: zeroOrInput(
+      reducer.securityDepositFixedUpfront
+    ),
+    security_deposit_fixed_ongoing: zeroOrInput(
+      reducer.securityDepositFixedOngoing
+    ),
+    interest_paid_on_deposit_percent: zeroOrInput(
+      reducer.interestPaidOnDepositPercent
+    )
   }
 }
 

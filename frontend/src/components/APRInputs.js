@@ -5,6 +5,10 @@ import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 import './../styles/app.scss'
 import { Api } from '../utils'
+import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
+require('./../styles/react-toastr.css')
+
+let container
 
 class APRInputs extends Component {
   constructor(props) {
@@ -34,40 +38,47 @@ class APRInputs extends Component {
       !this.isNullOrEmpty(formDataReducer.loanType) &&
       !this.isNullOrEmpty(formDataReducer.productType) &&
       !this.isNullOrEmpty(formDataReducer.versionNum) &&
-      !this.isNullOrEmpty(formDataReducer.startName) &&
-      !this.isNullOrEmpty(formDataReducer.installmentTimePeriod) &&
-      !this.isNullOrEmpty(formDataReducer.repaymentType) &&
-      !this.isNullOrEmpty(formDataReducer.interestTimePeriod) &&
-      !this.isNullOrEmpty(formDataReducer.interestPaymentType) &&
-      !this.isNullOrEmpty(formDataReducer.interestCalculationType) &&
-      !this.isNullOrEmpty(formDataReducer.loanAmount) &&
-      !this.isNullOrEmpty(formDataReducer.installment) &&
-      !this.isNullOrEmpty(formDataReducer.nominalInterestRate) &&
-      !this.isNullOrEmpty(formDataReducer.gracePeriodBalloon) &&
-      !this.isNullOrEmpty(formDataReducer.gracePeriodPrincipal) &&
-      !this.isNullOrEmpty(formDataReducer.gracePeriodInterestPay) &&
-      !this.isNullOrEmpty(formDataReducer.gracePeriodInterestCalculate) &&
-      !this.isNullOrEmpty(formDataReducer.feePercentOngoing) &&
-      !this.isNullOrEmpty(formDataReducer.feePercentUpfront) &&
-      !this.isNullOrEmpty(formDataReducer.feeFixedUpfront) &&
-      !this.isNullOrEmpty(formDataReducer.feeFixedOngoing) &&
-      !this.isNullOrEmpty(formDataReducer.taxPercentFees) &&
-      !this.isNullOrEmpty(formDataReducer.taxPercentInterest) &&
-      !this.isNullOrEmpty(formDataReducer.insurancePercentUpfront) &&
-      !this.isNullOrEmpty(formDataReducer.insurancePercentOngoing) &&
-      !this.isNullOrEmpty(formDataReducer.insuranceFixedUpfront) &&
-      !this.isNullOrEmpty(formDataReducer.insuranceFixedOngoing) &&
-      !this.isNullOrEmpty(formDataReducer.securityDepositPercentUpfront) &&
-      !this.isNullOrEmpty(formDataReducer.securityDepositPercentOngoing) &&
-      !this.isNullOrEmpty(formDataReducer.securityDepositFixedUpfront) &&
-      !this.isNullOrEmpty(formDataReducer.securityDepositFixedOngoing) &&
-      !this.isNullOrEmpty(formDataReducer.interestPaidOnDepositPercent) &&
-      !this.error
+      !this.isNullOrEmpty(formDataReducer.startName) && // required
+      !this.isNullOrEmpty(formDataReducer.installmentTimePeriod) && // required
+      !this.isNullOrEmpty(formDataReducer.repaymentType) && // required
+      !this.isNullOrEmpty(formDataReducer.interestTimePeriod) && // required
+      !this.isNullOrEmpty(formDataReducer.interestPaymentType) && // required
+      !this.isNullOrEmpty(formDataReducer.interestCalculationType) && //
+      !this.isNullOrEmpty(formDataReducer.loanAmount) && // required
+      !this.isNullOrEmpty(formDataReducer.installment) && // required
+      !this.isNullOrEmpty(formDataReducer.nominalInterestRate) // required
+      // !this.isNullOrEmpty(formDataReducer.gracePeriodBalloon) &&
+      // !this.isNullOrEmpty(formDataReducer.gracePeriodPrincipal) &&
+      // !this.isNullOrEmpty(formDataReducer.gracePeriodInterestPay) &&
+      // !this.isNullOrEmpty(formDataReducer.gracePeriodInterestCalculate) &&
+      // !this.isNullOrEmpty(formDataReducer.feePercentOngoing) &&
+      // !this.isNullOrEmpty(formDataReducer.feePercentUpfront) &&
+      // !this.isNullOrEmpty(formDataReducer.feeFixedUpfront) &&
+      // !this.isNullOrEmpty(formDataReducer.feeFixedOngoing) &&
+      // !this.isNullOrEmpty(formDataReducer.taxPercentFees) &&
+      // !this.isNullOrEmpty(formDataReducer.taxPercentInterest) &&
+      // !this.isNullOrEmpty(formDataReducer.insurancePercentUpfront) &&
+      // !this.isNullOrEmpty(formDataReducer.insurancePercentOngoing) &&
+      // !this.isNullOrEmpty(formDataReducer.insuranceFixedUpfront) &&
+      // !this.isNullOrEmpty(formDataReducer.insuranceFixedOngoing) &&
+      // !this.isNullOrEmpty(formDataReducer.securityDepositPercentUpfront) &&
+      // !this.isNullOrEmpty(formDataReducer.securityDepositPercentOngoing) &&
+      // !this.isNullOrEmpty(formDataReducer.securityDepositFixedUpfront) &&
+      // !this.isNullOrEmpty(formDataReducer.securityDepositFixedOngoing) &&
+      // !this.isNullOrEmpty(formDataReducer.interestPaidOnDepositPercent)
     )
   }
 
   isNullOrEmpty(input) {
-    return input === null || input.length === 0
+    return !input || input.length === 0
+  }
+
+  zeroOrInput(input) {
+    if (!input) {
+      return 0
+    } else {
+      return input
+    }
   }
 
   postData() {
@@ -162,14 +173,21 @@ class APRInputs extends Component {
             </Row>
             <Row>
               <Col sm={12} md={12}>
+                * indicates required field
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
                 <TextField
-                  className="inline-textfield"
-                  id="Full Name"
+                  className={('inline-textfield', 'input-required-field')}
+                  id="Full Name*"
                   reduxId="startName"
                   hint="ex. John"
                   typeVal="String"
                   limit="100"
                   textBody={formDataReducer.startName}
+                  onTextInputChange={this.handleTextChange}
+                  //doesn't allow spaces ** need to fix
                 />
               </Col>
             </Row>
@@ -184,7 +202,8 @@ class APRInputs extends Component {
             <Row>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Repayment Type:"
+                  className="dropdown-required-field"
+                  title="Repayment Type*"
                   reduxId="repaymentType"
                   items={[
                     //must match backend! IMPORTANT
@@ -196,7 +215,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Interest Payment:"
+                  className="dropdown-required-field"
+                  title="Interest Payment*"
                   reduxId="interestPaymentType"
                   items={[
                     { id: '1', value: 'Multiple Installments' },
@@ -206,7 +226,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Interest Calculation:"
+                  className="dropdown-required-field"
+                  title="Interest Calculation*"
                   reduxId="interestCalculationType"
                   items={[
                     { id: '1', value: 'initial amount or flat' },
@@ -219,7 +240,8 @@ class APRInputs extends Component {
             <Row className="vertical-margin-item flex-align-center">
               <Col sm={4} md={4}>
                 <TextField
-                  id="Loan Amount"
+                  className="input-required-field"
+                  id="Loan Amount*"
                   reduxId="loanAmount"
                   hint="ex. 5000"
                   typeVal="float"
@@ -234,7 +256,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <TextField
-                  id="Number of Installments"
+                  className="input-required-field"
+                  id="Number of Installments*"
                   reduxId="installment"
                   hint="ex. 12"
                   typeVal="int"
@@ -244,7 +267,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={2} md={2} className="bs-center">
                 <Dropdown
-                  title="Time Period:"
+                  className="dropdown-required-field"
+                  title="Time Period*"
                   reduxId="installmentTimePeriod"
                   items={[
                     { id: '1', value: 'days' },
@@ -263,7 +287,8 @@ class APRInputs extends Component {
             <Row className="vertical-margin-item flex-align-center">
               <Col sm={6} md={6}>
                 <TextField
-                  id="Nominal Interest Rate"
+                  className="input-required-field"
+                  id="Nominal Interest Rate*"
                   reduxId="nominalInterestRate"
                   hint="ex. 12"
                   typeVal="int"
@@ -278,7 +303,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <Dropdown
-                  title="Time Period:"
+                  className="dropdown-required-field"
+                  title="Time Period*"
                   reduxId="interestTimePeriod"
                   items={[
                     { id: '0', value: 'day' },
