@@ -1,11 +1,7 @@
-
 // @flow
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, TextField, KivaChart } from './'
-import Bootstrap from 'react-bootstrap'
-=======
-import React, { Component } from 'react'
 import { Grid, PageHeader } from 'react-bootstrap'
 
 import './../styles/app.css'
@@ -21,36 +17,120 @@ class APRRateDisplay extends Component {
       // data: this.convertMatrix(),
       id: null,
       partner_names: [],
-      visualType: 'bar', 
+      visualType: 'bar',
       isHidden: false,
-      barclass: "active",
-      lineclass: "",
-      pieclass: "",
-      areaclass: "",
+      barclass: 'active',
+      lineclass: '',
+      pieclass: '',
+      areaclass: '',
       data: [],
       testData: [
-      	[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      	["1-Jan-2012", "2-Jan-2012", "3-Jan-2012", "4-Jan-2012", "5-Jan-2012", "6-Jan-2012", "7-Jan-2012", "8-Jan-2012", "9-Jan-2012", "10-Jan-2012", "11-Jan-2012", "12-Jan-2012", "13-Jan-2012"],
-      	[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      	[5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      	[5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 0, 0],
-      	[0, 0, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 0],
-      	[51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-      	[51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 0, 0],
-      	[0.51, 0.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 6.01, 0],
-      	[51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-      	[0, 0.0013972602739726028, 0.001424695815349972, 0.0014521321083860088, 0.0014795691531013073, 0.0015070069495164607, 0.0015344454976520638, 0.0015618847975287118, 0.0015893248491670002, 0.0016167656525875253, 0.001644207207810884, 0.0016716495148576733, 0],
-      	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61.01687894181993],
-      	[51, 52.001397260273976, 53.00282195608932, 54.00427408819771, 55.00575365735081, 56.007260664300325, 57.00879510979798, 58.010356994595504, 59.011946319444675, 60.01356308509726, 61.01520729230507, 61.01687894181993, 0],
-      	[4846.49, -53.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -659.01, -545.99312105818, 0],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        [
+          '1-Jan-2012',
+          '2-Jan-2012',
+          '3-Jan-2012',
+          '4-Jan-2012',
+          '5-Jan-2012',
+          '6-Jan-2012',
+          '7-Jan-2012',
+          '8-Jan-2012',
+          '9-Jan-2012',
+          '10-Jan-2012',
+          '11-Jan-2012',
+          '12-Jan-2012',
+          '13-Jan-2012'
+        ],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [5000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [
+          5000,
+          5000,
+          5000,
+          5000,
+          5000,
+          5000,
+          5000,
+          5000,
+          5000,
+          5000,
+          5000,
+          0,
+          0
+        ],
+        [0, 0, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 0],
+        [51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 51, 0, 0],
+        [
+          0.51,
+          0.01,
+          6.01,
+          6.01,
+          6.01,
+          6.01,
+          6.01,
+          6.01,
+          6.01,
+          6.01,
+          6.01,
+          6.01,
+          0
+        ],
+        [51, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+        [
+          0,
+          0.0013972602739726028,
+          0.001424695815349972,
+          0.0014521321083860088,
+          0.0014795691531013073,
+          0.0015070069495164607,
+          0.0015344454976520638,
+          0.0015618847975287118,
+          0.0015893248491670002,
+          0.0016167656525875253,
+          0.001644207207810884,
+          0.0016716495148576733,
+          0
+        ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61.01687894181993],
+        [
+          51,
+          52.001397260273976,
+          53.00282195608932,
+          54.00427408819771,
+          55.00575365735081,
+          56.007260664300325,
+          57.00879510979798,
+          58.010356994595504,
+          59.011946319444675,
+          60.01356308509726,
+          61.01520729230507,
+          61.01687894181993,
+          0
+        ],
+        [
+          4846.49,
+          -53.01,
+          -659.01,
+          -659.01,
+          -659.01,
+          -659.01,
+          -659.01,
+          -659.01,
+          -659.01,
+          -659.01,
+          -659.01,
+          -545.99312105818,
+          0
+        ]
       ]
     }
     // this.convertMatrix = this.convertMatrix.bind(this)
     this.renderEditable = this.renderEditable.bind(this)
     this.updateTable = this.updateTable.bind(this)
   }
- 
+
   updateTable(e, cellInfo) {
     const { formDataReducer, changedFormData } = this.props
     if (
@@ -175,7 +255,7 @@ class APRRateDisplay extends Component {
       axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
         const apr = response.data.result.apr
         const recal_matrix = response.data.result.recal_matrix
-	changedFormData('new_repayment_schedule', recal_matrix)
+        changedFormData('new_repayment_schedule', recal_matrix)
         changedFormData('aprRate', apr)
         let calc_matrix = []
         if (recal_matrix != null) {
@@ -240,130 +320,190 @@ class APRRateDisplay extends Component {
       />
     )
   }
-  
+
   getCSV() {
     const { formDataReducer } = this.props
-    let csv = [['Period Number,Date,Days,Principal Disbursed,Principal Paid,Balance,Interest Paid,Fees Paid,Insurance Paid,Taxes Paid,Security Deposit,Interest Paid on Security,Deposit Withdrawal,Deposit Balance,Total Cashflow\n']];
-    let row;
+    let csv = [
+      [
+        'Period Number,Date,Days,Principal Disbursed,Principal Paid,Balance,Interest Paid,Fees Paid,Insurance Paid,Taxes Paid,Security Deposit,Interest Paid on Security,Deposit Withdrawal,Deposit Balance,Total Cashflow\n'
+      ]
+    ]
+    let row
     for (let j = 0; j < 13; j++) {
-    row = "";
+      row = ''
       for (let i = 0; i < 15; i++) {
-        row += formDataReducer.new_repayment_schedule[i][j] + ',';
+        row += formDataReducer.new_repayment_schedule[i][j] + ','
       }
-    row+='\n';
-    csv.push(row);
+      row += '\n'
+      csv.push(row)
     }
     row = '\n\n'
-    csv.push(row);
-    row = "partner name:," + formDataReducer.mfi[0] + "\n";
-    csv.push(row);	
-    row = "loan theme:," + formDataReducer.loanType[0]+ "\n";
-    csv.push(row);
-    row = "product type:," + formDataReducer.productType[0]+ "\n";
-    csv.push(row);
-    row = "version num:," + formDataReducer.versionNum[0]+ "\n";
-    csv.push(row);
-    row = "update name:," + formDataReducer.updateName+ "\n";
-    csv.push(row);
-    row = "start name:," + formDataReducer.startName[0]+ "\n";
-    csv.push(row);
-    row = "installment time period:," + formDataReducer.installmentTimePeriod[0]+ "\n";
-    csv.push(row);
-    row = "repayment type," + formDataReducer.repaymentType[0]+ "\n";
-    csv.push(row);
-    row = "interest time period:," + formDataReducer.interestTimePeriod[0]+ "\n";
-    csv.push(row);
-    row = "interest payment type:," + formDataReducer.interestPaymentType[0]+ "\n";
-    csv.push(row);
-    row = "interest calculation type:," + formDataReducer.interestCalculationType[0]+ "\n";
-    csv.push(row);	
-    row = "loan amount:," + formDataReducer.loanAmount[0]+ "\n";
-    csv.push(row);
-    row = "installment:," + formDataReducer.installment[0]+ "\n";
-    csv.push(row);
-    row = "nominal_interest_rate:," + formDataReducer.nominalInterestRate[0]+ "\n";
-    csv.push(row);
-    row = "grace_period_principal:," + formDataReducer.gracePeriodPrincipal[0]+ "\n";
-    csv.push(row);
-    row = "grace_period_interest_pay:," + formDataReducer.gracePeriodInterestPay[0]+ "\n";
-    csv.push(row);
-    row = "grace_period_interest_calculate:," + formDataReducer.gracePeriodInterestCalculate[0]+ "\n";
-    csv.push(row);
-    row = "grace_period_balloon:," + formDataReducer.gracePeriodBalloon[0]+ "\n";
-    csv.push(row);
-    row = "fee_percent_upfront:," + formDataReducer.feePercentUpfront[0]+ "\n";
-    csv.push(row);
-    row = "fee_percent_ongoing:," + formDataReducer.feePercentOngoing[0]+ "\n";
-    csv.push(row);
-    row = "fee_fixed_upfront:," + formDataReducer.feeFixedUpfront[0]+ "\n";
-    csv.push(row);
-    row = "fee_fixed_ongoing:," + formDataReducer.feeFixedOngoing[0]+ "\n";
-    csv.push(row);
-    row = "tax_percent_fees:," + formDataReducer.taxPercentFees[0]+ "\n";
-    csv.push(row);
-    row = "tax_percent_interest:," + formDataReducer.taxPercentInterest[0]+ "\n";
-    csv.push(row);
-    row = "insurance_percent_upfront:," + formDataReducer.insurancePercentUpfront[0]+ "\n";
-    csv.push(row);
-    row = "insurance_percent_ongoing:," + formDataReducer.insurancePercentOngoing[0]+ "\n";
-    csv.push(row);
-    row = "insurance_fixed_upfront:," + formDataReducer.insuranceFixedUpfront[0]+ "\n";
-    csv.push(row);
-    row = "insurance_fixed_ongoing:," + formDataReducer.insuranceFixedOngoing[0]+ "\n";
-    csv.push(row);
-    row = "security_deposit_percent_upfront:," + formDataReducer.securityDepositPercentUpfront[0]+ "\n";
-    csv.push(row);
-    row = "security_deposit_percent_ongoing:," + formDataReducer.securityDepositPercentOngoing[0]+ "\n";
-    csv.push(row);
-    row = "security_deposit_fixed_upfront:," + formDataReducer.securityDepositFixedUpfront[0]+ "\n";
-    csv.push(row);
-    row = "security_deposit_fixed_ongoing:," + formDataReducer.securityDepositFixedOngoing[0]+ "\n";
-    csv.push(row);
-    row = "interest_paid_on_deposit_percent:," + formDataReducer.interestPaidOnDepositPercent[0]+ "\n";
-    csv.push(row);        
-    let csvFile = new Blob(csv,{type: 'text/csv;charset=utf-8;'});
-    let url = URL.createObjectURL(csvFile);
-    let createDownloadLink = document.createElement('a');
-    createDownloadLink.href = url;
-    createDownloadLink.setAttribute('download', formDataReducer.mfi[0] + "_" + formDataReducer.loanType[0] + "_" + formDataReducer.productType[0] + "_" + formDataReducer.versionNum[0] + ".csv");
-    createDownloadLink.click();
-
+    csv.push(row)
+    row = 'partner name:,' + formDataReducer.mfi[0] + '\n'
+    csv.push(row)
+    row = 'loan theme:,' + formDataReducer.loanType[0] + '\n'
+    csv.push(row)
+    row = 'product type:,' + formDataReducer.productType[0] + '\n'
+    csv.push(row)
+    row = 'version num:,' + formDataReducer.versionNum[0] + '\n'
+    csv.push(row)
+    row = 'update name:,' + formDataReducer.updateName + '\n'
+    csv.push(row)
+    row = 'start name:,' + formDataReducer.startName[0] + '\n'
+    csv.push(row)
+    row =
+      'installment time period:,' +
+      formDataReducer.installmentTimePeriod[0] +
+      '\n'
+    csv.push(row)
+    row = 'repayment type,' + formDataReducer.repaymentType[0] + '\n'
+    csv.push(row)
+    row =
+      'interest time period:,' + formDataReducer.interestTimePeriod[0] + '\n'
+    csv.push(row)
+    row =
+      'interest payment type:,' + formDataReducer.interestPaymentType[0] + '\n'
+    csv.push(row)
+    row =
+      'interest calculation type:,' +
+      formDataReducer.interestCalculationType[0] +
+      '\n'
+    csv.push(row)
+    row = 'loan amount:,' + formDataReducer.loanAmount[0] + '\n'
+    csv.push(row)
+    row = 'installment:,' + formDataReducer.installment[0] + '\n'
+    csv.push(row)
+    row =
+      'nominal_interest_rate:,' + formDataReducer.nominalInterestRate[0] + '\n'
+    csv.push(row)
+    row =
+      'grace_period_principal:,' +
+      formDataReducer.gracePeriodPrincipal[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'grace_period_interest_pay:,' +
+      formDataReducer.gracePeriodInterestPay[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'grace_period_interest_calculate:,' +
+      formDataReducer.gracePeriodInterestCalculate[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'grace_period_balloon:,' + formDataReducer.gracePeriodBalloon[0] + '\n'
+    csv.push(row)
+    row = 'fee_percent_upfront:,' + formDataReducer.feePercentUpfront[0] + '\n'
+    csv.push(row)
+    row = 'fee_percent_ongoing:,' + formDataReducer.feePercentOngoing[0] + '\n'
+    csv.push(row)
+    row = 'fee_fixed_upfront:,' + formDataReducer.feeFixedUpfront[0] + '\n'
+    csv.push(row)
+    row = 'fee_fixed_ongoing:,' + formDataReducer.feeFixedOngoing[0] + '\n'
+    csv.push(row)
+    row = 'tax_percent_fees:,' + formDataReducer.taxPercentFees[0] + '\n'
+    csv.push(row)
+    row =
+      'tax_percent_interest:,' + formDataReducer.taxPercentInterest[0] + '\n'
+    csv.push(row)
+    row =
+      'insurance_percent_upfront:,' +
+      formDataReducer.insurancePercentUpfront[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'insurance_percent_ongoing:,' +
+      formDataReducer.insurancePercentOngoing[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'insurance_fixed_upfront:,' +
+      formDataReducer.insuranceFixedUpfront[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'insurance_fixed_ongoing:,' +
+      formDataReducer.insuranceFixedOngoing[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'security_deposit_percent_upfront:,' +
+      formDataReducer.securityDepositPercentUpfront[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'security_deposit_percent_ongoing:,' +
+      formDataReducer.securityDepositPercentOngoing[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'security_deposit_fixed_upfront:,' +
+      formDataReducer.securityDepositFixedUpfront[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'security_deposit_fixed_ongoing:,' +
+      formDataReducer.securityDepositFixedOngoing[0] +
+      '\n'
+    csv.push(row)
+    row =
+      'interest_paid_on_deposit_percent:,' +
+      formDataReducer.interestPaidOnDepositPercent[0] +
+      '\n'
+    csv.push(row)
+    let csvFile = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
+    let url = URL.createObjectURL(csvFile)
+    let createDownloadLink = document.createElement('a')
+    createDownloadLink.href = url
+    createDownloadLink.setAttribute(
+      'download',
+      formDataReducer.mfi[0] +
+        '_' +
+        formDataReducer.loanType[0] +
+        '_' +
+        formDataReducer.productType[0] +
+        '_' +
+        formDataReducer.versionNum[0] +
+        '.csv'
+    )
+    createDownloadLink.click()
   }
 
   createChart() {
     const { formDataReducer } = this.props
-    this.setState({data: formDataReducer.new_repayment_schedule});	
-    this.setState({isHidden: true});
+    this.setState({ data: formDataReducer.new_repayment_schedule })
+    this.setState({ isHidden: true })
   }
 
-  changeChart(paramVisual) {	
-    this.setState({visualType: paramVisual})
-      switch (paramVisual){
-        case 'bar':
-	  this.setState({barclass: "active"});
-	  this.setState({lineclass: ""});
-	  this.setState({areaclass: ""});
-	  this.setState({pieclass: ""});
-	break;
-	case 'line':
-	  this.setState({lineclass: "active"});
-	  this.setState({barclass: ""});
-	  this.setState({areaclass: ""});
-	  this.setState({pieclass: ""});
-	break;
-	case 'area':
-	  this.setState({areaclass: "active"});
-	  this.setState({lineclass: ""});
-	  this.setState({barclass: ""});
-	  this.setState({pieclass: ""});
-	break;
-	case 'pie':
-	  this.setState({pieclass: "active"});
-	  this.setState({lineclass: ""});
-	  this.setState({areaclass: ""});
-	  this.setState({barclass: ""});
-	break;			
-      }
+  changeChart(paramVisual) {
+    this.setState({ visualType: paramVisual })
+    switch (paramVisual) {
+      case 'bar':
+        this.setState({ barclass: 'active' })
+        this.setState({ lineclass: '' })
+        this.setState({ areaclass: '' })
+        this.setState({ pieclass: '' })
+        break
+      case 'line':
+        this.setState({ lineclass: 'active' })
+        this.setState({ barclass: '' })
+        this.setState({ areaclass: '' })
+        this.setState({ pieclass: '' })
+        break
+      case 'area':
+        this.setState({ areaclass: 'active' })
+        this.setState({ lineclass: '' })
+        this.setState({ barclass: '' })
+        this.setState({ pieclass: '' })
+        break
+      case 'pie':
+        this.setState({ pieclass: 'active' })
+        this.setState({ lineclass: '' })
+        this.setState({ areaclass: '' })
+        this.setState({ barclass: '' })
+        break
+    }
   }
 
   saveData() {
@@ -562,7 +702,7 @@ class APRRateDisplay extends Component {
       loan_amount: formDataReducer.loanAmount[0],
       installment: formDataReducer.installment[0],
       nominal_interest_rate: formDataReducer.nominalInterestRate[0],
-       grace_period_principal: formDataReducer.gracePeriodPrincipal[0],
+      grace_period_principal: formDataReducer.gracePeriodPrincipal[0],
       grace_period_interest_pay: formDataReducer.gracePeriodInterestPay[0],
       grace_period_interest_calculate:
         formDataReducer.gracePeriodInterestCalculate[0],
@@ -598,7 +738,7 @@ class APRRateDisplay extends Component {
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-   axios
+    axios
       .post('http://127.0.0.1:3453/saveNewLoan', payload)
       .then(response => {
         console.log(response)
@@ -620,19 +760,28 @@ class APRRateDisplay extends Component {
             this.saveData()
           }}
         />
-   	<button onClick={this.createChart.bind(this)}>Generate Chart</button>
-	<button onClick={this.getCSV.bind(this)}>Download CSV</button>
-        <div class = "col-lg-4 pull-right">
-	  <ul class = "nav nav-pills nav-stacked">
-	    <li role = "presentation" class={this.state.barclass}><a onClick={()=>this.changeChart("bar")}>Bar</a></li>
-	    <li role = "presentation" class={this.state.lineclass}><a onClick={()=>this.changeChart("line")}>Line</a></li>
-	    <li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
-	  </ul>
-    	</div>
-	{this.state.isHidden && <KivaChart visualType={this.state.visualType} data={this.state.data}></KivaChart>}
+        <button onClick={this.createChart.bind(this)}>Generate Chart</button>
+        <button onClick={this.getCSV.bind(this)}>Download CSV</button>
+        <div class="col-lg-4 pull-right">
+          <ul class="nav nav-pills nav-stacked">
+            <li role="presentation" class={this.state.barclass}>
+              <a onClick={() => this.changeChart('bar')}>Bar</a>
+            </li>
+            <li role="presentation" class={this.state.lineclass}>
+              <a onClick={() => this.changeChart('line')}>Line</a>
+            </li>
+            <li role="presentation" class={this.state.areaclass}>
+              <a onClick={() => this.changeChart('area')}>Area</a>
+            </li>
+          </ul>
+        </div>
+        {this.state.isHidden && (
+          <KivaChart
+            visualType={this.state.visualType}
+            data={this.state.data}
+          />
+        )}
 
-		
-		
         <br />
         <Button name="Cancel" url="" />
         <Button name="Back" url={formDataReducer.back} />
