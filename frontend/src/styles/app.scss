@@ -14,7 +14,7 @@ $color-text: #333;
 .page-body-grey {
 	width: 100vw;
 	height: 100vh;
-	background-color: #E8E8E8;
+	background-color: $page-background;
 	overflow: auto;
 }
 
@@ -23,7 +23,7 @@ $color-text: #333;
 }
 
 .solid-background-grey {
-	background-color: #E8E8E8;
+	background-color: $page-background;
 }
 
 .query-form-center {
