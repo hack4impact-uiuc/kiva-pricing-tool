@@ -623,11 +623,12 @@ class APRRateDisplay extends Component {
    	<button onClick={this.createChart.bind(this)}>Generate Chart</button>
 	<button onClick={this.getCSV.bind(this)}>Download CSV</button>
         <div class = "col-lg-4 pull-right">
+	{this.state.isHidden &&
 	  <ul class = "nav nav-pills nav-stacked">
 	    <li role = "presentation" class={this.state.barclass}><a onClick={()=>this.changeChart("bar")}>Bar</a></li>
 	    <li role = "presentation" class={this.state.lineclass}><a onClick={()=>this.changeChart("line")}>Line</a></li>
 	    <li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
-	  </ul>
+	  </ul>}
     	</div>
 	{this.state.isHidden && <KivaChart visualType={this.state.visualType} data={this.state.data}></KivaChart>}
 
