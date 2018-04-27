@@ -161,7 +161,7 @@ class APRInputs extends Component {
                 />
               </Col>
             </Row>
-            <Row className="vertical-margin-item">
+            <Row className="vertical-margin-item flex-align-center">
               <Col sm={4} md={4}>
                 <TextField
                   id="Loan Amount"
@@ -206,7 +206,7 @@ class APRInputs extends Component {
                 />
               </Col>
             </Row>
-            <Row className="vertical-margin-item">
+            <Row className="vertical-margin-item flex-align-center">
               <Col sm={6} md={6}>
                 <TextField
                   id="Nominal Interest Rate"
@@ -498,7 +498,7 @@ class APRInputs extends Component {
                 <TextField
                   className="inline-textfield placeholder-textfield"
                   id="Interest Paid on Deposit"
-                  hint="placeholder"
+                  hint="PLACEHOLDER"
                 />
               </Col>
               <Col sm={6} md={6}>

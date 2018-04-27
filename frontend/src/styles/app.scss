@@ -84,6 +84,16 @@ $color-text: #333;
 	text-align: justify;
 }
 
+.flex-align-center {
+	display: flex;
+	align-items: center;
+}
+
+.flex-align-bottom {
+	display: flex;
+	align-items: flex-end;
+}
+
 .expand-width {
 	width: 100%;
 }
