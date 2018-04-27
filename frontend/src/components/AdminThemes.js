@@ -86,8 +86,8 @@ class AdminThemes extends Component {
           console.log(update)
           this.setState({ data })
           if (
-            update != original &&
-            update != null &&
+            original !== update &&
+            update &&
             update.length != 0 &&
             update != ' '
           ) {
@@ -296,8 +296,6 @@ class AdminThemes extends Component {
           <Col sm={12} md={12}>
             <ReactTable
               data={this.state.data}
-              noDataText="No Results Found." // Text displayed when no data is in the table
-              loadingText="Loading themes...This may take a moment." // Text displayed when data is being loaded
               columns={[
                 {
                   Header: 'Loan Theme',
@@ -326,16 +324,14 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.removeLoan(original.loan_theme)} // Send text value to remove loan function
+                          this.removeTheme(original.loan_theme)} // Send text value to remove loan function
                       />
                     )
                   }
                 }
               ]}
-              // Allow react table to use state.filterable to filter correct column based on state.filterable id and value
               filtered={this.state.filtered}
               defaultSorted={[
-                // Sort table alphabetically
                 {
                   id: 'loan_theme',
                   desc: false

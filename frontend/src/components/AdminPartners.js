@@ -86,11 +86,9 @@ class AdminPartners extends Component {
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
           update = data[cellInfo.index][cellInfo.column.id]
           this.setState({ data })
-
-          //check to make sure update value is valid
           if (
-            update != original &&
-            update != null &&
+            original !== update &&
+            update &&
             update.length != 0 &&
             update != ' '
           ) {
@@ -259,6 +257,7 @@ class AdminPartners extends Component {
               <small> Add Partner: </small>{' '}
             </h2>
             <input
+              className="expand-width"
               type="text"
               label="Text"
               placeholder="Add MFI Partner"
