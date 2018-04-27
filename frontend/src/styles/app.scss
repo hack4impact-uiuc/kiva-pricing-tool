@@ -26,13 +26,43 @@ $color-text: #333;
 	background-color: #E8E8E8;
 }
 
+.query-form-center {
+	margin: 11% 20% 0% 20%;
+}
+
 .screen-vertical-centered-grid {
 	margin-top: 10%;
 }
 
 .screen-horizontal-centered {
-	margin-left: 20%;
-	margin-right: 20%;
+	margin-left: 13%;
+	margin-right: 13%;
+}
+
+@media screen and (max-width: 1050px) {
+	.query-form-center {
+		margin: 0% 20%;
+		margin-top: 25vh;
+	}
+
+	.screen-vertical-centered-grid {
+		margin-top: 5%;
+	}
+
+	.screen-horizontal-centered {
+		margin-left: 8%;
+		margin-right: 8%;
+	}
+}
+
+@media screen and (max-width: 950px) {
+	.screen-vertical-centered-grid {
+		margin-top: 5%;
+	}
+
+	.screen-horizontal-centered {
+		margin: 0;
+	}
 }
 
 /* specifies top and bottom to avoid overrides from other padding classes */

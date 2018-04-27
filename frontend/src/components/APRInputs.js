@@ -172,6 +172,11 @@ class APRInputs extends Component {
                   textBody={formDataReducer.loanAmount}
                 />
               </Col>
+              <Col sm={2} md={2} className="bs-center">
+                <div>
+                  <p className="vertical-margin-item">Paid Over: </p>
+                </div>
+              </Col>
               <Col sm={4} md={4}>
                 <TextField
                   id="Number of Installments"
@@ -182,7 +187,7 @@ class APRInputs extends Component {
                   textBody={formDataReducer.installment}
                 />
               </Col>
-              <Col sm={4} md={4} className="bs-center">
+              <Col sm={2} md={2} className="bs-center">
                 <Dropdown
                   title="Time Period:"
                   reduxId="installmentTimePeriod"
@@ -217,7 +222,12 @@ class APRInputs extends Component {
                   textBody={formDataReducer.nominalInterestRate}
                 />
               </Col>
-              <Col sm={6} md={6}>
+              <Col sm={2} md={2} className="bs-center">
+                <div>
+                  <p className="vertical-margin-item">Every: </p>
+                </div>
+              </Col>
+              <Col sm={4} md={4}>
                 <Dropdown
                   title="Time Period:"
                   reduxId="interestTimePeriod"

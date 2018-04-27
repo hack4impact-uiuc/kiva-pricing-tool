@@ -43,7 +43,7 @@ class FindLoan extends Component {
         const orig_matrix = response.data.result.original_matrix
         const user_matrix = response.data.result.user_matrix
         const calc_matrix = response.data.result.calc_matrix
-    		changedFormData('new_repayment_schedule', calc_matrix)
+        changedFormData('new_repayment_schedule', calc_matrix)
         changedFormData('aprRate', apr)
         changedFormData(
           'installmentTimePeriod',
@@ -305,7 +305,7 @@ class FindLoan extends Component {
       <div className="page-body-grey">
         <Grid
           fluid
-          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+          className="query-form-center padded-element-shrink round-corners-large solid-background"
         >
           <Row>
             <Col sm={12} md={12} className="bs-center">
