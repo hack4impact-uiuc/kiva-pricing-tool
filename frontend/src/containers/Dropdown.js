@@ -4,6 +4,7 @@ import { changedFormData } from './../actions'
 import Dropdown from './../components/Dropdown'
 
 function mapStateToProps(state) {
+  // console.log(state.formDataReducer)
   return {
     formDataReducer: state.formDataReducer
   }

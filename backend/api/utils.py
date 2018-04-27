@@ -450,7 +450,7 @@ def update_security_deposit_balance(origin_matrix, grace_period_balloon):
     new_security_deposit_interest_paid = origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX]
     new_security_deposit_balance = np.zeros(len(new_security_deposit))
     new_security_deposit_balance[0] = new_security_deposit[0]
-    for idx in range(len(new_security_deposit_balance)-grace_period_balloon):
+    for idx in range(len(new_security_deposit_balance)-grace_period_balloon-1):
         new_security_deposit_balance[idx] = np.sum(new_security_deposit[:idx+1]) + np.sum(new_security_deposit_interest_paid[:idx+1])
     return new_security_deposit_balance
 

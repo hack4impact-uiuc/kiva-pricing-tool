@@ -17,8 +17,7 @@ class NewLoan extends Component {
       loan_themes: [],
       selectedPartnerName: formDataReducer.mfi,
       selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType,
-      errorMessage: ''
+      selectedLoanProduct: formDataReducer.productType
     }
   }
 
@@ -53,7 +52,7 @@ class NewLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData } = this.props
-    console.log(this.inputsEntered(), 'error', formDataReducer)
+    console.log(this.inputsEntered(), 'error', [formDataReducer.mfi])
     return (
       <div className="page-body-grey">
         <Grid
@@ -75,7 +74,9 @@ class NewLoan extends Component {
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
                 limit={100}
-                selected={[formDataReducer.mfi]}
+                selected={
+                  formDataReducer.mfi === '' ? '' : [formDataReducer.mfi]
+                }
                 onInputChange={e => {
                   changedFormData('mfi', e)
                 }}
@@ -86,7 +87,11 @@ class NewLoan extends Component {
                 label="loan"
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
-                selected={[formDataReducer.loanType]}
+                selected={
+                  formDataReducer.loanType === ''
+                    ? ''
+                    : [formDataReducer.loanType]
+                }
                 onInputChange={e => {
                   changedFormData('loanType', e)
                 }}
