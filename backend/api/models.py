@@ -37,7 +37,7 @@ class Theme(db.Model):
     __tablename__ = "theme"
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    loan_theme = db.Column(db.String, unique=True, primary_key=True)
+    loan_theme = db.Column(db.String, unique=True)
     last_modified = db.Column(db.Date, nullable=False)
     active = db.Column(db.Boolean)
 
@@ -169,8 +169,9 @@ class RepaymentSchedule(db.Model):
     """RepaymentSchedule"""
     __tablename__ = "repayment_schedule"
 
-    id = db.Column(db.String,db.ForeignKey('loan.id', ondelete='SET NULL'), unique=True, primary_key=True) #MFI_Partner + Loan_theme + Product_type + Version_num
+    id = db.Column(db.String,nullable=False) #MFI_Partner + Loan_theme + Product_type + Version_num
     period_num = db.Column(db.Integer, nullable = False)
+    pkey = db.Column(db.String, unique=True, primary_key=True)
 
     payment_due_date = db.Column(db.Date, nullable=False)
     days = db.Column(db.Integer, nullable=False)
@@ -182,8 +183,10 @@ class RepaymentSchedule(db.Model):
     taxes = db.Column(db.Float, nullable=False)
     security_deposit = db.Column(db.Float, nullable=False)
     security_interest_paid = db.Column(db.Float, nullable=False)
-    balance = db.Column(db.Float, nullable=True)
-    deposit_balance = db.Column(db.Float, nullable=True)
+    balance = db.Column(db.Float, nullable=False)
+    deposit_withdrawal = db.Column(db.Float, nullable=False)
+    deposit_balance = db.Column(db.Float, nullable=False)
+    total_cashflow = db.Column(db.Float, nullable=False)
 
     payment_due_date_user = db.Column(db.Date, nullable=True)
     days_user = db.Column(db.Integer, nullable=True)
@@ -194,9 +197,11 @@ class RepaymentSchedule(db.Model):
     insurance_user = db.Column(db.Float, nullable=True)
     taxes_user = db.Column(db.Float, nullable=True)
     security_deposit_user = db.Column(db.Float, nullable=True)
-    security_interest_paid_user = db.Column(db.Float, nullable=False)
-    balance_user = db.Column(db.Float, nullable=False)
-    deposit_balance_user = db.Column(db.Float, nullable=False)
+    security_interest_paid_user = db.Column(db.Float, nullable=True)
+    balance_user = db.Column(db.Float, nullable=True)
+    deposit_withdrawal_user = db.Column(db.Float, nullable=True)
+    deposit_balance_user = db.Column(db.Float, nullable=True)
+    total_cashflow_user = db.Column(db.Float, nullable=True)
 
     payment_due_date_calc = db.Column(db.Date, nullable=False)
     days_calc = db.Column(db.Integer, nullable=False)
@@ -208,15 +213,30 @@ class RepaymentSchedule(db.Model):
     taxes_calc = db.Column(db.Float, nullable=False)
     security_deposit_calc = db.Column(db.Float, nullable=False)
     security_interest_paid_calc = db.Column(db.Float, nullable=False)
-    balance_calc = db.Column(db.Float, nullable=True)
-    deposit_balance_calc = db.Column(db.Float, nullable=True)
+    balance_calc = db.Column(db.Float, nullable=False)
+    deposit_withdrawal_calc = db.Column(db.Float, nullable=False)
+    deposit_balance_calc = db.Column(db.Float, nullable=False)
+    total_cashflow_calc = db.Column(db.Float, nullable=False)
 
-    def __init__(self, email):
-        if not all(x in data for x in ['partner_name','loan_theme','product_type','version_num','payment_due_date','days','amount_due','principal_payment','interest',
-                                        'fees','insurance','taxes','security_deposit','period_num','security_interest_paid','balance','deposit_balance']):
+    def __init__(self, data):
+        if not all(x in data for x in ['id','period_num','payment_due_date','days','amount_due','principal_payment','interest',
+                                        'fees','insurance','taxes','security_deposit','security_interest_paid','balance','deposit_balance','deposit_withdrawal','total_cashflow',
+                                        'payment_due_date_user','days_user','amount_due_user','principal_payment_user','interest_user',
+                                        'fees_user','insurance_user','taxes_user','security_deposit_user','security_interest_paid_user','balance_user','deposit_balance_user','deposit_withdrawal_user','total_cashflow_user',
+                                        'payment_due_date_calc','days_calc','amount_due_calc','principal_payment_calc','interest_calc',
+                                        'fees_calc','insurance_calc','taxes_calc','security_deposit_calc','security_interest_paid_calc','balance_calc','deposit_balance_calc','deposit_withdrawal_calc','total_cashflow_calc']):
+            for x in ['id','period_num','payment_due_date','days','amount_due','principal_payment','interest',
+                    'fees','insurance','taxes','security_deposit','security_interest_paid','balance','deposit_balance','deposit_withdrawal','total_cashflow',
+                    'payment_due_date_user','days_user','amount_due_user','principal_payment_user','interest_user',
+                    'fees_user','insurance_user','taxes_user','security_deposit_user','security_interest_paid_user','balance_user','deposit_balance_user','deposit_withdrawal_user','total_cashflow_user',
+                    'payment_due_date_calc','days_calc','amount_due_calc','principal_payment_calc','interest_calc',
+                    'fees_calc','insurance_calc','taxes_calc','security_deposit_calc','security_interest_paid_calc','balance_calc','deposit_balance_calc','deposit_withdrawal_calc','total_cashflow_calc']:
+                if x not in data:
+                    print(x)
             return #handle error
         self.id = data['id']
         self.period_num = data['period_num']
+        self.pkey = self.id + "_" + str(self.period_num)
 
         self.payment_due_date = data['payment_due_date']
         self.days = data['days']
@@ -230,32 +250,38 @@ class RepaymentSchedule(db.Model):
         self.security_deposit = data['security_deposit']
         self.security_interest_paid= data['security_interest_paid']
         self.deposit_balance = data['deposit_balance']
+        self.deposit_withdrawal = data['deposit_withdrawal']
+        self.total_cashflow = data['total_cashflow']
 
-        self.payment_due_date_user = None
-        self.days_user = None
-        self.amount_due_user = None
-        self.principal_payment_user = None
-        self.balance_user = None
-        self.interest_user = None
-        self.fees_user = None
-        self.insurance_user = None
-        self.taxes_user = None
-        self.security_deposit_user = None
-        self.security_interest_paid_user = None
-        self.deposit_balance_user = None
+        self.payment_due_date_user = data['payment_due_date_user']
+        self.days_user = data['days_user']
+        self.amount_due_user = data['amount_due_user']
+        self.principal_payment_user = data['principal_payment_user']
+        self.balance_user = data['balance_user']
+        self.interest_user = data['interest_user']
+        self.fees_user = data['fees_user']
+        self.insurance_user = data['insurance_user']
+        self.taxes_user = data['taxes_user']
+        self.security_deposit_user = data['security_deposit_user']
+        self.security_interest_paid_user = data['security_interest_paid_user']
+        self.deposit_balance_user = data['deposit_balance_user']
+        self.deposit_withdrawal_user = data['deposit_withdrawal_user']
+        self.total_cashflow_user = data['total_cashflow_user']
 
-        self.payment_due_date_calc = self.payment_due_date
-        self.days_calc = self.days
-        self.amount_due_calc = self.amount_due
-        self.principal_payment_calc = self.principal_payment
-        self.balance_calc = self.balance
-        self.interest_calc = self.interest
-        self.fees_calc = self.fees
-        self.insurance_calc = self.insurance
-        self.taxes_calc = self.taxes
-        self.security_deposit_calc = self.security_deposit
-        self.security_interest_paid_calc = self.security_interest_paid
-        self.deposit_balance_calc = self.deposit_balance
+        self.payment_due_date_calc = data['payment_due_date_calc']
+        self.days_calc = data['days_calc']
+        self.amount_due_calc = data['amount_due_calc']
+        self.principal_payment_calc = data['principal_payment_calc']
+        self.balance_calc = data['balance_calc']
+        self.interest_calc = data['interest_calc']
+        self.fees_calc = data['fees_calc']
+        self.insurance_calc = data['insurance_calc']
+        self.taxes_calc = data['taxes_calc']
+        self.security_deposit_calc = data['security_deposit_calc']
+        self.security_interest_paid_calc = data['security_interest_paid_calc']
+        self.deposit_balance_calc = data['deposit_balance_calc']
+        self.deposit_withdrawal_calc = data['deposit_withdrawal_calc']
+        self.total_cashflow_calc = data['total_cashflow_calc']
 
     def __repr__(self):
         return '<repayment {}>'.format(self.id)

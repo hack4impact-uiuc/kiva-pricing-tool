@@ -16,6 +16,18 @@ function formDataReset() {
   }
 }
 
+function getLoanData(results) {
+  return {
+    type: actionTypes.SEARCH,
+    payload: {
+      results
+    }
+  }
+}
+
+export function searchLoan(results) {
+  return dispatch => dispatch(getLoanData(results))
+}
 export function changedFormData(field, value) {
   return dispatch => dispatch(formDataChanged(field, value))
 }
