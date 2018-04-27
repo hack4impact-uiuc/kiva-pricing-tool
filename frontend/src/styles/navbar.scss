@@ -8,12 +8,6 @@
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus {
 	box-shadow: none;
-	background-color: transparent;
-	background-image: none;
-	color: $navbar-font;
-}
-
-.navbar-default .navbar-nav > .active > a:hover {
 	background-color: $navbar-hover-background;
 	background-image: none;
 	color: $navbar-font-hover;
@@ -28,6 +22,8 @@
 	color: $navbar-font-hover;
 }
 
-.dropdown-link {
+.dropdown-menu .active a,  .dropdown-menu .active a:hover {
+	background-image: none;
+	background-color: $navbar-dropdownbg-active;
 	color: $navbar-font-hover;
 }
