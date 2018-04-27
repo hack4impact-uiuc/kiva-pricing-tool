@@ -55,7 +55,7 @@ class NewLoan extends Component {
       <div className="page-body-grey overflow-handler">
         <Grid
           fluid
-          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+          className="query-form-center padded-element-shrink round-corners-large solid-background"
         >
           <Row>
             <Col sm={12} md={12} className="bs-center">
@@ -92,8 +92,7 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                id="Loan Product"
-                hint="i.e. small loan"
+                hint="Loan Product (i.e. small loan)"
                 typeVal="String"
                 limit={100}
                 textBody={formDataReducer.productType}
