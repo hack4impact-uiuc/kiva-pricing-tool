@@ -91,7 +91,7 @@ class AdminThemes extends Component {
     var updated_name = null
     if (this.state.edited_loans.length === 0) {
       container.warning(
-        'There are no changes to edit',
+        'There are no changes to save',
         'Please edit before saving.',
         { closeButton: true }
       )
