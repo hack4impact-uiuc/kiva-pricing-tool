@@ -250,8 +250,8 @@ class FindLoan extends Component {
             deposit_balance: '',
             total_cashflow: 0
           })
+          let last = reformatted_calc_matrix.length - 1
           for (let i = 0; i < reformatted_calc_matrix.length - 1; i++) {
-            let last = reformatted_calc_matrix.length - 1
             reformatted_calc_matrix[last]['days'] +=
               reformatted_calc_matrix[i]['days']
             reformatted_calc_matrix[last]['amount_due'] +=
