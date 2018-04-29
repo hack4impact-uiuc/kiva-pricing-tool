@@ -213,8 +213,7 @@ class FindLoan extends Component {
   }
 
   componentDidMount() {
-    const { changedFormData, resetFormData } = this.props
-    // resetFormData()
+    const { changedFormData } = this.props
     changedFormData('back', '')
     axios
       .get('http://127.0.0.1:3453/getMFIEntry')
