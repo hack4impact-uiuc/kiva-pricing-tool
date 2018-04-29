@@ -17,7 +17,8 @@ class KivaChart extends Component {
   render() {
     let i;		
     for (i = 0; i < 13; i++) { 
-      this.state.repaymentData[i] = {principal: this.props.data[5][i], interest: this.props.data[6][i], taxes: this.props.data[7][i], insurance: this.props.data[8][i], fees: this.props.data[9][i]}; 
+      //this.state.repaymentData[i] = {balance: this.props.data[5][i], interest: this.props.data[6][i], taxes: this.props.data[7][i], insurance: this.props.data[8][i], fees: this.props.data[9][i]}; 
+      this.state.repaymentData[i] = {balance: this.props.data[5][i]};
     }
     console.log(this.state.repaymentData);
     if (this.props.visualType == "bar") {
@@ -29,7 +30,7 @@ class KivaChart extends Component {
 	  <YAxis/>
 	  <Tooltip/>
 	  <Legend />
-	  <Bar dataKey="principal" stackId="a" fill="#82ca9d" />
+	  <Bar dataKey="balance" stackId="a" fill="#82ca9d" />
 	  <Bar dataKey="interest" stackId="a" fill="#8884d8" />
 	  <Bar dataKey="taxes" stackId="a" fill="#82ca3d" />
 	  <Bar dataKey="insurance" stackId="a" fill="#41ca3d" />
