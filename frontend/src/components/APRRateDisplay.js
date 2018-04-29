@@ -293,17 +293,24 @@ class APRRateDisplay extends Component {
       cellInfo.column.id !== 'deposit_withdrawal' &&
       cellInfo.column.id !== 'security_interest_paid' &&
       cellInfo.column.id !== 'deposit_balance' &&
-      cellInfo.column.id !== 'total_cashflow'
+      cellInfo.column.id !== 'total_cashflow' &&
+      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] !==
+        'Total'
+    let total =
+      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      'Total'
     return (
       <div
         style={
-          !editable
-            ? { backgroundColor: '#eaeaea' }
-            : formDataReducer.user_repayment_schedule[cellInfo.index][
-                cellInfo.column.id
-              ] !== null
-              ? { backgroundColor: '#bafaba' }
-              : { backgroundColor: '#fafafa' }
+          total
+            ? { backgroundColor: '#fafaba' }
+            : !editable
+              ? { backgroundColor: '#eaeaea' }
+              : formDataReducer.user_repayment_schedule[cellInfo.index][
+                  cellInfo.column.id
+                ] !== null
+                ? { backgroundColor: '#bafaba' }
+                : { backgroundColor: '#fafafa' }
         }
         contentEditable={editable}
         suppressContentEditableWarning
