@@ -23,6 +23,7 @@ class AdminPartners extends Component {
       selected_remove: ''
     }
     this.renderEditable = this.renderEditable.bind(this)
+    this.renderUnEditable = this.renderUnEditable.bind(this)
     this.saveAllPartners = this.saveAllPartners.bind(this)
   }
 
@@ -87,6 +88,20 @@ class AdminPartners extends Component {
         }}
         dangerouslySetInnerHTML={{
           __html: this.state.data[cellInfo.index][cellInfo.column.id]
+        }}
+      />
+    )
+  }
+
+  renderUnEditable(cellInfo) {
+    return (
+      <div
+        onBlur={e => {
+          const data = [...this.state.data]
+          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
+        }}
+        dangerouslySetInnerHTML={{
+          __html: this.state.data[cellInfo.index][cellInfo.column.id].trim()
         }}
       />
     )
@@ -282,7 +297,9 @@ class AdminPartners extends Component {
                 {
                   Header: 'MFI Partner',
                   accessor: 'partner_names',
-                  Cell: this.state.editing ? this.renderEditable : null,
+                  Cell: this.state.editing
+                    ? this.renderEditable
+                    : this.renderUnEditable,
                   filterMethod: (
                     filter,
                     row // Custom filter method for case insensitive filtering
