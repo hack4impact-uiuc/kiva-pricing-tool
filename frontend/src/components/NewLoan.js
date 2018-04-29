@@ -26,8 +26,7 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData, changedFormData } = this.props
-    resetFormData()
+    const { changedFormData } = this.props
     changedFormData('back', 'newloan')
     changedFormData('error', false)
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {

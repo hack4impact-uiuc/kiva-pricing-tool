@@ -4,7 +4,6 @@ import { changedFormData, resetFormData } from './../actions'
 import NewLoan from './../components/NewLoan'
 
 function mapStateToProps(state) {
-  // console.log(state)
   return {
     formDataReducer: state.formDataReducer
   }
@@ -13,8 +12,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      changedFormData,
-      resetFormData
+      changedFormData
     },
     dispatch
   )

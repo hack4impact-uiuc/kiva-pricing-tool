@@ -12,23 +12,27 @@ import './../styles/navbar.css'
 
 // note: changed NavItem's component class because we cannot have nested <a>
 class Navbar extends Component {
-  render() {
+  resetData() {
     const { resetFormData } = this.props
+    resetFormData()
+  }
+
+  render() {
     return (
       <Grid>
         <BootstrapNavbar fixedTop fluid className="custom-navbar-styles">
           <BootstrapNavbar.Toggle />
           <BootstrapNavbar.Collapse>
             <Nav>
-              <IndexLinkContainer to="/">
+              <IndexLinkContainer to="/" onClick={e => this.resetData()}>
                 <NavItem>Home</NavItem>
               </IndexLinkContainer>
 
-              <LinkContainer to="/newloan">
+              <LinkContainer to="/newloan" onClick={e => this.resetData()}>
                 <NavItem>New Loan</NavItem>
               </LinkContainer>
 
-              <LinkContainer to="/findloan">
+              <LinkContainer to="/findloan" onClick={e => this.resetData()}>
                 <NavItem>Find Loan</NavItem>
               </LinkContainer>
 
