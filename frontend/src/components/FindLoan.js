@@ -199,8 +199,111 @@ class FindLoan extends Component {
               total_cashflow: calc_matrix[14][i]
             })
           }
+          reformatted_matrix.push({
+            period_num: null,
+            payment_due_date: null,
+            days: null,
+            amount_due: null,
+            principal_payment: null,
+            balance: null,
+            interest: null,
+            fees: null,
+            insurance: null,
+            taxes: null,
+            security_deposit: null,
+            security_interest_paid: null,
+            deposit_withdrawal: null,
+            deposit_balance: null,
+            total_cashflow: null
+          })
+          reformatted_user_matrix.push({
+            period_num: null,
+            payment_due_date: null,
+            days: null,
+            amount_due: null,
+            principal_payment: null,
+            balance: null,
+            interest: null,
+            fees: null,
+            insurance: null,
+            taxes: null,
+            security_deposit: null,
+            security_interest_paid: null,
+            deposit_withdrawal: null,
+            deposit_balance: null,
+            total_cashflow: null
+          })
+          reformatted_calc_matrix.push({
+            period_num: 'Total',
+            payment_due_date: '',
+            days: 0,
+            amount_due: 0,
+            principal_payment: 0,
+            balance: '',
+            interest: 0,
+            fees: 0,
+            insurance: 0,
+            taxes: 0,
+            security_deposit: 0,
+            security_interest_paid: 0,
+            deposit_withdrawal: 0,
+            deposit_balance: '',
+            total_cashflow: 0
+          })
+          for (let i = 0; i < reformatted_calc_matrix.length - 1; i++) {
+            let last = reformatted_calc_matrix.length - 1
+            reformatted_calc_matrix[last]['days'] +=
+              reformatted_calc_matrix[i]['days']
+            reformatted_calc_matrix[last]['amount_due'] +=
+              reformatted_calc_matrix[i]['amount_due']
+            reformatted_calc_matrix[last]['principal_payment'] +=
+              reformatted_calc_matrix[i]['principal_payment']
+            reformatted_calc_matrix[last]['interest'] +=
+              reformatted_calc_matrix[i]['interest']
+            reformatted_calc_matrix[last]['fees'] +=
+              reformatted_calc_matrix[i]['fees']
+            reformatted_calc_matrix[last]['insurance'] +=
+              reformatted_calc_matrix[i]['insurance']
+            reformatted_calc_matrix[last]['taxes'] +=
+              reformatted_calc_matrix[i]['taxes']
+            reformatted_calc_matrix[last]['security_deposit'] +=
+              reformatted_calc_matrix[i]['security_deposit']
+            reformatted_calc_matrix[last]['security_interest_paid'] +=
+              reformatted_calc_matrix[i]['security_interest_paid']
+            reformatted_calc_matrix[last]['deposit_withdrawal'] +=
+              reformatted_calc_matrix[i]['deposit_withdrawal']
+            reformatted_calc_matrix[last]['total_cashflow'] +=
+              reformatted_calc_matrix[i]['total_cashflow']
+          }
+          reformatted_calc_matrix[last]['principal_payment'] = calc_matrix[
+            last
+          ]['principal_payment'].toFixed(2)
+          reformatted_calc_matrix[last]['interest'] = calc_matrix[last][
+            'interest'
+          ].toFixed(2)
+          reformatted_calc_matrix[last]['fees'] = calc_matrix[last][
+            'fees'
+          ].toFixed(2)
+          reformatted_calc_matrix[last]['insurance'] = calc_matrix[last][
+            'insurance'
+          ].toFixed(2)
+          reformatted_calc_matrix[last]['taxes'] = calc_matrix[last][
+            'taxes'
+          ].toFixed(2)
+          reformatted_calc_matrix[last]['security_deposit'] = calc_matrix[last][
+            'security_deposit'
+          ].toFixed(2)
+          reformatted_calc_matrix[last]['security_interest_paid'] = calc_matrix[
+            last
+          ]['security_interest_paid'].toFixed(2)
+          reformatted_calc_matrix[last]['deposit_withdrawal'] = calc_matrix[
+            last
+          ]['deposit_withdrawal'].toFixed(2)
+          reformatted_calc_matrix[last]['total_cashflow'] = calc_matrix[last][
+            'total_cashflow'
+          ].toFixed(2)
           reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-          calc_matrix[0]['period_num'] = 'Disbursement Info'
+          reformatted_calc_matrix[0]['period_num'] = 'Disbursement Info'
           changedFormData('original_repayment_schedule', reformatted_matrix)
           changedFormData('user_repayment_schedule', reformatted_user_matrix)
           changedFormData('calc_repayment_schedule', reformatted_calc_matrix)

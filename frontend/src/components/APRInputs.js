@@ -144,10 +144,103 @@ class APRInputs extends Component {
               total_cashflow: matrix[14][i]
             })
           }
+          reformatted_matrix.push({
+            period_num: null,
+            payment_due_date: null,
+            days: null,
+            amount_due: null,
+            principal_payment: null,
+            balance: null,
+            interest: null,
+            fees: null,
+            insurance: null,
+            taxes: null,
+            security_deposit: null,
+            security_interest_paid: null,
+            deposit_withdrawal: null,
+            deposit_balance: null,
+            total_cashflow: null
+          })
+          user_matrix.push({
+            period_num: null,
+            payment_due_date: null,
+            days: null,
+            amount_due: null,
+            principal_payment: null,
+            balance: null,
+            interest: null,
+            fees: null,
+            insurance: null,
+            taxes: null,
+            security_deposit: null,
+            security_interest_paid: null,
+            deposit_withdrawal: null,
+            deposit_balance: null,
+            total_cashflow: null
+          })
+          calc_matrix.push({
+            period_num: 'Total',
+            payment_due_date: ' ',
+            days: 0,
+            amount_due: 0,
+            principal_payment: 0,
+            balance: ' ',
+            interest: 0,
+            fees: 0,
+            insurance: 0,
+            taxes: 0,
+            security_deposit: 0,
+            security_interest_paid: 0,
+            deposit_withdrawal: 0,
+            deposit_balance: ' ',
+            total_cashflow: 0
+          })
+          let last = calc_matrix.length - 1
+          for (let i = 0; i < last; i++) {
+            calc_matrix[last]['days'] += calc_matrix[i]['days']
+            calc_matrix[last]['amount_due'] += calc_matrix[i]['amount_due']
+            calc_matrix[last]['principal_payment'] +=
+              calc_matrix[i]['principal_payment']
+            calc_matrix[last]['interest'] += calc_matrix[i]['interest']
+            calc_matrix[last]['fees'] += calc_matrix[i]['fees']
+            calc_matrix[last]['insurance'] += calc_matrix[i]['insurance']
+            calc_matrix[last]['taxes'] += calc_matrix[i]['taxes']
+            calc_matrix[last]['security_deposit'] +=
+              calc_matrix[i]['security_deposit']
+            calc_matrix[last]['security_interest_paid'] +=
+              calc_matrix[i]['security_interest_paid']
+            calc_matrix[last]['deposit_withdrawal'] +=
+              calc_matrix[i]['deposit_withdrawal']
+            calc_matrix[last]['total_cashflow'] +=
+              calc_matrix[i]['total_cashflow']
+          }
+          calc_matrix[last]['principal_payment'] = calc_matrix[last][
+            'principal_payment'
+          ].toFixed(2)
+          calc_matrix[last]['interest'] = calc_matrix[last]['interest'].toFixed(
+            2
+          )
+          calc_matrix[last]['fees'] = calc_matrix[last]['fees'].toFixed(2)
+          calc_matrix[last]['insurance'] = calc_matrix[last][
+            'insurance'
+          ].toFixed(2)
+          calc_matrix[last]['taxes'] = calc_matrix[last]['taxes'].toFixed(2)
+          calc_matrix[last]['security_deposit'] = calc_matrix[last][
+            'security_deposit'
+          ].toFixed(2)
+          calc_matrix[last]['security_interest_paid'] = calc_matrix[last][
+            'security_interest_paid'
+          ].toFixed(2)
+          calc_matrix[last]['deposit_withdrawal'] = calc_matrix[last][
+            'deposit_withdrawal'
+          ].toFixed(2)
+          calc_matrix[last]['total_cashflow'] = calc_matrix[last][
+            'total_cashflow'
+          ].toFixed(2)
         }
         reformatted_matrix[0]['period_num'] = 'Disbursement Info'
         calc_matrix[0]['period_num'] = 'Disbursement Info'
-        console.log(reformatted_matrix)
+        console.log(calc_matrix)
         changedFormData('original_repayment_schedule', reformatted_matrix)
         changedFormData('user_repayment_schedule', user_matrix)
         changedFormData('calc_repayment_schedule', calc_matrix)
