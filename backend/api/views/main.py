@@ -581,8 +581,8 @@ def get_loan():
         calc_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
         for row in sorted_rows:
             orig_matrix[0].append(row.period_num)
-            user_matrix[0].append(row.period_num_user)
-            calc_matrix[0].append(row.period_num_calc)
+            user_matrix[0].append(row.period_num)
+            calc_matrix[0].append(row.period_num)
 
             orig_matrix[1].append(row.payment_due_date)
             user_matrix[1].append(row.payment_due_date_user)
