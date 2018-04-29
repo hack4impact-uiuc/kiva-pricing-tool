@@ -2,8 +2,6 @@
 import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, TextField, KivaChart } from './'
-import Bootstrap from 'react-bootstrap'
-import React, { Component } from 'react'
 import { Grid, PageHeader } from 'react-bootstrap'
 import './../styles/app.css'
 import axios from 'axios'
