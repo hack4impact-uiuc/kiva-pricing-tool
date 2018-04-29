@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col, Modal } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
@@ -16,7 +16,9 @@ class AdminThemes extends Component {
       data: [],
       filtered: [], // ID and text data used for filtering react table
       editing: false,
-      edited_loans: []
+      edited_loans: [],
+      remove_warning: false,
+      selected_remove: ''
     }
     this.renderEditable = this.renderEditable.bind(this)
     this.saveAllTheme = this.saveAllTheme.bind(this)
@@ -135,14 +137,21 @@ class AdminThemes extends Component {
           this.setState({
             data: this.state.data.concat({ loan_theme: theme_name })
           })
+          container.success(``, 'Theme successfully added', {
+            closeButton: true
+          })
         })
-        .catch(function(error) {
-          console.log('error with adding')
+        .catch(error => {
+          if (error.response.status === 422) {
+            container.warning(
+              "The loan theme '" + theme_name + "' already exists.",
+              'Already Exists',
+              {
+                closeButton: true
+              }
+            )
+          }
         })
-      this.setState({ addshow: true })
-      container.success(``, 'Theme successfully added', {
-        closeButton: true
-      })
     } else {
       container.warning('Please enter a name.', 'Cannot add empty name', {
         closeButton: true
@@ -151,6 +160,7 @@ class AdminThemes extends Component {
   }
 
   removeTheme(theme_name) {
+    this.setState({ remove_warning: false })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
       .delete('http://127.0.0.1:3453/removeLT/' + theme_name)
@@ -161,7 +171,8 @@ class AdminThemes extends Component {
             this.setState({
               data: this.state.data
                 .slice(0, i)
-                .concat(this.state.data.slice(i + 1))
+                .concat(this.state.data.slice(i + 1)),
+              selected_remove: ''
             })
           }
         }
@@ -169,6 +180,10 @@ class AdminThemes extends Component {
     container.error('You have removed ' + theme_name, 'Theme Removed', {
       closeButton: true
     })
+  }
+
+  handleRemoveClick(theme_name) {
+    this.setState({ remove_warning: true, selected_remove: theme_name })
   }
 
   render() {
@@ -224,7 +239,7 @@ class AdminThemes extends Component {
               name="Add "
               url="themelist"
               onClickHandler={() => {
-                this.addTheme(this.refs.addpartnername.value)
+                this.addTheme(this.refs.addTheme.value)
               }}
             />
           </Col>
@@ -287,7 +302,7 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.removeTheme(original.loan_theme)} // Send text value to remove loan function
+                          this.handleRemoveClick(original.loan_theme)} // Send text value to remove loan function
                       />
                     )
                   }
@@ -303,6 +318,41 @@ class AdminThemes extends Component {
             />
           </Col>
         </Row>
+
+        <Modal show={this.state.remove_warning} enforceFocus>
+          <Modal.Header>
+            <Modal.Title>
+              <h4>Remove Element Warning</h4>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="bs-center">
+            <p className="large-font">
+              Are you sure you want to remove "{this.state.selected_remove}"?
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row>
+              <Col sm={6} md={6} className="bs-left">
+                <Button
+                  className="button-fancy"
+                  name="Cancel"
+                  url="themelist"
+                  onClickHandler={() =>
+                    this.setState({ remove_warning: false })}
+                />
+              </Col>
+              <Col sm={6} md={6}>
+                <Button
+                  className="button-fancy"
+                  name="Remove"
+                  url="themelist"
+                  onClickHandler={() =>
+                    this.removeTheme(this.state.selected_remove)}
+                />
+              </Col>
+            </Row>
+          </Modal.Footer>
+        </Modal>
       </Grid>
     )
   }

@@ -112,6 +112,10 @@ $color-text: #333;
 	text-align: right;
 }
 
+.bs-left {
+	text-align: left;
+}
+
 .bs-justify {
 	text-align: justify;
 }
@@ -142,4 +146,8 @@ $color-text: #333;
 	font-family: montserrat, sans-serif;
 	padding: 0;
 	border: none;
+}
+
+.large-font {
+	font-size: 14pt;
 }
