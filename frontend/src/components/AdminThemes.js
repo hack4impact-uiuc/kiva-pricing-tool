@@ -21,6 +21,7 @@ class AdminThemes extends Component {
       selected_remove: ''
     }
     this.renderEditable = this.renderEditable.bind(this)
+    this.renderUnEditable = this.renderUnEditable.bind(this)
     this.saveAllTheme = this.saveAllTheme.bind(this)
   }
 
@@ -82,6 +83,20 @@ class AdminThemes extends Component {
         }}
         dangerouslySetInnerHTML={{
           __html: this.state.data[cellInfo.index][cellInfo.column.id]
+        }}
+      />
+    )
+  }
+
+  renderUnEditable(cellInfo) {
+    return (
+      <div
+        onBlur={e => {
+          const data = [...this.state.data]
+          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
+        }}
+        dangerouslySetInnerHTML={{
+          __html: this.state.data[cellInfo.index][cellInfo.column.id].trim()
         }}
       />
     )
@@ -289,7 +304,9 @@ class AdminThemes extends Component {
                 {
                   Header: 'Loan Theme',
                   accessor: 'loan_theme',
-                  Cell: this.state.editing ? this.renderEditable : null,
+                  Cell: this.state.editing
+                    ? this.renderEditable
+                    : this.renderUnEditable,
                   filterMethod: (
                     filter,
                     row // Custom filter method for case insensitive filtering
