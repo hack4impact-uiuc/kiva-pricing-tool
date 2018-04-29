@@ -16,7 +16,7 @@ class TextField extends Component {
 
   componentDidMount() {
     // Used to check required fields and highlight with error messages immediately
-    if (this.props.requiredField) {
+    if (this.props.requiredField && this.props.textBody === null) {
       this.setState({
         error_message: 'This field is required.',
         className: this.props.className + ' required-error'
@@ -54,7 +54,10 @@ class TextField extends Component {
 
     if (this.props.typeVal.toLowerCase() === 'float') {
       let tryFloat = parseFloat(value)
+      // console.log(value.matches("[0-9.]*"))
+      console.log(/^[a-zA-Z ]+$/.test(value))
       let limit = parseInt(this.props.limit, 10)
+      console.log(tryFloat)
       if (isNaN(tryFloat)) {
         this.setState({
           error_message: 'Error in input: should be a decimal',
