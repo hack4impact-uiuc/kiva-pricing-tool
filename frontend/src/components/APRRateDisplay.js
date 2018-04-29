@@ -887,7 +887,6 @@ class APRRateDisplay extends Component {
 
         <Row className="vertical-margin-item">
           <Col sm={6} md={6}>
-            <Button className="button-fancy" name="Cancel" url="" />
             <Button
               className="button-fancy"
               name="Back"

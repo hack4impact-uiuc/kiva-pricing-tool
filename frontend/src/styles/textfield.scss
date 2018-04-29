@@ -22,6 +22,11 @@
 	visibility: hidden;
 }
 
+.required-error input {
+	background-color: $input-error-background;
+	border: 1px solid $error-message;
+}
+
 #className {
 	white-space: nowrap;
 }

@@ -168,23 +168,24 @@ class APRInputs extends Component {
           <Row>
             <Row>
               <Col sm={12} md={12}>
+                <h5>* Indicates required field</h5>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
                 <PageHeader>User Information</PageHeader>
               </Col>
             </Row>
             <Row>
               <Col sm={12} md={12}>
-                * indicates required field
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={12} md={12}>
                 <TextField
-                  className={('inline-textfield', 'input-required-field')}
+                  className="inline-textfield"
                   id="Full Name*"
                   reduxId="startName"
                   hint="ex. John"
                   typeVal="String"
                   limit="100"
+                  requiredField={true}
                   textBody={formDataReducer.startName}
                   onTextInputChange={this.handleTextChange}
                   //doesn't allow spaces ** need to fix
@@ -202,7 +203,6 @@ class APRInputs extends Component {
             <Row>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  className="dropdown-required-field"
                   title="Repayment Type*"
                   reduxId="repaymentType"
                   items={[
@@ -215,7 +215,6 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  className="dropdown-required-field"
                   title="Interest Payment*"
                   reduxId="interestPaymentType"
                   items={[
@@ -226,7 +225,6 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  className="dropdown-required-field"
                   title="Interest Calculation*"
                   reduxId="interestCalculationType"
                   items={[
@@ -240,12 +238,12 @@ class APRInputs extends Component {
             <Row className="vertical-margin-item flex-align-center">
               <Col sm={4} md={4}>
                 <TextField
-                  className="input-required-field"
                   id="Loan Amount*"
                   reduxId="loanAmount"
                   hint="ex. 5000"
                   typeVal="float"
                   limit="900000000"
+                  requiredField={true}
                   textBody={formDataReducer.loanAmount}
                 />
               </Col>
@@ -256,18 +254,17 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <TextField
-                  className="input-required-field"
                   id="Number of Installments*"
                   reduxId="installment"
                   hint="ex. 12"
                   typeVal="int"
                   limit="180"
+                  requiredField={true}
                   textBody={formDataReducer.installment}
                 />
               </Col>
               <Col sm={2} md={2} className="bs-center">
                 <Dropdown
-                  className="dropdown-required-field"
                   title="Time Period*"
                   reduxId="installmentTimePeriod"
                   items={[
@@ -287,12 +284,12 @@ class APRInputs extends Component {
             <Row className="vertical-margin-item flex-align-center">
               <Col sm={6} md={6}>
                 <TextField
-                  className="input-required-field"
                   id="Nominal Interest Rate*"
                   reduxId="nominalInterestRate"
                   hint="ex. 12"
                   typeVal="int"
                   limit="100"
+                  requiredField={true}
                   textBody={formDataReducer.nominalInterestRate}
                 />
               </Col>
@@ -303,7 +300,6 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <Dropdown
-                  className="dropdown-required-field"
                   title="Time Period*"
                   reduxId="interestTimePeriod"
                   items={[
