@@ -1,42 +1,29 @@
-//-------------------------------------------------------------------------
-/**
- * Admin page where users are able to edit the list of partners
-   within the database
- */
 import React, { Component } from 'react'
 import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
+import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 import axios from 'axios'
 import ReactDOM from 'react-dom'
 import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
-import './../styles/app.css'
-import 'react-table/react-table.css'
-
-//include to have proper Toastr formatting
 require('./../styles/react-toastr.css')
-
-//Toastr container that creates the ToastMessages
 let container
 
 class AdminPartners extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      partner_names: [], // list of partners in the database
-      data: [], // list of partners used within this component
-      editing: false, // current editable mode
-      edited_partners: [], // the edited partners within this current list
+      partner_names: [],
+      data: [],
+      editing: false,
+      edited_partners: [],
       filtered: []
     }
     this.renderEditable = this.renderEditable.bind(this)
     this.saveAllPartners = this.saveAllPartners.bind(this)
   }
 
-  //-------------------------------------------------------------------------
-  /**
-   * Removes empty values from the list when the user decides to edit
-   */
   cleanList() {
     for (var i = 0; i < this.state.data.length; i++) {
       console.log(this.state.data[i])
@@ -49,11 +36,6 @@ class AdminPartners extends Component {
     }
   }
 
-  //-------------------------------------------------------------------------
-  /**
-   * Populates the partner list in this component
-     with the partners in the database
-   */
   componentDidMount() {
     axios.get('http://127.0.0.1:3453/getAllMFI').then(response => {
       this.setState({ partner_names: response.data.result.partners })
@@ -65,13 +47,6 @@ class AdminPartners extends Component {
     })
   }
 
-  //-------------------------------------------------------------------------
-  /**
-   * Based on whether "editing" is true or false, renders each cell editable
-   When a cell is edited, it's original and updated value is added to the edited_partners
-   in the component
-   @param cellInfo current cell
-   */
   renderEditable(cellInfo) {
     var original = null
     var update = null
@@ -83,8 +58,10 @@ class AdminPartners extends Component {
         onBlur={e => {
           const data = [...this.state.data]
           original = data[cellInfo.index][cellInfo.column.id]
+          console.log(original)
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
           update = data[cellInfo.index][cellInfo.column.id]
+          console.log(update)
           this.setState({ data })
           if (
             original !== update &&
@@ -98,12 +75,6 @@ class AdminPartners extends Component {
                 update: update
               })
             })
-          } else {
-            container.warning(
-              'Please refresh page and remove.',
-              'Cannot edit empty cell',
-              { closeButton: true }
-            )
           }
         }}
         dangerouslySetInnerHTML={{
@@ -113,11 +84,14 @@ class AdminPartners extends Component {
     )
   }
 
-  //-------------------------------------------------------------------------
-  /**
-   * Iterates through the edited partners and updates them in the database
-    with an axios put request
-   */
+  partnerDoesExist(partner_name) {
+    for (var i = 0; i < this.state.data.length; i++) {
+      if (this.state.data[i] === partner_name) {
+        return true
+      }
+    }
+  }
+
   saveAllPartners() {
     var updated_name = null
     if (this.state.edited_partners.length === 0) {
@@ -157,13 +131,12 @@ class AdminPartners extends Component {
     }
   }
 
-  //-------------------------------------------------------------------------
-  /**
-   * Adds partner into the database
-   @param partner_name name of partner
-   */
   addPartner(partner_name) {
-    if (partner_name && partner_name.length) {
+    if (
+      partner_name &&
+      partner_name.length &&
+      !this.partnerDoesExist(partner_name)
+    ) {
       let data = { partner_name: partner_name }
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
@@ -179,6 +152,8 @@ class AdminPartners extends Component {
       container.success('', 'Partner successfully added', {
         closeButton: true
       })
+    } else if (this.partnerDoesExist(partner_name)) {
+      container.warning('', 'Partner already exists.', { closeButton: true })
     } else {
       container.warning('Please enter a name.', 'Cannot add empty name', {
         closeButton: true
@@ -186,11 +161,6 @@ class AdminPartners extends Component {
     }
   }
 
-  //-------------------------------------------------------------------------
-  /**
-   * removes partner from database
-   @param partner_name partner to remove
-   */
   removePartner(partner_name) {
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
@@ -212,10 +182,6 @@ class AdminPartners extends Component {
     })
   }
 
-  //-------------------------------------------------------------------------
-  /**
-   * Renders elements on a page
-   */
   render() {
     return (
       <Grid className="padded-element-vertical">
@@ -232,7 +198,7 @@ class AdminPartners extends Component {
           </Col>
         </Row>
 
-        <Row className="vertical-margin-item">
+        <Row className="vertical-margin-item flex-align-bottom">
           <Col sm={6} md={6}>
             <h2>
               {' '}
@@ -248,6 +214,7 @@ class AdminPartners extends Component {
                       { id: 'partner_names', value: event.target.value }
                     ]
                   })}
+                // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
           </Col>
@@ -276,23 +243,30 @@ class AdminPartners extends Component {
           </Col>
         </Row>
 
-        <Button
-          name="Edit List"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ editing: true })
-            this.cleanList()
-          }}
-        />
-
-        <Button
-          name="Save List"
-          url="partnerlist"
-          onClickHandler={() => {
-            this.setState({ editing: false })
-            this.saveAllPartners()
-          }}
-        />
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6}>
+            <Button
+              className="button-fancy"
+              name="Edit List"
+              url="partnerlist"
+              onClickHandler={() => {
+                this.setState({ editing: true })
+                this.cleanList()
+              }}
+            />
+          </Col>
+          <Col sm={6} md={6} className="bs-button-right">
+            <Button
+              className="button-fancy"
+              name="Save List"
+              url="partnerlist"
+              onClickHandler={() => {
+                this.setState({ editing: false })
+                this.saveAllPartners()
+              }}
+            />
+          </Col>
+        </Row>
 
         <ReactTable
           data={this.state.data}
@@ -320,6 +294,7 @@ class AdminPartners extends Component {
                 // Generate row such that value of text field is rememebered to pass into remove loan function
                 return (
                   <Button
+                    className="button-image-remove"
                     name="Remove"
                     url="partnerlist"
                     onClickHandler={() =>
