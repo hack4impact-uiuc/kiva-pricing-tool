@@ -433,7 +433,7 @@ class APRRateDisplay extends Component {
 		<li role = "presentation" class={this.state.areaclass}><a onClick={()=>this.changeChart("area")}>Area</a></li>
 	</ul>}
 	</div>
-	{this.state.isHidden && <KivaChart visualType={this.state.visualType} data={this.state.testData}></KivaChart>}
+	{this.state.isHidden && <KivaChart visualType={this.state.visualType} data={this.state.data}></KivaChart>}
         <br />
         <Button name="Cancel" url="" />
         <Button name="Back" url={formDataReducer.back} />
