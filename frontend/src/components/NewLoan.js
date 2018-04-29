@@ -110,9 +110,7 @@ class NewLoan extends Component {
             </Form>
 
             <Row>
-              <Col xs={6} sm={6} md={6}>
-                <Button className="button-fancy" name="Back" url="" />
-              </Col>
+              <Col xs={6} sm={6} md={6} />
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
                   className="button-fancy"
