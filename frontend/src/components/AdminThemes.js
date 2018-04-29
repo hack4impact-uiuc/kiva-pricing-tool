@@ -62,6 +62,7 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
+
           if (original !== update) {
             if (update && update.length != 0 && update != ' ') {
               this.setState({
