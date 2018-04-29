@@ -223,7 +223,6 @@ class FindLoan extends Component {
       .catch(function(error) {
         console.log(error)
       })
-    console.log("it's me meghatron")
   }
 
   getProductType() {
@@ -300,7 +299,6 @@ class FindLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData, searchLoan } = this.props
-    // console.log(this.state)
     return (
       <div className="page-body-grey">
         <Grid
@@ -319,7 +317,6 @@ class FindLoan extends Component {
               <Form>
                 <Typeahead
                   className="vertical-margin-item"
-                  // labelKey="mfi"
                   placeholder="Select MFI Partner"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
@@ -344,7 +341,6 @@ class FindLoan extends Component {
                   className="vertical-margin-item"
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
-                  // labelKey="loan"
                   options={this.state.loan_themes}
                   placeholder="Select Loan Type"
                   selected={
@@ -365,7 +361,6 @@ class FindLoan extends Component {
                     )
                   }
                   ref="product"
-                  // labelKey="product"
                   options={this.state.product_types}
                   placeholder="Search Products i.e. small loan"
                   typeVal="String"
@@ -384,7 +379,6 @@ class FindLoan extends Component {
                 <Typeahead
                   className="vertical-margin-item"
                   ref="version"
-                  // labelKey="version"
                   placeholder="Version Number"
                   disabled={
                     !(

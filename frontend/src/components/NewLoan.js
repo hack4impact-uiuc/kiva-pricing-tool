@@ -51,7 +51,6 @@ class NewLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData } = this.props
-    console.log(this.inputsEntered(), 'error', [formDataReducer.mfi])
     return (
       <div className="page-body-grey">
         <Grid
