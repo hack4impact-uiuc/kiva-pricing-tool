@@ -60,16 +60,16 @@ def fake_cal_apr():
     grace_period_principal = 0
     grace_period_interest_pay = 0
     grace_period_interest_calculate = 0
-    grace_period_balloon = 4
+    grace_period_balloon = 0
 
     security_deposit_percent_ongoing = 0.1
     security_deposit_percent_upfront = 0.1
     security_deposit_fixed_upfront = 10
     security_deposit_fixed_ongoing = 10
     interest_paid_on_deposit_percent = 0.1
-    interest_calculation_type = 'declining balance'
-    repayment_type = 'equal installments (amortized)'
-    interest_payment_type = 'multiple installments'
+    interest_calculation_type = 'initial amount or flat'
+    repayment_type = 'single end-term principal payment'
+    interest_payment_type = 'single end-term payment'
 
     periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
     installment_time_period = '4 weeks'
@@ -143,10 +143,11 @@ def fake_cal_apr():
         interest_paid_arr[idx] = 0
     balance_arr[len(balance_arr) - grace_period_balloon-1] = 0
 
+    # CHANGE
     # for interst payment type
     if interest_payment_type == 'single end-term payment':
-        interest_paid_arr[-1] = sum(interest_paid_arr)
-        for idx in range(len(interest_paid_arr)-1):
+        interest_paid_arr[-1-grace_period_balloon] = sum(interest_paid_arr)
+        for idx in range(len(interest_paid_arr)-1-grace_period_balloon):
             interest_paid_arr[idx] = 0
 
 

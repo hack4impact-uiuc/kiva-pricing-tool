@@ -71,7 +71,6 @@ def cal_repayment():
     user_change = input_json['user_change']
 
     try:
-        # apr, origin_matrix = cal_apr_helper(input_form)
         apr, recal_matrix = update_repayment_schedule(user_change, input_form)
         matrix_list = []
         for a in recal_matrix:
