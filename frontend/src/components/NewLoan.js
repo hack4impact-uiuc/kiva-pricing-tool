@@ -26,8 +26,7 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData, changedFormData } = this.props
-    resetFormData()
+    const { changedFormData } = this.props
     changedFormData('back', 'newloan')
     changedFormData('error', false)
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
@@ -52,7 +51,6 @@ class NewLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData } = this.props
-    console.log(this.inputsEntered(), 'error', [formDataReducer.mfi])
     return (
       <div className="page-body-grey">
         <Grid
@@ -111,9 +109,7 @@ class NewLoan extends Component {
             </Form>
 
             <Row>
-              <Col xs={6} sm={6} md={6}>
-                <Button className="button-fancy" name="Back" url="" />
-              </Col>
+              <Col xs={6} sm={6} md={6} />
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
                   className="button-fancy"
