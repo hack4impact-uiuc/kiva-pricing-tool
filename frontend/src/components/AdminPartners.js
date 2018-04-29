@@ -1,22 +1,14 @@
 import React, { Component } from 'react'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Bootstrap,
-  Form,
-  Alert,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Alert, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
-import LiveSearch from './LiveSearch'
-import TextField from './TextField'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
 import ReactDOM from 'react-dom'
+import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
+require('./../styles/react-toastr.css')
+let container
 
 class AdminPartners extends Component {
   constructor(props) {
@@ -24,16 +16,12 @@ class AdminPartners extends Component {
     this.state = {
       partner_names: [],
       data: [],
-
-      addconfirm: false,
-      adderror: false,
-      removeshow: false,
-      savesuccess: false,
       editing: false,
       edited_partners: [],
-      addshow: false
+      filtered: []
     }
     this.renderEditable = this.renderEditable.bind(this)
+    this.saveAllPartners = this.saveAllPartners.bind(this)
   }
 
   cleanList() {
@@ -75,37 +63,24 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (original != update) {
-            //add
-            let update_partner = { partner_name: update }
-            axios
-              .post('http://127.0.0.1:3453/addMFI', update_partner)
-              .then(response => {
-                this.setState({
-                  data: this.state.data.concat({
-                    partner_names: update_partner
-                  })
-                })
+          if (
+            original !== update &&
+            update &&
+            update.length != 0 &&
+            update != ' '
+          ) {
+            this.setState({
+              edited_partners: this.state.edited_partners.concat({
+                original: original,
+                update: update
               })
-              .catch(function(error) {
-                console.log('error with adding' + error + update_partner)
-              })
-
-            //remove
-            axios
-              .delete('http://127.0.0.1:3453/removeMFI/' + original)
-              .then(response => {
-                for (var i = 0; i < this.state.data.length; i++) {
-                  if (this.state.data[i].partner_names === original) {
-                    // Remove element in place, return array with element removed
-                    this.setState({
-                      data: this.state.data
-                        .slice(0, i)
-                        .concat(this.state.data.slice(i + 1))
-                    })
-                  }
-                }
-              })
+            })
+          } else {
+            container.warning(
+              'Please refresh page and remove.',
+              'Cannot edit empty cell',
+              { closeButton: true }
+            )
           }
         }}
         dangerouslySetInnerHTML={{
@@ -115,13 +90,47 @@ class AdminPartners extends Component {
     )
   }
 
-  addPartner(partner_name) {
+  saveAllPartners() {
+    var updated_name = null
+    if (this.state.edited_partners.length === 0) {
+      container.warning(
+        'There are no changes to edit',
+        'Please edit before saving.',
+        { closeButton: true }
+      )
+    } else {
+      for (var i = 0; i < this.state.edited_partners.length; i++) {
+        updated_name = {
+          updated_partner_name: this.state.edited_partners[i].update
+        }
+        axios
+          .put(
+            'http://127.0.0.1:3453/editMFI/' +
+              this.state.edited_partners[i].original,
+            updated_name
+          )
+          .then(response => {
+            for (var j = 0; i < this.state.edited_partners.length; j++) {
+              if (
+                this.state.edited_partners[j].update ===
+                this.state.edited_partners[j].update
+              ) {
+                // Remove element in place, return array with element removed
+                this.setState({
+                  edited_partners: this.state.edited_partners
+                    .slice(0, j)
+                    .concat(this.state.data.slice(j + 1))
+                })
+              }
+            }
+          })
+      }
+      container.success('Saved all partners', 'SUCCESS', { closeButton: true })
+    }
+  }
 
-    if (
-      partner_name != null &&
-      partner_name.length != 0 &&
-      partner_name != ' '
-    ) {
+  addPartner(partner_name) {
+    if (partner_name && partner_name.length) {
       let data = { partner_name: partner_name }
       axios
         .post('http://127.0.0.1:3453/addMFI', data)
@@ -134,22 +143,17 @@ class AdminPartners extends Component {
           console.log('error with adding')
         })
       this.setState({ addshow: true })
+      container.success('', 'Partner successfully added', {
+        closeButton: true
+      })
+    } else {
+      container.warning('Please enter a name.', 'Cannot add empty name', {
+        closeButton: true
+      })
     }
   }
 
-//     this.setState({ addshow: true })
-//     let data = { partner_name: partner_name }
-//     axios.post('http://127.0.0.1:3453/addMFI', data).then(response => {
-//       this.setState({
-//         data: this.state.data.concat({ partner_names: partner_name })
-//       })
-//     })
-//   }
-
-
-
   removePartner(partner_name) {
-    this.setState({ removeshow: true })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
       .delete('http://127.0.0.1:3453/removeMFI/' + partner_name)
@@ -165,11 +169,19 @@ class AdminPartners extends Component {
           }
         }
       })
+    container.error('You have removed ' + partner_name, 'Partner Removed', {
+      closeButton: true
+    })
   }
 
   render() {
     return (
       <Grid className="padded-element-vertical">
+        <ToastContainer
+          ref={ref => (container = ref)}
+          className="toast-top-right"
+        />
+
         <Row>
           <Col sm={12} md={12}>
             <PageHeader className="page-header-montserrat bs-center">
@@ -184,7 +196,6 @@ class AdminPartners extends Component {
               {' '}
               <small> Search Partners: </small>{' '}
             </h2>
-
             <div>
               <input
                 className="search-input"
@@ -204,12 +215,11 @@ class AdminPartners extends Component {
               {' '}
               <small> Add Partner: </small>{' '}
             </h2>
-
-            <TextField
-              id=""
-              hint="Add MFI Partner"
-              typeVal="String"
-              limit="5000"
+            <input
+              className="expand-width"
+              type="text"
+              label="Text"
+              placeholder="Add MFI Partner"
               ref="addpartnername"
             />
           </Col>
@@ -219,74 +229,64 @@ class AdminPartners extends Component {
               name="Add "
               url="partnerlist"
               onClickHandler={() => {
-                this.addPartner(this.refs.addpartnername.state.textBody)
+                this.addPartner(this.refs.addpartnername.value)
               }}
             />
           </Col>
         </Row>
 
-        <Row>
-          <Col sm={12} md={12}>
-            {this.state.addshow == true ? (
-              <Alert bsStyle="success">
-                <h4>Add Successful!</h4>
-              </Alert>
-            ) : null}
+        <Button
+          name="Save List"
+          url="partnerlist"
+          onClickHandler={() => {
+            this.setState({ editing: false })
+            this.saveAllPartners()
+          }}
+        />
 
-            {this.state.removeshow == true ? (
-              <Alert bsStyle="danger">
-                <h4>Partner Removed!</h4>
-              </Alert>
-            ) : null}
-          </Col>
-        </Row>
-
-        <Row>
-          <Col sm={12} md={12}>
-            <ReactTable
-              data={this.state.data}
-              columns={[
-                {
-                  Header: 'MFI Partner',
-                  accessor: 'partner_names',
-                  Cell: this.renderEditable
-                },
-                {
-                  Header: 'Edit',
-                  id: 'edit-button',
-                  width: 150,
-                  Cell: props => (
-                    <Button className="button-image-edit" name="Edit" />
-                  )
-                },
-                {
-                  Header: 'Remove',
-                  id: 'delete-button',
-                  width: 150,
-                  Cell: ({ row, original }) => {
-                    // Generate row such that value of text field is rememebered to pass into remove loan function
-                    return (
-                      <Button
-                        className="button-image-remove"
-                        name="Remove"
-                        url="partnerlist"
-                        onClickHandler={() =>
-                          this.removeLoan(original.partner_names)} // Send text value to remove loan function
-                      />
-                    )
-                  }
-                }
-              ]}
-              defaultSorted={[
-                {
-                  id: 'partner_names',
-                  desc: false
-                }
-              ]}
-            />
-          </Col>
-        </Row>
-
+        <ReactTable
+          data={this.state.data}
+          columns={[
+            {
+              Header: 'MFI Partner',
+              accessor: 'partner_names',
+              Cell: this.state.editing ? this.renderEditable : null,
+              filterMethod: (
+                filter,
+                row // Custom filter method for case insensitive filtering
+              ) =>
+                row[filter.id]
+                  .toLowerCase()
+                  .startsWith(filter.value.toLowerCase()) ||
+                row[filter.id]
+                  .toLowerCase()
+                  .endsWith(filter.value.toLowerCase())
+            },
+            {
+              Header: 'Remove',
+              id: 'delete-button',
+              width: 150,
+              Cell: ({ row, original }) => {
+                // Generate row such that value of text field is rememebered to pass into remove loan function
+                return (
+                  <Button
+                    name="Remove"
+                    url="partnerlist"
+                    onClickHandler={() =>
+                      this.removePartner(original.partner_names)} // Send text value to remove loan function
+                  />
+                )
+              }
+            }
+          ]}
+          filtered={this.state.filtered}
+          defaultSorted={[
+            {
+              id: 'partner_names',
+              desc: false
+            }
+          ]}
+        />
       </Grid>
     )
   }

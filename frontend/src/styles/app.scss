@@ -84,6 +84,10 @@ $color-text: #333;
 	text-align: justify;
 }
 
+.expand-width {
+	width: 100%;
+}
+
 .vertical-margin-item {
 	margin: 2% 0%;
 }
@@ -96,4 +100,18 @@ $color-text: #333;
 	font-family: montserrat, sans-serif;
 	padding: 0;
 	border: none;
+}
+
+[data-preview="ToastContainer"]::before {
+  filter: blur(10px);
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  content: "";
+  z-index: 0;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
 }

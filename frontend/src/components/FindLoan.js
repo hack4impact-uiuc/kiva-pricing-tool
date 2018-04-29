@@ -1,18 +1,7 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import {
-  Grid,
-  Jumbotron,
-  PageHeader,
-  Form,
-  Bootstrap,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Grid, PageHeader, Form, Row, Col } from 'react-bootstrap'
 import './../styles/app.css'
-import TextField from './TextField'
-import LiveSearch from './LiveSearch'
 import Button from './Button'
 import axios from 'axios'
 import { Typeahead } from 'react-bootstrap-typeahead'
@@ -21,8 +10,6 @@ import PropTypes from 'prop-types'
 class FindLoan extends Component {
   constructor(props) {
     super(props)
-    const { formDataReducer } = this.props
-    // console.log(formDataReducer)
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -224,20 +211,10 @@ class FindLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData } = this.props
     axios.get('http://127.0.0.1:3453/getMFIEntry').then(response => {
       this.setState({ partner_names: response.data.result.partners })
     })
-
-    // this._unblock = this.context.router.history.block(() => {
-    //   resetFormData()
-    // })
   }
-
-  // componentWillUnmount() {
-  //   // When the component unmounts, call the function
-  //   this._unblock()
-  // }
 
   handleTextChange = (name, value) => {
     const { changedFormData } = this.props
@@ -255,7 +232,7 @@ class FindLoan extends Component {
   }
 
   isNullOrEmpty(input) {
-    return input == null || input.length == 0
+    return !input || !input.length
   }
 
   render() {
@@ -384,14 +361,6 @@ class FindLoan extends Component {
             <Col xs={6} sm={6} md={6}>
               <Button
                 className="button-fancy"
-                name="Back"
-                url=""
-                onClickHandler={() => resetFormData()}
-              />
-            </Col>
-            <Col xs={6} sm={6} md={6} className="bs-button-right">
-              <Button
-                className="button-fancy"
                 disable={!this.inputsEntered()}
                 name="Duplicate"
                 url="form1"
@@ -400,7 +369,10 @@ class FindLoan extends Component {
                   changedFormData('versionNum', this.state.versions.length + 1)
                 }}
               />
+            </Col>
+            <Col xs={6} sm={6} md={6} className="bs-button-right">
               <Button
+                className="button-fancy"
                 disable={!this.inputsEntered()}
                 name="Continue"
                 url="output"
