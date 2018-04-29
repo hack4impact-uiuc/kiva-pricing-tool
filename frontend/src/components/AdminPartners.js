@@ -65,24 +65,21 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (
-            original !== update &&
-            update &&
-            update.length != 0 &&
-            update != ' '
-          ) {
-            this.setState({
-              edited_partners: this.state.edited_partners.concat({
-                original: original,
-                update: update
+          if (original !== update) {
+            if (update && update.length != 0 && update != ' ') {
+              this.setState({
+                edited_partners: this.state.edited_partners.concat({
+                  original: original,
+                  update: update
+                })
               })
-            })
-          } else {
-            container.warning(
-              'Please refresh page and remove.',
-              'Cannot edit empty cell',
-              { closeButton: true }
-            )
+            } else {
+              container.warning(
+                'Please refresh page and remove.',
+                'Cannot edit empty cell',
+                { closeButton: true }
+              )
+            }
           }
         }}
         dangerouslySetInnerHTML={{
@@ -124,6 +121,19 @@ class AdminPartners extends Component {
                     .concat(this.state.data.slice(j + 1))
                 })
               }
+            }
+          })
+          .catch(error => {
+            if (error.response.status === 422) {
+              container.warning(
+                "The MFI partner '" +
+                  this.state.edited_partners[i].update +
+                  "' already exists.",
+                'Already Exists',
+                {
+                  closeButton: true
+                }
+              )
             }
           })
       }

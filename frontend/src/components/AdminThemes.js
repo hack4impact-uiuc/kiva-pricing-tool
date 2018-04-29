@@ -62,24 +62,21 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           console.log(update)
           this.setState({ data })
-          if (
-            original !== update &&
-            update &&
-            update.length != 0 &&
-            update != ' '
-          ) {
-            this.setState({
-              edited_loans: this.state.edited_loans.concat({
-                original: original,
-                update: update
+          if (original !== update) {
+            if (update && update.length != 0 && update != ' ') {
+              this.setState({
+                edited_loans: this.state.edited_loans.concat({
+                  original: original,
+                  update: update
+                })
               })
-            })
-          } else {
-            container.warning(
-              'Please refresh page and remove.',
-              'Cannot edit empty cell',
-              { closeButton: true }
-            )
+            } else {
+              container.warning(
+                'Please refresh page and remove.',
+                'Cannot edit empty cell',
+                { closeButton: true }
+              )
+            }
           }
         }}
         dangerouslySetInnerHTML={{
@@ -121,6 +118,19 @@ class AdminThemes extends Component {
                     .concat(this.state.data.slice(j + 1))
                 })
               }
+            }
+          })
+          .catch(error => {
+            if (error.response.status === 422) {
+              container.warning(
+                "The loan theme '" +
+                  this.state.edited_loans[i].update +
+                  "' already exists.",
+                'Already Exists',
+                {
+                  closeButton: true
+                }
+              )
             }
           })
       }
