@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { changedFormData, resetFormData } from './../actions'
-import NewLoan from './../components/NewLoan'
+import { changedFormData } from './../actions'
+import Dropdown from './../components/Dropdown'
 
 function mapStateToProps(state) {
+  // console.log(state.formDataReducer)
   return {
     formDataReducer: state.formDataReducer
   }
@@ -18,4 +19,4 @@ function mapDispatchToProps(dispatch) {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewLoan)
+export default connect(mapStateToProps, mapDispatchToProps)(Dropdown)

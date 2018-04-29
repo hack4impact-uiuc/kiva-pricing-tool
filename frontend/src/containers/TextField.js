@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { changedFormData, resetFormData } from './../actions'
-import NewLoan from './../components/NewLoan'
+import { changedFormData } from './../actions'
+import TextField from './../components/TextField'
 
 function mapStateToProps(state) {
   return {
@@ -18,4 +18,4 @@ function mapDispatchToProps(dispatch) {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewLoan)
+export default connect(mapStateToProps, mapDispatchToProps)(TextField)

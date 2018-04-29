@@ -1,6 +1,7 @@
+@import "./variables.scss";
+
 .error-message {
-	color: red;
-	font-family: Raleway, sans-serif;
+	color: $error-message;
 }
 
 .inline-textfield .input-label, .inline-textfield .textfield-component {
@@ -19,6 +20,11 @@
 
 .placeholder-textfield .textfield-component {
 	visibility: hidden;
+}
+
+.required-error input {
+	background-color: $input-error-background;
+	border: 1px solid $error-message;
 }
 
 #className {

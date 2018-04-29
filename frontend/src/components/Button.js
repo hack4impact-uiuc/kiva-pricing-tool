@@ -10,10 +10,12 @@ class Button extends Component {
             className={this.props.className}
             type="button"
             onClick={() => {
-              if (this.props.onClickHandler) this.props.onClickHandler()
-              var runnable =
-                this.props.disable == null ? true : !this.props.disable
-              runnable && history.push('/' + this.props.url)
+              let runnable =
+                this.props.disable === null ? true : !this.props.disable
+              if (runnable) {
+                if (this.props.onClickHandler) this.props.onClickHandler()
+                history.push('/' + this.props.url)
+              }
             }}
           >
             {this.props.name}

@@ -1,8 +1,8 @@
 // Our lower components
 import Navbar from './../containers/Navbar'
-import Dropdown from './Dropdown.js'
+import Dropdown from './../containers/Dropdown.js'
 import Button from './Button.js'
-import TextField from './TextField.js'
+import TextField from './../containers/TextField.js'
 import KivaChart from './KivaChart.js'
 // Our Pages
 import IntroPage from './../containers/IntroPage'

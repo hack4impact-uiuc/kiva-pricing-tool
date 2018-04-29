@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Grid, PageHeader, Form, Row, Col } from 'react-bootstrap'
 import { Typeahead } from 'react-bootstrap-typeahead'
+import { Api } from './../utils'
 import './../styles/app.css'
+import { TextField, Button } from './'
 import './../styles/button.css'
-import TextField from './TextField'
-import Button from './Button'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 
@@ -17,8 +17,7 @@ class NewLoan extends Component {
       loan_themes: [],
       selectedPartnerName: formDataReducer.mfi,
       selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType,
-      errorMessage: ''
+      selectedLoanProduct: formDataReducer.productType
     }
   }
 
@@ -27,15 +26,13 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
+    const { changedFormData } = this.props
+    changedFormData('back', 'newloan')
+    changedFormData('error', false)
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
     })
-  }
-
-  handleTextChange = (name, value) => {
-    const { changedFormData } = this.props
-    changedFormData([name], [value])
   }
 
   inputsEntered() {
@@ -43,7 +40,8 @@ class NewLoan extends Component {
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType)
+      !this.isNullOrEmpty(formDataReducer.productType) &&
+      !formDataReducer.error // no error
     )
   }
 
@@ -52,12 +50,12 @@ class NewLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData, resetFormData } = this.props
+    const { formDataReducer, changedFormData } = this.props
     return (
-      <div className="page-body-grey overflow-handler">
+      <div className="page-body-grey">
         <Grid
           fluid
-          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+          className="query-form-center padded-element-shrink round-corners-large solid-background"
         >
           <Row>
             <Col sm={12} md={12} className="bs-center">
@@ -73,10 +71,11 @@ class NewLoan extends Component {
                 label="mfi"
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
-                typeVal="String"
                 limit={100}
-                selected={formDataReducer.mfi}
-                onChange={e => {
+                selected={
+                  formDataReducer.mfi === '' ? '' : [formDataReducer.mfi]
+                }
+                onInputChange={e => {
                   changedFormData('mfi', e)
                 }}
               />
@@ -86,8 +85,12 @@ class NewLoan extends Component {
                 label="loan"
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
-                selected={formDataReducer.loanType}
-                onChange={e => {
+                selected={
+                  formDataReducer.loanType === ''
+                    ? ''
+                    : [formDataReducer.loanType]
+                }
+                onInputChange={e => {
                   changedFormData('loanType', e)
                 }}
               />
@@ -95,24 +98,18 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                text="product"
                 hint="Loan Product (i.e. small loan)"
                 typeVal="String"
                 limit={100}
+                onInputChange={e => {
+                  changedFormData('productType', e)
+                }}
                 textBody={formDataReducer.productType}
-                onTextInputChange={this.handleTextChange}
               />
             </Form>
 
             <Row>
-              <Col xs={6} sm={6} md={6}>
-                <Button
-                  className="button-fancy"
-                  name="Back"
-                  url=""
-                  onClickHandler={() => resetFormData()}
-                />
-              </Col>
+              <Col xs={6} sm={6} md={6} />
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
                   className="button-fancy"
@@ -120,21 +117,16 @@ class NewLoan extends Component {
                   name="Continue"
                   url="form1"
                   onClickHandler={() => {
-                    axios
-                      .get(
-                        'http://127.0.0.1:3453/getVersionNum?partner_name=' +
-                          formDataReducer.mfi +
-                          '&theme=' +
-                          formDataReducer.loanType +
-                          '&product=' +
-                          formDataReducer.loanProduct
+                    Api.getVersionNum(
+                      formDataReducer.mfi,
+                      formDataReducer.loanType,
+                      formDataReducer.productType
+                    ).then(response => {
+                      changedFormData(
+                        'versionNum',
+                        response['version'].toString()
                       )
-                      .then(response => {
-                        changedFormData('versionNum', [
-                          response.data.result['version'].toString()
-                        ])
-                      })
-                    changedFormData('back', 'newloan')
+                    })
                   }}
                 />
               </Col>

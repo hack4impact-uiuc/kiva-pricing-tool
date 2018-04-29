@@ -7,58 +7,43 @@ import {
   NavDropdown,
   MenuItem
 } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
-import { Link } from 'react-router-dom'
+import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
 import './../styles/navbar.css'
 
 // note: changed NavItem's component class because we cannot have nested <a>
 class Navbar extends Component {
-  render() {
+  resetData() {
     const { resetFormData } = this.props
+    resetFormData()
+  }
+
+  render() {
     return (
       <Grid>
         <BootstrapNavbar fixedTop fluid className="custom-navbar-styles">
           <BootstrapNavbar.Toggle />
-
           <BootstrapNavbar.Collapse>
             <Nav>
-              <LinkContainer className="nav-white-link link-no-effect" to="/">
-                <NavItem className="hover-fancy">Home</NavItem>
-              </LinkContainer>
-              <LinkContainer
-                className="nav-white-link link-no-effect"
-                to="newloan"
-              >
-                <NavItem className="hover-fancy nav-white-link">
-                  New Loan
-                </NavItem>
-              </LinkContainer>
-              <LinkContainer
-                className="nav-white-link link-no-effect"
-                to="findloan"
-              >
-                <NavItem className="hover-fancy">Find Loan</NavItem>
+              <IndexLinkContainer to="/" onClick={e => this.resetData()}>
+                <NavItem>Home</NavItem>
+              </IndexLinkContainer>
+
+              <LinkContainer to="/newloan" onClick={e => this.resetData()}>
+                <NavItem>New Loan</NavItem>
               </LinkContainer>
 
-              <NavDropdown
-                className="hover-fancy"
-                id="adminToolNav"
-                title="Admin Tools"
-              >
-                <MenuItem componentClass="span">
-                  <Link
-                    className="link-no-effect dropdown-link"
-                    to="partnerlist"
-                  >
-                    Partner List
-                  </Link>
-                </MenuItem>
+              <LinkContainer to="/findloan" onClick={e => this.resetData()}>
+                <NavItem>Find Loan</NavItem>
+              </LinkContainer>
 
-                <MenuItem componentClass="span">
-                  <Link className="link-no-effect dropdown-link" to="themelist">
-                    Loan Theme List
-                  </Link>
-                </MenuItem>
+              <NavDropdown id="adminToolNav" title="Admin Tools">
+                <LinkContainer to="/partnerlist">
+                  <MenuItem>Partner List</MenuItem>
+                </LinkContainer>
+
+                <LinkContainer to="/themelist">
+                  <MenuItem>Loan Theme List</MenuItem>
+                </LinkContainer>
               </NavDropdown>
             </Nav>
           </BootstrapNavbar.Collapse>

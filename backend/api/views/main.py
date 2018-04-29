@@ -4,6 +4,23 @@ from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
 from api.utils import create_response, InvalidUsage, cal_apr_helper, update_repayment_schedule, round_matrix
 import numpy as np
+import datetime
+
+PERIOD_IDX = 0
+DATE_IDX = 1
+DAY_IDX = 2
+PRINCIPAL_DISBURSED_IDX = 3
+PRINCIPAL_PAID_IDX = 4
+BALANCE_IDX = 5
+INTEREST_PAID_IDX = 6
+FEES_IDX = 7
+INSURANCE_IDX = 8
+TAXES_IDX = 9
+SECURITY_DEPOSIT_IDX = 10
+SECURITY_DEPOSIT_INTEREST_PAID_IDX = 11
+SECURITY_DEPOSIT_WITHDRAW_IDX = 12
+SECURITY_DEPOSIT_BALANCE_IDX = 13
+CASH_FLOW_IDX = 14
 
 mod = Blueprint('main', __name__)
 
@@ -71,12 +88,14 @@ def cal_repayment():
     user_change = input_json['user_change']
 
     try:
-        apr, recal_matrix = update_repayment_schedule(user_change, input_form)
+        apr, origin_matrix = cal_apr_helper(input_form)
+        apr, recal_matrix = update_repayment_schedule(origin_matrix, user_change, input_form)
         matrix_list = []
         for a in recal_matrix:
             matrix_list.append(list(a))
         payload = {'apr': apr, 'recal_matrix': matrix_list}
         print(payload)
+
         return create_response(data=payload, status=200)
     except Exception as e:
         print(str(e))
@@ -119,7 +138,6 @@ def get_partner_theme_list():
 def save_loan():
     """Save a new loan to the database, attempts to get all form data and use loan's __init__ to add"""
     request_json = request.get_json()
-    print(request_json.keys())
     try:
         # for input form
         input_form = request_json['inputs']
@@ -175,74 +193,90 @@ def save_loan():
     try:
         # delete the previous repayment schedule, if any
         partner_id = Partner.query.filter_by(partner_name=partner_name).first().id
-        theme_id = Theme.query.filter_by(loan_theme=loan_theme).fisrt().id
-        repay_id = str(partner_id) + str(theme_id) + product_type + version_num
+        theme_id = Theme.query.filter_by(loan_theme=loan_theme).first().id
+        repay_id = str(partner_id) + "_" + str(theme_id) + "_" + str(product_type) + "_" + str(version_num)
         prev_repay = RepaymentSchedule.query.filter_by(id=repay_id).delete()
 
         # make new repayment schedule entries
         for col_idx in range(len(origin_matrix[0])):
-            cur_origin_col = origin_matrix[:,col_idx]
-            cur_user_change_col = user_change_matrix[:, col_idx]
-            cur_recal_col = repay_matrix[:,col_idx]
-
+            cur_origin_col = [a[col_idx] for a in origin_matrix]
+            cur_user_change_col = [a[col_idx] for a in user_change_matrix]
+            cur_recal_col = [a[col_idx] for a in recal_matrix]
             new_repay_row = {
-                    'id' : repay_id,
-                    'period_num' : int(cur_origin_col[PERIOD_IDX]),
-                    'payment_due_date' : datetime.datetime.strptime(cur_origin_col[DATE_IDX], '%d-%b-%Y'),
-                    'days' : int(cur_origin_col[DAY_IDX]),
-                    'amount_due' : float(cur_origin_col[PRINCIPAL_DISBURSED_IDX]),
-                    'principal_payment' : float(cur_origin_col[PRINCIPAL_PAID_IDX]),
-                    'interest' : float(cur_origin_col[INTEREST_PAID_IDX]),
-                    'fees' : float(cur_origin_col[FEES_IDX]),
-                    'insurance' : float(cur_origin_col[INSURANCE_IDX]),
-                    'taxes' : float(cur_origin_col[TAXES_IDX]),
-                    'security_deposit' : float(cur_origin_col[SECURITY_DEPOSIT_IDX]),
-                    'security_interest_paid' : float(cur_origin_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
-                    'balance' : float(cur_origin_col[BALANCE_IDX]),
-                    'deposit_balance' : float(cur_origin_col[SECURITY_DEPOSIT_BALANCE_IDX]),
-                    'deposit_withdrawal' : float(cur_origin_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
-                    'total_cashflow' : float(cur_origin_col[CASH_FLOW_IDX]),
+                'id' : repay_id,
+                'period_num' : int(cur_origin_col[PERIOD_IDX]),
+                'payment_due_date' : datetime.datetime.strptime(cur_origin_col[DATE_IDX], '%d-%b-%Y'),
+                'days' : int(cur_origin_col[DAY_IDX]),
+                'amount_due' : float(cur_origin_col[PRINCIPAL_DISBURSED_IDX]),
+                'principal_payment' : float(cur_origin_col[PRINCIPAL_PAID_IDX]),
+                'interest' : float(cur_origin_col[INTEREST_PAID_IDX]),
+                'fees' : float(cur_origin_col[FEES_IDX]),
+                'insurance' : float(cur_origin_col[INSURANCE_IDX]),
+                'taxes' : float(cur_origin_col[TAXES_IDX]),
+                'security_deposit' : float(cur_origin_col[SECURITY_DEPOSIT_IDX]),
+                'security_interest_paid' : float(cur_origin_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
+                'balance' : float(cur_origin_col[BALANCE_IDX]),
+                'deposit_balance' : float(cur_origin_col[SECURITY_DEPOSIT_BALANCE_IDX]),
+                'deposit_withdrawal' : float(cur_origin_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
+                'total_cashflow' : float(cur_origin_col[CASH_FLOW_IDX]),
 
-                    'period_num_user' : int(cur_user_change_col[PERIOD_IDX]),
-                    'payment_due_date_user' : datetime.datetime.strptime(cur_user_change_col[DATE_IDX], '%d-%b-%Y'),
-                    'days_user' : int(cur_user_change_col[DAY_IDX]),
-                    'amount_due_user' : float(cur_user_change_col[PRINCIPAL_DISBURSED_IDX]),
-                    'principal_payment_user' : float(cur_user_change_col[PRINCIPAL_PAID_IDX]),
-                    'interest_user' : float(cur_user_change_col[INTEREST_PAID_IDX]),
-                    'fees_user' : float(cur_user_change_col[FEES_IDX]),
-                    'insurance_user' : float(cur_user_change_col[INSURANCE_IDX]),
-                    'taxes_user' : float(cur_user_change_col[TAXES_IDX]),
-                    'security_deposit_uesr' : float(cur_user_change_col[SECURITY_DEPOSIT_IDX]),
-                    'security_interest_paid_user' : float(cur_user_change_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
-                    'balance_user' : float(cur_user_change_col[BALANCE_IDX]),
-                    'deposit_balance_user' : float(cur_user_change_col[SECURITY_DEPOSIT_BALANCE_IDX]),
-                    'deposit_withdrawal_user' : float(cur_user_change_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
-                    'total_cashflow_user' : float(cur_user_change_col[CASH_FLOW_IDX]),
+                'period_num_user' : int(cur_user_change_col[PERIOD_IDX]) if
+                    cur_user_change_col[PERIOD_IDX] is not None else None,
+                'payment_due_date_user' : datetime.datetime.strptime(cur_user_change_col[DATE_IDX], '%d-%b-%Y') if
+                    cur_user_change_col[DATE_IDX] is not None else None,
+                'days_user' : int(cur_user_change_col[DAY_IDX]) if
+                    cur_user_change_col[DAY_IDX] is not None else None,
+                'amount_due_user' : float(cur_user_change_col[PRINCIPAL_DISBURSED_IDX]) if
+                    cur_user_change_col[PRINCIPAL_DISBURSED_IDX] is not None else None,
+                'principal_payment_user' : float(cur_user_change_col[PRINCIPAL_PAID_IDX]) if
+                    cur_user_change_col[PRINCIPAL_PAID_IDX] is not None else None,
+                'interest_user' : float(cur_user_change_col[INTEREST_PAID_IDX]) if
+                    cur_user_change_col[INTEREST_PAID_IDX] is not None else None,
+                'fees_user' : float(cur_user_change_col[FEES_IDX]) if
+                    cur_user_change_col[FEES_IDX] is not None else None,
+                'insurance_user' : float(cur_user_change_col[INSURANCE_IDX]) if
+                    cur_user_change_col[INSURANCE_IDX] is not None else None,
+                'taxes_user' : float(cur_user_change_col[TAXES_IDX]) if
+                    cur_user_change_col[TAXES_IDX] is not None else None,
+                'security_deposit_user' : float(cur_user_change_col[SECURITY_DEPOSIT_IDX]) if
+                    cur_user_change_col[SECURITY_DEPOSIT_IDX] is not None else None,
+                'security_interest_paid_user' : float(cur_user_change_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]) if
+                    cur_user_change_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX] is not None else None,
+                'balance_user' : float(cur_user_change_col[BALANCE_IDX]) if
+                    cur_user_change_col[BALANCE_IDX] is not None else None,
+                'deposit_balance_user' : float(cur_user_change_col[SECURITY_DEPOSIT_BALANCE_IDX]) if
+                    cur_user_change_col[SECURITY_DEPOSIT_BALANCE_IDX] is not None else None,
+                'deposit_withdrawal_user' : float(cur_user_change_col[SECURITY_DEPOSIT_WITHDRAW_IDX]) if
+                    cur_user_change_col[SECURITY_DEPOSIT_WITHDRAW_IDX] is not None else None,
+                'total_cashflow_user' : float(cur_user_change_col[CASH_FLOW_IDX]) if
+                    cur_user_change_col[CASH_FLOW_IDX] is not None else None,
 
-                    'period_num_calc' : int(cur_recal_col[PERIOD_IDX]),
-                    'payment_due_date_calc' : datetime.datetime.strptime(cur_recal_col[DATE_IDX], '%d-%b-%Y'),
-                    'days_calc' : int(cur_recal_col[DAY_IDX]),
-                    'amount_due_calc' : float(cur_recal_col[PRINCIPAL_DISBURSED_IDX]),
-                    'principal_payment_calc' : float(cur_recal_col[PRINCIPAL_PAID_IDX]),
-                    'interest_calc' : float(cur_recal_col[INTEREST_PAID_IDX]),
-                    'fees_calc' : float(cur_recal_col[FEES_IDX]),
-                    'insurance_calc' : float(cur_recal_col[INSURANCE_IDX]),
-                    'taxes_calc' : float(cur_recal_col[TAXES_IDX]),
-                    'security_deposit_calc' : float(cur_recal_col[SECURITY_DEPOSIT_IDX]),
-                    'security_interest_paid_calc' : float(cur_recal_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
-                    'balance_calc' : float(cur_recal_col[BALANCE_IDX]),
-                    'deposit_balance_calc' : float(cur_recal_col[SECURITY_DEPOSIT_BALANCE_IDX]),
-                    'deposit_withdrawal_calc' : float(cur_recal_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
-                    'total_cashflow_calc' : float(cur_recal_col[CASH_FLOW_IDX])
-                }
+                'period_num_calc' : int(cur_recal_col[PERIOD_IDX]),
+                'payment_due_date_calc' : datetime.datetime.strptime(cur_recal_col[DATE_IDX], '%d-%b-%Y'),
+                'days_calc' : int(cur_recal_col[DAY_IDX]),
+                'amount_due_calc' : float(cur_recal_col[PRINCIPAL_DISBURSED_IDX]),
+                'principal_payment_calc' : float(cur_recal_col[PRINCIPAL_PAID_IDX]),
+                'interest_calc' : float(cur_recal_col[INTEREST_PAID_IDX]),
+                'fees_calc' : float(cur_recal_col[FEES_IDX]),
+                'insurance_calc' : float(cur_recal_col[INSURANCE_IDX]),
+                'taxes_calc' : float(cur_recal_col[TAXES_IDX]),
+                'security_deposit_calc' : float(cur_recal_col[SECURITY_DEPOSIT_IDX]),
+                'security_interest_paid_calc' : float(cur_recal_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX]),
+                'balance_calc' : float(cur_recal_col[BALANCE_IDX]),
+                'deposit_balance_calc' : float(cur_recal_col[SECURITY_DEPOSIT_BALANCE_IDX]),
+                'deposit_withdrawal_calc' : float(cur_recal_col[SECURITY_DEPOSIT_WITHDRAW_IDX]),
+                'total_cashflow_calc' : float(cur_recal_col[CASH_FLOW_IDX])
+            }
             repay_schedule = RepaymentSchedule(new_repay_row)
+            print(repay_schedule)
             db.session.add(repay_schedule)
-
         loan = Loan(newrow)
+        Loan.query.filter_by(id=repay_id).delete()
         db.session.add(Loan(newrow))
         db.session.commit()
         return create_response(status=201)
     except Exception as ex:
+        print(str(ex))
         return create_response(status=423, message=str(ex))
 
 
@@ -278,11 +312,17 @@ def get_csv():
 
 @app.route(GET_ALL_MFI, methods=['GET'])
 def getAllMFI():
+    """
+        returns a list of all MFI
+    """
     partners = Partner.query.filter_by(active=True).all()
     return create_response({'partners': [x.partner_name for x in partners]}, status=200)
 
 @app.route(EDIT_MFI, methods=['PUT'])
 def editMFI(partner_name):
+    """
+        edits partner name
+    """
     data = request.get_json()
     partner = Partner.query.filter_by(partner_name=partner_name).first()
     if partner is None:
@@ -297,6 +337,9 @@ def editMFI(partner_name):
 
 @app.route(ADD_MFI, methods=['POST'])
 def addMFI():
+    """
+        adds new partner
+    """
     data = request.get_json()
     try:
         partner_name = data['partner_name']
@@ -317,6 +360,9 @@ def addMFI():
 
 @app.route(REMOVE_MFI, methods=['DELETE'])
 def removeMFI(partner_name):
+    """
+        Deletes partner (sets active to false)
+    """
     partner = Partner.query.filter_by(partner_name=partner_name).first()
     if partner is None or partner.active is False:
         return create_response(status=422, message="No such MFI Partner currently exists")
@@ -326,11 +372,17 @@ def removeMFI(partner_name):
 
 @app.route(GET_ALL_LT, methods=['GET'])
 def getAllLT():
+    """
+        Gets all loan themes
+    """
     themes = Theme.query.filter_by(active=True).all()
     return create_response({'loan_theme': [x.loan_theme for x in themes]}, status=200)
 
 @app.route(EDIT_LT, methods=['PUT'])
 def editLT(loan_theme):
+    """
+        Edits loan theme name
+    """
     data = request.get_json()
     theme = Theme.query.filter_by(loan_theme=loan_theme).first()
     if theme is None:
@@ -345,6 +397,9 @@ def editLT(loan_theme):
 
 @app.route(ADD_LT, methods=['POST'])
 def addLT():
+    """
+        Adds new loan theme
+    """
     data = request.get_json()
     try:
         loan_theme = data['loan_theme']
@@ -365,6 +420,9 @@ def addLT():
 
 @app.route(REMOVE_LT, methods=['DELETE'])
 def removeLT(loan_theme):
+    """
+        Deletes loan theme (sets active to false)
+    """
     theme = Theme.query.filter_by(loan_theme=loan_theme).first()
     if theme is None or theme.active is False:
         return create_response(status=422, message="No such Loan Theme currently exists")
@@ -523,8 +581,8 @@ def get_loan():
         calc_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
         for row in sorted_rows:
             orig_matrix[0].append(row.period_num)
-            user_matrix[0].append(row.period_num_user)
-            calc_matrix[0].append(row.period_num_calc)
+            user_matrix[0].append(row.period_num)
+            calc_matrix[0].append(row.period_num)
 
             orig_matrix[1].append(row.payment_due_date)
             user_matrix[1].append(row.payment_due_date_user)
