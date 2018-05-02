@@ -771,21 +771,6 @@ class APRRateDisplay extends Component {
             )}
           </Col>
           <Col sm={4} md={4}>
-            <Row>
-              <Col sm={12} md={12}>
-                <ul class="nav nav-pills nav-stacked">
-                  <li role="presentation" class={this.state.barclass}>
-                    <a onClick={() => this.changeChart('bar')}>Bar</a>
-                  </li>
-                  <li role="presentation" class={this.state.lineclass}>
-                    <a onClick={() => this.changeChart('line')}>Line</a>
-                  </li>
-                  <li role="presentation" class={this.state.areaclass}>
-                    <a onClick={() => this.changeChart('area')}>Area</a>
-                  </li>
-                </ul>
-              </Col>
-            </Row>
             <Row className="vertical-margin-item">
               <Col sm={6} md={6}>
                 <button
@@ -802,6 +787,21 @@ class APRRateDisplay extends Component {
                 >
                   Download CSV
                 </button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <ul class="nav nav-pills nav-stacked">
+                  <li role="presentation" class={this.state.barclass}>
+                    <a onClick={() => this.changeChart('bar')}>Bar</a>
+                  </li>
+                  <li role="presentation" class={this.state.lineclass}>
+                    <a onClick={() => this.changeChart('line')}>Line</a>
+                  </li>
+                  <li role="presentation" class={this.state.areaclass}>
+                    <a onClick={() => this.changeChart('area')}>Area</a>
+                  </li>
+                </ul>
               </Col>
             </Row>
           </Col>
