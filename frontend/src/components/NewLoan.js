@@ -40,14 +40,34 @@ class NewLoan extends Component {
   inputsEntered() {
     const { formDataReducer } = this.props
     return (
-      !this.isNullOrEmpty(formDataReducer.mfi) &&
-      !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType) &&
+      this.isValidMFI(formDataReducer.mfi) &&
+      this.isValidTheme(formDataReducer.loanType) &&
+      !this.isValidPT(formDataReducer.productType) &&
       !formDataReducer.error // no error
     )
   }
 
-  isNullOrEmpty(input) {
+  isValidMFI(input) {
+    let mfi_exists = false
+    for (let name of this.state.partner_names) {
+      if (name === input) {
+        mfi_exists = true
+      }
+    }
+    return mfi_exists
+  }
+
+  isValidTheme(input) {
+    let theme_exists = false
+    for (let theme of this.state.loan_themes) {
+      if (theme === input) {
+        theme_exists = true
+      }
+    }
+    return theme_exists
+  }
+
+  isValidPT(input) {
     return !input || !input.length
   }
 
