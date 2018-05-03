@@ -55,7 +55,7 @@ class AdminPartners extends Component {
     var update = null
     return (
       <div
-        style={{ backgroundColor: '#fafafa' }}
+        style={{ backgroundColor: '#D2D2D2' }}
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {

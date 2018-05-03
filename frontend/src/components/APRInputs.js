@@ -335,7 +335,6 @@ class APRInputs extends Component {
                   reduxId="interestCalculationType"
                   items={[
                     { id: '1', value: 'initial amount or flat' },
-                    // { id: '2', value: 'Flat' },
                     { id: '2', value: 'declining balance' }
                   ]}
                 />
@@ -351,6 +350,7 @@ class APRInputs extends Component {
                   limit="900000000"
                   requiredField={true}
                   textBody={formDataReducer.loanAmount}
+                  className=""
                 />
               </Col>
               <Col sm={2} md={2} className="bs-center">
@@ -367,6 +367,7 @@ class APRInputs extends Component {
                   limit="180"
                   requiredField={true}
                   textBody={formDataReducer.installment}
+                  className=""
                 />
               </Col>
               <Col sm={2} md={2} className="bs-center">

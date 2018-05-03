@@ -16,12 +16,33 @@ class TextField extends Component {
 
   componentDidMount() {
     // Used to check required fields and highlight with error messages immediately
-    if (this.props.requiredField && this.props.textBody === null) {
-      this.setState({
-        error_message: 'This field is required.',
-        className: this.props.className + ' required-error'
-      })
+    // console.log(this.props)
+    const { formDataReducer, changedFormData } = this.props
+    // console.log("banana",(this.props.requiredField && (this.props.textBody === null || this.props.textBody.valueOf() === "".valueOf())))
+    if (
+      this.props.requiredField &&
+      (!formDataReducer[this.props.reduxId] ||
+        formDataReducer[this.props.reduxId].length === 0)
+    ) {
+      this.setState(
+        {
+          error_message: 'This field is required.',
+          className: this.props.className + ' required-error'
+        },
+        () => console.log('fuck', this.props.id, this.state)
+      )
+      changedFormData('error', true)
+    } else {
+      this.setState(
+        {
+          error_message: '',
+          className: this.props.className
+        },
+        () => console.log('not fuck', this.props.id, this.state)
+      )
+      changedFormData('error', false)
     }
+    // console.log(this.state)
   }
 
   handleChange(e) {
@@ -105,11 +126,12 @@ class TextField extends Component {
       changedFormData('error', false)
     }
 
-    this.setState({ textBody: value })
+    // this.setState({ textBody: value })
     changedFormData(this.props.reduxId, value)
   }
 
   render() {
+    const { formDataReducer } = this.props
     if (!this.state.valid) {
       let error = this.state.error_message
     }
@@ -123,7 +145,7 @@ class TextField extends Component {
             id={this.props.text}
             placeholder={this.props.hint}
             onChange={event => this.handleChange(event)}
-            value={this.props.textBody === null ? '' : this.props.textBody}
+            value={formDataReducer[this.props.reduxId]}
             required
             //autofocus
           />
