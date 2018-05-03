@@ -260,9 +260,11 @@ class APRInputs extends Component {
         >
           <Row>
             <Col sm={12} md={12} className="bs-center">
-              <PageHeader className="page-header-montserrat page-header-med-font bs-center">
-                {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
-                {formDataReducer.productType} | {formDataReducer.versionNum}
+              <PageHeader className="page-header-montserrat bs-center">
+                <small>
+                  {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
+                  {formDataReducer.productType} | {formDataReducer.versionNum}
+                </small>
               </PageHeader>
             </Col>
           </Row>
