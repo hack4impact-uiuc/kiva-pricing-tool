@@ -107,7 +107,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 ## Excel Sheet Calculation Differences
 Our calculator functions differently, and more accurately, than the original excel tool that we based our implementation off of.
 
-You can download the original APR tool we based our calculator off of [here](link here). The functionality our tool replicates is all under the "Pricing - Advanced" and "Rep Schedule - Advanced" sheets. We use the exact same inputs, but a few of our calculations are different. They are as following. 
+You can download the original APR tool we based our calculator off of [here](/docs/APR_Excel_Tool.xlsm). The functionality our tool replicates is all under the "Pricing - Advanced" and "Rep Schedule - Advanced" sheets. We use the exact same inputs, but a few of our calculations are different. They are as following. 
 
 * Repayment Schedule Editing
    * On the excel sheet, a user must enter manual mode and make changes on parallel columns
