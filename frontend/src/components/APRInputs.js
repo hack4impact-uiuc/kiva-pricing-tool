@@ -261,6 +261,19 @@ class APRInputs extends Component {
           <Row>
             <Row>
               <Col sm={12} md={12}>
+                <PageHeader>
+                  {formDataReducer.mfi +
+                    ' - ' +
+                    formDataReducer.loanType +
+                    ' - ' +
+                    formDataReducer.productType +
+                    ' - ' +
+                    formDataReducer.versionNum}
+                </PageHeader>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={12}>
                 <h5>* Indicates required field</h5>
               </Col>
             </Row>
