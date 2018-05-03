@@ -259,19 +259,16 @@ class APRInputs extends Component {
           className="screen-horizontal-centered screen-vertical-centered-grid padded-element-all round-corners-large solid-background"
         >
           <Row>
-            <Row>
-              <Col sm={12} md={12}>
-                <PageHeader>
-                  {formDataReducer.mfi +
-                    ' - ' +
-                    formDataReducer.loanType +
-                    ' - ' +
-                    formDataReducer.productType +
-                    ' - ' +
-                    formDataReducer.versionNum}
-                </PageHeader>
-              </Col>
-            </Row>
+            <Col sm={12} md={12} className="bs-center">
+              <PageHeader className="page-header-montserrat bs-center">
+                <small>
+                  {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
+                  {formDataReducer.productType} | {formDataReducer.versionNum}
+                </small>
+              </PageHeader>
+            </Col>
+          </Row>
+          <Row>
             <Row>
               <Col sm={12} md={12}>
                 <h5>* Indicates required field</h5>

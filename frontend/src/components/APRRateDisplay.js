@@ -731,21 +731,21 @@ class APRRateDisplay extends Component {
     return (
       <Grid fluid className="padded-element-horizontal">
         <Row>
-          <Col sm={12} md={12}>
-            <PageHeader>
-              {formDataReducer.mfi +
-                ' - ' +
-                formDataReducer.loanType +
-                ' - ' +
-                formDataReducer.productType +
-                ' - ' +
-                formDataReducer.versionNum}
+          <Col sm={12} md={12} className="bs-center">
+            <PageHeader className="page-header-montserrat bs-center">
+              <small>
+                {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
+                {formDataReducer.productType} | {formDataReducer.versionNum}
+              </small>
             </PageHeader>
           </Col>
         </Row>
         <Row>
           <Col sm={12} md={12}>
-            <PageHeader> APR Rate: {formDataReducer.nominalApr}%</PageHeader>
+            <PageHeader className="bs-center">
+              {' '}
+              APR Rate: {formDataReducer.nominalApr}%
+            </PageHeader>
           </Col>
         </Row>
         <Row className="vertical-margin-item">
