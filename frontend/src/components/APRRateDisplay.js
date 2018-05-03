@@ -403,17 +403,80 @@ class APRRateDisplay extends Component {
       csv.push(row)
     }
     row = '\n\n'
-    csv.push(row); 
-    row = "APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n";
-    csv.push(row);
-    row = formDataReducer.aprRate+","+formDataReducer.mfi[0]+","+formDataReducer.loanType[0]+","+formDataReducer.productType[0]+","+formDataReducer.versionNum[0]+","+formDataReducer.updateName+","+formDataReducer.startName[0]+","+formDataReducer.installmentTimePeriod[0]+","+formDataReducer.repaymentType[0]+","+formDataReducer.interestTimePeriod[0]+","+formDataReducer.interestPaymentType[0]+","+formDataReducer.interestCalculationType[0]+","+formDataReducer.loanAmount[0]+","+formDataReducer.installment[0]+","+formDataReducer.nominalInterestRate[0]+","+formDataReducer.gracePeriodPrincipal[0]+","+formDataReducer.gracePeriodInterestPay[0]+","+formDataReducer.gracePeriodInterestCalculate[0]+","+formDataReducer.gracePeriodBalloon[0]+","+formDataReducer.feePercentUpfront[0]+","+formDataReducer.feePercentOngoing[0]+","+formDataReducer.feeFixedUpfront[0]+","+formDataReducer.feeFixedOngoing[0]+","+formDataReducer.taxPercentFees[0]+","+formDataReducer.taxPercentInterest[0]+","+formDataReducer.insurancePercentUpfront[0]+","+formDataReducer.insurancePercentOngoing[0]+","+formDataReducer.insuranceFixedUpfront[0]+","+formDataReducer.insuranceFixedOngoing[0]+","+formDataReducer.securityDepositPercentUpfront[0]+","+formDataReducer.securityDepositPercentOngoing[0]+","+formDataReducer.securityDepositFixedUpfront[0]+","+formDataReducer.securityDepositFixedOngoing[0]+","+formDataReducer.interestPaidOnDepositPercent[0]
-    csv.push(row);
-    let csvFile = new Blob(csv,{type: 'text/csv;charset=utf-8;'});
-    let url = URL.createObjectURL(csvFile);
-    let createDownloadLink = document.createElement('a');
-    createDownloadLink.href = url;
-    createDownloadLink.setAttribute('download', formDataReducer.mfi[0] + "_" + formDataReducer.loanType[0] + "_" + formDataReducer.productType[0] + "_" + formDataReducer.versionNum[0] + ".csv");
-    createDownloadLink.click();
+    csv.push(row)
+    row =
+      'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
+    csv.push(row)
+    row =
+      formDataReducer.aprRate +
+      ',' +
+      formDataReducer.mfi[0] +
+      ',' +
+      formDataReducer.loanType[0] +
+      ',' +
+      formDataReducer.productType[0] +
+      ',' +
+      formDataReducer.versionNum[0] +
+      ',' +
+      formDataReducer.updateName +
+      ',' +
+      formDataReducer.startName[0] +
+      ',' +
+      formDataReducer.installmentTimePeriod[0] +
+      ',' +
+      formDataReducer.repaymentType[0] +
+      ',' +
+      formDataReducer.interestTimePeriod[0] +
+      ',' +
+      formDataReducer.interestPaymentType[0] +
+      ',' +
+      formDataReducer.interestCalculationType[0] +
+      ',' +
+      formDataReducer.loanAmount[0] +
+      ',' +
+      formDataReducer.installment[0] +
+      ',' +
+      formDataReducer.nominalInterestRate[0] +
+      ',' +
+      formDataReducer.gracePeriodPrincipal[0] +
+      ',' +
+      formDataReducer.gracePeriodInterestPay[0] +
+      ',' +
+      formDataReducer.gracePeriodInterestCalculate[0] +
+      ',' +
+      formDataReducer.gracePeriodBalloon[0] +
+      ',' +
+      formDataReducer.feePercentUpfront[0] +
+      ',' +
+      formDataReducer.feePercentOngoing[0] +
+      ',' +
+      formDataReducer.feeFixedUpfront[0] +
+      ',' +
+      formDataReducer.feeFixedOngoing[0] +
+      ',' +
+      formDataReducer.taxPercentFees[0] +
+      ',' +
+      formDataReducer.taxPercentInterest[0] +
+      ',' +
+      formDataReducer.insurancePercentUpfront[0] +
+      ',' +
+      formDataReducer.insurancePercentOngoing[0] +
+      ',' +
+      formDataReducer.insuranceFixedUpfront[0] +
+      ',' +
+      formDataReducer.insuranceFixedOngoing[0] +
+      ',' +
+      formDataReducer.securityDepositPercentUpfront[0] +
+      ',' +
+      formDataReducer.securityDepositPercentOngoing[0] +
+      ',' +
+      formDataReducer.securityDepositFixedUpfront[0] +
+      ',' +
+      formDataReducer.securityDepositFixedOngoing[0] +
+      ',' +
+      formDataReducer.interestPaidOnDepositPercent[0]
+    csv.push(row)
+
     let csvFile = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
     let url = URL.createObjectURL(csvFile)
     let createDownloadLink = document.createElement('a')
@@ -738,8 +801,18 @@ class APRRateDisplay extends Component {
               //  visualType={this.state.visualType}
               //  data={this.state.data}
               ///>
-              <KivaChart id = "balanceChart" visualType={this.state.visualType} data={this.state.data}></KivaChart>
-	            <KivaChart id = "paymentChart" visualType={this.state.visualType} data={this.state.data}></KivaChart>
+              <div>
+                <KivaChart
+                  id="balanceChart"
+                  visualType={this.state.visualType}
+                  data={this.state.data}
+                />
+                <KivaChart
+                  id="paymentChart"
+                  visualType={this.state.visualType}
+                  data={this.state.data}
+                />
+              </div>
             )}
           </Col>
           <Col sm={4} md={4}>
@@ -763,19 +836,19 @@ class APRRateDisplay extends Component {
             </Row>
             <Row>
               <Col sm={12} md={12}>
-                <ul class="nav nav-pills nav-stacked">
-                  {this.state.isHidden && (
-                  <li role="presentation" class={this.state.barclass}>
-                    <a onClick={() => this.changeChart('bar')}>Bar</a>
-                  </li>
-                  <li role="presentation" class={this.state.lineclass}>
-                    <a onClick={() => this.changeChart('line')}>Line</a>
-                  </li>
-                  <li role="presentation" class={this.state.areaclass}>
-                    <a onClick={() => this.changeChart('area')}>Area</a>
-                  </li>
-                  )}
-                </ul>
+                {this.state.isHidden && (
+                  <ul class="nav nav-pills nav-stacked">
+                    <li role="presentation" class={this.state.barclass}>
+                      <a onClick={() => this.changeChart('bar')}>Bar</a>
+                    </li>
+                    <li role="presentation" class={this.state.lineclass}>
+                      <a onClick={() => this.changeChart('line')}>Line</a>
+                    </li>
+                    <li role="presentation" class={this.state.areaclass}>
+                      <a onClick={() => this.changeChart('area')}>Area</a>
+                    </li>
+                  </ul>
+                )}
               </Col>
             </Row>
           </Col>
