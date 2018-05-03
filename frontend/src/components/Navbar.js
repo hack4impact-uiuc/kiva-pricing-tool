@@ -7,37 +7,41 @@ import {
   NavDropdown,
   MenuItem
 } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
 import './../styles/navbar.css'
 
 // note: changed NavItem's component class because we cannot have nested <a>
 class Navbar extends Component {
-  render() {
+  resetData() {
     const { resetFormData } = this.props
+    resetFormData()
+  }
+
+  render() {
     return (
       <Grid>
         <BootstrapNavbar fixedTop fluid className="custom-navbar-styles">
           <BootstrapNavbar.Toggle />
           <BootstrapNavbar.Collapse>
             <Nav>
-              <LinkContainer to="/">
+              <IndexLinkContainer to="/" onClick={e => this.resetData()}>
                 <NavItem>Home</NavItem>
-              </LinkContainer>
+              </IndexLinkContainer>
 
-              <LinkContainer to="newloan">
+              <LinkContainer to="/newloan" onClick={e => this.resetData()}>
                 <NavItem>New Loan</NavItem>
               </LinkContainer>
 
-              <LinkContainer to="findloan">
+              <LinkContainer to="/findloan" onClick={e => this.resetData()}>
                 <NavItem>Find Loan</NavItem>
               </LinkContainer>
 
               <NavDropdown id="adminToolNav" title="Admin Tools">
-                <LinkContainer to="partnerlist">
+                <LinkContainer to="/partnerlist">
                   <MenuItem>Partner List</MenuItem>
                 </LinkContainer>
 
-                <LinkContainer to="themelist">
+                <LinkContainer to="/themelist">
                   <MenuItem>Loan Theme List</MenuItem>
                 </LinkContainer>
               </NavDropdown>

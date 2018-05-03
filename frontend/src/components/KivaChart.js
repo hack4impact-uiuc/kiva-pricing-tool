@@ -1,12 +1,28 @@
-import React, { Component, View, StyleSheet } from 'react';
+import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
-import { extent, max } from 'd3-array';
-import { RadialBarChart, RadialBar, LineChart, Line, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, AreaChart, Legend, Treemap, PieChart, Pie } from 'recharts';
+import { extent, max } from 'd3-array'
+import {
+  LineChart,
+  Line,
+  Bar,
+  BarChart,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Area,
+  AreaChart,
+  Legend,
+  Treemap,
+  PieChart,
+  Pie
+} from 'recharts'
 import { connect } from 'react-redux'
 import { APRRateDisplay } from './'
 
 class KivaChart extends Component {
-  	constructor(props) {
+
+  constructor(props) {
 	super(props)
 	this.state = {
 	data3: [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},

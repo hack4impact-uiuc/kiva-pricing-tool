@@ -7,7 +7,7 @@ export default function formDataReducer(state = initialState.formData, action) {
       return {
         ...state,
 
-        [action.payload.field]: [action.payload.value]
+        [action.payload.field]: action.payload.value
       }
     case RESET:
       return initialState.formData
@@ -16,7 +16,7 @@ export default function formDataReducer(state = initialState.formData, action) {
       for (var key in action.payload.results) {
         prevState = {
           ...prevState,
-          [key]: [action.payload.results[key]]
+          [key]: action.payload.results[key]
         }
       }
       return prevState

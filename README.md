@@ -113,7 +113,13 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
     outfile.close()
 ```
 
+## Excel Sheet Differences
+Our calculator functions differently, and more accurately, than the original excel tool that we based our implementation off of.
 
+* [Excel Tool] (link here)
+
+* Security Deposit Differences
+   * 
 
 
 

@@ -17,8 +17,7 @@ class NewLoan extends Component {
       loan_themes: [],
       selectedPartnerName: formDataReducer.mfi,
       selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType,
-      errorMessage: ''
+      selectedLoanProduct: formDataReducer.productType
     }
   }
 
@@ -27,9 +26,9 @@ class NewLoan extends Component {
   }
 
   componentDidMount() {
-    const { resetFormData, changedFormData } = this.props
-    resetFormData()
+    const { changedFormData } = this.props
     changedFormData('back', 'newloan')
+    changedFormData('error', false)
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       this.setState({ loan_themes: response.data.result.themes })
@@ -41,7 +40,8 @@ class NewLoan extends Component {
     return (
       !this.isNullOrEmpty(formDataReducer.mfi) &&
       !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType)
+      !this.isNullOrEmpty(formDataReducer.productType) &&
+      !formDataReducer.error // no error
     )
   }
 
@@ -52,10 +52,10 @@ class NewLoan extends Component {
   render() {
     const { formDataReducer, changedFormData } = this.props
     return (
-      <div className="page-body-grey overflow-handler">
+      <div className="page-body-grey">
         <Grid
           fluid
-          className="screen-horizontal-centered screen-vertical-centered-grid padded-element-shrink round-corners-large solid-background"
+          className="query-form-center padded-element-shrink round-corners-large solid-background"
         >
           <Row>
             <Col sm={12} md={12} className="bs-center">
@@ -72,7 +72,9 @@ class NewLoan extends Component {
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
                 limit={100}
-                selected={formDataReducer.mfi}
+                selected={
+                  formDataReducer.mfi === '' ? '' : [formDataReducer.mfi]
+                }
                 onInputChange={e => {
                   changedFormData('mfi', e)
                 }}
@@ -83,7 +85,11 @@ class NewLoan extends Component {
                 label="loan"
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
-                selected={formDataReducer.loanType}
+                selected={
+                  formDataReducer.loanType === ''
+                    ? ''
+                    : [formDataReducer.loanType]
+                }
                 onInputChange={e => {
                   changedFormData('loanType', e)
                 }}
@@ -92,18 +98,18 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                id="Loan Product"
-                hint="i.e. small loan"
+                hint="Loan Product (i.e. small loan)"
                 typeVal="String"
                 limit={100}
+                onInputChange={e => {
+                  changedFormData('productType', e)
+                }}
                 textBody={formDataReducer.productType}
               />
             </Form>
 
             <Row>
-              <Col xs={6} sm={6} md={6}>
-                <Button className="button-fancy" name="Back" url="" />
-              </Col>
+              <Col xs={6} sm={6} md={6} />
               <Col xs={6} sm={6} md={6} className="bs-button-right">
                 <Button
                   className="button-fancy"

@@ -57,7 +57,6 @@ function getVersionNum(mfi, loanType, productType) {
 }
 
 function searchLoan(mfi, loanType, productType, versionNum) {
-  let valid = false
   return axios
     .get(
       'http://127.0.0.1:3453/findLoan?partner_name=' +
@@ -86,7 +85,7 @@ function postData(reducerData) {
       adapters.convertToApiLoan(reducerData)
     )
     .then(response => {
-      return response.data.result.apr.toString()
+      return response.data.result
     })
     .catch(function(error) {
       console.log(error + ' there was an error with the request')
