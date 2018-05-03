@@ -894,11 +894,7 @@ class APRRateDisplay extends Component {
 
         <Row className="vertical-margin-item">
           <Col sm={6} md={6}>
-            <Button
-              className="button-fancy"
-              name="Back"
-              url={formDataReducer.back}
-            />
+            <Button className="button-fancy" name="Edit Inputs" url={'form1'} />
           </Col>
           <Col sm={6} md={6} className="bs-button-right">
             <Button
