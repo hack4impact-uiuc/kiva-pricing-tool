@@ -39,6 +39,7 @@ class FindLoan extends Component {
     axios
       .get('http://127.0.0.1:3453/findLoan', data)
       .then(response => {
+        console.log('RESULT', response.data.result)
         const apr = response.data.result.nominal_apr
         const orig_matrix = response.data.result.original_matrix
         const user_matrix = response.data.result.user_matrix
@@ -420,7 +421,7 @@ class FindLoan extends Component {
               <Form>
                 <Typeahead
                   className="vertical-margin-item"
-                  placeholder="Select MFI Partner"
+                  placeholder="Select Field Partner"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
                   onInputChange={e => {
@@ -445,7 +446,7 @@ class FindLoan extends Component {
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   options={this.state.loan_themes}
-                  placeholder="Select Loan Type"
+                  placeholder="Select Loan Theme"
                   selected={
                     formDataReducer.loanType ? [formDataReducer.loanType] : ''
                   }
@@ -465,7 +466,7 @@ class FindLoan extends Component {
                   }
                   ref="product"
                   options={this.state.product_types}
-                  placeholder="Search Products i.e. small loan"
+                  placeholder="Select Loan Product"
                   typeVal="String"
                   limit={100}
                   selected={
@@ -482,7 +483,7 @@ class FindLoan extends Component {
                 <Typeahead
                   className="vertical-margin-item"
                   ref="version"
-                  placeholder="Version Number"
+                  placeholder="Select Version Number"
                   disabled={
                     !(
                       !this.isNullOrEmpty(formDataReducer.mfi) &&
