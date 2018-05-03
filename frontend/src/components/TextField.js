@@ -6,7 +6,7 @@ class TextField extends Component {
     super(props)
     const { formDataReducer } = this.props
     this.state = {
-      valid: true,
+      // valid: true,
       id: this.props.text,
       error_message: '',
       type: this.props.typeVal,
@@ -18,6 +18,7 @@ class TextField extends Component {
     // Used to check required fields and highlight with error messages immediately
     // console.log(this.props)
     const { formDataReducer, changedFormData } = this.props
+    console.log(formDataReducer[this.props.reduxId])
     // console.log("banana",(this.props.requiredField && (this.props.textBody === null || this.props.textBody.valueOf() === "".valueOf())))
     if (
       this.props.requiredField &&
@@ -28,8 +29,8 @@ class TextField extends Component {
         {
           error_message: 'This field is required.',
           className: this.props.className + ' required-error'
-        },
-        () => console.log('fuck', this.props.id, this.state)
+        }
+        // () => console.log('fuck', this.props.id, this.state)
       )
       changedFormData('error', true)
     } else {
@@ -37,8 +38,8 @@ class TextField extends Component {
         {
           error_message: '',
           className: this.props.className
-        },
-        () => console.log('not fuck', this.props.id, this.state)
+        }
+        // () => console.log('not fuck', this.props.id, this.state)
       )
       changedFormData('error', false)
     }
@@ -132,9 +133,9 @@ class TextField extends Component {
 
   render() {
     const { formDataReducer } = this.props
-    if (!this.state.valid) {
-      let error = this.state.error_message
-    }
+    // if (!this.state.valid) {
+    //   let error = this.state.error_message
+    // }
     return (
       <div id="className" className={this.state.className}>
         <div className="input-label">{this.props.id}</div>
