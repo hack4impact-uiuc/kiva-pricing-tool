@@ -84,7 +84,7 @@ class APRInputs extends Component {
   postData() {
     const { formDataReducer, changedFormData } = this.props
     this.inputsEntered() &&
-      Api.postData(formDataReducer).then(r => {
+      Api.calAPR(formDataReducer).then(r => {
         changedFormData('nominalApr', r.apr)
         const matrix = r.matrix
         let reformatted_matrix = []

@@ -3,6 +3,7 @@ import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import { Button, KivaChart } from './'
+import { Api } from '../utils'
 import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
@@ -144,47 +145,6 @@ class APRRateDisplay extends Component {
         ] =
           e.target.innerHTML
       }
-      let inputs = {
-        partner_name: formDataReducer.mfi,
-        loan_theme: formDataReducer.loanType,
-        product_type: formDataReducer.productType,
-        version_num: formDataReducer.versionNum,
-        update_name: formDataReducer.updateName,
-        start_name: formDataReducer.startName,
-        installment_time_period: formDataReducer.installmentTimePeriod,
-        repayment_type: formDataReducer.repaymentType,
-        interest_time_period: formDataReducer.interestTimePeriod,
-        interest_payment_type: formDataReducer.interestPaymentType,
-        interest_calculation_type: formDataReducer.interestCalculationType,
-        loan_amount: formDataReducer.loanAmount,
-        installment: formDataReducer.installment,
-        nominal_interest_rate: formDataReducer.nominalInterestRate,
-        grace_period_principal: formDataReducer.gracePeriodPrincipal,
-        grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
-        grace_period_interest_calculate:
-          formDataReducer.gracePeriodInterestCalculate,
-        grace_period_balloon: formDataReducer.gracePeriodBalloon,
-        fee_percent_upfront: formDataReducer.feePercentUpfront,
-        fee_percent_ongoing: formDataReducer.feePercentOngoing,
-        fee_fixed_upfront: formDataReducer.feeFixedUpfront,
-        fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
-        tax_percent_fees: formDataReducer.taxPercentFees,
-        tax_percent_interest: formDataReducer.taxPercentInterest,
-        insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
-        insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
-        insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
-        insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
-        security_deposit_percent_upfront:
-          formDataReducer.securityDepositPercentUpfront,
-        security_deposit_percent_ongoing:
-          formDataReducer.securityDepositPercentOngoing,
-        security_deposit_fixed_upfront:
-          formDataReducer.securityDepositFixedUpfront,
-        security_deposit_fixed_ongoing:
-          formDataReducer.securityDepositFixedOngoing,
-        interest_paid_on_deposit_percent:
-          formDataReducer.interestPaidOnDepositPercent
-      }
       let user_change = [
         [],
         [],
@@ -248,9 +208,9 @@ class APRRateDisplay extends Component {
         )
       }
       let data = {
-        input_form: inputs,
         user_change: user_change
       }
+      Api.recalculate(data, formDataReducer)
       axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
         const apr = response.data.result.apr
         const recal_matrix = response.data.result.recal_matrix
@@ -757,19 +717,13 @@ class APRRateDisplay extends Component {
       loan_theme: formDataReducer.loanType,
       product_type: formDataReducer.productType,
       version_num: formDataReducer.versionNum,
-      inputs: data,
       origin_matrix: orig_matrix,
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    axios
-      .post('http://127.0.0.1:3453/saveNewLoan', payload)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(function(error) {
-        console.log(error.message + ' there was an error with the request')
-      })
+    Api.saveLoan(payload, data).then(response => {
+      console.log(response)
+    })
   }
 
   render() {
