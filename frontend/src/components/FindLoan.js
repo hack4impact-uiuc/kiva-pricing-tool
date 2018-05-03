@@ -426,6 +426,9 @@ class FindLoan extends Component {
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
                   onInputChange={e => {
                     changedFormData('mfi', e)
+                    changedFormData('loanType', '')
+                    changedFormData('productType', '')
+                    changedFormData('versionNum', '')
                     this.getProductType()
                     axios
                       .get('http://127.0.0.1:3453/getLTEntry', {
@@ -452,6 +455,8 @@ class FindLoan extends Component {
                   }
                   onInputChange={e => {
                     changedFormData('loanType', e)
+                    changedFormData('productType', '')
+                    changedFormData('versionNum', '')
                     this.getProductType()
                   }}
                 />
@@ -476,6 +481,7 @@ class FindLoan extends Component {
                   }
                   onInputChange={e => {
                     changedFormData('productType', e)
+                    changedFormData('versionNum', '')
                     this.getVersionNumEntries()
                   }}
                 />
