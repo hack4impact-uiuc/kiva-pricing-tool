@@ -18,6 +18,7 @@ import {
   Pie
 } from 'recharts'
 import { connect } from 'react-redux'
+import { APRRateDisplay } from './'
 
 class KivaChart extends Component {
   constructor(props) {
@@ -33,16 +34,30 @@ class KivaChart extends Component {
     }
   }
   render() {
-    for (let i = 0; i < 13; i++) {
-      this.state.repaymentData[i] = {
-        principal: this.props.data[5][i],
-        interest: this.props.data[6][i],
-        taxes: this.props.data[7][i],
-        insurance: this.props.data[8][i],
-        fees: this.props.data[9][i]
+    if (this.props.name == 'paymentChart') {
+      let i
+      for (i = 0; i < 13; i++) {
+        this.state.repaymentData[i] = {
+          periodNum: i,
+          principal: this.props.data[5][i],
+          interest: this.props.data[6][i],
+          taxes: this.props.data[7][i],
+          insurance: this.props.data[8][i],
+          fees: this.props.data[9][i]
+        }
       }
+      console.log(this.state.repaymentData)
+    } else if (this.props.name == 'balanceChart') {
+      let i
+      for (i = 0; i < 13; i++) {
+        this.state.repaymentData[i] = {
+          periodNum: i,
+          balance: this.props.data[5][i]
+        }
+      }
+      console.log(this.state.repaymentData)
     }
-    console.log(this.state.repaymentData)
+
     if (this.props.visualType == 'bar') {
       return (
         <div>
@@ -62,6 +77,7 @@ class KivaChart extends Component {
             <Bar dataKey="taxes" stackId="a" fill="#82ca3d" />
             <Bar dataKey="insurance" stackId="a" fill="#41ca3d" />
             <Bar dataKey="fees" stackId="a" fill="#66ca3d" />
+            <XAxis dataKey="periodNum" />
           </BarChart>
         </div>
       )
@@ -100,6 +116,7 @@ class KivaChart extends Component {
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             />
+            <XAxis dataKey="periodNum" />
           </LineChart>
         </div>
       )
@@ -161,9 +178,24 @@ class KivaChart extends Component {
             stroke="#ffc658"
             fill="#ffc658"
           />
+          <XAxis dataKey="periodNum" />
         </AreaChart>
       )
     }
+    // if (this.props.visualType == "radial") {
+    // 	return (
+    // 	<div>
+    // 	<RadialBarChart width={500} height={300} cx={150} cy={150} innerRadius={20} outerRadius={140} barSize={10} data={this.state.repaymentData}>
+    // 	<RadialBar minAngle={15} label={{ position: 'insideStart', fill: '#fff' }} background clockWise={true} dataKey='interest'/>
+    // 	<RadialBar minAngle={15} label={{ position: 'insideStart', fill: '#fff' }} background clockWise={true} dataKey='principal'/>
+    // 	<RadialBar minAngle={15} label={{ position: 'insideStart', fill: '#fff' }} background clockWise={true} dataKey='insurance'/>
+    // 	<RadialBar minAngle={15} label={{ position: 'insideStart', fill: '#fff' }} background clockWise={true} dataKey='taxes'/>
+    // 	<RadialBar minAngle={15} label={{ position: 'insideStart', fill: '#fff' }} background clockWise={true} dataKey='fees'/>
+    // 	</RadialBarChart>
+    // 	</div>
+    // 	)
+    // }
   }
 }
+
 export default KivaChart

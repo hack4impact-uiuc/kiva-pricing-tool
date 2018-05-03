@@ -11,9 +11,7 @@ import 'react-table/react-table.css'
 class APRRateDisplay extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
-      // data: this.convertMatrix(),
       id: null,
       partner_names: [],
       visualType: 'bar',
@@ -125,7 +123,6 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-    // this.convertMatrix = this.convertMatrix.bind(this)
     this.renderEditable = this.renderEditable.bind(this)
     this.updateTable = this.updateTable.bind(this)
   }
@@ -246,7 +243,6 @@ class APRRateDisplay extends Component {
           formDataReducer.user_repayment_schedule[i]['total_cashflow']
         )
       }
-      // user_change[0][0] = '0'
       let data = {
         input_form: inputs,
         user_change: user_change
@@ -345,119 +341,79 @@ class APRRateDisplay extends Component {
     }
     row = '\n\n'
     csv.push(row)
-    row = 'partner name:,' + formDataReducer.mfi[0] + '\n'
-    csv.push(row)
-    row = 'loan theme:,' + formDataReducer.loanType[0] + '\n'
-    csv.push(row)
-    row = 'product type:,' + formDataReducer.productType[0] + '\n'
-    csv.push(row)
-    row = 'version num:,' + formDataReducer.versionNum[0] + '\n'
-    csv.push(row)
-    row = 'update name:,' + formDataReducer.updateName + '\n'
-    csv.push(row)
-    row = 'start name:,' + formDataReducer.startName[0] + '\n'
+    row =
+      'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
     csv.push(row)
     row =
-      'installment time period:,' +
+      formDataReducer.aprRate +
+      ',' +
+      formDataReducer.mfi[0] +
+      ',' +
+      formDataReducer.loanType[0] +
+      ',' +
+      formDataReducer.productType[0] +
+      ',' +
+      formDataReducer.versionNum[0] +
+      ',' +
+      formDataReducer.updateName +
+      ',' +
+      formDataReducer.startName[0] +
+      ',' +
       formDataReducer.installmentTimePeriod[0] +
-      '\n'
-    csv.push(row)
-    row = 'repayment type,' + formDataReducer.repaymentType[0] + '\n'
-    csv.push(row)
-    row =
-      'interest time period:,' + formDataReducer.interestTimePeriod[0] + '\n'
-    csv.push(row)
-    row =
-      'interest payment type:,' + formDataReducer.interestPaymentType[0] + '\n'
-    csv.push(row)
-    row =
-      'interest calculation type:,' +
+      ',' +
+      formDataReducer.repaymentType[0] +
+      ',' +
+      formDataReducer.interestTimePeriod[0] +
+      ',' +
+      formDataReducer.interestPaymentType[0] +
+      ',' +
       formDataReducer.interestCalculationType[0] +
-      '\n'
-    csv.push(row)
-    row = 'loan amount:,' + formDataReducer.loanAmount[0] + '\n'
-    csv.push(row)
-    row = 'installment:,' + formDataReducer.installment[0] + '\n'
-    csv.push(row)
-    row =
-      'nominal_interest_rate:,' + formDataReducer.nominalInterestRate[0] + '\n'
-    csv.push(row)
-    row =
-      'grace_period_principal:,' +
+      ',' +
+      formDataReducer.loanAmount[0] +
+      ',' +
+      formDataReducer.installment[0] +
+      ',' +
+      formDataReducer.nominalInterestRate[0] +
+      ',' +
       formDataReducer.gracePeriodPrincipal[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'grace_period_interest_pay:,' +
+      ',' +
       formDataReducer.gracePeriodInterestPay[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'grace_period_interest_calculate:,' +
+      ',' +
       formDataReducer.gracePeriodInterestCalculate[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'grace_period_balloon:,' + formDataReducer.gracePeriodBalloon[0] + '\n'
-    csv.push(row)
-    row = 'fee_percent_upfront:,' + formDataReducer.feePercentUpfront[0] + '\n'
-    csv.push(row)
-    row = 'fee_percent_ongoing:,' + formDataReducer.feePercentOngoing[0] + '\n'
-    csv.push(row)
-    row = 'fee_fixed_upfront:,' + formDataReducer.feeFixedUpfront[0] + '\n'
-    csv.push(row)
-    row = 'fee_fixed_ongoing:,' + formDataReducer.feeFixedOngoing[0] + '\n'
-    csv.push(row)
-    row = 'tax_percent_fees:,' + formDataReducer.taxPercentFees[0] + '\n'
-    csv.push(row)
-    row =
-      'tax_percent_interest:,' + formDataReducer.taxPercentInterest[0] + '\n'
-    csv.push(row)
-    row =
-      'insurance_percent_upfront:,' +
+      ',' +
+      formDataReducer.gracePeriodBalloon[0] +
+      ',' +
+      formDataReducer.feePercentUpfront[0] +
+      ',' +
+      formDataReducer.feePercentOngoing[0] +
+      ',' +
+      formDataReducer.feeFixedUpfront[0] +
+      ',' +
+      formDataReducer.feeFixedOngoing[0] +
+      ',' +
+      formDataReducer.taxPercentFees[0] +
+      ',' +
+      formDataReducer.taxPercentInterest[0] +
+      ',' +
       formDataReducer.insurancePercentUpfront[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'insurance_percent_ongoing:,' +
+      ',' +
       formDataReducer.insurancePercentOngoing[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'insurance_fixed_upfront:,' +
+      ',' +
       formDataReducer.insuranceFixedUpfront[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'insurance_fixed_ongoing:,' +
+      ',' +
       formDataReducer.insuranceFixedOngoing[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'security_deposit_percent_upfront:,' +
+      ',' +
       formDataReducer.securityDepositPercentUpfront[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'security_deposit_percent_ongoing:,' +
+      ',' +
       formDataReducer.securityDepositPercentOngoing[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'security_deposit_fixed_upfront:,' +
+      ',' +
       formDataReducer.securityDepositFixedUpfront[0] +
-      '\n'
-    csv.push(row)
-    row =
-      'security_deposit_fixed_ongoing:,' +
+      ',' +
       formDataReducer.securityDepositFixedOngoing[0] +
-      '\n'
+      ',' +
+      formDataReducer.interestPaidOnDepositPercent[0]
     csv.push(row)
-    row =
-      'interest_paid_on_deposit_percent:,' +
-      formDataReducer.interestPaidOnDepositPercent[0] +
-      '\n'
-    csv.push(row)
+
     let csvFile = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
     let url = URL.createObjectURL(csvFile)
     let createDownloadLink = document.createElement('a')
@@ -565,6 +521,7 @@ class APRRateDisplay extends Component {
       [],
       []
     ]
+
     for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
       user_change[0].push(
         formDataReducer.user_repayment_schedule[i]['period_num']
@@ -764,10 +721,22 @@ class APRRateDisplay extends Component {
         <Row className="vertical-margin-item">
           <Col sm={8} md={8}>
             {this.state.isHidden && (
-              <KivaChart
-                visualType={this.state.visualType}
-                data={this.state.data}
-              />
+              //<KivaChart
+              //  visualType={this.state.visualType}
+              //  data={this.state.data}
+              ///>
+              <div>
+                <KivaChart
+                  id="balanceChart"
+                  visualType={this.state.visualType}
+                  data={this.state.data}
+                />
+                <KivaChart
+                  id="paymentChart"
+                  visualType={this.state.visualType}
+                  data={this.state.data}
+                />
+              </div>
             )}
           </Col>
           <Col sm={4} md={4}>
@@ -791,17 +760,19 @@ class APRRateDisplay extends Component {
             </Row>
             <Row>
               <Col sm={12} md={12}>
-                <ul class="nav nav-pills nav-stacked">
-                  <li role="presentation" class={this.state.barclass}>
-                    <a onClick={() => this.changeChart('bar')}>Bar</a>
-                  </li>
-                  <li role="presentation" class={this.state.lineclass}>
-                    <a onClick={() => this.changeChart('line')}>Line</a>
-                  </li>
-                  <li role="presentation" class={this.state.areaclass}>
-                    <a onClick={() => this.changeChart('area')}>Area</a>
-                  </li>
-                </ul>
+                {this.state.isHidden && (
+                  <ul class="nav nav-pills nav-stacked">
+                    <li role="presentation" class={this.state.barclass}>
+                      <a onClick={() => this.changeChart('bar')}>Bar</a>
+                    </li>
+                    <li role="presentation" class={this.state.lineclass}>
+                      <a onClick={() => this.changeChart('line')}>Line</a>
+                    </li>
+                    <li role="presentation" class={this.state.areaclass}>
+                      <a onClick={() => this.changeChart('area')}>Area</a>
+                    </li>
+                  </ul>
+                )}
               </Col>
             </Row>
           </Col>
@@ -894,11 +865,7 @@ class APRRateDisplay extends Component {
 
         <Row className="vertical-margin-item">
           <Col sm={6} md={6}>
-            <Button
-              className="button-fancy"
-              name="Back"
-              url={formDataReducer.back}
-            />
+            <Button className="button-fancy" name="Edit Inputs" url={'form1'} />
           </Col>
           <Col sm={6} md={6} className="bs-button-right">
             <Button

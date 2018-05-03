@@ -78,6 +78,31 @@ function searchLoan(mfi, loanType, productType, versionNum) {
     })
 }
 
+function getTable(mfi, loanType, productType, versionNum) {
+  return axios
+    .get(
+      'http://127.0.0.1:3453/findLoan?partner_name=' +
+        mfi +
+        '&loan_theme=' +
+        loanType +
+        '&product_type=' +
+        productType +
+        '&version_num=' +
+        versionNum
+    )
+    .then(response => {
+      // console.log(response.data.result)
+      let converted = adapters.convertFromApiLoan(response.data.result)
+      console.log(converted)
+      console.log(response.data)
+      // return adapters.convertFromApiLoan(response.data.result)
+    })
+    .catch(function(error) {
+      console.log('ERROR: ', error)
+      return null
+    })
+}
+
 function postData(reducerData) {
   return axios
     .post(

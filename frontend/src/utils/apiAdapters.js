@@ -1,3 +1,11 @@
+function zeroOrInput(input) {
+  if (!input) {
+    return 0
+  } else {
+    return input
+  }
+}
+
 function convertFromApiLoan(loan) {
   console.log(loan)
   return {
@@ -35,15 +43,10 @@ function convertFromApiLoan(loan) {
     securityDepositFixedUpfront: loan.security_deposit_fixed_upfront,
     securityDepositFixedOngoing: loan.security_deposit_fixed_ongoing,
     interestPaidOnDepositPercent: loan.interest_paid_on_deposit_percent,
-    nominalApr: loan.nominal_apr
-  }
-}
-
-function zeroOrInput(input) {
-  if (!input) {
-    return 0
-  } else {
-    return input
+    nominalApr: loan.nominal_apr,
+    originalMatrix: loan.original_matrix,
+    userMatrix: loan.user_matrix,
+    calcMatrix: loan.calc_matrix
   }
 }
 
