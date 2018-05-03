@@ -34,7 +34,7 @@ class KivaChart extends Component {
     }
   }
   render() {
-    if (this.props.name == 'paymentChart') {
+    if (this.props.id == 'paymentChart') {
       let i
       for (i = 0; i < 13; i++) {
         this.state.repaymentData[i] = {
@@ -47,12 +47,13 @@ class KivaChart extends Component {
         }
       }
       console.log(this.state.repaymentData)
-    } else if (this.props.name == 'balanceChart') {
+    }
+    if (this.props.id == 'balanceChart') {
       let i
       for (i = 0; i < 13; i++) {
         this.state.repaymentData[i] = {
           periodNum: i,
-          balance: this.props.data[5][i]
+          principal: this.props.data[5][i]
         }
       }
       console.log(this.state.repaymentData)

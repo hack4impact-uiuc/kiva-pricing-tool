@@ -69,8 +69,7 @@ function searchLoan(mfi, loanType, productType, versionNum) {
         versionNum
     )
     .then(response => {
-      console.log(response.data.result)
-      return adapters.convertFromApiLoan(response.data.result)
+      return response
     })
     .catch(function(error) {
       console.log('ERROR: ', error)
@@ -103,7 +102,7 @@ function getTable(mfi, loanType, productType, versionNum) {
     })
 }
 
-function postData(reducerData) {
+function calAPR(reducerData) {
   return axios
     .post(
       'http://127.0.0.1:3453/calculateAPR',
@@ -117,10 +116,36 @@ function postData(reducerData) {
     })
 }
 
+function saveLoan(payload, inputs) {
+  payload.inputs = adapters.convertToApiLoan(inputs)
+  return axios
+    .post('http://127.0.0.1:3453/saveNewLoan', payload)
+    .then(response => {
+      return response
+    })
+    .catch(function(error) {
+      console.log(error + ' there was an error with the request')
+    })
+}
+
+function recalculate(payload, inputs) {
+  payload.input_form = adapters.convertToApiLoan(inputs)
+  return axios
+    .post('http://127.0.0.1:3453/recalculate', payload)
+    .then(response => {
+      return response
+    })
+    .catch(function(error) {
+      console.log(error + ' there was an error with the request')
+    })
+}
+
 export default {
   getProductType,
   getVersionNumEntries,
   getVersionNum,
   searchLoan,
-  postData
+  calAPR,
+  saveLoan,
+  recalculate
 }

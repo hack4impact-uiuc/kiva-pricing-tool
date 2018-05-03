@@ -84,7 +84,7 @@ class APRInputs extends Component {
   postData() {
     const { formDataReducer, changedFormData } = this.props
     this.inputsEntered() &&
-      Api.postData(formDataReducer).then(r => {
+      Api.calAPR(formDataReducer).then(r => {
         changedFormData('nominalApr', r.apr)
         const matrix = r.matrix
         let reformatted_matrix = []
@@ -269,6 +269,19 @@ class APRInputs extends Component {
             </Col>
           </Row>
           <Row>
+            <Row>
+              <Col sm={12} md={12}>
+                <PageHeader>
+                  {formDataReducer.mfi +
+                    ' - ' +
+                    formDataReducer.loanType +
+                    ' - ' +
+                    formDataReducer.productType +
+                    ' - ' +
+                    formDataReducer.versionNum}
+                </PageHeader>
+              </Col>
+            </Row>
             <Row>
               <Col sm={12} md={12}>
                 <h5>* Indicates required field</h5>

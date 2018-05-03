@@ -3,6 +3,7 @@ import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import { Button, KivaChart } from './'
+import { Api } from '../utils'
 import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
@@ -134,7 +135,7 @@ class APRRateDisplay extends Component {
         cellInfo.column.id
       ].toString() !== e.target.innerHTML
     ) {
-      if (e.target.innerHTML === '') {
+      if (e.target.innerHTML === null || e.target.innerHTML.trim() === '') {
         formDataReducer.user_repayment_schedule[cellInfo.index][
           cellInfo.column.id
         ] = null
@@ -143,47 +144,6 @@ class APRRateDisplay extends Component {
           cellInfo.column.id
         ] =
           e.target.innerHTML
-      }
-      let inputs = {
-        partner_name: formDataReducer.mfi,
-        loan_theme: formDataReducer.loanType,
-        product_type: formDataReducer.productType,
-        version_num: formDataReducer.versionNum,
-        update_name: formDataReducer.updateName,
-        start_name: formDataReducer.startName,
-        installment_time_period: formDataReducer.installmentTimePeriod,
-        repayment_type: formDataReducer.repaymentType,
-        interest_time_period: formDataReducer.interestTimePeriod,
-        interest_payment_type: formDataReducer.interestPaymentType,
-        interest_calculation_type: formDataReducer.interestCalculationType,
-        loan_amount: formDataReducer.loanAmount,
-        installment: formDataReducer.installment,
-        nominal_interest_rate: formDataReducer.nominalInterestRate,
-        grace_period_principal: formDataReducer.gracePeriodPrincipal,
-        grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
-        grace_period_interest_calculate:
-          formDataReducer.gracePeriodInterestCalculate,
-        grace_period_balloon: formDataReducer.gracePeriodBalloon,
-        fee_percent_upfront: formDataReducer.feePercentUpfront,
-        fee_percent_ongoing: formDataReducer.feePercentOngoing,
-        fee_fixed_upfront: formDataReducer.feeFixedUpfront,
-        fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
-        tax_percent_fees: formDataReducer.taxPercentFees,
-        tax_percent_interest: formDataReducer.taxPercentInterest,
-        insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
-        insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
-        insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
-        insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
-        security_deposit_percent_upfront:
-          formDataReducer.securityDepositPercentUpfront,
-        security_deposit_percent_ongoing:
-          formDataReducer.securityDepositPercentOngoing,
-        security_deposit_fixed_upfront:
-          formDataReducer.securityDepositFixedUpfront,
-        security_deposit_fixed_ongoing:
-          formDataReducer.securityDepositFixedOngoing,
-        interest_paid_on_deposit_percent:
-          formDataReducer.interestPaidOnDepositPercent
       }
       let user_change = [
         [],
@@ -202,7 +162,11 @@ class APRRateDisplay extends Component {
         [],
         []
       ]
-      for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
+      for (
+        let i = 0;
+        i < formDataReducer.user_repayment_schedule.length - 1;
+        i++
+      ) {
         user_change[0].push(
           formDataReducer.user_repayment_schedule[i]['period_num']
         )
@@ -244,9 +208,9 @@ class APRRateDisplay extends Component {
         )
       }
       let data = {
-        input_form: inputs,
         user_change: user_change
       }
+      Api.recalculate(data, formDataReducer)
       axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
         const apr = response.data.result.apr
         const recal_matrix = response.data.result.recal_matrix
@@ -273,6 +237,65 @@ class APRRateDisplay extends Component {
               total_cashflow: recal_matrix[14][i]
             })
           }
+          calc_matrix.push({
+            period_num: 'Total',
+            payment_due_date: ' ',
+            days: 0,
+            amount_due: 0,
+            principal_payment: 0,
+            balance: ' ',
+            interest: 0,
+            fees: 0,
+            insurance: 0,
+            taxes: 0,
+            security_deposit: 0,
+            security_interest_paid: 0,
+            deposit_withdrawal: 0,
+            deposit_balance: ' ',
+            total_cashflow: 0
+          })
+          let last = calc_matrix.length - 1
+          for (let i = 0; i < last; i++) {
+            calc_matrix[last]['days'] += calc_matrix[i]['days']
+            calc_matrix[last]['amount_due'] += calc_matrix[i]['amount_due']
+            calc_matrix[last]['principal_payment'] +=
+              calc_matrix[i]['principal_payment']
+            calc_matrix[last]['interest'] += calc_matrix[i]['interest']
+            calc_matrix[last]['fees'] += calc_matrix[i]['fees']
+            calc_matrix[last]['insurance'] += calc_matrix[i]['insurance']
+            calc_matrix[last]['taxes'] += calc_matrix[i]['taxes']
+            calc_matrix[last]['security_deposit'] +=
+              calc_matrix[i]['security_deposit']
+            calc_matrix[last]['security_interest_paid'] +=
+              calc_matrix[i]['security_interest_paid']
+            calc_matrix[last]['deposit_withdrawal'] +=
+              calc_matrix[i]['deposit_withdrawal']
+            calc_matrix[last]['total_cashflow'] +=
+              calc_matrix[i]['total_cashflow']
+          }
+          calc_matrix[last]['principal_payment'] = calc_matrix[last][
+            'principal_payment'
+          ].toFixed(2)
+          calc_matrix[last]['interest'] = calc_matrix[last]['interest'].toFixed(
+            2
+          )
+          calc_matrix[last]['fees'] = calc_matrix[last]['fees'].toFixed(2)
+          calc_matrix[last]['insurance'] = calc_matrix[last][
+            'insurance'
+          ].toFixed(2)
+          calc_matrix[last]['taxes'] = calc_matrix[last]['taxes'].toFixed(2)
+          calc_matrix[last]['security_deposit'] = calc_matrix[last][
+            'security_deposit'
+          ].toFixed(2)
+          calc_matrix[last]['security_interest_paid'] = calc_matrix[last][
+            'security_interest_paid'
+          ].toFixed(2)
+          calc_matrix[last]['deposit_withdrawal'] = calc_matrix[last][
+            'deposit_withdrawal'
+          ].toFixed(2)
+          calc_matrix[last]['total_cashflow'] = calc_matrix[last][
+            'total_cashflow'
+          ].toFixed(2)
         }
         calc_matrix[0]['period_num'] = 'Disbursement Info'
         changedFormData('calc_repayment_schedule', calc_matrix)
@@ -694,25 +717,32 @@ class APRRateDisplay extends Component {
       loan_theme: formDataReducer.loanType,
       product_type: formDataReducer.productType,
       version_num: formDataReducer.versionNum,
-      inputs: data,
       origin_matrix: orig_matrix,
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    axios
-      .post('http://127.0.0.1:3453/saveNewLoan', payload)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(function(error) {
-        console.log(error.message + ' there was an error with the request')
-      })
+    Api.saveLoan(payload, data).then(response => {
+      console.log(response)
+    })
   }
 
   render() {
     const { formDataReducer } = this.props
     return (
       <Grid fluid className="padded-element-horizontal">
+        <Row>
+          <Col sm={12} md={12}>
+            <PageHeader>
+              {formDataReducer.mfi +
+                ' - ' +
+                formDataReducer.loanType +
+                ' - ' +
+                formDataReducer.productType +
+                ' - ' +
+                formDataReducer.versionNum}
+            </PageHeader>
+          </Col>
+        </Row>
         <Row>
           <Col sm={12} md={12}>
             <PageHeader> APR Rate: {formDataReducer.nominalApr}%</PageHeader>
