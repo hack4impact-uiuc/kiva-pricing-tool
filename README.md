@@ -18,7 +18,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 
 **React Router**
 * What is React Router
-    * Different parts that make up react router that we will probably be using: 
+   * Different parts that make up react router that we will probably be using: 
         * Route: IMPORTANT! renders a specific UI when a location matches the route’s path.
         * Link: helps us navigate within our application
         * Router: The common low-level interface for all router components
@@ -34,7 +34,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 
 **Redux Resources**
 * What is Redux
-    * Redux is a tool for managing application state.
+   * Redux is a tool for managing application state.
 * [Basic Intro Video to Redux Components](https://www.youtube.com/watch?v=DiLVAXlVYR0)
 * [More on the Different Parts of Redux](https://redux.js.org/#the-gist)
 * [When is Redux Useful](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
