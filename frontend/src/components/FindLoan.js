@@ -19,6 +19,7 @@ class FindLoan extends Component {
       versions: [],
       disableButton: ''
     }
+    this.getTables = this.getTables.bind(this)
   }
 
   static contextTypes = {
@@ -36,8 +37,12 @@ class FindLoan extends Component {
       }
     }
 
-    axios
-      .get('http://127.0.0.1:3453/findLoan', data)
+    Api.searchLoan(
+      formDataReducer.mfi,
+      formDataReducer.loanType,
+      formDataReducer.productType,
+      formDataReducer.versionNum
+    )
       .then(response => {
         console.log('RESULT', response.data.result)
         const apr = response.data.result.nominal_apr
@@ -275,33 +280,33 @@ class FindLoan extends Component {
             reformatted_calc_matrix[last]['total_cashflow'] +=
               reformatted_calc_matrix[i]['total_cashflow']
           }
-          reformatted_calc_matrix[last]['principal_payment'] = calc_matrix[
+          reformatted_calc_matrix[last][
+            'principal_payment'
+          ] = reformatted_calc_matrix[last]['principal_payment'].toFixed(2)
+          reformatted_calc_matrix[last]['interest'] = reformatted_calc_matrix[
             last
-          ]['principal_payment'].toFixed(2)
-          reformatted_calc_matrix[last]['interest'] = calc_matrix[last][
-            'interest'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['fees'] = calc_matrix[last][
+          ]['interest'].toFixed(2)
+          reformatted_calc_matrix[last]['fees'] = reformatted_calc_matrix[last][
             'fees'
           ].toFixed(2)
-          reformatted_calc_matrix[last]['insurance'] = calc_matrix[last][
-            'insurance'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['taxes'] = calc_matrix[last][
-            'taxes'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['security_deposit'] = calc_matrix[last][
+          reformatted_calc_matrix[last]['insurance'] = reformatted_calc_matrix[
+            last
+          ]['insurance'].toFixed(2)
+          reformatted_calc_matrix[last]['taxes'] = reformatted_calc_matrix[
+            last
+          ]['taxes'].toFixed(2)
+          reformatted_calc_matrix[last][
             'security_deposit'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['security_interest_paid'] = calc_matrix[
-            last
-          ]['security_interest_paid'].toFixed(2)
-          reformatted_calc_matrix[last]['deposit_withdrawal'] = calc_matrix[
-            last
-          ]['deposit_withdrawal'].toFixed(2)
-          reformatted_calc_matrix[last]['total_cashflow'] = calc_matrix[last][
+          ] = reformatted_calc_matrix[last]['security_deposit'].toFixed(2)
+          reformatted_calc_matrix[last][
+            'security_interest_paid'
+          ] = reformatted_calc_matrix[last]['security_interest_paid'].toFixed(2)
+          reformatted_calc_matrix[last][
+            'deposit_withdrawal'
+          ] = reformatted_calc_matrix[last]['deposit_withdrawal'].toFixed(2)
+          reformatted_calc_matrix[last][
             'total_cashflow'
-          ].toFixed(2)
+          ] = reformatted_calc_matrix[last]['total_cashflow'].toFixed(2)
           reformatted_matrix[0]['period_num'] = 'Disbursement Info'
           reformatted_calc_matrix[0]['period_num'] = 'Disbursement Info'
           changedFormData('original_repayment_schedule', reformatted_matrix)
@@ -514,14 +519,7 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="output"
                 onClickHandler={() => {
-                  Api.searchLoan(
-                    formDataReducer.mfi,
-                    formDataReducer.loanType,
-                    formDataReducer.productType,
-                    formDataReducer.versionNum
-                  ).then(value => {
-                    searchLoan(value)
-                  })
+                  this.getTables()
                 }}
               />
             </Col>
@@ -532,14 +530,7 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="form1"
                 onClickHandler={() => {
-                  Api.searchLoan(
-                    formDataReducer.mfi,
-                    formDataReducer.loanType,
-                    formDataReducer.productType,
-                    formDataReducer.versionNum
-                  ).then(value => {
-                    searchLoan(value)
-                  })
+                  this.getTables()
                 }}
               />
             </Col>
