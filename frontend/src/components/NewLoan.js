@@ -30,8 +30,10 @@ class NewLoan extends Component {
     changedFormData('back', 'newloan')
     changedFormData('error', false)
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
-      this.setState({ partner_names: response.data.result.partners })
-      this.setState({ loan_themes: response.data.result.themes })
+      this.setState({
+        partner_names: response.data.result.partners,
+        loan_themes: response.data.result.themes
+      })
     })
   }
 
