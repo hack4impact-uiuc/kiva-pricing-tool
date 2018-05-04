@@ -279,7 +279,7 @@ class APRInputs extends Component {
                   typeVal="String"
                   limit="100"
                   requiredField={true}
-                  textBody={formDataReducer.startName}
+                  // textBody={formDataReducer.startName}
                   onTextInputChange={this.handleTextChange}
                   //doesn't allow spaces ** need to fix
                 />
@@ -336,7 +336,7 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   requiredField={true}
-                  textBody={formDataReducer.loanAmount}
+                  // textBody={formDataReducer.loanAmount}
                   className=""
                 />
               </Col>
@@ -353,7 +353,7 @@ class APRInputs extends Component {
                   typeVal="int"
                   limit="180"
                   requiredField={true}
-                  textBody={formDataReducer.installment}
+                  // textBody={formDataReducer.installment}
                   className=""
                 />
               </Col>
@@ -384,7 +384,7 @@ class APRInputs extends Component {
                   typeVal="int"
                   limit="100"
                   requiredField={true}
-                  textBody={formDataReducer.nominalInterestRate}
+                  // textBody={formDataReducer.nominalInterestRate}
                 />
               </Col>
               <Col sm={2} md={2} className="bs-center">
@@ -666,6 +666,7 @@ class APRInputs extends Component {
               <Col sm={6} md={6} className="bs-button-right">
                 <TextField
                   className="inline-textfield placeholder-textfield"
+                  // reduxId="interestPaidOnDepositPercent"
                   id="Interest Paid on Deposit"
                   hint="PLACEHOLDER"
                 />

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import './../styles/textfield.css'
 
 class TextField extends Component {
@@ -6,7 +7,6 @@ class TextField extends Component {
     super(props)
     const { formDataReducer } = this.props
     this.state = {
-      // valid: true,
       id: this.props.text,
       error_message: '',
       type: this.props.typeVal,
@@ -14,36 +14,38 @@ class TextField extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.formDataReducer[this.props.reduxId] !=
+      this.props.formDataReducer[this.props.reduxId]
+    ) {
+      this.setState({
+        error_message: '',
+        className: this.props.className
+      })
+    }
+  }
+
   componentDidMount() {
     // Used to check required fields and highlight with error messages immediately
-    // console.log(this.props)
     const { formDataReducer, changedFormData } = this.props
-    console.log(formDataReducer[this.props.reduxId])
-    // console.log("banana",(this.props.requiredField && (this.props.textBody === null || this.props.textBody.valueOf() === "".valueOf())))
     if (
       this.props.requiredField &&
       (!formDataReducer[this.props.reduxId] ||
         formDataReducer[this.props.reduxId].length === 0)
     ) {
-      this.setState(
-        {
-          error_message: 'This field is required.',
-          className: this.props.className + ' required-error'
-        }
-        // () => console.log('fuck', this.props.id, this.state)
-      )
+      this.setState({
+        error_message: 'This field is required.',
+        className: this.props.className + ' required-error'
+      })
       changedFormData('error', true)
     } else {
-      this.setState(
-        {
-          error_message: '',
-          className: this.props.className
-        }
-        // () => console.log('not fuck', this.props.id, this.state)
-      )
+      this.setState({
+        error_message: '',
+        className: this.props.className
+      })
       changedFormData('error', false)
     }
-    // console.log(this.state)
   }
 
   handleChange(e) {
@@ -114,7 +116,11 @@ class TextField extends Component {
       }
     }
 
-    if (value === '' && this.props.requiredField === true) {
+    if (
+      value === '' &&
+      formDataReducer[this.props.reduxId].length === 0 &&
+      this.props.requiredField === true
+    ) {
       // Check if required field is empty
       this.setState({
         error_message: 'This field is required.',
@@ -127,19 +133,16 @@ class TextField extends Component {
       changedFormData('error', false)
     }
 
-    // this.setState({ textBody: value })
     changedFormData(this.props.reduxId, value)
   }
 
   render() {
     const { formDataReducer } = this.props
-    // if (!this.state.valid) {
-    //   let error = this.state.error_message
-    // }
+    console.log('¯\\_(ツ)_/¯', this.state.className)
     return (
       <div id="className" className={this.state.className}>
         <div className="input-label">{this.props.id}</div>
-        <div className="textfield-component">
+        <div className="textfield-component" onLoad={() => this.onLoad()}>
           <input
             className="form-control input-sm"
             type={this.props.input_type}
@@ -148,7 +151,7 @@ class TextField extends Component {
             onChange={event => this.handleChange(event)}
             value={formDataReducer[this.props.reduxId]}
             required
-            //autofocus
+            autofocus
           />
         </div>
         <p className="error-message">{this.state.error_message}</p>

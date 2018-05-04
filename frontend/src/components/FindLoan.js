@@ -421,7 +421,7 @@ class FindLoan extends Component {
               <Form>
                 <Typeahead
                   className="vertical-margin-item"
-                  placeholder="Select Field Partner"
+                  placeholder="Select Field Partner:"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
                   onInputChange={e => {
@@ -449,7 +449,7 @@ class FindLoan extends Component {
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   options={this.state.loan_themes}
-                  placeholder="Select Loan Theme"
+                  placeholder="Select Loan Theme:"
                   selected={
                     formDataReducer.loanType ? [formDataReducer.loanType] : ''
                   }
@@ -471,7 +471,7 @@ class FindLoan extends Component {
                   }
                   ref="product"
                   options={this.state.product_types}
-                  placeholder="Select Loan Product"
+                  placeholder="Select Loan Product:"
                   typeVal="String"
                   limit={100}
                   selected={
@@ -489,7 +489,7 @@ class FindLoan extends Component {
                 <Typeahead
                   className="vertical-margin-item"
                   ref="version"
-                  placeholder="Select Version Number"
+                  placeholder="Select Version Number:"
                   disabled={
                     !(
                       !this.isNullOrEmpty(formDataReducer.mfi) &&
@@ -503,7 +503,6 @@ class FindLoan extends Component {
                       ? [formDataReducer.versionNum]
                       : ''
                   }
-                  placeholder="Search Versions:"
                   onInputChange={e => {
                     changedFormData('versionNum', e)
                   }}
