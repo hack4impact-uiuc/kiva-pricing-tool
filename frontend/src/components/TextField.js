@@ -14,7 +14,7 @@ class TextField extends Component {
     }
   }
 
-  // will remove errors if redux populates data
+  // if redux populates fields, will remove the "field required" error message
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.formDataReducer[this.props.reduxId] !=
@@ -152,13 +152,12 @@ class TextField extends Component {
       })
       changedFormData('error', true)
       changedFormData(this.props.reduxId, value)
-    } else if (value === '') {
-      // Else if to prevent error message resetting (both conditions check for value)
-      this.setState({ error_message: '', className: this.props.className }) // Reset classname since it's not an error (remove required-error)
-      changedFormData('error', false)
     }
-
-    // changedFormData(this.props.reduxId, value)
+    // else if (value === '') {
+    //   // Else if to prevent error message resetting (both conditions check for value)
+    //   this.setState({ error_message: '', className: this.props.className }) // Reset classname since it's not an error (remove required-error)
+    //   changedFormData('error', false)
+    // }
   }
 
   render() {

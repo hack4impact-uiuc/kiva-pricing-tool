@@ -251,7 +251,7 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer } = this.props
-    console.log(formDataReducer, this.inputsEntered())
+    // console.log(formDataReducer, this.inputsEntered())
     return (
       <div className="page-body-grey padded-element-vertical overpad-shrink">
         <Grid
