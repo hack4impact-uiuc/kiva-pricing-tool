@@ -35,7 +35,7 @@ class Dropdown extends Component {
   render() {
     const { formDataReducer, changedFormData } = this.props
     // console.log("yo", formDataReducer, this.props.reduxId, "hi"+formDataReducer[this.props.reduxId])
-    console.log(this.state.value)
+    // console.log(this.state.value)
     return (
       <span className="space">
         <DropdownButton
