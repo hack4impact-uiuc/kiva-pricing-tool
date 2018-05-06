@@ -61,10 +61,8 @@ class AdminPartners extends Component {
         onBlur={e => {
           const data = [...this.state.data]
           original = data[cellInfo.index][cellInfo.column.id]
-          console.log(original)
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
           update = data[cellInfo.index][cellInfo.column.id]
-          console.log(update)
           this.setState({ data })
           if (original !== update) {
             if (update && update.length != 0 && update != ' ') {
@@ -106,6 +104,7 @@ class AdminPartners extends Component {
 
   saveAllPartners() {
     var updated_name = null
+    var partners = []
     if (this.state.edited_partners.length === 0) {
       container.warning(
         'There are no changes to save',
@@ -139,12 +138,13 @@ class AdminPartners extends Component {
             }
           })
           .catch(error => {
-            if (error.response.status === 422) {
+            if (
+              error.response.status === 422 ||
+              error.response.status === 400
+            ) {
               container.warning(
-                "The MFI partner '" +
-                  this.state.edited_partners[i].update +
-                  "' already exists.",
-                'Already Exists',
+                'Changes to partner were not saved.',
+                'One or more of edited partners already exists.',
                 {
                   closeButton: true
                 }

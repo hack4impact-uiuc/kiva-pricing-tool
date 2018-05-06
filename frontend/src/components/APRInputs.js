@@ -47,25 +47,6 @@ class APRInputs extends Component {
       !this.isNullOrEmpty(formDataReducer.loanAmount) && // required
       !this.isNullOrEmpty(formDataReducer.installment) && // required
       !this.isNullOrEmpty(formDataReducer.nominalInterestRate) // required
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodBalloon) &&
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodPrincipal) &&
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodInterestPay) &&
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodInterestCalculate) &&
-      // !this.isNullOrEmpty(formDataReducer.feePercentOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.feePercentUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.feeFixedUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.feeFixedOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.taxPercentFees) &&
-      // !this.isNullOrEmpty(formDataReducer.taxPercentInterest) &&
-      // !this.isNullOrEmpty(formDataReducer.insurancePercentUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.insurancePercentOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.insuranceFixedUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.insuranceFixedOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositPercentUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositPercentOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositFixedUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositFixedOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.interestPaidOnDepositPercent)
     )
   }
 
@@ -428,7 +409,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodPrincipal"
                   hint="Capital"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodPrincipal}
                 />
               </Col>
@@ -439,7 +420,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodInterestPay"
                   hint="Int Pmt"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodInterestPay}
                 />
               </Col>
@@ -450,7 +431,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodInterestCalculate"
                   hint="Int Calc"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodInterestCalculate}
                 />
               </Col>
@@ -461,7 +442,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodBalloon"
                   hint="Balloon"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodBalloon}
                 />
               </Col>
