@@ -187,7 +187,7 @@ def save_loan():
         user_change_matrix = request_json['user_change_matrix']
         recal_matrix = request_json['repay_matrix']
 
-    except:
+    except Exception as e:
         return create_response(status=422, message='missing compoonents for save new loan')
 
     try:
@@ -268,7 +268,6 @@ def save_loan():
                 'total_cashflow_calc' : float(cur_recal_col[CASH_FLOW_IDX])
             }
             repay_schedule = RepaymentSchedule(new_repay_row)
-            print(repay_schedule)
             db.session.add(repay_schedule)
         loan = Loan(newrow)
         Loan.query.filter_by(id=repay_id).delete()

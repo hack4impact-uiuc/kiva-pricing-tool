@@ -96,7 +96,8 @@ function convertToApiLoan(reducer) {
     ),
     interest_paid_on_deposit_percent: zeroOrInput(
       reducer.interestPaidOnDepositPercent
-    )
+    ),
+    nominal_apr: zeroOrInput(reducer.nominalApr)
   }
 }
 

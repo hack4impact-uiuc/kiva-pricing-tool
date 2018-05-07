@@ -317,19 +317,21 @@ class APRRateDisplay extends Component {
         'Total'
     let total =
       formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
-      'Total'
+        'Total' ||
+      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+        'Disbursement Info'
     return (
       <div
         style={
           total
             ? { backgroundColor: '#fafaba' }
             : !editable
-              ? { backgroundColor: '#eaeaea' }
+              ? { backgroundColor: '#fafafa' }
               : formDataReducer.user_repayment_schedule[cellInfo.index][
                   cellInfo.column.id
                 ] !== null
                 ? { backgroundColor: '#bafaba' }
-                : { backgroundColor: '#fafafa' }
+                : { backgroundColor: '#eaeaea' }
         }
         contentEditable={editable}
         suppressContentEditableWarning
@@ -545,7 +547,11 @@ class APRRateDisplay extends Component {
       []
     ]
 
-    for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
+    for (
+      let i = 0;
+      i < formDataReducer.user_repayment_schedule.length - 1;
+      i++
+    ) {
       user_change[0].push(
         formDataReducer.user_repayment_schedule[i]['period_num']
       )
@@ -721,7 +727,7 @@ class APRRateDisplay extends Component {
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    Api.saveLoan(payload, data).then(response => {
+    Api.saveLoan(payload, formDataReducer).then(response => {
       console.log(response)
     })
   }
