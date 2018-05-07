@@ -287,8 +287,9 @@ class APRInputs extends Component {
             <Row>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Repayment Type*"
+                  title="Repayment Type"
                   reduxId="repaymentType"
+                  requiredField={true}
                   items={[
                     //must match backend! IMPORTANT
                     { id: '1', value: 'equal principal payments' },
@@ -299,8 +300,9 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Interest Payment*"
+                  title="Interest Payment"
                   reduxId="interestPaymentType"
+                  requiredField={true}
                   items={[
                     { id: '1', value: 'Multiple Installments' },
                     { id: '2', value: 'Single End-Term Payments' }
@@ -309,8 +311,9 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Interest Calculation*"
+                  title="Interest Calculation"
                   reduxId="interestCalculationType"
+                  requiredField={true}
                   items={[
                     { id: '1', value: 'initial amount or flat' },
                     { id: '2', value: 'declining balance' }
@@ -350,7 +353,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={2} md={2} className="bs-center">
                 <Dropdown
-                  title="Time Period*"
+                  title="Time Period"
+                  requiredField={true}
                   reduxId="installmentTimePeriod"
                   items={[
                     { id: '1', value: 'days' },
@@ -385,7 +389,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <Dropdown
-                  title="Time Period*"
+                  title="Time Period"
+                  requiredField={true}
                   reduxId="interestTimePeriod"
                   items={[
                     { id: '0', value: 'day' },
