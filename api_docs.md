@@ -113,7 +113,7 @@ Get loan data for a specified loan in CSV format.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-| partner_namE  | string | **Required** | Filter Loans by Partner 
+| partner_name  | string | **Required** | Filter Loans by Partner 
 | theme  | string | **Required** | Filter Loans by Theme 
 | product  | string | **Required** | Filter Loans by Product 
 
@@ -130,7 +130,7 @@ Get loan data for a specified loan in CSV format.
  
 ### Endpoint
 
-    POST /saveLoan
+    POST /saveNewLoan
     
 **Description**
 
@@ -140,13 +140,19 @@ Puts a new loan in the database.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   partner_name    | string | **Required** | description 
-|   loan_theme  | string | **Required** | description 
-|   product_type    | string | **Required** | description 
-|   version_num | number | **Required** | description 
-|   start_name  | string | **Required** | description 
-|   update_name | string | **Required** | description 
-|   nominal_apr | number | **Required** | description 
+|   partner_name | string | **Required** | description 
+|   loan_theme  | string | **Required** | description
+|   product_type | string | **Required** | description
+|   version_num  | number | **Required** | description
+|   inputs | JSON | **Required** | See contents for Input JSON below 
+|   origin_matrix  | Matrix | **Required** | description
+|   user_change_matrix | Matrix | **Required** | description 
+|   repay_matrix  | Matrix | **Required** | description
+
+**Input Form Parameters**
+
+|   Name    |  Type  | Required                      | Description               |
+|:---------:|:------:|:-----------------------------:|:-------------------------:|
 |   installment_time_period | string | **Required** | description 
 |   repayment_type  | string | **Required** | description 
 |   interest_time_period    | string | **Required** | description 
@@ -154,7 +160,8 @@ Puts a new loan in the database.
 |   interest_calculation_type   | string | **Required** | description 
 |   loan_amount | number | **Required** | description 
 |   installment | number | **Required** | description 
-|   nominal_interest_rate   | number | **Required** | description 
+|   nominal_interest_rate   | number | **Required** | description
+|   nominal_apr   | number | **Required** | description
 |   grace_period_principal  | number | **Required** | description 
 |   grace_period_interest_pay   | number | **Required** | description 
 |   grace_period_interest_calculate | number | **Required** | description 
