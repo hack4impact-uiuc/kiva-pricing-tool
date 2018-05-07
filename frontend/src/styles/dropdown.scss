@@ -1,3 +1,15 @@
 .space {
     padding: 10px;
 }
+
+.error-message {
+	color: $error-message;
+}
+
+.hidden-error {
+	display: none;
+}
+
+.dropdown .required-dropdown {
+	border-color: $error-message;
+}
