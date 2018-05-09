@@ -8,13 +8,14 @@ import { APRRateDisplay } from './'
 class KivaChart extends Component {
   constructor(props) {
   super(props)
-  this.state = {
-    data3: [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-            {name: 'Group C', value: 300}, {name: 'Group D', value: 200}],
-    repaymentData: [],
-    principalBalance: "",
+    this.state = {
+      data3: [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
+              {name: 'Group C', value: 300}, {name: 'Group D', value: 200}],
+      repaymentData: [],
+      principalBalance: "",
     }
   }
+	
   render() {
     if (this.props.id == "Payment Chart") {
       let i;		
@@ -66,21 +67,21 @@ class KivaChart extends Component {
       )
     }
     if (this.props.visualType == "area") {
-	return(
-	  <AreaChart width={600} height={400} data={this.state.repaymentData} margin={{top: 20, right: 10, left: 5, bottom: 5}}>
-	  <CartesianGrid strokeDasharray="3 3"/>
-          <XAxis dataKey="periodNum"/>
-	  <YAxis/>
-	  <Tooltip/>
-	  <Legend/>
-	  <Area type='monotone' dataKey='interest' stackId="1" stroke='#c94473' fill='#c94473' />
-	  <Area type='monotone' dataKey={this.state.principalBalance} stackId="1" stroke='#a044c9' fill='#a044c9' />
-	  <Area type='monotone' dataKey='taxes' stackId="1" stroke='#95c5dd' fill='#95c5dd' />
-	  <Area type='monotone' dataKey='fees' stackId="1" stroke='#34bf60' fill='#34bf60' />
-	  <Area type='monotone' dataKey='insurance' stackId="1" stroke='#bfa434' fill='#bfa434' />
-	  <Area type='monotone' dataKey='security deposit' stackId="1" stroke='#66ca3d' fill='#66ca3d' />
-	  </AreaChart>
-	)
+      return(
+        <AreaChart width={600} height={400} data={this.state.repaymentData} margin={{top: 20, right: 10, left: 5, bottom: 5}}>
+	<CartesianGrid strokeDasharray="3 3"/>
+        <XAxis dataKey="periodNum"/>
+	<YAxis/>
+	<Tooltip/>
+	<Legend/>
+	<Area type='monotone' dataKey='interest' stackId="1" stroke='#c94473' fill='#c94473' />
+	<Area type='monotone' dataKey={this.state.principalBalance} stackId="1" stroke='#a044c9' fill='#a044c9' />
+	<Area type='monotone' dataKey='taxes' stackId="1" stroke='#95c5dd' fill='#95c5dd' />
+	<Area type='monotone' dataKey='fees' stackId="1" stroke='#34bf60' fill='#34bf60' />
+	<Area type='monotone' dataKey='insurance' stackId="1" stroke='#bfa434' fill='#bfa434' />
+	<Area type='monotone' dataKey='security deposit' stackId="1" stroke='#66ca3d' fill='#66ca3d' />
+	</AreaChart>
+      )
     }
   }
 }
