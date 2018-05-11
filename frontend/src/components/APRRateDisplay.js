@@ -123,13 +123,13 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-    this.renderEditable = this.renderEditable.bind(this)
-    this.updateTable = this.updateTable.bind(this)
-    this.changeVisualType = this.changeVisualType.bind(this);
-    this.changeChartType = this.changeChartType.bind(this);
+//     this.renderEditable = this.renderEditable.bind(this)
+//     this.updateTable = this.updateTable.bind(this)
+//     this.changeVisualType = this.changeVisualType.bind(this);
+//     this.changeChartType = this.changeChartType.bind(this);
   }
 
-  updateTable(e, cellInfo) {
+  updateTable = (e, cellInfo) => {
     const { formDataReducer, changedFormData } = this.props
     if (
       formDataReducer.calc_repayment_schedule[cellInfo.index][
@@ -282,20 +282,20 @@ class APRRateDisplay extends Component {
       this.createChart.bind(this)
     }
   }
-  renderEditable(cellInfo) {
+  renderEditable = (event) => {
     const { formDataReducer } = this.props
     let editable =
-      cellInfo.column.id !== 'period_num' &&
-      cellInfo.column.id !== 'amount_due' &&
-      cellInfo.column.id !== 'balance' &&
-      cellInfo.column.id !== 'deposit_withdrawal' &&
-      cellInfo.column.id !== 'security_interest_paid' &&
-      cellInfo.column.id !== 'deposit_balance' &&
-      cellInfo.column.id !== 'total_cashflow' &&
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] !==
+      event.column.id !== 'period_num' &&
+      event.column.id !== 'amount_due' &&
+      event.column.id !== 'balance' &&
+      event.column.id !== 'deposit_withdrawal' &&
+      event.column.id !== 'security_interest_paid' &&
+      event.column.id !== 'deposit_balance' &&
+      event.column.id !== 'total_cashflow' &&
+      formDataReducer.calc_repayment_schedule[e.index]['period_num'] !==
         'Total'
     let total =
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      formDataReducer.calc_repayment_schedule[e.index]['period_num'] ===
       'Total'
     return (
       <div
@@ -304,7 +304,7 @@ class APRRateDisplay extends Component {
             ? { backgroundColor: '#fafaba' }
             : !editable
               ? { backgroundColor: '#eaeaea' }
-              : formDataReducer.user_repayment_schedule[cellInfo.index][
+              : formDataReducer.user_repayment_schedule[event.index][
                   cellInfo.column.id
                 ] !== null
                 ? { backgroundColor: '#bafaba' }
@@ -313,11 +313,11 @@ class APRRateDisplay extends Component {
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
-          this.updateTable(e, cellInfo)
+          this.updateTable(e, event)
         }}
         dangerouslySetInnerHTML={{
           __html:
-            formDataReducer.calc_repayment_schedule[cellInfo.index][
+            formDataReducer.calc_repayment_schedule[event.index][
               cellInfo.column.id
             ]
         }}
@@ -325,20 +325,20 @@ class APRRateDisplay extends Component {
     )
   }
   
-  changeVisualType(changeVisual) {
-  	this.setState({changeVisual})
-	if (changeVisual) {
+  changeVisualType = (event) =>{
+  	this.setState({event})
+	if (event) {
 		this.setState({visualType: "area"})
-	}else if (!changeVisual) {
+	}else if (!event) {
 		this.setState({visualType: "bar"})
 	}	  
   }
   
-  changeChartType(changeChart) {
-  	this.setState({changeChart})
-	if (changeChart) {
+  changeChartType = (event) =>{
+  	this.setState({event})
+	if (event) {
 		this.setState({chartID: "Balance Chart"})
-	}else if (!changeChart) {
+	}else if (!event) {
 		this.setState({chartID: "Payment Chart"})
 	}	  
   }
