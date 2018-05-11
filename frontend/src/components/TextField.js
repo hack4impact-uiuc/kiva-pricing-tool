@@ -69,7 +69,7 @@ class TextField extends Component {
     if (nums.test(e.target.value)) {
       let tryInt = parseInt(e.target.value, 10)
       let limit = parseInt(this.props.limit, 10)
-      // console.log(tryInt, limit)
+
       if (tryInt > limit) {
         this.setState({
           error_message: 'input limit succeeded',
@@ -139,7 +139,6 @@ class TextField extends Component {
       this.handleChangeString(e)
     }
 
-    // console.log("HI", value.replace(/\s/g, "").length === 0)
     if (
       value.replace(/\s/g, '').length === 0 &&
       // formDataReducer[this.props.reduxId].length === 0 &&
