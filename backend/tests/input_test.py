@@ -68,8 +68,8 @@ def fake_cal_apr():
     security_deposit_fixed_ongoing = 10
     interest_paid_on_deposit_percent = 0.1
     interest_calculation_type = 'initial amount or flat'
-    repayment_type = 'single end-term principal payment'
-    interest_payment_type = 'single end-term payment'
+    repayment_type = 'equal installments (amortized)'
+    interest_payment_type = 'multiple installments'
 
     periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
     installment_time_period = '4 weeks'

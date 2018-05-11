@@ -47,25 +47,6 @@ class APRInputs extends Component {
       !this.isNullOrEmpty(formDataReducer.loanAmount) && // required
       !this.isNullOrEmpty(formDataReducer.installment) && // required
       !this.isNullOrEmpty(formDataReducer.nominalInterestRate) // required
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodBalloon) &&
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodPrincipal) &&
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodInterestPay) &&
-      // !this.isNullOrEmpty(formDataReducer.gracePeriodInterestCalculate) &&
-      // !this.isNullOrEmpty(formDataReducer.feePercentOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.feePercentUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.feeFixedUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.feeFixedOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.taxPercentFees) &&
-      // !this.isNullOrEmpty(formDataReducer.taxPercentInterest) &&
-      // !this.isNullOrEmpty(formDataReducer.insurancePercentUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.insurancePercentOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.insuranceFixedUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.insuranceFixedOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositPercentUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositPercentOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositFixedUpfront) &&
-      // !this.isNullOrEmpty(formDataReducer.securityDepositFixedOngoing) &&
-      // !this.isNullOrEmpty(formDataReducer.interestPaidOnDepositPercent)
     )
   }
 
@@ -84,7 +65,7 @@ class APRInputs extends Component {
   postData() {
     const { formDataReducer, changedFormData } = this.props
     this.inputsEntered() &&
-      Api.postData(formDataReducer).then(r => {
+      Api.calAPR(formDataReducer).then(r => {
         changedFormData('nominalApr', r.apr)
         const matrix = r.matrix
         let reformatted_matrix = []
@@ -251,13 +232,23 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer } = this.props
-    console.log(formDataReducer, this.inputsEntered())
+    // console.log(formDataReducer, this.inputsEntered())
     return (
       <div className="page-body-grey padded-element-vertical overpad-shrink">
         <Grid
           fluid
           className="screen-horizontal-centered screen-vertical-centered-grid padded-element-all round-corners-large solid-background"
         >
+          <Row>
+            <Col sm={12} md={12} className="bs-center">
+              <PageHeader className="page-header-montserrat bs-center">
+                <small>
+                  {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
+                  {formDataReducer.productType} | {formDataReducer.versionNum}
+                </small>
+              </PageHeader>
+            </Col>
+          </Row>
           <Row>
             <Row>
               <Col sm={12} md={12}>
@@ -279,7 +270,7 @@ class APRInputs extends Component {
                   typeVal="String"
                   limit="100"
                   requiredField={true}
-                  textBody={formDataReducer.startName}
+                  // textBody={formDataReducer.startName}
                   onTextInputChange={this.handleTextChange}
                   //doesn't allow spaces ** need to fix
                 />
@@ -296,8 +287,9 @@ class APRInputs extends Component {
             <Row>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Repayment Type*"
+                  title="Repayment Type"
                   reduxId="repaymentType"
+                  requiredField={true}
                   items={[
                     //must match backend! IMPORTANT
                     { id: '1', value: 'equal principal payments' },
@@ -308,8 +300,9 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Interest Payment*"
+                  title="Interest Payment"
                   reduxId="interestPaymentType"
+                  requiredField={true}
                   items={[
                     { id: '1', value: 'Multiple Installments' },
                     { id: '2', value: 'Single End-Term Payments' }
@@ -318,11 +311,11 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4} className="bs-center">
                 <Dropdown
-                  title="Interest Calculation*"
+                  title="Interest Calculation"
                   reduxId="interestCalculationType"
+                  requiredField={true}
                   items={[
                     { id: '1', value: 'initial amount or flat' },
-                    // { id: '2', value: 'Flat' },
                     { id: '2', value: 'declining balance' }
                   ]}
                 />
@@ -337,7 +330,8 @@ class APRInputs extends Component {
                   typeVal="float"
                   limit="900000000"
                   requiredField={true}
-                  textBody={formDataReducer.loanAmount}
+                  // textBody={formDataReducer.loanAmount}
+                  className=""
                 />
               </Col>
               <Col sm={2} md={2} className="bs-center">
@@ -353,12 +347,14 @@ class APRInputs extends Component {
                   typeVal="int"
                   limit="180"
                   requiredField={true}
-                  textBody={formDataReducer.installment}
+                  // textBody={formDataReducer.installment}
+                  className=""
                 />
               </Col>
               <Col sm={2} md={2} className="bs-center">
                 <Dropdown
-                  title="Time Period*"
+                  title="Time Period"
+                  requiredField={true}
                   reduxId="installmentTimePeriod"
                   items={[
                     { id: '1', value: 'days' },
@@ -383,7 +379,7 @@ class APRInputs extends Component {
                   typeVal="int"
                   limit="100"
                   requiredField={true}
-                  textBody={formDataReducer.nominalInterestRate}
+                  // textBody={formDataReducer.nominalInterestRate}
                 />
               </Col>
               <Col sm={2} md={2} className="bs-center">
@@ -393,7 +389,8 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <Dropdown
-                  title="Time Period*"
+                  title="Time Period"
+                  requiredField={true}
                   reduxId="interestTimePeriod"
                   items={[
                     { id: '0', value: 'day' },
@@ -417,7 +414,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodPrincipal"
                   hint="Capital"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodPrincipal}
                 />
               </Col>
@@ -428,7 +425,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodInterestPay"
                   hint="Int Pmt"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodInterestPay}
                 />
               </Col>
@@ -439,7 +436,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodInterestCalculate"
                   hint="Int Calc"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodInterestCalculate}
                 />
               </Col>
@@ -450,7 +447,7 @@ class APRInputs extends Component {
                   reduxId="gracePeriodBalloon"
                   hint="Balloon"
                   typeVal="float"
-                  limit="180"
+                  limit={formDataReducer.installment - 1}
                   textBody={formDataReducer.gracePeriodBalloon}
                 />
               </Col>
@@ -665,6 +662,7 @@ class APRInputs extends Component {
               <Col sm={6} md={6} className="bs-button-right">
                 <TextField
                   className="inline-textfield placeholder-textfield"
+                  // reduxId="interestPaidOnDepositPercent"
                   id="Interest Paid on Deposit"
                   hint="PLACEHOLDER"
                 />

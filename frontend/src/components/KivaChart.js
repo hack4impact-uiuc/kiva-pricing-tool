@@ -82,7 +82,8 @@ class KivaChart extends Component {
 	<Area type='monotone' dataKey='security deposit' stackId="1" stroke='#66ca3d' fill='#66ca3d' />
 	</AreaChart>
       )
-    }
+
   }
 }
+
 export default KivaChart

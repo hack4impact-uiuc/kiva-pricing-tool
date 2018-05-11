@@ -3,6 +3,7 @@ import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import { Button, KivaChart } from './'
+import { Api } from '../utils'
 import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
@@ -136,7 +137,7 @@ class APRRateDisplay extends Component {
         cellInfo.column.id
       ].toString() !== e.target.innerHTML
     ) {
-      if (e.target.innerHTML === '') {
+      if (e.target.innerHTML === null || e.target.innerHTML.trim() === '') {
         formDataReducer.user_repayment_schedule[cellInfo.index][
           cellInfo.column.id
         ] = null
@@ -145,47 +146,6 @@ class APRRateDisplay extends Component {
           cellInfo.column.id
         ] =
           e.target.innerHTML
-      }
-      let inputs = {
-        partner_name: formDataReducer.mfi,
-        loan_theme: formDataReducer.loanType,
-        product_type: formDataReducer.productType,
-        version_num: formDataReducer.versionNum,
-        update_name: formDataReducer.updateName,
-        start_name: formDataReducer.startName,
-        installment_time_period: formDataReducer.installmentTimePeriod,
-        repayment_type: formDataReducer.repaymentType,
-        interest_time_period: formDataReducer.interestTimePeriod,
-        interest_payment_type: formDataReducer.interestPaymentType,
-        interest_calculation_type: formDataReducer.interestCalculationType,
-        loan_amount: formDataReducer.loanAmount,
-        installment: formDataReducer.installment,
-        nominal_interest_rate: formDataReducer.nominalInterestRate,
-        grace_period_principal: formDataReducer.gracePeriodPrincipal,
-        grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
-        grace_period_interest_calculate:
-          formDataReducer.gracePeriodInterestCalculate,
-        grace_period_balloon: formDataReducer.gracePeriodBalloon,
-        fee_percent_upfront: formDataReducer.feePercentUpfront,
-        fee_percent_ongoing: formDataReducer.feePercentOngoing,
-        fee_fixed_upfront: formDataReducer.feeFixedUpfront,
-        fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
-        tax_percent_fees: formDataReducer.taxPercentFees,
-        tax_percent_interest: formDataReducer.taxPercentInterest,
-        insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
-        insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
-        insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
-        insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
-        security_deposit_percent_upfront:
-          formDataReducer.securityDepositPercentUpfront,
-        security_deposit_percent_ongoing:
-          formDataReducer.securityDepositPercentOngoing,
-        security_deposit_fixed_upfront:
-          formDataReducer.securityDepositFixedUpfront,
-        security_deposit_fixed_ongoing:
-          formDataReducer.securityDepositFixedOngoing,
-        interest_paid_on_deposit_percent:
-          formDataReducer.interestPaidOnDepositPercent
       }
       let user_change = [
         [],
@@ -204,7 +164,11 @@ class APRRateDisplay extends Component {
         [],
         []
       ]
-      for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
+      for (
+        let i = 0;
+        i < formDataReducer.user_repayment_schedule.length - 1;
+        i++
+      ) {
         user_change[0].push(
           formDataReducer.user_repayment_schedule[i]['period_num']
         )
@@ -246,9 +210,9 @@ class APRRateDisplay extends Component {
         )
       }
       let data = {
-        input_form: inputs,
         user_change: user_change
       }
+      Api.recalculate(data, formDataReducer)
       axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
         const apr = response.data.result.apr
         const recal_matrix = response.data.result.recal_matrix
@@ -275,6 +239,65 @@ class APRRateDisplay extends Component {
               total_cashflow: recal_matrix[14][i]
             })
           }
+          calc_matrix.push({
+            period_num: 'Total',
+            payment_due_date: ' ',
+            days: 0,
+            amount_due: 0,
+            principal_payment: 0,
+            balance: ' ',
+            interest: 0,
+            fees: 0,
+            insurance: 0,
+            taxes: 0,
+            security_deposit: 0,
+            security_interest_paid: 0,
+            deposit_withdrawal: 0,
+            deposit_balance: ' ',
+            total_cashflow: 0
+          })
+          let last = calc_matrix.length - 1
+          for (let i = 0; i < last; i++) {
+            calc_matrix[last]['days'] += calc_matrix[i]['days']
+            calc_matrix[last]['amount_due'] += calc_matrix[i]['amount_due']
+            calc_matrix[last]['principal_payment'] +=
+              calc_matrix[i]['principal_payment']
+            calc_matrix[last]['interest'] += calc_matrix[i]['interest']
+            calc_matrix[last]['fees'] += calc_matrix[i]['fees']
+            calc_matrix[last]['insurance'] += calc_matrix[i]['insurance']
+            calc_matrix[last]['taxes'] += calc_matrix[i]['taxes']
+            calc_matrix[last]['security_deposit'] +=
+              calc_matrix[i]['security_deposit']
+            calc_matrix[last]['security_interest_paid'] +=
+              calc_matrix[i]['security_interest_paid']
+            calc_matrix[last]['deposit_withdrawal'] +=
+              calc_matrix[i]['deposit_withdrawal']
+            calc_matrix[last]['total_cashflow'] +=
+              calc_matrix[i]['total_cashflow']
+          }
+          calc_matrix[last]['principal_payment'] = calc_matrix[last][
+            'principal_payment'
+          ].toFixed(2)
+          calc_matrix[last]['interest'] = calc_matrix[last]['interest'].toFixed(
+            2
+          )
+          calc_matrix[last]['fees'] = calc_matrix[last]['fees'].toFixed(2)
+          calc_matrix[last]['insurance'] = calc_matrix[last][
+            'insurance'
+          ].toFixed(2)
+          calc_matrix[last]['taxes'] = calc_matrix[last]['taxes'].toFixed(2)
+          calc_matrix[last]['security_deposit'] = calc_matrix[last][
+            'security_deposit'
+          ].toFixed(2)
+          calc_matrix[last]['security_interest_paid'] = calc_matrix[last][
+            'security_interest_paid'
+          ].toFixed(2)
+          calc_matrix[last]['deposit_withdrawal'] = calc_matrix[last][
+            'deposit_withdrawal'
+          ].toFixed(2)
+          calc_matrix[last]['total_cashflow'] = calc_matrix[last][
+            'total_cashflow'
+          ].toFixed(2)
         }
         calc_matrix[0]['period_num'] = 'Disbursement Info'
         changedFormData('calc_repayment_schedule', calc_matrix)
@@ -295,20 +318,23 @@ class APRRateDisplay extends Component {
       formDataReducer.calc_repayment_schedule[e.index]['period_num'] !==
         'Total'
     let total =
-      formDataReducer.calc_repayment_schedule[e.index]['period_num'] ===
-      'Total'
+
+      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+        'Total' ||
+      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+        'Disbursement Info'
     return (
       <div
         style={
           total
             ? { backgroundColor: '#fafaba' }
             : !editable
-              ? { backgroundColor: '#eaeaea' }
+              ? { backgroundColor: '#fafafa' }
               : formDataReducer.user_repayment_schedule[event.index][
                   cellInfo.column.id
                 ] !== null
                 ? { backgroundColor: '#bafaba' }
-                : { backgroundColor: '#fafafa' }
+                : { backgroundColor: '#eaeaea' }
         }
         contentEditable={editable}
         suppressContentEditableWarning
@@ -360,17 +386,80 @@ class APRRateDisplay extends Component {
       csv.push(row)
     }
     row = '\n\n'
-    csv.push(row); 
-    row = "APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n";
-    csv.push(row);
-    row = formDataReducer.aprRate+","+formDataReducer.mfi[0]+","+formDataReducer.loanType[0]+","+formDataReducer.productType[0]+","+formDataReducer.versionNum[0]+","+formDataReducer.updateName+","+formDataReducer.startName[0]+","+formDataReducer.installmentTimePeriod[0]+","+formDataReducer.repaymentType[0]+","+formDataReducer.interestTimePeriod[0]+","+formDataReducer.interestPaymentType[0]+","+formDataReducer.interestCalculationType[0]+","+formDataReducer.loanAmount[0]+","+formDataReducer.installment[0]+","+formDataReducer.nominalInterestRate[0]+","+formDataReducer.gracePeriodPrincipal[0]+","+formDataReducer.gracePeriodInterestPay[0]+","+formDataReducer.gracePeriodInterestCalculate[0]+","+formDataReducer.gracePeriodBalloon[0]+","+formDataReducer.feePercentUpfront[0]+","+formDataReducer.feePercentOngoing[0]+","+formDataReducer.feeFixedUpfront[0]+","+formDataReducer.feeFixedOngoing[0]+","+formDataReducer.taxPercentFees[0]+","+formDataReducer.taxPercentInterest[0]+","+formDataReducer.insurancePercentUpfront[0]+","+formDataReducer.insurancePercentOngoing[0]+","+formDataReducer.insuranceFixedUpfront[0]+","+formDataReducer.insuranceFixedOngoing[0]+","+formDataReducer.securityDepositPercentUpfront[0]+","+formDataReducer.securityDepositPercentOngoing[0]+","+formDataReducer.securityDepositFixedUpfront[0]+","+formDataReducer.securityDepositFixedOngoing[0]+","+formDataReducer.interestPaidOnDepositPercent[0]
-    csv.push(row);
-    let csvFile = new Blob(csv,{type: 'text/csv;charset=utf-8;'});
-    let url = URL.createObjectURL(csvFile);
-    let createDownloadLink = document.createElement('a');
-    createDownloadLink.href = url;
-    createDownloadLink.setAttribute('download', formDataReducer.mfi[0] + "_" + formDataReducer.loanType[0] + "_" + formDataReducer.productType[0] + "_" + formDataReducer.versionNum[0] + ".csv");
-    createDownloadLink.click();
+    csv.push(row)
+    row =
+      'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
+    csv.push(row)
+    row =
+      formDataReducer.aprRate +
+      ',' +
+      formDataReducer.mfi[0] +
+      ',' +
+      formDataReducer.loanType[0] +
+      ',' +
+      formDataReducer.productType[0] +
+      ',' +
+      formDataReducer.versionNum[0] +
+      ',' +
+      formDataReducer.updateName +
+      ',' +
+      formDataReducer.startName[0] +
+      ',' +
+      formDataReducer.installmentTimePeriod[0] +
+      ',' +
+      formDataReducer.repaymentType[0] +
+      ',' +
+      formDataReducer.interestTimePeriod[0] +
+      ',' +
+      formDataReducer.interestPaymentType[0] +
+      ',' +
+      formDataReducer.interestCalculationType[0] +
+      ',' +
+      formDataReducer.loanAmount[0] +
+      ',' +
+      formDataReducer.installment[0] +
+      ',' +
+      formDataReducer.nominalInterestRate[0] +
+      ',' +
+      formDataReducer.gracePeriodPrincipal[0] +
+      ',' +
+      formDataReducer.gracePeriodInterestPay[0] +
+      ',' +
+      formDataReducer.gracePeriodInterestCalculate[0] +
+      ',' +
+      formDataReducer.gracePeriodBalloon[0] +
+      ',' +
+      formDataReducer.feePercentUpfront[0] +
+      ',' +
+      formDataReducer.feePercentOngoing[0] +
+      ',' +
+      formDataReducer.feeFixedUpfront[0] +
+      ',' +
+      formDataReducer.feeFixedOngoing[0] +
+      ',' +
+      formDataReducer.taxPercentFees[0] +
+      ',' +
+      formDataReducer.taxPercentInterest[0] +
+      ',' +
+      formDataReducer.insurancePercentUpfront[0] +
+      ',' +
+      formDataReducer.insurancePercentOngoing[0] +
+      ',' +
+      formDataReducer.insuranceFixedUpfront[0] +
+      ',' +
+      formDataReducer.insuranceFixedOngoing[0] +
+      ',' +
+      formDataReducer.securityDepositPercentUpfront[0] +
+      ',' +
+      formDataReducer.securityDepositPercentOngoing[0] +
+      ',' +
+      formDataReducer.securityDepositFixedUpfront[0] +
+      ',' +
+      formDataReducer.securityDepositFixedOngoing[0] +
+      ',' +
+      formDataReducer.interestPaidOnDepositPercent[0]
+    csv.push(row)
+
     let csvFile = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
     let url = URL.createObjectURL(csvFile)
     let createDownloadLink = document.createElement('a')
@@ -449,7 +538,11 @@ class APRRateDisplay extends Component {
       []
     ]
 
-    for (let i = 0; i < formDataReducer.user_repayment_schedule.length; i++) {
+    for (
+      let i = 0;
+      i < formDataReducer.user_repayment_schedule.length - 1;
+      i++
+    ) {
       user_change[0].push(
         formDataReducer.user_repayment_schedule[i]['period_num']
       )
@@ -621,19 +714,13 @@ class APRRateDisplay extends Component {
       loan_theme: formDataReducer.loanType,
       product_type: formDataReducer.productType,
       version_num: formDataReducer.versionNum,
-      inputs: data,
       origin_matrix: orig_matrix,
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    axios
-      .post('http://127.0.0.1:3453/saveNewLoan', payload)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(function(error) {
-        console.log(error.message + ' there was an error with the request')
-      })
+    Api.saveLoan(payload, formDataReducer).then(response => {
+      console.log(response)
+    })
   }
 
   render() {
@@ -641,8 +728,21 @@ class APRRateDisplay extends Component {
     return (
       <Grid fluid className="padded-element-horizontal">
         <Row>
+          <Col sm={12} md={12} className="bs-center">
+            <PageHeader className="page-header-montserrat bs-center">
+              <small>
+                {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
+                {formDataReducer.productType} | {formDataReducer.versionNum}
+              </small>
+            </PageHeader>
+          </Col>
+        </Row>
+        <Row>
           <Col sm={12} md={12}>
-            <PageHeader> APR Rate: {formDataReducer.nominalApr}%</PageHeader>
+            <PageHeader className="bs-center">
+              {' '}
+              APR Rate: {formDataReducer.nominalApr}%
+            </PageHeader>
           </Col>
         </Row>
         <Row className="vertical-margin-item">
@@ -679,6 +779,7 @@ class APRRateDisplay extends Component {
 		</label>
 		<KivaChart id = {this.state.chartID} visualType={this.state.visualType} data={this.state.data}></KivaChart>			
 	      </div>
+
             )}
           </Col>
           <Col sm={4} md={4}>
@@ -790,11 +891,7 @@ class APRRateDisplay extends Component {
 
         <Row className="vertical-margin-item">
           <Col sm={6} md={6}>
-            <Button
-              className="button-fancy"
-              name="Back"
-              url={formDataReducer.back}
-            />
+            <Button className="button-fancy" name="Edit Inputs" url={'form1'} />
           </Col>
           <Col sm={6} md={6} className="bs-button-right">
             <Button

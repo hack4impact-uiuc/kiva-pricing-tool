@@ -127,8 +127,8 @@ def get_partner_theme_list():
     """
         grabbing MFI Partner and Loan Theme
     """
-    themes = Theme.query.all()
-    partners = Partner.query.all()
+    themes = Theme.query.order_by(Theme.loan_theme).all()
+    partners = Partner.query.order_by(Partner.partner_name).all()
     data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}
     return create_response(data=data, status=200)
 
@@ -187,7 +187,7 @@ def save_loan():
         user_change_matrix = request_json['user_change_matrix']
         recal_matrix = request_json['repay_matrix']
 
-    except:
+    except Exception as e:
         return create_response(status=422, message='missing compoonents for save new loan')
 
     try:
@@ -268,7 +268,6 @@ def save_loan():
                 'total_cashflow_calc' : float(cur_recal_col[CASH_FLOW_IDX])
             }
             repay_schedule = RepaymentSchedule(new_repay_row)
-            print(repay_schedule)
             db.session.add(repay_schedule)
         loan = Loan(newrow)
         Loan.query.filter_by(id=repay_id).delete()
@@ -555,21 +554,21 @@ def get_loan():
                 'grace_period_interest_pay' : entry.grace_period_interest_pay,
                 'grace_period_interest_calculate' : entry.grace_period_interest_calculate,
                 'grace_period_balloon' : entry.grace_period_balloon,
-                'fee_percent_upfront' : entry.fee_percent_upfront,
-                'fee_percent_ongoing' : entry.fee_percent_ongoing,
+                'fee_percent_upfront' : entry.fee_percent_upfront * 100,
+                'fee_percent_ongoing' : entry.fee_percent_ongoing * 100,
                 'fee_fixed_upfront' : entry.fee_fixed_upfront,
                 'fee_fixed_ongoing' : entry.fee_fixed_ongoing,
-                'insurance_percent_upfront' : entry.insurance_percent_upfront,
-                'insurance_percent_ongoing' : entry.insurance_percent_ongoing,
+                'insurance_percent_upfront' : entry.insurance_percent_upfront * 100,
+                'insurance_percent_ongoing' : entry.insurance_percent_ongoing * 100,
                 'insurance_fixed_upfront' : entry.insurance_fixed_upfront,
                 'insurance_fixed_ongoing' : entry.insurance_fixed_ongoing,
-                'tax_percent_fees' : entry.tax_percent_fees,
-                'tax_percent_interest' : entry.tax_percent_interest,
-                'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront,
-                'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing,
+                'tax_percent_fees' : entry.tax_percent_fees * 100,
+                'tax_percent_interest' : entry.tax_percent_interest * 100,
+                'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront * 100,
+                'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing * 100,
                 'security_deposit_fixed_upfront' : entry.security_deposit_fixed_upfront,
                 'security_deposit_fixed_ongoing' : entry.security_deposit_fixed_ongoing,
-                'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent,
+                'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent * 100,
                 'original_matrix' : None,
                 'user_matrix' : None,
                 'calc_matrix' : None
@@ -661,21 +660,21 @@ def get_loan():
             'grace_period_interest_pay' : entry.grace_period_interest_pay,
             'grace_period_interest_calculate' : entry.grace_period_interest_calculate,
             'grace_period_balloon' : entry.grace_period_balloon,
-            'fee_percent_upfront' : entry.fee_percent_upfront,
-            'fee_percent_ongoing' : entry.fee_percent_ongoing,
+            'fee_percent_upfront' : entry.fee_percent_upfront * 100,
+            'fee_percent_ongoing' : entry.fee_percent_ongoing * 100,
             'fee_fixed_upfront' : entry.fee_fixed_upfront,
             'fee_fixed_ongoing' : entry.fee_fixed_ongoing,
-            'insurance_percent_upfront' : entry.insurance_percent_upfront,
-            'insurance_percent_ongoing' : entry.insurance_percent_ongoing,
+            'insurance_percent_upfront' : entry.insurance_percent_upfront * 100,
+            'insurance_percent_ongoing' : entry.insurance_percent_ongoing * 100,
             'insurance_fixed_upfront' : entry.insurance_fixed_upfront,
             'insurance_fixed_ongoing' : entry.insurance_fixed_ongoing,
-            'tax_percent_fees' : entry.tax_percent_fees,
-            'tax_percent_interest' : entry.tax_percent_interest,
-            'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront,
-            'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing,
+            'tax_percent_fees' : entry.tax_percent_fees * 100,
+            'tax_percent_interest' : entry.tax_percent_interest * 100,
+            'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront * 100,
+            'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing * 100,
             'security_deposit_fixed_upfront' : entry.security_deposit_fixed_upfront,
             'security_deposit_fixed_ongoing' : entry.security_deposit_fixed_ongoing,
-            'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent,
+            'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent * 100,
             'original_matrix' : orig_matrix,
             'user_matrix' : user_matrix,
             'calc_matrix' : calc_matrix

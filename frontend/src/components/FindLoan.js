@@ -19,6 +19,7 @@ class FindLoan extends Component {
       versions: [],
       disableButton: ''
     }
+    this.getTables = this.getTables.bind(this)
   }
 
   static contextTypes = {
@@ -36,9 +37,14 @@ class FindLoan extends Component {
       }
     }
 
-    axios
-      .get('http://127.0.0.1:3453/findLoan', data)
+    Api.searchLoan(
+      formDataReducer.mfi,
+      formDataReducer.loanType,
+      formDataReducer.productType,
+      formDataReducer.versionNum
+    )
       .then(response => {
+        console.log('RESULT', response.data.result)
         const apr = response.data.result.nominal_apr
         const orig_matrix = response.data.result.original_matrix
         const user_matrix = response.data.result.user_matrix
@@ -274,33 +280,33 @@ class FindLoan extends Component {
             reformatted_calc_matrix[last]['total_cashflow'] +=
               reformatted_calc_matrix[i]['total_cashflow']
           }
-          reformatted_calc_matrix[last]['principal_payment'] = calc_matrix[
+          reformatted_calc_matrix[last][
+            'principal_payment'
+          ] = reformatted_calc_matrix[last]['principal_payment'].toFixed(2)
+          reformatted_calc_matrix[last]['interest'] = reformatted_calc_matrix[
             last
-          ]['principal_payment'].toFixed(2)
-          reformatted_calc_matrix[last]['interest'] = calc_matrix[last][
-            'interest'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['fees'] = calc_matrix[last][
+          ]['interest'].toFixed(2)
+          reformatted_calc_matrix[last]['fees'] = reformatted_calc_matrix[last][
             'fees'
           ].toFixed(2)
-          reformatted_calc_matrix[last]['insurance'] = calc_matrix[last][
-            'insurance'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['taxes'] = calc_matrix[last][
-            'taxes'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['security_deposit'] = calc_matrix[last][
+          reformatted_calc_matrix[last]['insurance'] = reformatted_calc_matrix[
+            last
+          ]['insurance'].toFixed(2)
+          reformatted_calc_matrix[last]['taxes'] = reformatted_calc_matrix[
+            last
+          ]['taxes'].toFixed(2)
+          reformatted_calc_matrix[last][
             'security_deposit'
-          ].toFixed(2)
-          reformatted_calc_matrix[last]['security_interest_paid'] = calc_matrix[
-            last
-          ]['security_interest_paid'].toFixed(2)
-          reformatted_calc_matrix[last]['deposit_withdrawal'] = calc_matrix[
-            last
-          ]['deposit_withdrawal'].toFixed(2)
-          reformatted_calc_matrix[last]['total_cashflow'] = calc_matrix[last][
+          ] = reformatted_calc_matrix[last]['security_deposit'].toFixed(2)
+          reformatted_calc_matrix[last][
+            'security_interest_paid'
+          ] = reformatted_calc_matrix[last]['security_interest_paid'].toFixed(2)
+          reformatted_calc_matrix[last][
+            'deposit_withdrawal'
+          ] = reformatted_calc_matrix[last]['deposit_withdrawal'].toFixed(2)
+          reformatted_calc_matrix[last][
             'total_cashflow'
-          ].toFixed(2)
+          ] = reformatted_calc_matrix[last]['total_cashflow'].toFixed(2)
           reformatted_matrix[0]['period_num'] = 'Disbursement Info'
           reformatted_calc_matrix[0]['period_num'] = 'Disbursement Info'
           changedFormData('original_repayment_schedule', reformatted_matrix)
@@ -329,7 +335,7 @@ class FindLoan extends Component {
   }
 
   getProductType() {
-    const { formDataReducer } = this.props
+    const { formDataReducer, changedFormData } = this.props
 
     if (formDataReducer.mfi && formDataReducer.loanType) {
       let validPartnerName =
@@ -342,12 +348,14 @@ class FindLoan extends Component {
           formDataReducer.mfi,
           formDataReducer.loanType
         ).then(response => this.setState({ product_types: response }))
+      } else if (!validPartnerName) {
+        changedFormData('loanType', '')
       }
     }
   }
 
   getVersionNumEntries() {
-    const { formDataReducer } = this.props
+    const { formDataReducer, changedFormData } = this.props
     if (
       formDataReducer.mfi &&
       formDataReducer.loanType &&
@@ -366,6 +374,10 @@ class FindLoan extends Component {
           formDataReducer.loanType,
           formDataReducer.productType
         ).then(response => this.setState({ versions: response }))
+      } else if (!validPartnerName) {
+        changedFormData('loanType', '')
+      } else if (!validProductType) {
+        changedFormData('productType', '')
       }
     }
   }
@@ -402,6 +414,7 @@ class FindLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData, searchLoan } = this.props
+    console.log(this.isNullOrEmpty(formDataReducer.mfi))
     return (
       <div className="page-body-grey">
         <Grid
@@ -420,11 +433,10 @@ class FindLoan extends Component {
               <Form>
                 <Typeahead
                   className="vertical-margin-item"
-                  placeholder="Select MFI Partner"
+                  placeholder="Select Field Partner:"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
                   onInputChange={e => {
-                    changedFormData('mfi', e)
                     this.getProductType()
                     axios
                       .get('http://127.0.0.1:3453/getLTEntry', {
@@ -436,6 +448,13 @@ class FindLoan extends Component {
                         this.setState({
                           loan_themes: response.data.result.themes
                         })
+                        changedFormData('mfi', e)
+                      })
+                      .catch(function(error) {
+                        changedFormData('mfi', '')
+                        changedFormData('loanType', '')
+                        changedFormData('productType', '')
+                        changedFormData('versionNum', '')
                       })
                   }}
                 />
@@ -445,12 +464,14 @@ class FindLoan extends Component {
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   options={this.state.loan_themes}
-                  placeholder="Select Loan Type"
+                  placeholder="Select Loan Theme:"
                   selected={
                     formDataReducer.loanType ? [formDataReducer.loanType] : ''
                   }
                   onInputChange={e => {
                     changedFormData('loanType', e)
+                    changedFormData('productType', '')
+                    changedFormData('versionNum', '')
                     this.getProductType()
                   }}
                 />
@@ -458,14 +479,12 @@ class FindLoan extends Component {
                 <Typeahead
                   className="vertical-margin-item"
                   disabled={
-                    !(
-                      !this.isNullOrEmpty(formDataReducer.mfi) &&
-                      !this.isNullOrEmpty(formDataReducer.loanType)
-                    )
+                    this.isNullOrEmpty(formDataReducer.mfi) ||
+                    this.isNullOrEmpty(formDataReducer.loanType)
                   }
                   ref="product"
                   options={this.state.product_types}
-                  placeholder="Search Products i.e. small loan"
+                  placeholder="Select Loan Product:"
                   typeVal="String"
                   limit={100}
                   selected={
@@ -475,6 +494,7 @@ class FindLoan extends Component {
                   }
                   onInputChange={e => {
                     changedFormData('productType', e)
+                    changedFormData('versionNum', '')
                     this.getVersionNumEntries()
                   }}
                 />
@@ -482,7 +502,7 @@ class FindLoan extends Component {
                 <Typeahead
                   className="vertical-margin-item"
                   ref="version"
-                  placeholder="Version Number"
+                  placeholder="Select Version Number:"
                   disabled={
                     !(
                       !this.isNullOrEmpty(formDataReducer.mfi) &&
@@ -496,7 +516,6 @@ class FindLoan extends Component {
                       ? [formDataReducer.versionNum]
                       : ''
                   }
-                  placeholder="Search Versions:"
                   onInputChange={e => {
                     changedFormData('versionNum', e)
                   }}
@@ -513,14 +532,7 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="output"
                 onClickHandler={() => {
-                  Api.searchLoan(
-                    formDataReducer.mfi,
-                    formDataReducer.loanType,
-                    formDataReducer.productType,
-                    formDataReducer.versionNum
-                  ).then(value => {
-                    searchLoan(value)
-                  })
+                  this.getTables()
                 }}
               />
             </Col>
@@ -531,14 +543,7 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="form1"
                 onClickHandler={() => {
-                  Api.searchLoan(
-                    formDataReducer.mfi,
-                    formDataReducer.loanType,
-                    formDataReducer.productType,
-                    formDataReducer.versionNum
-                  ).then(value => {
-                    searchLoan(value)
-                  })
+                  this.getTables()
                 }}
               />
             </Col>

@@ -37,25 +37,6 @@ input_json = {
     'interest_time_period': 'month'
 }
 
-# user_change[PRINCIPAL_PAID_IDX][4] = 100
-# user_change[PRINCIPAL_PAID_IDX][5] = 100
-# user_change[PRINCIPAL_PAID_IDX][6] = 100
-# user_change[FEES_IDX][4] = 200
-# user_change[FEES_IDX][8] = 100
-# user_change[INSURANCE_IDX][6] = 100
-# user_change[INSURANCE_IDX][7] = 30
-# user_change[INTEREST_PAID_IDX][8] = 12
-# user_change[INTEREST_PAID_IDX][4] = 10
-# user_change[TAXES_IDX][4] = 30
-# user_change[TAXES_IDX][8] = 10
-# user_change[SECURITY_DEPOSIT_IDX][6] = 10
-# user_change[SECURITY_DEPOSIT_IDX][8] = 10
-# user_change[DAY_IDX][4] = 60
-# user_change[DAY_IDX][5] = 60
-# user_change[DATE_IDX][0] = '10-Mar-2012'
-# user_change[DATE_IDX][6] = '18-Aug-2012'
-
-
 def test_on_principal_change():
     local_json = copy.deepcopy(input_json)
     apr, origin_matrix = cal_apr_helper(local_json)
@@ -74,7 +55,7 @@ def test_on_principal_change():
     origin_matrix[INTEREST_PAID_IDX] = update_interest(origin_matrix, local_json['interest_calculation_type'], local_json['interest_payment_type'], scaled_interest, local_json['grace_period_interest_calculate'], local_json['grace_period_interest_pay'],local_json['grace_period_balloon'])
     origin_matrix[TAXES_IDX] = update_taxes(origin_matrix,local_json['tax_percent_fees']/100,local_json['tax_percent_interest']/100)
     origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix,local_json['grace_period_balloon'])
-    # print (origin_matrix)
+    
     origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix,local_json['grace_period_balloon'])
     assert round_arr(origin_matrix[PRINCIPAL_PAID_IDX]) == [0, 75.21, 76.60, 78.01, 79.45, 80.92, 82.41, 83.93, 85.48, 87.06, 88.67, 90.30, 91.97]
     assert round_arr(origin_matrix[BALANCE_IDX]) == [1000.00, 924.79, 848.20, 770.19, 690.74, 609.82, 527.41, 443.48, 358.00, 270.94, 182.27, 91.97, 0]
@@ -214,13 +195,80 @@ def test_on_principal_change():
     assert round_arr(origin_matrix[PRINCIPAL_PAID_IDX]) == [0, 100, 76.60, 78.01, 79.45, 80.92, 82.41, 83.93, 418.69, 0, 0, 0, 0]
     assert round_arr(origin_matrix[BALANCE_IDX]) == [1000.00, 900.00, 823.40, 745.40, 665.95, 585.03, 502.62, 418.69, 0, 0, 0, 0, 0]
     assert round_arr(origin_matrix[SECURITY_DEPOSIT_IDX]) ==  [ 110.00, 20.00, 17.66, 17.80, 17.94, 18.09, 18.24, 18.39, 41.87, 0, 0, 0, 0]
-    # assert round_arr(origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX]) == [0, 0.85, 1.01, 1.09, 1.18, 1.26, 1.35, 1.44, 1.52, 1.61, 1.70, 1.79, 1.88 ]
+    assert round_arr(origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX]) == [0, 0.85, 1.01, 1.15, 1.30, 1.44, 1.59, 1.75, 1.90, 0, 0, 0, 0 ]
     assert round_arr(origin_matrix[FEES_IDX]) == [200.00, 110.00, 107.66, 107.80, 107.94, 108.09, 108.24, 108.39, 141.87, 0, 0, 0, 0]
-    # assert round_arr(origin_matrix[INTEREST_PAID_IDX]) == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 221.54]
-    # assert round_arr(origin_matrix[TAXES_IDX]) == [20.00, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 33.15]
-    # assert round_arr(origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX]) == [0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 266.68]
-    # assert round_arr(origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX]) == [ 110.00, 130.85, 141.85, 152.94, 164.12, 175.38, 186.73, 198.17, 209.69, 221.31, 233.01, 244.80, 0]
+    assert round_arr(origin_matrix[INTEREST_PAID_IDX]) == [0, 0, 0, 0, 0, 0, 0, 0, 147.69, 0, 0, 0, 0]
+    assert round_arr(origin_matrix[TAXES_IDX]) == [20.00, 11.00, 10.77, 10.78, 10.79, 10.81, 10.82, 10.84, 28.96, 0, 0, 0, 0 ]
+    assert round_arr(origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX]) == [0,0, 0, 0, 0, 0, 0, 0, 290.99, 0, 0, 0, 0]
+    assert round_arr(origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX]) == [110.00, 130.85, 149.51, 168.46, 187.70, 207.24, 227.07, 247.21, 0, 0, 0, 0, 0]
 
+def test_on_days_date():
+    local_json = copy.deepcopy(input_json)
+    apr, origin_matrix = cal_apr_helper(local_json)
+    
+    user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(object)
+    user_change[:] = None
 
+    # no change case
+    origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], local_json['installment_time_period'])
+    assert list(origin_matrix[DATE_IDX]) == ['1-Jan-2012','29-Jan-2012','26-Feb-2012','25-Mar-2012','22-Apr-2012','20-May-2012','17-Jun-2012','15-Jul-2012','12-Aug-2012','9-Sep-2012','7-Oct-2012','4-Nov-2012','2-Dec-2012']
+    assert list(origin_matrix[DAY_IDX]) == [0,28,28,28,28,28,28,28,28,28,28,28,28]
 
+    # change start date
+    user_change[DATE_IDX][0] = '10-Mar-2012'
+    origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], local_json['installment_time_period'])
+    assert list(origin_matrix[DATE_IDX]) == ['10-Mar-2012','7-Apr-2012','5-May-2012','2-Jun-2012','30-Jun-2012','28-Jul-2012','25-Aug-2012','22-Sep-2012','20-Oct-2012','17-Nov-2012','15-Dec-2012','12-Jan-2013','9-Feb-2013']
+    assert list(origin_matrix[DAY_IDX]) == [0,28,28,28,28,28,28,28,28,28,28,28,28]
 
+    # change two consecutive day number and the last day number
+    user_change[DAY_IDX][3] = 20
+    user_change[DAY_IDX][4] = 20
+    user_change[DAY_IDX][-1] = 20
+    origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], local_json['installment_time_period'])
+    assert list(origin_matrix[DATE_IDX]) == ['10-Mar-2012','7-Apr-2012','5-May-2012','25-May-2012','14-Jun-2012','12-Jul-2012','9-Aug-2012','6-Sep-2012','4-Oct-2012','1-Nov-2012','29-Nov-2012','27-Dec-2012','16-Jan-2013']
+    assert list(origin_matrix[DAY_IDX]) == [0,28,28,20,20,28,28,28,28,28,28,28,20]
+
+    # change date on same row as day
+    user_change[DATE_IDX][3] = '30-Jun-2012'
+    user_change[DATE_IDX][-1] = '10-Dec-2015'
+    origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], local_json['installment_time_period'])
+    assert list(origin_matrix[DATE_IDX]) == ['10-Mar-2012','7-Apr-2012','5-May-2012','30-Jun-2012','20-Jul-2012','17-Aug-2012','14-Sep-2012','12-Oct-2012','9-Nov-2012','7-Dec-2012','4-Jan-2013','1-Feb-2013','10-Dec-2015']
+    assert list(origin_matrix[DAY_IDX]) == [0,28,28,56,20,28,28,28,28,28,28,28,1042]
+
+def test_on_insurance_change():
+    local_json = copy.deepcopy(input_json)
+    apr, origin_matrix = cal_apr_helper(local_json)
+    user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(object)
+    user_change[:] = None
+    scaled_interest, security_deposit_scaled_interest = cal_scaled_interest(local_json['nominal_interest_rate']/100, local_json['installment_time_period'], local_json['interest_time_period'], local_json['interest_paid_on_deposit_percent']/100)
+
+    # no change
+    origin_matrix[INSURANCE_IDX] = on_insurance_change(origin_matrix, user_change[INSURANCE_IDX])
+    assert round_arr(origin_matrix[INSURANCE_IDX]) == [ 150.00, 102.48, 94.82, 87.02, 79.07, 70.98, 62.74, 54.35, 45.80, 37.09, 28.23, 19.20, 0]
+
+    # change first and last two
+    user_change[INSURANCE_IDX][0]=100
+    user_change[INSURANCE_IDX][-1]=100
+    user_change[INSURANCE_IDX][-2]=100
+    origin_matrix[INSURANCE_IDX] = on_insurance_change(origin_matrix, user_change[INSURANCE_IDX])
+    assert round_arr(origin_matrix[INSURANCE_IDX]) == [100, 102.48, 94.82, 87.02, 79.07, 70.98, 62.74, 54.35, 45.80, 37.09, 28.23, 100, 100]
+
+    # test balloon payment
+    local_json['grace_period_balloon'] = 4
+    apr, origin_matrix = cal_apr_helper(local_json)
+    user_change[INSURANCE_IDX][-1]= None
+    user_change[INSURANCE_IDX][-2]= None
+    user_change[INSURANCE_IDX][6]=100
+    user_change[INSURANCE_IDX][7]=100
+    origin_matrix[INSURANCE_IDX] = on_insurance_change(origin_matrix, user_change[INSURANCE_IDX])
+    assert round_arr(origin_matrix[INSURANCE_IDX]) == [100, 102.48, 94.82, 87.02, 79.07, 70.98, 100, 100, 0, 0, 0, 0, 0]
+
+def test_on_interest_change():
+    local_json = copy.deepcopy(input_json)
+    apr, origin_matrix = cal_apr_helper(local_json)
+    user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(object)
+    user_change[:] = None
+    scaled_interest, security_deposit_scaled_interest = cal_scaled_interest(local_json['nominal_interest_rate']/100, local_json['installment_time_period'], local_json['interest_time_period'], local_json['interest_paid_on_deposit_percent']/100)
+    # no change
+    origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX], local_json['interest_payment_type'], local_json['grace_period_balloon'])
+    assert round_arr(origin_matrix[INTEREST_PAID_IDX]) == [0, 18.46, 17.07, 15.66, 14.22, 12.75, 11.26, 9.74, 8.19, 6.61, 5.00, 3.37, 1.70 ]
