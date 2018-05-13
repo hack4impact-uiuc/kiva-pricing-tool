@@ -3,7 +3,7 @@
 }
 
 .error-message {
-	color: $error-message;
+	color:#FF0000;
 }
 
 .hidden-error {
@@ -11,5 +11,5 @@
 }
 
 .dropdown .required-dropdown {
-	border-color: $error-message;
+	border-color: #FF0000;
 }
