@@ -89,8 +89,7 @@ class KivaChart extends Component {
           <Bar dataKey="security deposit" stackId="a" fill="#66ca3d" />
         </BarChart>
       )
-    }
-    if (this.props.visualType == 'line') {
+    } else if (this.props.visualType == 'line') {
       return (
         <LineChart
           width={600}
@@ -130,8 +129,7 @@ class KivaChart extends Component {
           <Line type="monotone" dataKey="security deposit" stroke="#66ca3d" />
         </LineChart>
       )
-    }
-    if (this.props.visualType == 'area') {
+    } else if (this.props.visualType == 'area') {
       return (
         <AreaChart
           width={600}

@@ -17,7 +17,7 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'bar',
-      chartID: "Payment Chart",
+      chartID: 'Payment Chart',
       changeChart: false,
       changeVisual: false,
       isHidden: false,
@@ -124,10 +124,6 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-//     this.renderEditable = this.renderEditable.bind(this)
-//     this.updateTable = this.updateTable.bind(this)
-//     this.changeVisualType = this.changeVisualType.bind(this);
-//     this.changeChartType = this.changeChartType.bind(this);
   }
 
   updateTable = (e, cellInfo) => {
@@ -305,7 +301,7 @@ class APRRateDisplay extends Component {
       this.createChart.bind(this)
     }
   }
-  renderEditable = (event) => {
+  renderEditable = event => {
     const { formDataReducer } = this.props
     let editable =
       event.column.id !== 'period_num' &&
@@ -315,13 +311,12 @@ class APRRateDisplay extends Component {
       event.column.id !== 'security_interest_paid' &&
       event.column.id !== 'deposit_balance' &&
       event.column.id !== 'total_cashflow' &&
-      formDataReducer.calc_repayment_schedule[e.index]['period_num'] !==
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] !==
         'Total'
     let total =
-
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Total' ||
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Disbursement Info'
     return (
       <div
@@ -331,7 +326,7 @@ class APRRateDisplay extends Component {
             : !editable
               ? { backgroundColor: '#fafafa' }
               : formDataReducer.user_repayment_schedule[event.index][
-                  cellInfo.column.id
+                  event.column.id
                 ] !== null
                 ? { backgroundColor: '#bafaba' }
                 : { backgroundColor: '#eaeaea' }
@@ -344,29 +339,29 @@ class APRRateDisplay extends Component {
         dangerouslySetInnerHTML={{
           __html:
             formDataReducer.calc_repayment_schedule[event.index][
-              cellInfo.column.id
+              event.column.id
             ]
         }}
       />
     )
   }
-  
-  changeVisualType = (event) =>{
-  	this.setState({event})
-	if (event) {
-		this.setState({visualType: "area"})
-	}else if (!event) {
-		this.setState({visualType: "bar"})
-	}	  
+
+  changeVisualType = event => {
+    this.setState({ event })
+    if (event) {
+      this.setState({ visualType: 'area' })
+    } else if (!event) {
+      this.setState({ visualType: 'bar' })
+    }
   }
-  
-  changeChartType = (event) =>{
-  	this.setState({event})
-	if (event) {
-		this.setState({chartID: "Balance Chart"})
-	}else if (!event) {
-		this.setState({chartID: "Payment Chart"})
-	}	  
+
+  changeChartType = event => {
+    this.setState({ event })
+    if (event) {
+      this.setState({ chartID: 'Balance Chart' })
+    } else if (!event) {
+      this.setState({ chartID: 'Payment Chart' })
+    }
   }
 
   getCSV() {
@@ -748,38 +743,41 @@ class APRRateDisplay extends Component {
         <Row className="vertical-margin-item">
           <Col sm={8} md={8}>
             {this.state.isHidden && (
-	      <div>		
+              <div>
                 <label htmlFor="material-switch">
-		<span>{this.state.visualType}</span>
-		<Switch
-		  onChange={this.changeVisualType}
-		  checked={this.state.changeVisual}
-		  onColor="#438b48"
-		  onHandleColor="#c4ccc6"
-		  handleDiameter={30}
-		  uncheckedIcon={false}
-		  checkedIcon={false}
-		  className="react-switch"
-		  id="material-switch"
-		/>
-		</label>
-		<label htmlFor="material-switch">
-		<span>{this.state.chartID}</span>
-		<Switch
-		  onChange={this.changeChartType}
-		  checked={this.state.changeChart}
-		  onColor="#438b48"
-		  onHandleColor="#c4ccc6"
-		  handleDiameter={30}
-		  uncheckedIcon={false}
-		  checkedIcon={false}
-		  className="react-switch"
-		  id="material-switch"
-		/>
-		</label>
-		<KivaChart id = {this.state.chartID} visualType={this.state.visualType} data={this.state.data}></KivaChart>			
-	      </div>
-
+                  <span>{this.state.visualType}</span>
+                  <Switch
+                    onChange={this.changeVisualType}
+                    checked={this.state.changeVisual}
+                    onColor="#438b48"
+                    onHandleColor="#c4ccc6"
+                    handleDiameter={30}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    className="react-switch"
+                    id="material-switch"
+                  />
+                </label>
+                <label htmlFor="material-switch">
+                  <span>{this.state.chartID}</span>
+                  <Switch
+                    onChange={this.changeChartType}
+                    checked={this.state.changeChart}
+                    onColor="#438b48"
+                    onHandleColor="#c4ccc6"
+                    handleDiameter={30}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    className="react-switch"
+                    id="material-switch"
+                  />
+                </label>
+                <KivaChart
+                  id={this.state.chartID}
+                  visualType={this.state.visualType}
+                  data={this.state.data}
+                />
+              </div>
             )}
           </Col>
           <Col sm={4} md={4}>
