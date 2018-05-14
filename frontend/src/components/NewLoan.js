@@ -120,7 +120,7 @@ class NewLoan extends Component {
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                hint="Loan Product (i.e. small loan)"
+                hint="Loan Product"
                 typeVal="String"
                 limit={100}
                 onInputChange={e => {
