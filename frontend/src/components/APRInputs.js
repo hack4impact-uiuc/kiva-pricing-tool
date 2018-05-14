@@ -258,7 +258,7 @@ class APRInputs extends Component {
             </Row>
             <Row>
               <Col sm={12} md={12}>
-                <PageHeader>User Information</PageHeader>
+                <PageHeader>Reporter Information</PageHeader>
               </Col>
             </Row>
             <Row>
