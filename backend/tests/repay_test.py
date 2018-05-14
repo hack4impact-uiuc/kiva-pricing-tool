@@ -272,3 +272,50 @@ def test_on_interest_change():
     # no change
     origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX], local_json['interest_payment_type'], local_json['grace_period_balloon'])
     assert round_arr(origin_matrix[INTEREST_PAID_IDX]) == [0, 18.46, 17.07, 15.66, 14.22, 12.75, 11.26, 9.74, 8.19, 6.61, 5.00, 3.37, 1.70 ]
+
+    # change first and last one
+    user_change[INTEREST_PAID_IDX][1] = 10
+    user_change[INTEREST_PAID_IDX][-1] = 10
+    origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX], local_json['interest_payment_type'], local_json['grace_period_balloon'])
+    origin_matrix[TAXES_IDX] = update_taxes(origin_matrix, local_json['tax_percent_fees']/100,local_json['tax_percent_interest']/100)
+    assert round_arr(origin_matrix[INTEREST_PAID_IDX]) == [0, 10, 25.53, 15.66, 14.22, 12.75, 11.26, 9.74, 8.19, 6.61, 5.00, 3.37, 10 ]
+    assert round_arr(origin_matrix[TAXES_IDX]) == [ 20.00,11.75, 13.32, 12.35, 12.22, 12.08, 11.95, 11.81,11.67,11.53 ,11.39,11.24,11.92 ]
+
+    # test balloon payment
+    local_json['grace_period_balloon'] = 4
+    apr, origin_matrix = cal_apr_helper(local_json)
+    user_change[INTEREST_PAID_IDX][-1] = None
+    user_change[INTEREST_PAID_IDX][-5] = 10
+    origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX], local_json['interest_payment_type'], local_json['grace_period_balloon'])
+    origin_matrix[TAXES_IDX] = update_taxes(origin_matrix, local_json['tax_percent_fees']/100,local_json['tax_percent_interest']/100)
+    assert round_arr(origin_matrix[INTEREST_PAID_IDX]) == [0, 10, 25.53, 15.66, 14.22, 12.75, 11.26, 9.74, 10, 0, 0, 0, 0]
+    assert round_arr(origin_matrix[TAXES_IDX]) == [ 20.00,11.75, 13.32, 12.35, 12.22, 12.08, 11.95, 11.81,15.43,0 ,0,0,0 ]
+
+def test_on_fees_change():
+    local_json = copy.deepcopy(input_json)
+    apr, origin_matrix = cal_apr_helper(local_json)
+    user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(object)
+    user_change[:] = None
+    scaled_interest, security_deposit_scaled_interest = cal_scaled_interest(local_json['nominal_interest_rate']/100, local_json['installment_time_period'], local_json['interest_time_period'], local_json['interest_paid_on_deposit_percent']/100)
+    # no change
+    origin_matrix[FEES_IDX] = on_fees_change(origin_matrix, user_change[FEES_IDX])
+    assert round_arr(origin_matrix[FEES_IDX]) == [200.00, 107.52, 107.66,107.80, 107.94, 108.09, 108.24, 108.39, 108.55, 108.71,108.87, 109.03, 109.20]
+
+    # change first and last one
+    user_change[FEES_IDX][0] = 100
+    user_change[FEES_IDX][-1] = 100
+    origin_matrix[FEES_IDX] = on_fees_change(origin_matrix, user_change[FEES_IDX])
+    origin_matrix[TAXES_IDX] = update_taxes(origin_matrix, local_json['tax_percent_fees']/100,local_json['tax_percent_interest']/100)
+    assert round_arr(origin_matrix[FEES_IDX]) == [100, 107.52, 107.66,107.80, 107.94, 108.09, 108.24, 108.39, 108.55, 108.71,108.87, 109.03, 100]
+    assert round_arr(origin_matrix[TAXES_IDX]) == [10.00, 12.60, 12.47, 12.35, 12.22, 12.08, 11.95, 11.81, 11.67, 11.53, 11.39, 11.24, 10.17]
+
+    # test balloon payment
+    local_json['grace_period_balloon'] = 4
+    apr, origin_matrix = cal_apr_helper(local_json)
+    user_change[FEES_IDX][-1] = None
+    user_change[FEES_IDX][-5] = 100
+    origin_matrix[FEES_IDX] = on_fees_change(origin_matrix, user_change[FEES_IDX])
+    origin_matrix[TAXES_IDX] = update_taxes(origin_matrix, local_json['tax_percent_fees']/100,local_json['tax_percent_interest']/100)
+    assert round_arr(origin_matrix[FEES_IDX]) == [100, 107.52, 107.66,107.80, 107.94, 108.09, 108.24, 108.39, 100, 0,0, 0, 0]
+    assert round_arr(origin_matrix[TAXES_IDX]) == [10.00, 12.60, 12.47, 12.35, 12.22, 12.08, 11.95, 11.81, 10.82, 0, 0, 0, 0]
+     
