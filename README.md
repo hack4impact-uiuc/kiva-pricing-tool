@@ -129,7 +129,9 @@ You can download the original APR tool we based our calculator off of [here](/do
    * On the excel sheet, security deposit withdrawals are allocated to the last cashflow, even if a balloon payment occurs
    * Our calculations will lump the security deposit withdrawal with the final payment if a balloon payment occurs
    
-   
+* Cash Flows
+   * On the excel sheet, there are cashflow indicators after each expense (interest, fees, taxes, security deposit)
+   * Our implementation instead displays the overall final cash flows in each period once
 
 
 
