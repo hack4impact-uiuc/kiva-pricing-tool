@@ -727,7 +727,8 @@ class APRRateDisplay extends Component {
             <PageHeader className="page-header-montserrat bs-center">
               <small>
                 {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
-                {formDataReducer.productType} | {formDataReducer.versionNum}
+                {formDataReducer.productType} | Version{' '}
+                {formDataReducer.versionNum}
               </small>
             </PageHeader>
           </Col>
