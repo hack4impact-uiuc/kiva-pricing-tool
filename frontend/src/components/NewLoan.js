@@ -17,7 +17,11 @@ class NewLoan extends Component {
       loan_themes: [],
       selectedPartnerName: formDataReducer.mfi,
       selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType
+      selectedLoanProduct: formDataReducer.productType,
+      partnerClass: 'vertical-margin-item',
+      productErrorClass: 'typeahead-message-hidden',
+      loanClass: 'vertical-margin-item',
+      loanErrorClass: 'typeahead-message-hidden'
     }
   }
 
@@ -89,7 +93,7 @@ class NewLoan extends Component {
           <Row>
             <Form>
               <Typeahead
-                className="vertical-margin-item"
+                className={this.state.partnerClass}
                 label="mfi"
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
@@ -99,11 +103,22 @@ class NewLoan extends Component {
                 }
                 onInputChange={e => {
                   changedFormData('mfi', e)
+                  if (!this.isValidMFI(e)) {
+                    this.setState({
+                      partnerClass: 'vertical-margin-item typeahead-error',
+                      productErrorClass: 'typeahead-message-show'
+                    })
+                  } else if (this.isValidMFI(e)) {
+                    this.setState({ partnerClass: 'vertical-margin-item' })
+                  }
                 }}
               />
+              <p className={this.state.productErrorClass}>
+                MFI Partner does not exist.
+              </p>
 
               <Typeahead
-                className="vertical-margin-item"
+                className={this.state.loanClass}
                 label="loan"
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
@@ -114,8 +129,19 @@ class NewLoan extends Component {
                 }
                 onInputChange={e => {
                   changedFormData('loanType', e)
+                  if (!this.isValidTheme(e)) {
+                    this.setState({
+                      loanClass: 'vertical-margin-item typeahead-error',
+                      loanErrorClass: 'typeahead-message-show'
+                    })
+                  } else if (this.isValidTheme(e)) {
+                    this.setState({ loanClass: 'vertical-margin-item' })
+                  }
                 }}
               />
+              <p className={this.state.loanErrorClass}>
+                Loan Theme does not exist.
+              </p>
 
               <TextField
                 className="vertical-margin-item"

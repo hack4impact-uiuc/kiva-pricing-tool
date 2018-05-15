@@ -138,3 +138,16 @@
 .large-font {
 	font-size: 14pt;
 }
+
+.typeahead-error .rbt-input {
+	border: 1px solid $error-message;
+	background-color: $input-error-background;
+}
+
+.typeahead-message-hidden {
+	display: none;
+}
+
+.typeahead-message-show {
+	color: $error-message;
+}
