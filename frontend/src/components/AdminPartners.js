@@ -237,7 +237,7 @@ class AdminPartners extends Component {
             </h2>
             <div>
               <input
-                className="search-input"
+                className="expand-width"
                 placeholder="Search MFI Partner"
                 onChange={event =>
                   this.setState({
