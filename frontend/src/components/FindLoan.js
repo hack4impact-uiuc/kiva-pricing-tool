@@ -17,7 +17,19 @@ class FindLoan extends Component {
       loan_themes: [],
       product_types: [],
       versions: [],
-      disableButton: ''
+      disableButton: '',
+
+      // Error class handling for typeaheads
+      partnerClass: 'vertical-margin-item',
+      themeClass: 'vertical-margin-item',
+      productClass: 'vertical-margin-item',
+      versionClass: 'vertical-margin-item',
+
+      // Error message handling
+      partnerErrorClass: 'typeahead-message-hidden',
+      themeErrorClass: 'typeahead-message-hidden',
+      productErrorClass: 'typeahead-message-hidden',
+      versionErrorClass: 'typeahead-message-hidden'
     }
     this.getTables = this.getTables.bind(this)
   }
@@ -408,6 +420,30 @@ class FindLoan extends Component {
     return false
   }
 
+  // Method to check if MFI partner exists in queried partner list
+  // Entry is valid if DB has corresponding name
+  isValidMFI(input) {
+    return this.state.partner_names.indexOf(input) != -1
+  }
+
+  // Method to check if LT exists in queried LT list
+  // Entry is valid if DB has corresponding name
+  isValidTheme(input) {
+    return this.state.loan_themes.indexOf(input) != -1
+  }
+
+  // Method to check if PT exists in queried PT list
+  // Entry is valid if DB has corresponding name
+  isValidPT(input) {
+    return this.state.product_types.indexOf(input) != -1
+  }
+
+  // Method to check if version exists in queried version list
+  // Entry is valid if DB has corresponding name
+  isValidVersionNum(input) {
+    return this.state.versions.indexOf(input) != -1
+  }
+
   isNullOrEmpty(input) {
     return !input || !input.length
   }
@@ -432,7 +468,7 @@ class FindLoan extends Component {
             <Col sm={12} md={12}>
               <Form>
                 <Typeahead
-                  className="vertical-margin-item"
+                  className={this.state.partnerClass}
                   placeholder="Select Field Partner"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
@@ -456,11 +492,27 @@ class FindLoan extends Component {
                         changedFormData('productType', '')
                         changedFormData('versionNum', '')
                       })
+
+                    // Check if entered value is valid and switch classes
+                    if (!this.isValidMFI(e)) {
+                      this.setState({
+                        partnerClass: 'vertical-margin-item typeahead-error',
+                        partnerErrorClass: 'typeahead-message-show'
+                      })
+                    } else if (this.isValidMFI(e)) {
+                      this.setState({
+                        partnerClass: 'vertical-margin-item',
+                        partnerErrorClass: 'typeahead-message-hidden'
+                      })
+                    }
                   }}
                 />
+                <p className={this.state.partnerErrorClass}>
+                  MFI Partner not found.
+                </p>
 
                 <Typeahead
-                  className="vertical-margin-item"
+                  className={this.state.themeClass}
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   options={this.state.loan_themes}
@@ -473,11 +525,27 @@ class FindLoan extends Component {
                     changedFormData('productType', '')
                     changedFormData('versionNum', '')
                     this.getProductType()
+
+                    // Check if entered value is valid and switch classes
+                    if (!this.isValidTheme(e)) {
+                      this.setState({
+                        themeClass: 'vertical-margin-item typeahead-error',
+                        themeErrorClass: 'typeahead-message-show'
+                      })
+                    } else if (this.isValidTheme(e)) {
+                      this.setState({
+                        themeClass: 'vertical-margin-item',
+                        themeErrorClass: 'typeahead-message-hidden'
+                      })
+                    }
                   }}
                 />
+                <p className={this.state.themeErrorClass}>
+                  Loan Theme not found.
+                </p>
 
                 <Typeahead
-                  className="vertical-margin-item"
+                  className={this.state.productClass}
                   disabled={
                     this.isNullOrEmpty(formDataReducer.mfi) ||
                     this.isNullOrEmpty(formDataReducer.loanType)
@@ -496,11 +564,27 @@ class FindLoan extends Component {
                     changedFormData('productType', e)
                     changedFormData('versionNum', '')
                     this.getVersionNumEntries()
+
+                    // Check if entered value is valid and switch classes
+                    if (!this.isValidPT(e)) {
+                      this.setState({
+                        productClass: 'vertical-margin-item typeahead-error',
+                        productErrorClass: 'typeahead-message-show'
+                      })
+                    } else if (this.isValidPT(e)) {
+                      this.setState({
+                        productClass: 'vertical-margin-item',
+                        productErrorClass: 'typeahead-message-hidden'
+                      })
+                    }
                   }}
                 />
+                <p className={this.state.productErrorClass}>
+                  Product type not found.
+                </p>
 
                 <Typeahead
-                  className="vertical-margin-item"
+                  className={this.state.versionClass}
                   ref="version"
                   placeholder="Select Version Number"
                   disabled={
@@ -518,8 +602,24 @@ class FindLoan extends Component {
                   }
                   onInputChange={e => {
                     changedFormData('versionNum', e)
+
+                    // Check if entered value is valid and switch classes
+                    if (!this.isValidVersionNum(e)) {
+                      this.setState({
+                        versionClass: 'vertical-margin-item typeahead-error',
+                        versionErrorClass: 'typeahead-message-show'
+                      })
+                    } else if (this.isValidVersionNum(e)) {
+                      this.setState({
+                        versionClass: 'vertical-margin-item',
+                        versionErrorClass: 'typeahead-message-hidden'
+                      })
+                    }
                   }}
                 />
+                <p className={this.state.versionErrorClass}>
+                  Version number not found.
+                </p>
               </Form>
             </Col>
           </Row>
@@ -532,6 +632,7 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="output"
                 onClickHandler={() => {
+                  Api.calAPR(formDataReducer)
                   this.getTables()
                 }}
               />

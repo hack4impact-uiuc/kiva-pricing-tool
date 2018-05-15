@@ -3,7 +3,7 @@ from flask_migrate import Migrate, MigrateCommand
 from api import db, app
 import os
 from api.models import Partner, Theme, Loan, RepaymentSchedule
-
+import datetime
 
 
 manager = Manager(app)
@@ -682,6 +682,8 @@ def recreate_db():
         p = Partner(data)
         db.session.add(p)
     for loan in loans:
+        loan['start_date'] = datetime.datetime.now()
+        loan['update_date'] = datetime.datetime.now()
         l = Loan(loan)
         db.session.add(l)
     db.session.commit()

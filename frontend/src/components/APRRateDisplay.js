@@ -8,6 +8,7 @@ import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
+import Switch from 'react-switch'
 
 class APRRateDisplay extends Component {
   constructor(props) {
@@ -16,11 +17,10 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'bar',
+      chartID: 'Payment Chart',
+      changeChart: false,
+      changeVisual: false,
       isHidden: false,
-      barclass: 'active',
-      lineclass: '',
-      pieclass: '',
-      areaclass: '',
       data: [],
       testData: [
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -124,11 +124,9 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-    this.renderEditable = this.renderEditable.bind(this)
-    this.updateTable = this.updateTable.bind(this)
   }
 
-  updateTable(e, cellInfo) {
+  updateTable = (e, cellInfo) => {
     const { formDataReducer, changedFormData } = this.props
     if (
       formDataReducer.calc_repayment_schedule[cellInfo.index][
@@ -303,22 +301,22 @@ class APRRateDisplay extends Component {
       this.createChart.bind(this)
     }
   }
-  renderEditable(cellInfo) {
+  renderEditable = event => {
     const { formDataReducer } = this.props
     let editable =
-      cellInfo.column.id !== 'period_num' &&
-      cellInfo.column.id !== 'amount_due' &&
-      cellInfo.column.id !== 'balance' &&
-      cellInfo.column.id !== 'deposit_withdrawal' &&
-      cellInfo.column.id !== 'security_interest_paid' &&
-      cellInfo.column.id !== 'deposit_balance' &&
-      cellInfo.column.id !== 'total_cashflow' &&
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] !==
+      event.column.id !== 'period_num' &&
+      event.column.id !== 'amount_due' &&
+      event.column.id !== 'balance' &&
+      event.column.id !== 'deposit_withdrawal' &&
+      event.column.id !== 'security_interest_paid' &&
+      event.column.id !== 'deposit_balance' &&
+      event.column.id !== 'total_cashflow' &&
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] !==
         'Total'
     let total =
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Total' ||
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Disbursement Info'
     return (
       <div
@@ -327,8 +325,8 @@ class APRRateDisplay extends Component {
             ? { backgroundColor: '#fafaba' }
             : !editable
               ? { backgroundColor: '#fafafa' }
-              : formDataReducer.user_repayment_schedule[cellInfo.index][
-                  cellInfo.column.id
+              : formDataReducer.user_repayment_schedule[event.index][
+                  event.column.id
                 ] !== null
                 ? { backgroundColor: '#bafaba' }
                 : { backgroundColor: '#eaeaea' }
@@ -336,16 +334,34 @@ class APRRateDisplay extends Component {
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
-          this.updateTable(e, cellInfo)
+          this.updateTable(e, event)
         }}
         dangerouslySetInnerHTML={{
           __html:
-            formDataReducer.calc_repayment_schedule[cellInfo.index][
-              cellInfo.column.id
+            formDataReducer.calc_repayment_schedule[event.index][
+              event.column.id
             ]
         }}
       />
     )
+  }
+
+  changeVisualType = event => {
+    this.setState({ event })
+    if (event) {
+      this.setState({ visualType: 'area' })
+    } else if (!event) {
+      this.setState({ visualType: 'bar' })
+    }
+  }
+
+  changeChartType = event => {
+    this.setState({ event })
+    if (event) {
+      this.setState({ chartID: 'Balance Chart' })
+    } else if (!event) {
+      this.setState({ chartID: 'Payment Chart' })
+    }
   }
 
   getCSV() {
@@ -445,13 +461,13 @@ class APRRateDisplay extends Component {
     createDownloadLink.href = url
     createDownloadLink.setAttribute(
       'download',
-      formDataReducer.mfi[0] +
+      formDataReducer.mfi +
         '_' +
-        formDataReducer.loanType[0] +
+        formDataReducer.loanType +
         '_' +
-        formDataReducer.productType[0] +
+        formDataReducer.productType +
         '_' +
-        formDataReducer.versionNum[0] +
+        formDataReducer.versionNum +
         '.csv'
     )
     createDownloadLink.click()
@@ -461,36 +477,6 @@ class APRRateDisplay extends Component {
     const { formDataReducer } = this.props
     this.setState({ data: formDataReducer.new_repayment_schedule })
     this.setState({ isHidden: true })
-  }
-
-  changeChart(paramVisual) {
-    this.setState({ visualType: paramVisual })
-    switch (paramVisual) {
-      case 'bar':
-        this.setState({ barclass: 'active' })
-        this.setState({ lineclass: '' })
-        this.setState({ areaclass: '' })
-        this.setState({ pieclass: '' })
-        break
-      case 'line':
-        this.setState({ lineclass: 'active' })
-        this.setState({ barclass: '' })
-        this.setState({ areaclass: '' })
-        this.setState({ pieclass: '' })
-        break
-      case 'area':
-        this.setState({ areaclass: 'active' })
-        this.setState({ lineclass: '' })
-        this.setState({ barclass: '' })
-        this.setState({ pieclass: '' })
-        break
-      case 'pie':
-        this.setState({ pieclass: 'active' })
-        this.setState({ lineclass: '' })
-        this.setState({ areaclass: '' })
-        this.setState({ barclass: '' })
-        break
-    }
   }
 
   saveData() {
@@ -741,7 +727,8 @@ class APRRateDisplay extends Component {
             <PageHeader className="page-header-montserrat bs-center">
               <small>
                 {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
-                {formDataReducer.productType} | {formDataReducer.versionNum}
+                {formDataReducer.productType} | Version{' '}
+                {formDataReducer.versionNum}
               </small>
             </PageHeader>
           </Col>
@@ -757,18 +744,37 @@ class APRRateDisplay extends Component {
         <Row className="vertical-margin-item">
           <Col sm={8} md={8}>
             {this.state.isHidden && (
-              //<KivaChart
-              //  visualType={this.state.visualType}
-              //  data={this.state.data}
-              ///>
               <div>
+                <label htmlFor="material-switch">
+                  <span>{this.state.visualType}</span>
+                  <Switch
+                    onChange={this.changeVisualType}
+                    checked={this.state.changeVisual}
+                    onColor="#438b48"
+                    onHandleColor="#c4ccc6"
+                    handleDiameter={30}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    className="react-switch"
+                    id="material-switch"
+                  />
+                </label>
+                <label htmlFor="material-switch">
+                  <span>{this.state.chartID}</span>
+                  <Switch
+                    onChange={this.changeChartType}
+                    checked={this.state.changeChart}
+                    onColor="#438b48"
+                    onHandleColor="#c4ccc6"
+                    handleDiameter={30}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    className="react-switch"
+                    id="material-switch"
+                  />
+                </label>
                 <KivaChart
-                  id="balanceChart"
-                  visualType={this.state.visualType}
-                  data={this.state.data}
-                />
-                <KivaChart
-                  id="paymentChart"
+                  id={this.state.chartID}
                   visualType={this.state.visualType}
                   data={this.state.data}
                 />
@@ -792,23 +798,6 @@ class APRRateDisplay extends Component {
                 >
                   Download CSV
                 </button>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={12} md={12}>
-                {this.state.isHidden && (
-                  <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation" class={this.state.barclass}>
-                      <a onClick={() => this.changeChart('bar')}>Bar</a>
-                    </li>
-                    <li role="presentation" class={this.state.lineclass}>
-                      <a onClick={() => this.changeChart('line')}>Line</a>
-                    </li>
-                    <li role="presentation" class={this.state.areaclass}>
-                      <a onClick={() => this.changeChart('area')}>Area</a>
-                    </li>
-                  </ul>
-                )}
               </Col>
             </Row>
           </Col>
