@@ -461,13 +461,13 @@ class APRRateDisplay extends Component {
     createDownloadLink.href = url
     createDownloadLink.setAttribute(
       'download',
-      formDataReducer.mfi[0] +
+      formDataReducer.mfi +
         '_' +
-        formDataReducer.loanType[0] +
+        formDataReducer.loanType +
         '_' +
-        formDataReducer.productType[0] +
+        formDataReducer.productType +
         '_' +
-        formDataReducer.versionNum[0] +
+        formDataReducer.versionNum +
         '.csv'
     )
     createDownloadLink.click()

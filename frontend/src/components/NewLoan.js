@@ -17,7 +17,15 @@ class NewLoan extends Component {
       loan_themes: [],
       selectedPartnerName: formDataReducer.mfi,
       selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType
+      selectedLoanProduct: formDataReducer.productType,
+
+      // Error class handling for typeahead
+      partnerClass: 'vertical-margin-item',
+      loanClass: 'vertical-margin-item',
+
+      // Error message class handling
+      partnerErrorClass: 'typeahead-message-hidden',
+      loanErrorClass: 'typeahead-message-hidden'
     }
   }
 
@@ -47,24 +55,16 @@ class NewLoan extends Component {
     )
   }
 
+  // Method to check if MFI partner exists in queried partner list
+  // Entry is valid if DB has corresponding name
   isValidMFI(input) {
-    let mfi_exists = false
-    for (let name of this.state.partner_names) {
-      if (name === input) {
-        mfi_exists = true
-      }
-    }
-    return mfi_exists
+    return this.state.partner_names.indexOf(input) != -1
   }
 
+  // Method to check if LT exists in queried LT list
+  // Entry is valid if DB has corresponding name
   isValidTheme(input) {
-    let theme_exists = false
-    for (let theme of this.state.loan_themes) {
-      if (theme === input) {
-        theme_exists = true
-      }
-    }
-    return theme_exists
+    return this.state.loan_themes.indexOf(input) != -1
   }
 
   isValidPT(input) {
@@ -89,7 +89,7 @@ class NewLoan extends Component {
           <Row>
             <Form>
               <Typeahead
-                className="vertical-margin-item"
+                className={this.state.partnerClass}
                 label="mfi"
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
@@ -99,11 +99,27 @@ class NewLoan extends Component {
                 }
                 onInputChange={e => {
                   changedFormData('mfi', e)
+
+                  // Check if entered value is valid and switch classes
+                  if (!this.isValidMFI(e)) {
+                    this.setState({
+                      partnerClass: 'vertical-margin-item typeahead-error',
+                      partnerErrorClass: 'typeahead-message-show'
+                    })
+                  } else if (this.isValidMFI(e)) {
+                    this.setState({
+                      partnerClass: 'vertical-margin-item',
+                      partnerErrorClass: 'typeahead-message-hidden'
+                    })
+                  }
                 }}
               />
+              <p className={this.state.partnerErrorClass}>
+                MFI Partner does not exist.
+              </p>
 
               <Typeahead
-                className="vertical-margin-item"
+                className={this.state.loanClass}
                 label="loan"
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
@@ -114,8 +130,24 @@ class NewLoan extends Component {
                 }
                 onInputChange={e => {
                   changedFormData('loanType', e)
+
+                  // Check if entered value is valid and switch classes
+                  if (!this.isValidTheme(e)) {
+                    this.setState({
+                      loanClass: 'vertical-margin-item typeahead-error',
+                      loanErrorClass: 'typeahead-message-show'
+                    })
+                  } else if (this.isValidTheme(e)) {
+                    this.setState({
+                      loanClass: 'vertical-margin-item',
+                      loanErrorClass: 'typeahead-message-hidden'
+                    })
+                  }
                 }}
               />
+              <p className={this.state.loanErrorClass}>
+                Loan Theme does not exist.
+              </p>
 
               <TextField
                 className="vertical-margin-item"
