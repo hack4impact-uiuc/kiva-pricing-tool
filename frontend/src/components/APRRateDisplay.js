@@ -16,7 +16,7 @@ class APRRateDisplay extends Component {
     this.state = {
       id: null,
       partner_names: [],
-      visualType: 'bar',
+      visualType: 'Bar',
       chartID: "Payment Chart",
       changeChart: false,
       changeVisual: false,
@@ -124,10 +124,6 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-//     this.renderEditable = this.renderEditable.bind(this)
-//     this.updateTable = this.updateTable.bind(this)
-//     this.changeVisualType = this.changeVisualType.bind(this);
-//     this.changeChartType = this.changeChartType.bind(this);
   }
 
   updateTable = (e, cellInfo) => {
@@ -351,20 +347,20 @@ class APRRateDisplay extends Component {
     )
   }
   
-  changeVisualType = (event) =>{
+  changeVisualType = event =>{
   	this.setState({event})
 	if (event) {
-		this.setState({visualType: "area"})
-	}else if (!event) {
-		this.setState({visualType: "bar"})
+		this.setState({visualType: "Area"})
+	}else{
+		this.setState({visualType: "Bar"})
 	}	  
   }
   
-  changeChartType = (event) =>{
+  changeChartType = event =>{
   	this.setState({event})
 	if (event) {
 		this.setState({chartID: "Balance Chart"})
-	}else if (!event) {
+	}else{
 		this.setState({chartID: "Payment Chart"})
 	}	  
   }
@@ -752,7 +748,7 @@ class APRRateDisplay extends Component {
                 <label htmlFor="material-switch">
 		<span>{this.state.visualType}</span>
 		<Switch
-		  onChange={this.changeVisualType}
+                  onChange={event => this.changeVisualType(event)}
 		  checked={this.state.changeVisual}
 		  onColor="#438b48"
 		  onHandleColor="#c4ccc6"
@@ -766,7 +762,7 @@ class APRRateDisplay extends Component {
 		<label htmlFor="material-switch">
 		<span>{this.state.chartID}</span>
 		<Switch
-		  onChange={this.changeChartType}
+                  onChange={event => this.changeChartType(event)}
 		  checked={this.state.changeChart}
 		  onColor="#438b48"
 		  onHandleColor="#c4ccc6"
