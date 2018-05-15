@@ -237,7 +237,7 @@ class AdminThemes extends Component {
             </h2>
             <div>
               <input
-                className="search-input"
+                className="expand-width"
                 placeholder="Search Loan Theme"
                 onChange={event =>
                   this.setState({
