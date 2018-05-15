@@ -775,18 +775,19 @@ class APRRateDisplay extends Component {
 		</label>
 		<KivaChart id = {this.state.chartID} visualType={this.state.visualType} data={this.state.data}></KivaChart>			
 	      </div>
-
             )}
           </Col>
           <Col sm={4} md={4}>
             <Row className="vertical-margin-item">
               <Col sm={6} md={6}>
+		{!this.state.isHidden && (
                 <button
                   className="button-fancy"
                   onClick={this.createChart.bind(this)}
                 >
                   Generate Chart
                 </button>
+		)}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
                 <button
