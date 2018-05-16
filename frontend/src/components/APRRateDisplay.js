@@ -9,6 +9,7 @@ import axios from 'axios'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import Switch from 'react-switch'
+import { ReactTableDefaults } from 'react-table'
 
 class APRRateDisplay extends Component {
   constructor(props) {
@@ -730,6 +731,10 @@ class APRRateDisplay extends Component {
 
   render() {
     const { formDataReducer } = this.props
+    // console.log(ReactTableDefaults.column)
+    let my_default = ReactTableDefaults.column
+    my_default.minWidth = 60
+
     return (
       <Grid fluid className="padded-element-horizontal">
         <Row>
@@ -819,14 +824,35 @@ class APRRateDisplay extends Component {
           <Col sm={12} md={12}>
             <ReactTable
               data={formDataReducer.calc_repayment_schedule}
+              sortable={false}
+              // column={
+              //   my_default
+              // }
+
               columns={[
                 {
-                  Header: <h5 style={{ color: 'red' }}>Period Number</h5>,
+                  minWidth: 80,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Period Number
+                    </div>
+                  ),
                   accessor: 'period_num',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Payment Due Date</h5>,
+                  minWidth: 80,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Payment Due Date
+                    </div>
+                  ),
                   accessor: 'payment_due_date',
                   Cell: this.renderEditable
                 },
@@ -836,12 +862,26 @@ class APRRateDisplay extends Component {
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Amount Due</h5>,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Amount Due
+                    </div>
+                  ),
                   accessor: 'amount_due',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Principal Payment</h5>,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Principal Payment
+                    </div>
+                  ),
                   accessor: 'principal_payment',
                   Cell: this.renderEditable
                 },
@@ -861,7 +901,8 @@ class APRRateDisplay extends Component {
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Insurance</h5>,
+                  minWidth: 70,
+                  Header: 'Insurance',
                   accessor: 'insurance',
                   Cell: this.renderEditable
                 },
@@ -871,29 +912,63 @@ class APRRateDisplay extends Component {
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Security Deposit</h5>,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Security Deposit
+                    </div>
+                  ),
                   accessor: 'security_deposit',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: (
-                    <h5 style={{ color: 'red' }}>Security Interest Paid</h5>
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Security Interest Paid
+                    </div>
                   ),
                   accessor: 'security_interest_paid',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Deposit Withdrawal</h5>,
+                  minWidth: 70,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Deposit Withdrawal
+                    </div>
+                  ),
                   accessor: 'deposit_withdrawal',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Deposit Balance</h5>,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Deposit Balance
+                    </div>
+                  ),
                   accessor: 'deposit_balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Total Cashflow</h5>,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Total Cashflow
+                    </div>
+                  ),
                   accessor: 'total_cashflow',
                   Cell: this.renderEditable
                 }

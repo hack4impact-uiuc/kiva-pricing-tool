@@ -162,7 +162,11 @@ class FindLoan extends Component {
         let reformatted_matrix = []
         let reformatted_user_matrix = []
         let reformatted_calc_matrix = []
-        if (orig_matrix != null && user_matrix != null && calc_matrix != null) {
+        if (
+          orig_matrix !== null &&
+          user_matrix !== null &&
+          calc_matrix !== null
+        ) {
           for (let i = 0; i < orig_matrix[0].length; i++) {
             reformatted_matrix.push({
               period_num: orig_matrix[0][i],
@@ -351,9 +355,9 @@ class FindLoan extends Component {
 
     if (formDataReducer.mfi && formDataReducer.loanType) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) !== -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
 
       if (validPartnerName && validLoanTheme) {
         Api.getProductType(
@@ -374,11 +378,11 @@ class FindLoan extends Component {
       formDataReducer.productType
     ) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) !== -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
       let validProductType =
-        this.state.product_types.indexOf(formDataReducer.productType) != -1
+        this.state.product_types.indexOf(formDataReducer.productType) !== -1
 
       if (validPartnerName && validLoanTheme && validProductType) {
         Api.getVersionNumEntries(
@@ -403,13 +407,13 @@ class FindLoan extends Component {
       !this.isNullOrEmpty(formDataReducer.versionNum)
     ) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) !== -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
       let validProductType =
-        this.state.product_types.indexOf(formDataReducer.productType) != -1
+        this.state.product_types.indexOf(formDataReducer.productType) !== -1
       let validVersionNum =
-        this.state.versions.indexOf(formDataReducer.versionNum) != -1
+        this.state.versions.indexOf(formDataReducer.versionNum) !== -1
       return (
         validPartnerName &&
         validLoanTheme &&
@@ -423,25 +427,25 @@ class FindLoan extends Component {
   // Method to check if MFI partner exists in queried partner list
   // Entry is valid if DB has corresponding name
   isValidMFI(input) {
-    return this.state.partner_names.indexOf(input) != -1
+    return this.state.partner_names.indexOf(input) !== -1
   }
 
   // Method to check if LT exists in queried LT list
   // Entry is valid if DB has corresponding name
   isValidTheme(input) {
-    return this.state.loan_themes.indexOf(input) != -1
+    return this.state.loan_themes.indexOf(input) !== -1
   }
 
   // Method to check if PT exists in queried PT list
   // Entry is valid if DB has corresponding name
   isValidPT(input) {
-    return this.state.product_types.indexOf(input) != -1
+    return this.state.product_types.indexOf(input) !== -1
   }
 
   // Method to check if version exists in queried version list
   // Entry is valid if DB has corresponding name
   isValidVersionNum(input) {
-    return this.state.versions.indexOf(input) != -1
+    return this.state.versions.indexOf(input) !== -1
   }
 
   isNullOrEmpty(input) {
