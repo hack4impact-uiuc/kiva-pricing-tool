@@ -219,8 +219,8 @@ class APRInputs extends Component {
             'total_cashflow'
           ].toFixed(2)
         }
-        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-        calc_matrix[0]['period_num'] = 'Disbursement Info'
+        reformatted_matrix[0]['period_num'] = 'Disbursement'
+        calc_matrix[0]['period_num'] = 'Disbursement'
         console.log(calc_matrix)
         changedFormData('original_repayment_schedule', reformatted_matrix)
         changedFormData('user_repayment_schedule', user_matrix)
