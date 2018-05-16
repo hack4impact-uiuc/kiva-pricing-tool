@@ -77,7 +77,7 @@ class TextField extends Component {
         changedFormData('error', true)
       } else {
         this.setState({ error_message: '' })
-        changedFormData('error', false)
+        changedFormData('error', true)
       }
 
       changedFormData(this.props.reduxId, e.target.value)
@@ -101,6 +101,9 @@ class TextField extends Component {
           error_message: 'input limit succeeded',
           className: this.props.className + ' required-error'
         })
+        changedFormData('error', true)
+      } else {
+        this.setState({ error_message: '' })
         changedFormData('error', true)
       }
       changedFormData(this.props.reduxId, e.target.value)
