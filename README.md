@@ -56,4 +56,5 @@ Over the course of the 3 months we had to build out this tool, we accumulated so
     * We query the database with the identification parameters, then delete any existing loan with the same data and post the current loan into the database
     * This way we are effectively "editing" a loan, and if no existing loan is found, we can save a new loan to the database with one endpoint
 
-  
+* Input Page Styling
+    * In order to align the textfields in the Input Page, we created hidden textfields to better realign/format the page
