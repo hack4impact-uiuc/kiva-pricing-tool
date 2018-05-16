@@ -49,10 +49,7 @@ class Dropdown extends Component {
 
   componentDidMount() {
     const { formDataReducer } = this.props
-    // console.log('hi')
     let val = this.props.reduxId
-    // console.log(formDataReducer)
-    // console.log( val, formDataReducer.this.props.reduxId)
     this.setState({
       value:
         formDataReducer[this.props.reduxId].length === 0
@@ -79,8 +76,6 @@ class Dropdown extends Component {
 
   render() {
     const { formDataReducer, changedFormData } = this.props
-    // console.log("yo", formDataReducer, this.props.reduxId, "hi"+formDataReducer[this.props.reduxId])
-    // console.log(this.state.value)
     return (
       <span className="space">
         <DropdownButton
