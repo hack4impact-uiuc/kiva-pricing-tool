@@ -9,7 +9,6 @@ class Dropdown extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    // console.log(formDataReducer[this.props.reduxId], formDataReducer[this.props.reduxId].length)
     this.state = {
       default: this.props.title,
       value: this.props.title, // Used to check if value of dropdown is the same as the title for error messages
@@ -51,8 +50,6 @@ class Dropdown extends Component {
     const { formDataReducer } = this.props
     // console.log('hi')
     let val = this.props.reduxId
-    // console.log(formDataReducer)
-    // console.log( val, formDataReducer.this.props.reduxId)
     this.setState({
       value:
         formDataReducer[this.props.reduxId].length === 0
@@ -79,8 +76,6 @@ class Dropdown extends Component {
 
   render() {
     const { formDataReducer, changedFormData } = this.props
-    // console.log("yo", formDataReducer, this.props.reduxId, "hi"+formDataReducer[this.props.reduxId])
-    // console.log(this.state.value)
     return (
       <span className="space">
         <DropdownButton

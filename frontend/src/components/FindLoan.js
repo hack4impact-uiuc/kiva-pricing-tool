@@ -464,6 +464,12 @@ class FindLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData, searchLoan } = this.props
+    console.log(this.isNullOrEmpty(formDataReducer.mfi))
+    console.log('Loan Type:', formDataReducer.loanType)
+    console.log(
+      'Is this true or not',
+      formDataReducer.loanType != null && formDataReducer.loanType.length > 0
+    )
     return (
       <div className="page-body-grey">
         <Grid
@@ -482,7 +488,7 @@ class FindLoan extends Component {
               <Form>
                 <Typeahead
                   className={this.state.partnerClass}
-                  placeholder="Select Field Partner:"
+                  placeholder="Select Field Partner"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
                   onInputChange={e => {
@@ -529,7 +535,7 @@ class FindLoan extends Component {
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   options={this.state.loan_themes}
-                  placeholder="Select Loan Theme:"
+                  placeholder="Select Loan Theme"
                   selected={
                     formDataReducer.loanType ? [formDataReducer.loanType] : ''
                   }
@@ -545,6 +551,7 @@ class FindLoan extends Component {
                         themeClass: 'vertical-margin-item typeahead-error',
                         themeErrorClass: 'typeahead-message-show'
                       })
+                      changedFormData('loanType', '')
                     } else if (this.isValidTheme(e)) {
                       this.setState({
                         themeClass: 'vertical-margin-item',
@@ -565,7 +572,7 @@ class FindLoan extends Component {
                   }
                   ref="product"
                   options={this.state.product_types}
-                  placeholder="Select Loan Product:"
+                  placeholder="Select Loan Product"
                   typeVal="String"
                   limit={100}
                   selected={
@@ -599,13 +606,11 @@ class FindLoan extends Component {
                 <Typeahead
                   className={this.state.versionClass}
                   ref="version"
-                  placeholder="Select Version Number:"
+                  placeholder="Select Version Number"
                   disabled={
-                    !(
-                      !this.isNullOrEmpty(formDataReducer.mfi) &&
-                      !this.isNullOrEmpty(formDataReducer.loanType) &&
-                      !this.isNullOrEmpty(formDataReducer.productType)
-                    )
+                    this.isNullOrEmpty(formDataReducer.mfi) ||
+                    this.isNullOrEmpty(formDataReducer.loanType) ||
+                    this.isNullOrEmpty(formDataReducer.productType)
                   }
                   options={this.state.versions}
                   selected={
@@ -656,6 +661,13 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="form1"
                 onClickHandler={() => {
+                  Api.getVersionNum(
+                    formDataReducer.mfi,
+                    formDataReducer.loanType,
+                    formDataReducer.productType
+                  ).then(response => {
+                    changedFormData('versionNum', response.version)
+                  })
                   this.getTables()
                 }}
               />
