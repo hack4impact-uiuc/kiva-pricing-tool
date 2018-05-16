@@ -1,6 +1,6 @@
 # Localhost
 ## Frontend
-In your terminal, cd into the frontend folder.
+In your terminal, cd into the frontend folder and type in
 ```
  npm install
 ``` 
