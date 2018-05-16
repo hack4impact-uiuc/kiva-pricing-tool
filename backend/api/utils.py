@@ -65,8 +65,6 @@ def round_float(f, n):
         ret = np.floor(f * 10 ** n + 0.5) / 10**n
         return ret
     except Exception as e:
-        print(e)
-        print(f)
         return None
 
 #TODO: add rounding before json
@@ -140,7 +138,6 @@ def cal_apr_helper(input_json):
                 elif repayment_type == 'single end-term principal payment':
                     balance_arr[idx] = loan_amount
                 else:
-                    print('impossible repayment_type')
                     exit(1)
 
                 if repayment_type == 'equal installments (amortized)':
@@ -845,7 +842,7 @@ def update_repayment_schedule(origin_matrix, user_change, input_form):
     # Note that the following operation must be kept in order since they have dependencies.
     origin_matrix[DATE_IDX], origin_matrix[DAY_IDX] = on_days_change(origin_matrix, user_change[DAY_IDX], user_change[DATE_IDX], installment_time_period)
     origin_matrix[PRINCIPAL_PAID_IDX] = on_principal_change(origin_matrix, user_change[PRINCIPAL_PAID_IDX], grace_period_balloon)
-    
+
     origin_matrix[BALANCE_IDX] = update_balance(origin_matrix)
     origin_matrix[FEES_IDX] = update_fees(origin_matrix, fee_percent_ongoing, fee_fixed_ongoing, grace_period_balloon)
     origin_matrix[FEES_IDX] = on_fees_change(origin_matrix, user_change[FEES_IDX])

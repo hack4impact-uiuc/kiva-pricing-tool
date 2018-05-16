@@ -1,9 +1,8 @@
 // @flow
-import React, { Component, View, StyleSheet } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import { Button, KivaChart } from './'
-import { Api } from '../utils'
+import { Api, Variables } from '../utils'
 import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
@@ -125,10 +124,13 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-    this.renderEditable = this.renderEditable.bind(this)
-    this.updateTable = this.updateTable.bind(this)
+    // this.renderEditable = this.renderEditable.bind(this)
+    // this.updateTable = this.updateTable.bind(this)
   }
 
+  /**
+   * Call recalculate endpoint to receive updated values upon user change.
+   */
   updateTable = (e, cellInfo) => {
     const { formDataReducer, changedFormData } = this.props
     if (
@@ -215,7 +217,7 @@ class APRRateDisplay extends Component {
         user_change: user_change
       }
       Api.recalculate(data, formDataReducer)
-      axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
+      axios.post(Variables.flaskURL + 'recalculate', data).then(response => {
         const apr = response.data.result.apr
         const recal_matrix = response.data.result.recal_matrix
         changedFormData('nominalApr', apr)
@@ -307,6 +309,10 @@ class APRRateDisplay extends Component {
       this.createChart.bind(this)
     }
   }
+
+  /**
+   * Div element for each cell entry, conditionally allowing user edits
+   */
   renderEditable = event => {
     const { formDataReducer } = this.props
     let editable =
@@ -378,11 +384,11 @@ class APRRateDisplay extends Component {
   changeChartType(changeChart) {
     this.setState({ changeChart })                                    //change chart type based on the current boolean state
     if (changeChart) {
-      this.setState({chartID: "Payment Chart"})
-    }else if (!changeChart) {
-      this.setState({chartID: "Balance Chart"})
-    }	  
-   }
+      this.setState({ chartID: 'Payment Chart' })
+    } else if (!changeChart) {
+      this.setState({ chartID: 'Balance Chart' })
+    }
+  }
 
   /*
    * generates and downloads CSV file containing repayment schedule and user inputs from APRInputs.js
@@ -413,71 +419,71 @@ class APRRateDisplay extends Component {
     row =
       formDataReducer.nominalApr +
       ',' +
-      formDataReducer.mfi[0] +
+      formDataReducer.mfi +
       ',' +
-      formDataReducer.loanType[0] +
+      formDataReducer.loanType +
       ',' +
-      formDataReducer.productType[0] +
+      formDataReducer.productType +
       ',' +
-      formDataReducer.versionNum[0] +
+      formDataReducer.versionNum +
       ',' +
       formDataReducer.updateName +
       ',' +
-      formDataReducer.startName[0] +
+      formDataReducer.startName +
       ',' +
-      formDataReducer.installmentTimePeriod[0] +
+      formDataReducer.installmentTimePeriod +
       ',' +
-      formDataReducer.repaymentType[0] +
+      formDataReducer.repaymentType +
       ',' +
-      formDataReducer.interestTimePeriod[0] +
+      formDataReducer.interestTimePeriod +
       ',' +
-      formDataReducer.interestPaymentType[0] +
+      formDataReducer.interestPaymentType +
       ',' +
-      formDataReducer.interestCalculationType[0] +
+      formDataReducer.interestCalculationType +
       ',' +
-      formDataReducer.loanAmount[0] +
+      formDataReducer.loanAmount +
       ',' +
-      formDataReducer.installment[0] +
+      formDataReducer.installment +
       ',' +
-      formDataReducer.nominalInterestRate[0] +
+      formDataReducer.nominalInterestRate +
       ',' +
-      formDataReducer.gracePeriodPrincipal[0] +
+      formDataReducer.gracePeriodPrincipal +
       ',' +
-      formDataReducer.gracePeriodInterestPay[0] +
+      formDataReducer.gracePeriodInterestPay +
       ',' +
-      formDataReducer.gracePeriodInterestCalculate[0] +
+      formDataReducer.gracePeriodInterestCalculate +
       ',' +
-      formDataReducer.gracePeriodBalloon[0] +
+      formDataReducer.gracePeriodBalloon +
       ',' +
-      formDataReducer.feePercentUpfront[0] +
+      formDataReducer.feePercentUpfront +
       ',' +
-      formDataReducer.feePercentOngoing[0] +
+      formDataReducer.feePercentOngoing +
       ',' +
-      formDataReducer.feeFixedUpfront[0] +
+      formDataReducer.feeFixedUpfront +
       ',' +
-      formDataReducer.feeFixedOngoing[0] +
+      formDataReducer.feeFixedOngoing +
       ',' +
-      formDataReducer.taxPercentFees[0] +
+      formDataReducer.taxPercentFees +
       ',' +
-      formDataReducer.taxPercentInterest[0] +
+      formDataReducer.taxPercentInterest +
       ',' +
-      formDataReducer.insurancePercentUpfront[0] +
+      formDataReducer.insurancePercentUpfront +
       ',' +
-      formDataReducer.insurancePercentOngoing[0] +
+      formDataReducer.insurancePercentOngoing +
       ',' +
-      formDataReducer.insuranceFixedUpfront[0] +
+      formDataReducer.insuranceFixedUpfront +
       ',' +
-      formDataReducer.insuranceFixedOngoing[0] +
+      formDataReducer.insuranceFixedOngoing +
       ',' +
-      formDataReducer.securityDepositPercentUpfront[0] +
+      formDataReducer.securityDepositPercentUpfront +
       ',' +
-      formDataReducer.securityDepositPercentOngoing[0] +
+      formDataReducer.securityDepositPercentOngoing +
       ',' +
-      formDataReducer.securityDepositFixedUpfront[0] +
+      formDataReducer.securityDepositFixedUpfront +
       ',' +
-      formDataReducer.securityDepositFixedOngoing[0] +
+      formDataReducer.securityDepositFixedOngoing +
       ',' +
-      formDataReducer.interestPaidOnDepositPercent[0]
+      formDataReducer.interestPaidOnDepositPercent
     csv.push(row)
 
     let csvFile = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
@@ -508,6 +514,9 @@ class APRRateDisplay extends Component {
     this.setState({ isHidden: true })                                                    
   }
 
+  /**
+   * Call save loan endpoint to save loan and repayment schedule in database.
+   */
   saveData() {
     const { formDataReducer } = this.props
     let orig_matrix = [
@@ -691,48 +700,6 @@ class APRRateDisplay extends Component {
     }
     orig_matrix[0][0] = 0
     calc_matrix[0][0] = 0
-    let data = {
-      partner_name: formDataReducer.mfi,
-      loan_theme: formDataReducer.loanType,
-      product_type: formDataReducer.productType,
-      version_num: '1',
-      update_name: formDataReducer.startName,
-      start_name: formDataReducer.startName,
-      nominal_apr: formDataReducer.nominalApr,
-      installment_time_period: formDataReducer.installmentTimePeriod,
-      repayment_type: formDataReducer.repaymentType,
-      interest_time_period: formDataReducer.interestTimePeriod,
-      interest_payment_type: formDataReducer.interestPaymentType,
-      interest_calculation_type: formDataReducer.interestCalculationType,
-      loan_amount: formDataReducer.loanAmount,
-      installment: formDataReducer.installment,
-      nominal_interest_rate: formDataReducer.nominalInterestRate,
-      grace_period_principal: formDataReducer.gracePeriodPrincipal,
-      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
-      grace_period_interest_calculate:
-        formDataReducer.gracePeriodInterestCalculate,
-      grace_period_balloon: formDataReducer.gracePeriodBalloon,
-      fee_percent_upfront: formDataReducer.feePercentUpfront,
-      fee_percent_ongoing: formDataReducer.feePercentOngoing,
-      fee_fixed_upfront: formDataReducer.feeFixedUpfront,
-      fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
-      tax_percent_fees: formDataReducer.taxPercentFees,
-      tax_percent_interest: formDataReducer.taxPercentInterest,
-      insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
-      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
-      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
-      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
-      security_deposit_percent_upfront:
-        formDataReducer.securityDepositPercentUpfront,
-      security_deposit_percent_ongoing:
-        formDataReducer.securityDepositPercentOngoing,
-      security_deposit_fixed_upfront:
-        formDataReducer.securityDepositFixedUpfront,
-      security_deposit_fixed_ongoing:
-        formDataReducer.securityDepositFixedOngoing,
-      interest_paid_on_deposit_percent:
-        formDataReducer.interestPaidOnDepositPercent
-    }
     let payload = {
       partner_name: formDataReducer.mfi,
       loan_theme: formDataReducer.loanType,
@@ -742,14 +709,14 @@ class APRRateDisplay extends Component {
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    Api.saveLoan(payload, formDataReducer).then(response => {
-      console.log(response)
-    })
+    Api.saveLoan(payload, formDataReducer).then(response => {})
   }
-
+  /**
+   * Render for display page. Contains repayment schedule as a ReactTable, and
+   * charts for visualization.
+   */
   render() {
     const { formDataReducer } = this.props
-    // console.log(ReactTableDefaults.column)
     let my_default = ReactTableDefaults.column
     my_default.minWidth = 60
 
@@ -783,8 +750,8 @@ class APRRateDisplay extends Component {
                   <Switch
                     onChange={event => this.changeVisualType(event)}                              //change visualization type when pressed
                     checked={this.state.changeVisual}                                             //changeVisual boolean changes state every time switch is pressed
-                    onColor="#438b48"
-                    onHandleColor="#c4ccc6"
+                    onColor={Variables.switchOnColor}
+                    onHandleColor="#ffffff"
                     handleDiameter={30}
                     uncheckedIcon={false}
                     checkedIcon={false}
@@ -800,8 +767,8 @@ class APRRateDisplay extends Component {
                     onChange={event => this.changeChartType(event)}
                     //changeChart boolean changes state every time switch is pressed
                     checked={this.state.changeChart}
-                    onColor="#438b48"
-                    onHandleColor="#c4ccc6"
+                    onColor={Variables.switchOnColor}
+                    onHandleColor="#ffffff"
                     handleDiameter={30}
                     uncheckedIcon={false}
                     checkedIcon={false}
@@ -823,17 +790,14 @@ class APRRateDisplay extends Component {
                 {!this.state.isHidden && (
                   <button
                     className="button-fancy"
-                    onClick={this.createChart.bind(this)}
+                    onClick={() => this.createChart()}
                   >
                     Generate Chart
                   </button>
                 )}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
-                <button
-                  className="button-fancy"
-                  onClick={this.getCSV.bind(this)}
-                >
+                <button className="button-fancy" onClick={() => this.getCSV()}>
                   Download CSV
                 </button>
               </Col>
@@ -856,9 +820,9 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Period Number
+                      <h5>Period Number</h5>
                     </div>
                   ),
                   accessor: 'period_num',
@@ -869,16 +833,16 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Payment Due Date
+                      <h5>Payment Due Date</h5>
                     </div>
                   ),
                   accessor: 'payment_due_date',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Days</h5>,
+                  Header: <h5>Days</h5>,
                   accessor: 'days',
                   Cell: this.renderEditable
                 },
@@ -886,9 +850,9 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Amount Due
+                      <h5>Amount Due</h5>
                     </div>
                   ),
                   accessor: 'amount_due',
@@ -898,37 +862,37 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Principal Payment
+                      <h5>Principal Payment</h5>
                     </div>
                   ),
                   accessor: 'principal_payment',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Balance</h5>,
+                  Header: <h5>Balance</h5>,
                   accessor: 'balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Interest</h5>,
+                  Header: <h5>Interest</h5>,
                   accessor: 'interest',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Fees</h5>,
+                  Header: <h5>Fees</h5>,
                   accessor: 'fees',
                   Cell: this.renderEditable
                 },
                 {
                   minWidth: 70,
-                  Header: 'Insurance',
+                  Header: <h5>Insurance</h5>,
                   accessor: 'insurance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Taxes</h5>,
+                  Header: <h5>Taxes</h5>,
                   accessor: 'taxes',
                   Cell: this.renderEditable
                 },
@@ -936,9 +900,9 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Security Deposit
+                      <h5> Security Deposit</h5>
                     </div>
                   ),
                   accessor: 'security_deposit',
@@ -948,9 +912,9 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Security Interest Paid
+                      <h5>Security Interest Paid</h5>
                     </div>
                   ),
                   accessor: 'security_interest_paid',
@@ -961,9 +925,9 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Deposit Withdrawal
+                      <h5>Deposit Withdrawal</h5>
                     </div>
                   ),
                   accessor: 'deposit_withdrawal',
@@ -973,9 +937,9 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Deposit Balance
+                      <h5>Deposit Balance</h5>
                     </div>
                   ),
                   accessor: 'deposit_balance',
@@ -985,9 +949,9 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
-                      Total Cashflow
+                      <h5>Total Cashflow</h5>
                     </div>
                   ),
                   accessor: 'total_cashflow',

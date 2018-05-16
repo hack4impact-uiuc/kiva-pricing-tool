@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Alert, Row, Col, Modal } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col, Modal } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
-import { ToastContainer, ToastMessage } from 'react-toastr'
+import { Variables } from './../utils'
+import { ToastContainer } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
 
@@ -37,7 +38,7 @@ class AdminThemes extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:3453/getAllLT').then(response => {
+    axios.get(Variables.flaskURL + 'getAllLT').then(response => {
       for (let theme of response.data.result.loan_theme) {
         this.setState({
           data: this.state.data.concat({ loan_theme: theme })
@@ -61,7 +62,7 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
 
           if (original !== update) {
-            if (update && update.length != 0 && update != ' ') {
+            if (update && update.length !== 0 && update !== ' ') {
               this.setState({
                 edited_loans: this.state.edited_loans.concat({
                   original: original,
@@ -113,7 +114,8 @@ class AdminThemes extends Component {
         }
         axios
           .put(
-            'http://127.0.0.1:3453/editLT/' +
+            Variables.flaskURL +
+              'editLT/' +
               this.state.edited_loans[i].original,
             updated_name
           )
@@ -123,11 +125,6 @@ class AdminThemes extends Component {
               edited_loans: this.state.edited_loans
                 .slice(0, i)
                 .concat(this.state.data.slice(i + 1))
-            })
-            i--
-
-            container.success('Saved all themes', 'SUCCESS', {
-              closeButton: true
             })
           })
           .catch(error => {
@@ -145,6 +142,7 @@ class AdminThemes extends Component {
             }
           })
       }
+      container.success('Saved all themes', 'SUCCESS', { closeButton: true })
     }
   }
 
@@ -152,7 +150,7 @@ class AdminThemes extends Component {
     if (theme_name && theme_name.length) {
       let data = { loan_theme: theme_name }
       axios
-        .post('http://127.0.0.1:3453/addLT', data)
+        .post(Variables.flaskURL + 'addLT', data)
         .then(response => {
           this.setState({
             data: this.state.data.concat({ loan_theme: theme_name })
@@ -183,7 +181,7 @@ class AdminThemes extends Component {
     this.setState({ remove_warning: false })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
-      .delete('http://127.0.0.1:3453/removeLT/' + theme_name)
+      .delete(Variables.flaskURL + 'removeLT/' + theme_name)
       .then(response => {
         for (var i = 0; i < this.state.data.length; i++) {
           if (this.state.data[i].loan_theme === theme_name) {
@@ -235,7 +233,8 @@ class AdminThemes extends Component {
                 onChange={event =>
                   this.setState({
                     filtered: [{ id: 'loan_theme', value: event.target.value }]
-                  })}
+                  })
+                }
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -324,7 +323,8 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.handleRemoveClick(original.loan_theme)} // Send text value to remove loan function
+                          this.handleRemoveClick(original.loan_theme)
+                        } // Send text value to remove loan function
                       />
                     )
                   }
@@ -360,7 +360,8 @@ class AdminThemes extends Component {
                   name="Cancel"
                   url="themelist"
                   onClickHandler={() =>
-                    this.setState({ remove_warning: false })}
+                    this.setState({ remove_warning: false })
+                  }
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -369,7 +370,8 @@ class AdminThemes extends Component {
                   name="Remove"
                   url="themelist"
                   onClickHandler={() =>
-                    this.removeTheme(this.state.selected_remove)}
+                    this.removeTheme(this.state.selected_remove)
+                  }
                 />
               </Col>
             </Row>

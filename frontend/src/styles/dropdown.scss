@@ -1,15 +1,20 @@
+@import "./variables.scss";
+
 .space {
     padding: 10px;
 }
 
+/* Validation error message */
 .error-message {
-	color:#FF0000;
+	color: $error-message;
 }
 
+/* Hide error message when appropriate */
 .hidden-error {
 	display: none;
 }
 
+/* Highlight border on error */
 .dropdown .required-dropdown {
-	border-color: #FF0000;
+	border-color: $error-message;
 }

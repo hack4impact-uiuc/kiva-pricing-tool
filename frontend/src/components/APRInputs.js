@@ -2,13 +2,8 @@
 import React, { Component } from 'react'
 import { Dropdown, Button, TextField } from './'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
-import axios from 'axios'
 import './../styles/app.scss'
 import { Api } from '../utils'
-import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
-require('./../styles/react-toastr.css')
-
-let container
 
 class APRInputs extends Component {
   constructor(props) {
@@ -31,6 +26,9 @@ class APRInputs extends Component {
     changedFormData([name], value)
   }
 
+  /**
+   * Checks whether proper inputs have been entered.
+   */
   inputsEntered() {
     const { formDataReducer } = this.props
     return (
@@ -62,6 +60,10 @@ class APRInputs extends Component {
     }
   }
 
+  /**
+   * Sends inputs to backend to calculate initial APR rate and repayment
+   * schedule.
+   */
   postData() {
     const { formDataReducer, changedFormData } = this.props
     this.inputsEntered() &&
@@ -221,7 +223,6 @@ class APRInputs extends Component {
         }
         reformatted_matrix[0]['period_num'] = 'Disbursement'
         calc_matrix[0]['period_num'] = 'Disbursement'
-        console.log(calc_matrix)
         changedFormData('original_repayment_schedule', reformatted_matrix)
         changedFormData('user_repayment_schedule', user_matrix)
         changedFormData('calc_repayment_schedule', calc_matrix)
@@ -232,7 +233,6 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer } = this.props
-    // console.log(formDataReducer, this.inputsEntered())
     return (
       <div className="page-body-grey padded-element-vertical overpad-shrink">
         <Grid
