@@ -5,6 +5,7 @@ import Button from './Button'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
+import { Variables } from './../utils'
 import { ToastContainer } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
@@ -37,7 +38,7 @@ class AdminThemes extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:3453/getAllLT').then(response => {
+    axios.get(Variables.flaskURL + 'getAllLT').then(response => {
       for (let theme of response.data.result.loan_theme) {
         this.setState({
           data: this.state.data.concat({ loan_theme: theme })
@@ -113,7 +114,8 @@ class AdminThemes extends Component {
         }
         axios
           .put(
-            'http://127.0.0.1:3453/editLT/' +
+            Variables.flaskURL +
+              'editLT/' +
               this.state.edited_loans[i].original,
             updated_name
           )
@@ -148,7 +150,7 @@ class AdminThemes extends Component {
     if (theme_name && theme_name.length) {
       let data = { loan_theme: theme_name }
       axios
-        .post('http://127.0.0.1:3453/addLT', data)
+        .post(Variables.flaskURL + 'addLT', data)
         .then(response => {
           this.setState({
             data: this.state.data.concat({ loan_theme: theme_name })
@@ -179,7 +181,7 @@ class AdminThemes extends Component {
     this.setState({ remove_warning: false })
     // Remove loan from being visible from table, remove from state.data array if successful response from db
     axios
-      .delete('http://127.0.0.1:3453/removeLT/' + theme_name)
+      .delete(Variables.flaskURL + 'removeLT/' + theme_name)
       .then(response => {
         for (var i = 0; i < this.state.data.length; i++) {
           if (this.state.data[i].loan_theme === theme_name) {

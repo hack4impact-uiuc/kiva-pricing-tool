@@ -1,10 +1,12 @@
 import axios from 'axios'
 import adapters from './apiAdapters'
+import Variables from './Variables'
 
 function getProductType(mfi, loanType) {
   return axios
     .get(
-      'http://127.0.0.1:3453/getPTEntry?partner_name=' +
+      Variables.flaskURL +
+        'getPTEntry?partner_name=' +
         mfi +
         '&loan_theme=' +
         loanType
@@ -21,7 +23,8 @@ function getProductType(mfi, loanType) {
 function getVersionNumEntries(mfi, loanType, productType) {
   return axios
     .get(
-      'http://127.0.0.1:3453/getVersionNumEntry?partner_name=' +
+      Variables.flaskURL +
+        'getVersionNumEntry?partner_name=' +
         mfi +
         '&loan_theme=' +
         loanType +
@@ -40,7 +43,8 @@ function getVersionNumEntries(mfi, loanType, productType) {
 function getVersionNum(mfi, loanType, productType) {
   return axios
     .get(
-      'http://127.0.0.1:3453/getVersionNum?partner_name=' +
+      Variables.flaskURL +
+        'getVersionNum?partner_name=' +
         mfi +
         '&theme=' +
         loanType +
@@ -59,7 +63,8 @@ function getVersionNum(mfi, loanType, productType) {
 function searchLoan(mfi, loanType, productType, versionNum) {
   return axios
     .get(
-      'http://127.0.0.1:3453/findLoan?partner_name=' +
+      Variables.flaskURL +
+        'findLoan?partner_name=' +
         mfi +
         '&loan_theme=' +
         loanType +
@@ -80,7 +85,8 @@ function searchLoan(mfi, loanType, productType, versionNum) {
 function getTable(mfi, loanType, productType, versionNum) {
   return axios
     .get(
-      'http://127.0.0.1:3453/findLoan?partner_name=' +
+      Variables.flaskURL +
+        'findLoan?partner_name=' +
         mfi +
         '&loan_theme=' +
         loanType +
@@ -104,7 +110,7 @@ function getTable(mfi, loanType, productType, versionNum) {
 function calAPR(reducerData) {
   return axios
     .post(
-      'http://127.0.0.1:3453/calculateAPR',
+      Variables.flaskURL + 'calculateAPR',
       adapters.convertToApiLoan(reducerData)
     )
     .then(response => {
@@ -118,7 +124,7 @@ function calAPR(reducerData) {
 function saveLoan(payload, inputs) {
   payload.inputs = adapters.convertToApiLoan(inputs)
   return axios
-    .post('http://127.0.0.1:3453/saveNewLoan', payload)
+    .post(Variables.flaskURL + 'saveNewLoan', payload)
     .then(response => {
       return response
     })
@@ -130,7 +136,7 @@ function saveLoan(payload, inputs) {
 function recalculate(payload, inputs) {
   payload.input_form = adapters.convertToApiLoan(inputs)
   return axios
-    .post('http://127.0.0.1:3453/recalculate', payload)
+    .post(Variables.flaskURL + 'recalculate', payload)
     .then(response => {
       return response
     })

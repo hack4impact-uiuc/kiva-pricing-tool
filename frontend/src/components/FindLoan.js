@@ -5,7 +5,7 @@ import './../styles/app.css'
 import Button from './Button'
 import axios from 'axios'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { Api } from './../utils'
+import { Api, Variables } from './../utils'
 import PropTypes from 'prop-types'
 
 class FindLoan extends Component {
@@ -344,7 +344,7 @@ class FindLoan extends Component {
     const { changedFormData } = this.props
     changedFormData('back', '')
     axios
-      .get('http://127.0.0.1:3453/getMFIEntry')
+      .get(Variables.flaskURL + 'getMFIEntry')
       .then(response => {
         this.setState({ partner_names: response.data.result.partners })
       })
@@ -486,7 +486,7 @@ class FindLoan extends Component {
                   onInputChange={e => {
                     this.getProductType()
                     axios
-                      .get('http://127.0.0.1:3453/getLTEntry', {
+                      .get(Variables.flaskURL + 'getLTEntry', {
                         params: {
                           partner_name: e
                         }

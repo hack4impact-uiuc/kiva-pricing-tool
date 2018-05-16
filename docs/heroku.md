@@ -60,7 +60,7 @@ $ python manage.py db upgrade
 ### Resetting your Database
 For the first step you have two options, for the first option you should go into your heroku backend's postgress add-on, then go to the settings page and press **Reset Database**.
 <br>
-or you can type in:
+The second option is to type this into your terminal:
 
 ```
 $ heroku pg:reset DATABASE
