@@ -253,11 +253,6 @@ class APRInputs extends Component {
           <Row>
             <Row>
               <Col sm={12} md={12}>
-                <h5>* Indicates required field</h5>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={12} md={12}>
                 <PageHeader>Reporter Information</PageHeader>
               </Col>
             </Row>
@@ -265,7 +260,7 @@ class APRInputs extends Component {
               <Col sm={12} md={12}>
                 <TextField
                   className="inline-textfield"
-                  id="Full Name*"
+                  id="Full Name"
                   reduxId="startName"
                   hint="ex. John"
                   typeVal="String"
@@ -325,7 +320,7 @@ class APRInputs extends Component {
             <Row className="vertical-margin-item flex-align-center">
               <Col sm={4} md={4}>
                 <TextField
-                  id="Loan Amount*"
+                  id="Loan Amount"
                   reduxId="loanAmount"
                   hint="ex. 5000"
                   typeVal="float"
@@ -342,7 +337,7 @@ class APRInputs extends Component {
               </Col>
               <Col sm={4} md={4}>
                 <TextField
-                  id="Number of Installments*"
+                  id="Number of Installments"
                   reduxId="installment"
                   hint="ex. 12"
                   typeVal="int"
