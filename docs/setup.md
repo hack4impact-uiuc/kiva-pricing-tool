@@ -1,4 +1,6 @@
 # Localhost Setup
+Clone the kiva-pricing-tool repository onto your computer.
+
 ## Frontend
 In your terminal, cd into the frontend folder and type in
 ```
