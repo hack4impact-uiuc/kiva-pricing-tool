@@ -1,0 +1,10 @@
+html, #root, #root > div {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	padding-top: 2.3%; /* Clear bootstrap navbar fix */
+}

@@ -1,0 +1,189 @@
+@import "./variables.scss";
+
+/* Sets the background of the element to grey and fill */
+.page-body-grey {
+	width: 100%;
+	height: 100%;
+	background-color: $page-background;
+	overflow: auto;
+}
+
+/* Fills background white */
+.solid-background {
+	background-color: white;
+}
+
+/* Fills background grey */
+.solid-background-grey {
+	background-color: $page-background;
+}
+
+
+/******************************************************************* MARGINS ************************************************************/
+/* Center element on screen in all directions */
+.query-form-center {
+	margin: 11% 20% 0% 20%;
+}
+
+/* Add large top margin to element */
+.screen-vertical-centered-grid {
+	margin-top: 10%;
+}
+
+/* Add horizontal margins, left and right separate to avoid overridding classes */
+.screen-horizontal-centered {
+	margin-left: 13%;
+	margin-right: 13%;
+}
+
+.vertical-margin-item {
+	margin: 2% 0%;
+}
+
+/* Screen breaks readjustments */
+/* Readjust margins when width of browser shrinks, prevents overflow and fields cutting off */
+@media screen and (max-width: 1050px) {
+	.query-form-center {
+		margin: 0% 20%;
+		margin-top: 25vh;
+	}
+
+	.screen-vertical-centered-grid {
+		margin-top: 5%;
+	}
+
+	.screen-horizontal-centered {
+		margin-left: 8%;
+		margin-right: 8%;
+	}
+}
+
+@media screen and (max-width: 950px) {
+	.screen-vertical-centered-grid {
+		margin-top: 5%;
+	}
+
+	.screen-horizontal-centered {
+		margin: 0;
+	}
+}
+
+/* Readjust heights for smaller devices, allows for responsive centering */
+@media screen and (max-height: 630px) {
+	.query-form-center {
+		margin: 0% 20%;
+		margin-top: 6%;
+	}
+
+	.screen-vertical-centered-grid {
+		margin-top: 3%;
+	}
+}
+
+/********************************************************************* PADDING ****************************************************************/
+/* Specifies top and bottom to avoid overrides from other padding classes */
+.padded-element-vertical {
+	padding-top: 4%;
+	padding-bottom: 4%;
+}
+
+/* Adds horizontal padding to element, specify each direction to avoid overrides */
+.padded-element-horizontal {
+	padding-left: 4%;
+	padding-right: 4%;
+}
+
+/* Adds padding on all sides of element */
+.padded-element-all {
+	padding: 4%;
+}
+
+/* Adds large amount of horizontal padding */
+.padded-element-horizontal-lg {
+	padding-left: 8%;
+	padding-right: 8%;
+}
+
+/* Adds large padding on all sides */
+.padded-element-shrink {
+	padding: 6% 10%;
+}
+
+/* Clear top padding and bugs with fixed navbar */
+.overpad-shrink {
+	padding-top: 0;
+}
+
+
+/**************************************************************** TEXT ALIGNMENTS ***********************************************************/
+.bs-center {
+	text-align: center;
+}
+
+.bs-button-right {
+	text-align: right;
+}
+
+.bs-left {
+	text-align: left;
+}
+
+.bs-justify {
+	text-align: justify;
+}
+
+.flex-align-center {
+	display: flex;
+	align-items: center;
+}
+
+.flex-align-bottom {
+	display: flex;
+	align-items: flex-end;
+}
+
+.expand-width {
+	width: 100%;
+}
+
+/* Center image in container */
+.img-container-center img {
+	display: block;
+	margin: auto;
+}
+
+
+/************************************************************** TYPEAHEAD COMPONENT OVERRIDES ***************************************************/
+.typeahead-error .rbt-input {
+	border: 1px solid $error-message;
+	background-color: $input-error-background;
+}
+
+.typeahead-message-hidden {
+	display: none;
+}
+
+.typeahead-message-show {
+	color: $error-message;
+}
+/********************************************************************** SWITCHES ***************************************************************/
+.react-switch-handle{
+	border: 2px solid black !important;
+}
+/************************************************************************** MISC ***************************************************************/
+/* Add rounded borders to elements */
+.round-corners-large {
+	border-radius: 15px;
+}
+
+/* Customize react-bootstrap pageheaders */
+.page-header-montserrat {
+	font-family: montserrat, sans-serif;
+	padding: 0;
+	border: none;
+}
+
+/* Change font size to 14pt */
+.large-font {
+	font-size: 14pt;
+}
