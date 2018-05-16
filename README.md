@@ -58,3 +58,11 @@ Over the course of the 3 months we had to build out this tool, we accumulated so
 
 * Input Page Styling
     * In order to align the textfields in the Input Page, we created hidden textfields to better realign/format the page
+    
+* Loan Repayment Visualization
+    * In order to load the chart, a user has to hit "Generate Chart"
+    * We put the button there because the data need to populate the chart doesn't load instantly when we render the page, so no chart data would be displayed otherwise
+    
+* User Information - Name
+    * This is placed in the input form page
+    * A better UX would be to place that at the beginning of both the New Loan and the Find Loan sequences, so that the backend can more easily differentiate an initial user and a user who is updating the loan. The UX would also be more straightforward.
