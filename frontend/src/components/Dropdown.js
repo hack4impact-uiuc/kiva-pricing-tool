@@ -9,7 +9,6 @@ class Dropdown extends Component {
   constructor(props) {
     super(props)
     const { formDataReducer } = this.props
-    // console.log(formDataReducer[this.props.reduxId], formDataReducer[this.props.reduxId].length)
     this.state = {
       default: this.props.title,
       value: this.props.title, // Used to check if value of dropdown is the same as the title for error messages

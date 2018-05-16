@@ -9,6 +9,7 @@ import axios from 'axios'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import Switch from 'react-switch'
+import { ReactTableDefaults } from 'react-table'
 
 class APRRateDisplay extends Component {
   constructor(props) {
@@ -16,8 +17,8 @@ class APRRateDisplay extends Component {
     this.state = {
       id: null,
       partner_names: [],
-      visualType: 'bar',
-      chartID: 'Payment Chart',
+      visualType: 'Bar',
+      chartID: 'Balance Chart',
       changeChart: false,
       changeVisual: false,
       isHidden: false,
@@ -124,8 +125,13 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
+    this.renderEditable = this.renderEditable.bind(this)
+    this.updateTable = this.updateTable.bind(this)
   }
 
+  /**
+   * Call recalculate endpoint to receive updated values upon user change.
+   */
   updateTable = (e, cellInfo) => {
     const { formDataReducer, changedFormData } = this.props
     if (
@@ -135,6 +141,9 @@ class APRRateDisplay extends Component {
     ) {
       if (e.target.innerHTML === null || e.target.innerHTML.trim() === '') {
         formDataReducer.user_repayment_schedule[cellInfo.index][
+          cellInfo.column.id
+        ] = null
+        formDataReducer.calc_repayment_schedule[cellInfo.index][
           cellInfo.column.id
         ] = null
       } else {
@@ -295,12 +304,16 @@ class APRRateDisplay extends Component {
             'total_cashflow'
           ].toFixed(2)
         }
-        calc_matrix[0]['period_num'] = 'Disbursement Info'
+        calc_matrix[0]['period_num'] = 'Disbursement'
         changedFormData('calc_repayment_schedule', calc_matrix)
       })
       this.createChart.bind(this)
     }
   }
+
+  /**
+   * Div element for each cell entry, conditionally allowing user edits
+   */
   renderEditable = event => {
     const { formDataReducer } = this.props
     let editable =
@@ -317,7 +330,7 @@ class APRRateDisplay extends Component {
       formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Total' ||
       formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
-        'Disbursement Info'
+        'Disbursement'
     return (
       <div
         style={
@@ -331,6 +344,12 @@ class APRRateDisplay extends Component {
                 ? { backgroundColor: '#bafaba' }
                 : { backgroundColor: '#eaeaea' }
         }
+        onKeyDown={e => {
+          this.ModifyEnterKeyPressAsTab
+          if (e.keyCode === 13) {
+            e.preventDefault()
+          }
+        }}
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
@@ -345,22 +364,21 @@ class APRRateDisplay extends Component {
       />
     )
   }
-
-  changeVisualType = event => {
-    this.setState({ event })
-    if (event) {
-      this.setState({ visualType: 'area' })
-    } else if (!event) {
-      this.setState({ visualType: 'bar' })
+  changeVisualType(changeVisual) {
+    this.setState({ changeVisual })
+    if (changeVisual) {
+      this.setState({ visualType: 'Area' })
+    } else if (!changeVisual) {
+      this.setState({ visualType: 'Bar' })
     }
   }
 
-  changeChartType = event => {
-    this.setState({ event })
-    if (event) {
-      this.setState({ chartID: 'Balance Chart' })
-    } else if (!event) {
+  changeChartType(changeChart) {
+    this.setState({ changeChart })
+    if (changeChart) {
       this.setState({ chartID: 'Payment Chart' })
+    } else if (!changeChart) {
+      this.setState({ chartID: 'Balance Chart' })
     }
   }
 
@@ -372,9 +390,9 @@ class APRRateDisplay extends Component {
       ]
     ]
     let row
-    for (let j = 0; j < 13; j++) {
+    for (let j = 0; j < formDataReducer.new_repayment_schedule[0].length; j++) {
       row = ''
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < formDataReducer.new_repayment_schedule.length; i++) {
         row += formDataReducer.new_repayment_schedule[i][j] + ','
       }
       row += '\n'
@@ -386,73 +404,73 @@ class APRRateDisplay extends Component {
       'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
     csv.push(row)
     row =
-      formDataReducer.aprRate +
+      formDataReducer.nominalApr +
       ',' +
-      formDataReducer.mfi[0] +
+      formDataReducer.mfi +
       ',' +
-      formDataReducer.loanType[0] +
+      formDataReducer.loanType +
       ',' +
-      formDataReducer.productType[0] +
+      formDataReducer.productType +
       ',' +
-      formDataReducer.versionNum[0] +
+      formDataReducer.versionNum +
       ',' +
       formDataReducer.updateName +
       ',' +
-      formDataReducer.startName[0] +
+      formDataReducer.startName +
       ',' +
-      formDataReducer.installmentTimePeriod[0] +
+      formDataReducer.installmentTimePeriod +
       ',' +
-      formDataReducer.repaymentType[0] +
+      formDataReducer.repaymentType +
       ',' +
-      formDataReducer.interestTimePeriod[0] +
+      formDataReducer.interestTimePeriod +
       ',' +
-      formDataReducer.interestPaymentType[0] +
+      formDataReducer.interestPaymentType +
       ',' +
-      formDataReducer.interestCalculationType[0] +
+      formDataReducer.interestCalculationType +
       ',' +
-      formDataReducer.loanAmount[0] +
+      formDataReducer.loanAmount +
       ',' +
-      formDataReducer.installment[0] +
+      formDataReducer.installment +
       ',' +
-      formDataReducer.nominalInterestRate[0] +
+      formDataReducer.nominalInterestRate +
       ',' +
-      formDataReducer.gracePeriodPrincipal[0] +
+      formDataReducer.gracePeriodPrincipal +
       ',' +
-      formDataReducer.gracePeriodInterestPay[0] +
+      formDataReducer.gracePeriodInterestPay +
       ',' +
-      formDataReducer.gracePeriodInterestCalculate[0] +
+      formDataReducer.gracePeriodInterestCalculate +
       ',' +
-      formDataReducer.gracePeriodBalloon[0] +
+      formDataReducer.gracePeriodBalloon +
       ',' +
-      formDataReducer.feePercentUpfront[0] +
+      formDataReducer.feePercentUpfront +
       ',' +
-      formDataReducer.feePercentOngoing[0] +
+      formDataReducer.feePercentOngoing +
       ',' +
-      formDataReducer.feeFixedUpfront[0] +
+      formDataReducer.feeFixedUpfront +
       ',' +
-      formDataReducer.feeFixedOngoing[0] +
+      formDataReducer.feeFixedOngoing +
       ',' +
-      formDataReducer.taxPercentFees[0] +
+      formDataReducer.taxPercentFees +
       ',' +
-      formDataReducer.taxPercentInterest[0] +
+      formDataReducer.taxPercentInterest +
       ',' +
-      formDataReducer.insurancePercentUpfront[0] +
+      formDataReducer.insurancePercentUpfront +
       ',' +
-      formDataReducer.insurancePercentOngoing[0] +
+      formDataReducer.insurancePercentOngoing +
       ',' +
-      formDataReducer.insuranceFixedUpfront[0] +
+      formDataReducer.insuranceFixedUpfront +
       ',' +
-      formDataReducer.insuranceFixedOngoing[0] +
+      formDataReducer.insuranceFixedOngoing +
       ',' +
-      formDataReducer.securityDepositPercentUpfront[0] +
+      formDataReducer.securityDepositPercentUpfront +
       ',' +
-      formDataReducer.securityDepositPercentOngoing[0] +
+      formDataReducer.securityDepositPercentOngoing +
       ',' +
-      formDataReducer.securityDepositFixedUpfront[0] +
+      formDataReducer.securityDepositFixedUpfront +
       ',' +
-      formDataReducer.securityDepositFixedOngoing[0] +
+      formDataReducer.securityDepositFixedOngoing +
       ',' +
-      formDataReducer.interestPaidOnDepositPercent[0]
+      formDataReducer.interestPaidOnDepositPercent
     csv.push(row)
 
     let csvFile = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
@@ -479,6 +497,9 @@ class APRRateDisplay extends Component {
     this.setState({ isHidden: true })
   }
 
+  /**
+   * Call save loan endpoint to save loan and repayment schedule in database.
+   */
   saveData() {
     const { formDataReducer } = this.props
     let orig_matrix = [
@@ -713,13 +734,17 @@ class APRRateDisplay extends Component {
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    Api.saveLoan(payload, formDataReducer).then(response => {
-      console.log(response)
-    })
+    Api.saveLoan(payload, formDataReducer).then(response => {})
   }
-
+  /**
+   * Render for display page. Contains repayment schedule as a ReactTable, and
+   * charts for visualization.
+   */
   render() {
     const { formDataReducer } = this.props
+    let my_default = ReactTableDefaults.column
+    my_default.minWidth = 60
+
     return (
       <Grid fluid className="padded-element-horizontal">
         <Row>
@@ -748,7 +773,7 @@ class APRRateDisplay extends Component {
                 <label htmlFor="material-switch">
                   <span>{this.state.visualType}</span>
                   <Switch
-                    onChange={this.changeVisualType}
+                    onChange={event => this.changeVisualType(event)}
                     checked={this.state.changeVisual}
                     onColor="#438b48"
                     onHandleColor="#c4ccc6"
@@ -762,7 +787,7 @@ class APRRateDisplay extends Component {
                 <label htmlFor="material-switch">
                   <span>{this.state.chartID}</span>
                   <Switch
-                    onChange={this.changeChartType}
+                    onChange={event => this.changeChartType(event)}
                     checked={this.state.changeChart}
                     onColor="#438b48"
                     onHandleColor="#c4ccc6"
@@ -784,12 +809,14 @@ class APRRateDisplay extends Component {
           <Col sm={4} md={4}>
             <Row className="vertical-margin-item">
               <Col sm={6} md={6}>
-                <button
-                  className="button-fancy"
-                  onClick={this.createChart.bind(this)}
-                >
-                  Generate Chart
-                </button>
+                {!this.state.isHidden && (
+                  <button
+                    className="button-fancy"
+                    onClick={this.createChart.bind(this)}
+                  >
+                    Generate Chart
+                  </button>
+                )}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
                 <button
@@ -807,79 +834,151 @@ class APRRateDisplay extends Component {
           <Col sm={12} md={12}>
             <ReactTable
               data={formDataReducer.calc_repayment_schedule}
+              sortable={false}
+              // column={
+              //   my_default
+              // }
+
               columns={[
                 {
-                  Header: 'Period Number',
+                  minWidth: 80,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Period Number</h5>
+                    </div>
+                  ),
                   accessor: 'period_num',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Payment Due Date',
+                  minWidth: 80,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Payment Due Date</h5>
+                    </div>
+                  ),
                   accessor: 'payment_due_date',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Days',
+                  Header: <h5>Days</h5>,
                   accessor: 'days',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Amount Due',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Amount Due</h5>
+                    </div>
+                  ),
                   accessor: 'amount_due',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Principal Payment',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Principal Payment</h5>
+                    </div>
+                  ),
                   accessor: 'principal_payment',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Balance',
+                  Header: <h5>Balance</h5>,
                   accessor: 'balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Interest',
+                  Header: <h5>Interest</h5>,
                   accessor: 'interest',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Fees',
+                  Header: <h5>Fees</h5>,
                   accessor: 'fees',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Insurance',
+                  minWidth: 70,
+                  Header: <h5>Insurance</h5>,
                   accessor: 'insurance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Taxes',
+                  Header: <h5>Taxes</h5>,
                   accessor: 'taxes',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Security Deposit',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5> Security Deposit</h5>
+                    </div>
+                  ),
                   accessor: 'security_deposit',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Security Interest Paid',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Security Interest Paid</h5>
+                    </div>
+                  ),
                   accessor: 'security_interest_paid',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Deposit Withdrawal',
+                  minWidth: 70,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Deposit Withdrawal</h5>
+                    </div>
+                  ),
                   accessor: 'deposit_withdrawal',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Deposit Balance',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Deposit Balance</h5>
+                    </div>
+                  ),
                   accessor: 'deposit_balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Total Cashflow',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      <h5>Total Cashflow</h5>
+                    </div>
+                  ),
                   accessor: 'total_cashflow',
                   Cell: this.renderEditable
                 }

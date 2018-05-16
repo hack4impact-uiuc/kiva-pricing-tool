@@ -1,5 +1,5 @@
 {
-  "name": "frontend-starter",
+  "name": "ls",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,7 +14,7 @@
     "husky": "^0.14.3",
     "lint-staged": "^6.1.0",
     "node-sass-chokidar": "0.0.3",
-    "npm": "^5.8.0",
+    "npm": "^5.10.0",
     "npm-run-all": "^4.1.2",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
@@ -61,5 +61,9 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
-  }
+  },
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

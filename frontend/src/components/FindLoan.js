@@ -38,6 +38,9 @@ class FindLoan extends Component {
     router: PropTypes.object.isRequired
   }
 
+  /**
+   * Gets existing loan and repayment schedule from backend to populate redux.
+   */
   getTables() {
     const { formDataReducer, changedFormData } = this.props
     let data = {
@@ -56,17 +59,18 @@ class FindLoan extends Component {
       formDataReducer.versionNum
     )
       .then(response => {
-        console.log('RESULT', response.data.result)
         const apr = response.data.result.nominal_apr
         const orig_matrix = response.data.result.original_matrix
         const user_matrix = response.data.result.user_matrix
         const calc_matrix = response.data.result.calc_matrix
         changedFormData('new_repayment_schedule', calc_matrix)
-        changedFormData('aprRate', apr)
+        changedFormData('nominalApr', apr)
         changedFormData(
           'installmentTimePeriod',
           response.data.result.installment_time_period
         )
+        changedFormData('startName', response.data.result.start_name)
+        changedFormData('updateName', response.data.result.update_name)
         changedFormData('repaymentType', response.data.result.repayment_type)
         changedFormData(
           'interestTimePeriod',
@@ -323,8 +327,8 @@ class FindLoan extends Component {
           reformatted_calc_matrix[last][
             'total_cashflow'
           ] = reformatted_calc_matrix[last]['total_cashflow'].toFixed(2)
-          reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-          reformatted_calc_matrix[0]['period_num'] = 'Disbursement Info'
+          reformatted_matrix[0]['period_num'] = 'Disbursement'
+          reformatted_calc_matrix[0]['period_num'] = 'Disbursement'
           changedFormData('original_repayment_schedule', reformatted_matrix)
           changedFormData('user_repayment_schedule', reformatted_user_matrix)
           changedFormData('calc_repayment_schedule', reformatted_calc_matrix)
@@ -350,6 +354,9 @@ class FindLoan extends Component {
       })
   }
 
+  /**
+   * Gets all product types of data with given entries.
+   */
   getProductType() {
     const { formDataReducer, changedFormData } = this.props
 
@@ -370,6 +377,9 @@ class FindLoan extends Component {
     }
   }
 
+  /**
+   * Gets all version of loans with entered data.
+   */
   getVersionNumEntries() {
     const { formDataReducer, changedFormData } = this.props
     if (
@@ -455,6 +465,11 @@ class FindLoan extends Component {
   render() {
     const { formDataReducer, changedFormData, searchLoan } = this.props
     console.log(this.isNullOrEmpty(formDataReducer.mfi))
+    console.log('Loan Type:', formDataReducer.loanType)
+    console.log(
+      'Is this true or not',
+      formDataReducer.loanType != null && formDataReducer.loanType.length > 0
+    )
     return (
       <div className="page-body-grey">
         <Grid
@@ -473,7 +488,7 @@ class FindLoan extends Component {
               <Form>
                 <Typeahead
                   className={this.state.partnerClass}
-                  placeholder="Select Field Partner:"
+                  placeholder="Select Field Partner"
                   options={this.state.partner_names}
                   selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
                   onInputChange={e => {
@@ -520,7 +535,7 @@ class FindLoan extends Component {
                   disabled={this.isNullOrEmpty(formDataReducer.mfi)}
                   ref="loan"
                   options={this.state.loan_themes}
-                  placeholder="Select Loan Theme:"
+                  placeholder="Select Loan Theme"
                   selected={
                     formDataReducer.loanType ? [formDataReducer.loanType] : ''
                   }
@@ -536,6 +551,7 @@ class FindLoan extends Component {
                         themeClass: 'vertical-margin-item typeahead-error',
                         themeErrorClass: 'typeahead-message-show'
                       })
+                      changedFormData('loanType', '')
                     } else if (this.isValidTheme(e)) {
                       this.setState({
                         themeClass: 'vertical-margin-item',
@@ -556,7 +572,7 @@ class FindLoan extends Component {
                   }
                   ref="product"
                   options={this.state.product_types}
-                  placeholder="Select Loan Product:"
+                  placeholder="Select Loan Product"
                   typeVal="String"
                   limit={100}
                   selected={
@@ -590,13 +606,11 @@ class FindLoan extends Component {
                 <Typeahead
                   className={this.state.versionClass}
                   ref="version"
-                  placeholder="Select Version Number:"
+                  placeholder="Select Version Number"
                   disabled={
-                    !(
-                      !this.isNullOrEmpty(formDataReducer.mfi) &&
-                      !this.isNullOrEmpty(formDataReducer.loanType) &&
-                      !this.isNullOrEmpty(formDataReducer.productType)
-                    )
+                    this.isNullOrEmpty(formDataReducer.mfi) ||
+                    this.isNullOrEmpty(formDataReducer.loanType) ||
+                    this.isNullOrEmpty(formDataReducer.productType)
                   }
                   options={this.state.versions}
                   selected={
@@ -647,6 +661,13 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="form1"
                 onClickHandler={() => {
+                  Api.getVersionNum(
+                    formDataReducer.mfi,
+                    formDataReducer.loanType,
+                    formDataReducer.productType
+                  ).then(response => {
+                    changedFormData('versionNum', response.version)
+                  })
                   this.getTables()
                 }}
               />
