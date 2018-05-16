@@ -61,6 +61,11 @@ class TextField extends Component {
     }
   }
 
+  /**
+   * Handles the change for a TextField accepting Integer values. Checks that input is an integer 
+   * and has not exceeded specified limit.
+   * @param {String} e, the modified value in a TextField
+   */
   handleChangeInteger(e) {
     const { changedFormData } = this.props
     const nums = /^[0-9\b]+$/
@@ -76,13 +81,18 @@ class TextField extends Component {
         changedFormData('error', true)
       } else {
         this.setState({ error_message: '' })
-        changedFormData('error', true)
+        changedFormData('error', false)
       }
 
       changedFormData(this.props.reduxId, e.target.value)
     }
   }
 
+  /**
+   * Handles the change for a TextField accepting Float values. Checks that input is an integer or a decimal 
+   * and has not exceeded the specified limit.
+   * @param {String} e, the modified value in a TextField
+   */
   handleChangeFloat(e) {
     const { changedFormData } = this.props
     const nums = /^[0-9\b]+$/
@@ -103,12 +113,16 @@ class TextField extends Component {
         changedFormData('error', true)
       } else {
         this.setState({ error_message: '' })
-        changedFormData('error', true)
+        changedFormData('error', false)
       }
       changedFormData(this.props.reduxId, e.target.value)
     }
   }
 
+  /**
+   * Handles the change for a TextField accepting Integer values. Checks that input only contains letter characters 
+   * @param {String} e, the modified value in a TextField
+   */
   handleChangeString(e) {
     const { changedFormData } = this.props
     changedFormData(this.props.reduxId, e.target.value)
@@ -144,7 +158,6 @@ class TextField extends Component {
 
     if (
       value.replace(/\s/g, '').length === 0 &&
-      // formDataReducer[this.props.reduxId].length === 0 &&
       this.props.requiredField === true
     ) {
       // Check if required field is empty
