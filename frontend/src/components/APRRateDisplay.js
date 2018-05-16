@@ -16,8 +16,8 @@ class APRRateDisplay extends Component {
     this.state = {
       id: null,
       partner_names: [],
-      visualType: 'bar',
-      chartID: 'Payment Chart',
+      visualType: 'Bar',
+      chartID: "Payment Chart",
       changeChart: false,
       changeVisual: false,
       isHidden: false,
@@ -345,24 +345,23 @@ class APRRateDisplay extends Component {
       />
     )
   }
-
-  changeVisualType = event => {
-    this.setState({ event })
-    if (event) {
-      this.setState({ visualType: 'area' })
-    } else if (!event) {
-      this.setState({ visualType: 'bar' })
+  changeVisualType(changeVisual) {
+    this.setState({changeVisual})
+    if (changeVisual) {
+      this.setState({visualType: "Area"})
+    }else if (!changeVisual) {
+      this.setState({visualType: "Bar"})
     }
   }
 
-  changeChartType = event => {
-    this.setState({ event })
-    if (event) {
-      this.setState({ chartID: 'Balance Chart' })
-    } else if (!event) {
-      this.setState({ chartID: 'Payment Chart' })
-    }
-  }
+  changeChartType(changeChart) {
+    this.setState({changeChart})
+    if (changeChart) {
+      this.setState({chartID: "Balance Chart"})
+    }else if (!changeChart) {
+      this.setState({chartID: "Payment Chart"})
+    }	  
+   }
 
   getCSV() {
     const { formDataReducer } = this.props
@@ -746,50 +745,49 @@ class APRRateDisplay extends Component {
             {this.state.isHidden && (
               <div>
                 <label htmlFor="material-switch">
-                  <span>{this.state.visualType}</span>
-                  <Switch
-                    onChange={this.changeVisualType}
-                    checked={this.state.changeVisual}
-                    onColor="#438b48"
-                    onHandleColor="#c4ccc6"
-                    handleDiameter={30}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
-                    className="react-switch"
-                    id="material-switch"
-                  />
+                <span>{this.state.visualType}</span>
+                <Switch
+                              onChange={event => this.changeVisualType(event)}
+                  checked={this.state.changeVisual}
+                  onColor="#438b48"
+                  onHandleColor="#c4ccc6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  className="react-switch"
+                  id="material-switch"
+                />
                 </label>
                 <label htmlFor="material-switch">
-                  <span>{this.state.chartID}</span>
-                  <Switch
-                    onChange={this.changeChartType}
-                    checked={this.state.changeChart}
-                    onColor="#438b48"
-                    onHandleColor="#c4ccc6"
-                    handleDiameter={30}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
-                    className="react-switch"
-                    id="material-switch"
-                  />
-                </label>
-                <KivaChart
-                  id={this.state.chartID}
-                  visualType={this.state.visualType}
-                  data={this.state.data}
+                <span>{this.state.chartID}</span>
+                <Switch
+                              onChange={event => this.changeChartType(event)}
+                  checked={this.state.changeChart}
+                  onColor="#438b48"
+                  onHandleColor="#c4ccc6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  className="react-switch"
+                  id="material-switch"
                 />
-              </div>
-            )}
-          </Col>
-          <Col sm={4} md={4}>
-            <Row className="vertical-margin-item">
-              <Col sm={6} md={6}>
-                <button
-                  className="button-fancy"
-                  onClick={this.createChart.bind(this)}
-                >
-                  Generate Chart
-                </button>
+                </label>
+                <KivaChart id = {this.state.chartID} visualType={this.state.visualType} data={this.state.data}></KivaChart>			
+                    </div>
+
+                        )}
+                      </Col>
+                      <Col sm={4} md={4}>
+                        <Row className="vertical-margin-item">
+                          <Col sm={6} md={6}>
+                {!this.state.isHidden && (
+                            <button
+                              className="button-fancy"
+                              onClick={this.createChart.bind(this)}
+                            >
+                              Generate Chart
+                            </button>
+                )}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
                 <button
