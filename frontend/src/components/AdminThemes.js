@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Alert, Row, Col, Modal } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col, Modal } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
-import { ToastContainer, ToastMessage } from 'react-toastr'
+import { ToastContainer } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
 
@@ -231,7 +231,8 @@ class AdminThemes extends Component {
                 onChange={event =>
                   this.setState({
                     filtered: [{ id: 'loan_theme', value: event.target.value }]
-                  })}
+                  })
+                }
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -320,7 +321,8 @@ class AdminThemes extends Component {
                         name="Remove"
                         url="themelist"
                         onClickHandler={() =>
-                          this.handleRemoveClick(original.loan_theme)} // Send text value to remove loan function
+                          this.handleRemoveClick(original.loan_theme)
+                        } // Send text value to remove loan function
                       />
                     )
                   }
@@ -356,7 +358,8 @@ class AdminThemes extends Component {
                   name="Cancel"
                   url="themelist"
                   onClickHandler={() =>
-                    this.setState({ remove_warning: false })}
+                    this.setState({ remove_warning: false })
+                  }
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -365,7 +368,8 @@ class AdminThemes extends Component {
                   name="Remove"
                   url="themelist"
                   onClickHandler={() =>
-                    this.removeTheme(this.state.selected_remove)}
+                    this.removeTheme(this.state.selected_remove)
+                  }
                 />
               </Col>
             </Row>

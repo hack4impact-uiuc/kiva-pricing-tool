@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Alert, Row, Col, Modal } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col, Modal } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
-import ReactDOM from 'react-dom'
-import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
+import { ToastContainer } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
 
@@ -103,7 +102,6 @@ class AdminPartners extends Component {
 
   saveAllPartners() {
     var updated_name = null
-    var partners = []
     if (this.state.edited_partners.length === 0) {
       container.warning(
         'There are no changes to save',
@@ -243,7 +241,8 @@ class AdminPartners extends Component {
                     filtered: [
                       { id: 'partner_names', value: event.target.value }
                     ]
-                  })}
+                  })
+                }
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -332,7 +331,8 @@ class AdminPartners extends Component {
                         name="Remove"
                         url="partnerlist"
                         onClickHandler={() =>
-                          this.handleRemoveClick(original.partner_names)} // Send text value to remove loan function
+                          this.handleRemoveClick(original.partner_names)
+                        } // Send text value to remove loan function
                       />
                     )
                   }
@@ -368,7 +368,8 @@ class AdminPartners extends Component {
                   name="Cancel"
                   url="partnerlist"
                   onClickHandler={() =>
-                    this.setState({ remove_warning: false })}
+                    this.setState({ remove_warning: false })
+                  }
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -377,7 +378,8 @@ class AdminPartners extends Component {
                   name="Remove"
                   url="partnerlist"
                   onClickHandler={() =>
-                    this.removePartner(this.state.selected_remove)}
+                    this.removePartner(this.state.selected_remove)
+                  }
                 />
               </Col>
             </Row>

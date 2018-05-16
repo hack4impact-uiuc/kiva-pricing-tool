@@ -11,7 +11,6 @@ import PropTypes from 'prop-types'
 class FindLoan extends Component {
   constructor(props) {
     super(props)
-    const { formDataReducer } = this.props
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -367,10 +366,9 @@ class FindLoan extends Component {
         this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
 
       if (validPartnerName && validLoanTheme) {
-        Api.getProductType(
-          formDataReducer.mfi,
-          formDataReducer.loanType
-        ).then(response => this.setState({ product_types: response }))
+        Api.getProductType(formDataReducer.mfi, formDataReducer.loanType).then(
+          response => this.setState({ product_types: response })
+        )
       } else if (!validPartnerName) {
         changedFormData('loanType', '')
       }
@@ -463,13 +461,7 @@ class FindLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData, searchLoan } = this.props
-    console.log(this.isNullOrEmpty(formDataReducer.mfi))
-    console.log('Loan Type:', formDataReducer.loanType)
-    console.log(
-      'Is this true or not',
-      formDataReducer.loanType != null && formDataReducer.loanType.length > 0
-    )
+    const { formDataReducer, changedFormData } = this.props
     return (
       <div className="page-body-grey">
         <Grid
@@ -490,7 +482,7 @@ class FindLoan extends Component {
                   className={this.state.partnerClass}
                   placeholder="Select Field Partner"
                   options={this.state.partner_names}
-                  selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
+                  selected={formDataReducer.mfi ? [formDataReducer.mfi] : []}
                   onInputChange={e => {
                     this.getProductType()
                     axios
@@ -537,7 +529,7 @@ class FindLoan extends Component {
                   options={this.state.loan_themes}
                   placeholder="Select Loan Theme"
                   selected={
-                    formDataReducer.loanType ? [formDataReducer.loanType] : ''
+                    formDataReducer.loanType ? [formDataReducer.loanType] : []
                   }
                   onInputChange={e => {
                     changedFormData('loanType', e)
@@ -578,7 +570,7 @@ class FindLoan extends Component {
                   selected={
                     formDataReducer.productType
                       ? [formDataReducer.productType]
-                      : ''
+                      : []
                   }
                   onInputChange={e => {
                     changedFormData('productType', e)
@@ -616,7 +608,7 @@ class FindLoan extends Component {
                   selected={
                     formDataReducer.versionNum
                       ? [formDataReducer.versionNum]
-                      : ''
+                      : []
                   }
                   onInputChange={e => {
                     changedFormData('versionNum', e)

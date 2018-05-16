@@ -1,9 +1,5 @@
-import React, { Component, View, StyleSheet } from 'react'
-import { Link } from 'react-router-dom'
-import { extent, max } from 'd3-array'
+import React, { Component } from 'react'
 import {
-  RadialBarChart,
-  RadialBar,
   LineChart,
   Line,
   Bar,
@@ -14,14 +10,8 @@ import {
   Tooltip,
   Area,
   AreaChart,
-  Legend,
-  Treemap,
-  PieChart,
-  Pie
+  Legend
 } from 'recharts'
-
-import { connect } from 'react-redux'
-import { APRRateDisplay } from './'
 
 class KivaChart extends Component {
   constructor(props) {

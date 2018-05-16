@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { Route } from 'react-router'
 import { ConnectedRouter } from 'react-router-redux'
-import { ToastContainer, ToastMessage } from 'react-toastr'
 
 import configureStore, { history } from './store/configureStore'
 import {

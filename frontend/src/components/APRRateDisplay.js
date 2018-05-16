@@ -1,6 +1,5 @@
 // @flow
-import React, { Component, View, StyleSheet } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import { Button, KivaChart } from './'
 import { Api } from '../utils'
@@ -683,48 +682,48 @@ class APRRateDisplay extends Component {
     }
     orig_matrix[0][0] = 0
     calc_matrix[0][0] = 0
-    let data = {
-      partner_name: formDataReducer.mfi,
-      loan_theme: formDataReducer.loanType,
-      product_type: formDataReducer.productType,
-      version_num: '1',
-      update_name: formDataReducer.startName,
-      start_name: formDataReducer.startName,
-      nominal_apr: formDataReducer.nominalApr,
-      installment_time_period: formDataReducer.installmentTimePeriod,
-      repayment_type: formDataReducer.repaymentType,
-      interest_time_period: formDataReducer.interestTimePeriod,
-      interest_payment_type: formDataReducer.interestPaymentType,
-      interest_calculation_type: formDataReducer.interestCalculationType,
-      loan_amount: formDataReducer.loanAmount,
-      installment: formDataReducer.installment,
-      nominal_interest_rate: formDataReducer.nominalInterestRate,
-      grace_period_principal: formDataReducer.gracePeriodPrincipal,
-      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
-      grace_period_interest_calculate:
-        formDataReducer.gracePeriodInterestCalculate,
-      grace_period_balloon: formDataReducer.gracePeriodBalloon,
-      fee_percent_upfront: formDataReducer.feePercentUpfront,
-      fee_percent_ongoing: formDataReducer.feePercentOngoing,
-      fee_fixed_upfront: formDataReducer.feeFixedUpfront,
-      fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
-      tax_percent_fees: formDataReducer.taxPercentFees,
-      tax_percent_interest: formDataReducer.taxPercentInterest,
-      insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
-      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
-      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
-      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
-      security_deposit_percent_upfront:
-        formDataReducer.securityDepositPercentUpfront,
-      security_deposit_percent_ongoing:
-        formDataReducer.securityDepositPercentOngoing,
-      security_deposit_fixed_upfront:
-        formDataReducer.securityDepositFixedUpfront,
-      security_deposit_fixed_ongoing:
-        formDataReducer.securityDepositFixedOngoing,
-      interest_paid_on_deposit_percent:
-        formDataReducer.interestPaidOnDepositPercent
-    }
+    // let data = {
+    //   partner_name: formDataReducer.mfi,
+    //   loan_theme: formDataReducer.loanType,
+    //   product_type: formDataReducer.productType,
+    //   version_num: '1',
+    //   update_name: formDataReducer.startName,
+    //   start_name: formDataReducer.startName,
+    //   nominal_apr: formDataReducer.nominalApr,
+    //   installment_time_period: formDataReducer.installmentTimePeriod,
+    //   repayment_type: formDataReducer.repaymentType,
+    //   interest_time_period: formDataReducer.interestTimePeriod,
+    //   interest_payment_type: formDataReducer.interestPaymentType,
+    //   interest_calculation_type: formDataReducer.interestCalculationType,
+    //   loan_amount: formDataReducer.loanAmount,
+    //   installment: formDataReducer.installment,
+    //   nominal_interest_rate: formDataReducer.nominalInterestRate,
+    //   grace_period_principal: formDataReducer.gracePeriodPrincipal,
+    //   grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
+    //   grace_period_interest_calculate:
+    //     formDataReducer.gracePeriodInterestCalculate,
+    //   grace_period_balloon: formDataReducer.gracePeriodBalloon,
+    //   fee_percent_upfront: formDataReducer.feePercentUpfront,
+    //   fee_percent_ongoing: formDataReducer.feePercentOngoing,
+    //   fee_fixed_upfront: formDataReducer.feeFixedUpfront,
+    //   fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
+    //   tax_percent_fees: formDataReducer.taxPercentFees,
+    //   tax_percent_interest: formDataReducer.taxPercentInterest,
+    //   insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
+    //   insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
+    //   insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
+    //   insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
+    //   security_deposit_percent_upfront:
+    //     formDataReducer.securityDepositPercentUpfront,
+    //   security_deposit_percent_ongoing:
+    //     formDataReducer.securityDepositPercentOngoing,
+    //   security_deposit_fixed_upfront:
+    //     formDataReducer.securityDepositFixedUpfront,
+    //   security_deposit_fixed_ongoing:
+    //     formDataReducer.securityDepositFixedOngoing,
+    //   interest_paid_on_deposit_percent:
+    //     formDataReducer.interestPaidOnDepositPercent
+    // }
     let payload = {
       partner_name: formDataReducer.mfi,
       loan_theme: formDataReducer.loanType,
@@ -845,7 +844,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Period Number</h5>
                     </div>
@@ -858,7 +857,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Payment Due Date</h5>
                     </div>
@@ -875,7 +874,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Amount Due</h5>
                     </div>
@@ -887,7 +886,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Principal Payment</h5>
                     </div>
@@ -925,7 +924,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5> Security Deposit</h5>
                     </div>
@@ -937,7 +936,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Security Interest Paid</h5>
                     </div>
@@ -950,7 +949,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Deposit Withdrawal</h5>
                     </div>
@@ -962,7 +961,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Deposit Balance</h5>
                     </div>
@@ -974,7 +973,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Total Cashflow</h5>
                     </div>

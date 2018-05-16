@@ -95,7 +95,7 @@ class NewLoan extends Component {
                 placeholder="Select MFI Partner"
                 limit={100}
                 selected={
-                  formDataReducer.mfi === '' ? '' : [formDataReducer.mfi]
+                  formDataReducer.mfi === '' ? [] : [formDataReducer.mfi]
                 }
                 onInputChange={e => {
                   changedFormData('mfi', e)
@@ -125,7 +125,7 @@ class NewLoan extends Component {
                 placeholder="Select Loan Type"
                 selected={
                   formDataReducer.loanType === ''
-                    ? ''
+                    ? []
                     : [formDataReducer.loanType]
                 }
                 onInputChange={e => {
