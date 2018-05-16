@@ -28,7 +28,7 @@ You will then have a ```(venv)``` before the ```$```, meaning that you are now i
 (venv)$ pip install -r requirements.txt
 ```
 
-To install Postgres with Homebrew([postgresapp](http://postgresapp.com/) also works). If you are using linux, use your linux distributon's package manager to install postgres (*DO THIS IN A NEW TERMINAL*):
+To install Postgres with Homebrew([postgresapp](http://postgresapp.com/) also works). If you are using linux, use your linux distributon's package manager to install postgres (**do this in new terminal**):
 ```
 $ brew install postgresql
 $ brew link postgresql
@@ -56,7 +56,7 @@ $ psql
 ```
 Note: Please replace the user name and password and database name to what you want in your own application. You must change those configurations in ```config.py``` and in ```.env```
 <br/>
-(*GO BACK THE TERMINAL WITH YOUR VIRTUAL ENVIRONMENT RUNNING*)
+(**go back to the terminal with your virtual environment running**)
 <br/>
 To populate the database type in:
 ```
