@@ -76,7 +76,7 @@ $ python manage.py recreate_db
 ```
 
 ## Frontend
-Change all axios calls from http://127.0.0.1:3453 to whatever your heroku backend's url is
+Change flaskURL in frontend/src/utils from http://127.0.0.1:3453 to whatever your heroku backend's url is
 
 To create a new heroku app out of your frontend repository
 ```
