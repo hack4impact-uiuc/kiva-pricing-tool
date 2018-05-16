@@ -397,7 +397,7 @@ class APRRateDisplay extends Component {
       'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
     csv.push(row)
     row =
-      formDataReducer.aprRate +
+      formDataReducer.nominalApr +
       ',' +
       formDataReducer.mfi[0] +
       ',' +
