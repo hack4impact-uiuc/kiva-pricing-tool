@@ -10,7 +10,6 @@ class Dropdown extends Component {
     const { formDataReducer } = this.props
     this.state = {
       default: this.props.title,
-      // value: this.props.title, // Used to check if value of dropdown is the same as the title for error messages
       value:
         formDataReducer[this.props.reduxId].length === 0
           ? this.props.title
