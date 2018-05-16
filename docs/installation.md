@@ -45,9 +45,6 @@ To deactivate when you're using it:
 ```
 If you are using pip, your command line will have `(venv)$` in front instead of the `(flask......) bash-3.2$` Now look above for instructions to run the server.
 
-
-# Deploying to Heroku
-Separate the frontend and the backend into two different repositories
 The API should be at http://127.0.0.1:3453/ 
 
 To install Postgres with Homebrew([postgresapp](http://postgresapp.com/) also works). If you are using linux, use your linux distributon's package manager to install postgres:
@@ -79,7 +76,8 @@ $ psql
 Note: Please replace the user name and password and database name to what you want in your own application. You must change those configurations in ```config.py``` and in ```.env```
 
 
- 
+# Deploying to Heroku
+Separate the frontend and the backend into two different repositories
 
 ## Backend
 ### Heroku Deployment
