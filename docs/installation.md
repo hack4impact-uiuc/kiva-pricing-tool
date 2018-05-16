@@ -1,4 +1,4 @@
-# Localhost
+# Localhost Setup
 ## Frontend
 In your terminal, cd into the frontend folder and type in
 ```
