@@ -31,6 +31,14 @@ You will then have a ```(venv)``` before the ```$```, meaning that you are now i
 ```
 (venv)$ pip install -r requirements.txt
 ```
+To populate the database type in:
+```
+(venv)$ python manage.py recreate_db
+```
+Then, to run the server type in:
+```
+(venv)$ python manage.py runserver
+```
 To deactivate when you're using it:
 ```
 (venv)$ deactivate venv
