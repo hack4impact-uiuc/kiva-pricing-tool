@@ -1,8 +1,13 @@
 # Localhost
 ## Frontend
-In your terminal, cd into the frontend folder
-Type in npm install
-Then type in npm start
+In your terminal, cd into the frontend folder and type in
+```
+ npm install
+``` 
+To run your program, type in 
+```
+npm start
+```
 The site will be displayed on: http://localhost:3000
 
 
@@ -14,15 +19,27 @@ If you have a Mac, run this script and everything should be setup.
 $ ./mac_setup.sh
 ```
 ### Running Development Server
-To run the server, make sure you are in the root directory. Then, startup the virtual environment and run the server:
+
+First, install virtualenv, create and activate the environment called **venv**:
+
+```bash
+$ pip3 install virtualenv
+$ virtualenv -p python3 venv
+$ source venv/bin/activate
 ```
-$ pipenv shell  # startup virtual environment
-(flask-boilerplate-_rcP-Rlt) bash-3.2$ python manage.py runserver
+You will then have a ```(venv)``` before the ```$```, meaning that you are now in your virtual environment. Then, install the python package dependencies, which include Flask.
 ```
-If you are using pipenv, you may also run commands without being inside your virtual environment:
+(venv)$ pip install -r requirements.txt
 ```
-$ pipenv run python manage.py runserver # pipenv run [command]
+To deactivate when you're using it:
 ```
+(venv)$ deactivate venv
+```
+If you are using pip, your command line will have `(venv)$` in front instead of the `(flask......) bash-3.2$` Now look above for instructions to run the server.
+
+
+# Deploying to Heroku
+Separate the frontend and the backend into two different repositories
 The API should be at http://127.0.0.1:3453/ 
 
 To install Postgres with Homebrew([postgresapp](http://postgresapp.com/) also works). If you are using linux, use your linux distributon's package manager to install postgres:
@@ -53,59 +70,8 @@ $ psql
 ```
 Note: Please replace the user name and password and database name to what you want in your own application. You must change those configurations in ```config.py``` and in ```.env```
 
-We will be using [pipenv](https://docs.pipenv.org/), the officially recommended Python packaging tool from [Python](https://packaging.python.org/tutorials/managing-dependencies/#managing-dependencies). If prefer to use `pip` instead of `pipenv`, look below for instructions. Pipenv is very similar to npm and yarn in Javascript and it automatically creates/manages a virtualenv while adding/removing packages from your `Pipfile`. It also manages and autoloads environment variables and in general, helps developers setup a working environment. 
 
-First, install pipenv. If you are on MacOS, use homebrew:
-```
-brew install pipenv
-```
-If you're using Linux or Windows, I'd just use pip:
-```
-pip install pipenv
-```
-
-Then, setup pipenv for flask-boilerplate:
-```
-pipenv --python 3.6
-```
-That's it! All your dependencies will be installed in your virtualenv. Virtualenv is a tool to create isolated Python environments, which will prevent dependency conflicts with your python projects.
-
-To start your virtualenv, run:
-```
-pipenv shell
-```
-Now, any python command you run will be ran inside this virtual environment. You should get something that looks like this:
-```
-(flask-boilerplate-_rcP-Rlt) bash-3.2 $
-```
-To deactivate, type `exit`:
-```
-(flask-boilerplate-_rcP-Rlt) bash-3.2 $ exit
-```
-For more instructions, see the [official documentation](https://docs.pipenv.org) for pipenv.
-#### Using Pip
-Using pip would require a little bit more steps, since you would have to use pip and virtualenv separately. In addition, managing `requirements.txt` can be a pain. For more benefits `pipenv` solves, look at their [documentation](https://docs.pipenv.org/). I'd recommend using Pipenv but if you still haven't changed your mind, here are the instructions. 
-
-Always remember to use the ***same virtual environement***!!!! This is a good practice for any python development. <br>
-First, install virtualenv, create and activate the environment called **venv**:
-```bash
-$ pip3 install virtualenv
-$ virtualenv -p python3 venv
-$ source venv/bin/activate
-```
-You will then have a ```(venv)``` before the ```$```, meaning that you are now in your virtual environment. Then, install the python package dependencies, which include Flask.
-```
-(venv)$ pip install -r requirements.txt
-```
-To deactivate when you're using it:
-```
-(venv)$ deactivate venv
-```
-If you are using pip, your command line will have `(venv)$` in front instead of the `(flask......) bash-3.2$` Now look above for instructions to run the server.
-
-
-# Deploying to Heroku
-Separate the frontend and the backend into two different repositories
+ 
 
 ## Backend
 ### Heroku Deployment
