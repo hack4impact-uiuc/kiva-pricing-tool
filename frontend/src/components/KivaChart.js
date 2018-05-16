@@ -48,11 +48,11 @@ class KivaChart extends Component {
             <Tooltip />
             <Legend />
             <Bar dataKey="principal" stackId="a" fill="#c94473" />
-            <Bar dataKey="interest" stackId="a" fill="#a044c9" />
+            <Bar dataKey="interest" stackId="a" fill="#B977D7" />
             <Bar dataKey="taxes" stackId="a" fill="#95c5dd" />
             <Bar dataKey="insurance" stackId="a" fill="#34bf60" />
             <Bar dataKey="fees" stackId="a" fill="#bfa434" />
-            <Bar dataKey="security_deposit" stackId="a" fill="#e1f5c2" />
+            <Bar dataKey="security_deposit" stackId="a" fill="#7EBC89" />
           </BarChart>
         )
       }
@@ -73,7 +73,7 @@ class KivaChart extends Component {
             <Line
               type="monotone"
               dataKey="interest"
-              stroke="#a044c9"
+              stroke="#B977D7"
               activeDot={{ r: 8 }}
             />
             <Line
@@ -89,7 +89,7 @@ class KivaChart extends Component {
               stroke="#bfa434"
               activeDot={{ r: 8 }}
             />
-            <Line type="monotone" dataKey="security_deposit" stroke="#e1f5c2" />
+            <Line type="monotone" dataKey="security_deposit" stroke="#7EBC89" />
           </LineChart>
         )
       }
@@ -117,8 +117,8 @@ class KivaChart extends Component {
               type="monotone"
               dataKey="interest"
               stackId="1"
-              stroke="#a044c9"
-              fill="#a044c9"
+              stroke="#B977D7"
+              fill="#B977D7"
             />
             <Area
               type="monotone"
@@ -145,8 +145,8 @@ class KivaChart extends Component {
               type="monotone"
               dataKey="security_deposit"
               stackId="1"
-              stroke="#e1f5c2"
-              fill="#e1f5c2"
+              stroke="#7EBC89"
+              fill="#7EBC89"
             />
           </AreaChart>
         )
@@ -210,7 +210,7 @@ class KivaChart extends Component {
               type="monotone"
               dataKey="balance"
               stackId="1"
-              stroke="#9ae395"
+              stroke="#000000"
               fill="#9ae395"
             />
           </AreaChart>

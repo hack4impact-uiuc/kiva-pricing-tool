@@ -124,8 +124,8 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-    this.renderEditable = this.renderEditable.bind(this)
-    this.updateTable = this.updateTable.bind(this)
+    // this.renderEditable = this.renderEditable.bind(this)
+    // this.updateTable = this.updateTable.bind(this)
   }
 
   /**
@@ -811,17 +811,14 @@ class APRRateDisplay extends Component {
                 {!this.state.isHidden && (
                   <button
                     className="button-fancy"
-                    onClick={this.createChart.bind(this)}
+                    onClick={() => this.createChart()}
                   >
                     Generate Chart
                   </button>
                 )}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
-                <button
-                  className="button-fancy"
-                  onClick={this.getCSV.bind(this)}
-                >
+                <button className="button-fancy" onClick={() => this.getCSV()}>
                   Download CSV
                 </button>
               </Col>
