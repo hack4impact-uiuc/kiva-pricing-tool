@@ -69,6 +69,8 @@ class FindLoan extends Component {
           'installmentTimePeriod',
           response.data.result.installment_time_period
         )
+        changedFormData('startName', response.data.result.start_name)
+        changedFormData('updateName', response.data.result.update_name)
         changedFormData('repaymentType', response.data.result.repayment_type)
         changedFormData(
           'interestTimePeriod',
