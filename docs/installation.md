@@ -55,9 +55,9 @@ $ psql
 # GRANT ALL PRIVILEGES ON DATABASE testdb TO testusr;
 ```
 Note: Please replace the user name and password and database name to what you want in your own application. You must change those configurations in ```config.py``` and in ```.env```
-<br/>
+<br>
 (**go back to the terminal with your virtual environment running**)
-<br/>
+<br>
 To populate the database type in:
 ```
 (venv)$ python manage.py recreate_db
