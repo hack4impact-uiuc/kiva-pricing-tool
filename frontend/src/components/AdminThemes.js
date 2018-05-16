@@ -27,7 +27,6 @@ class AdminThemes extends Component {
 
   cleanList() {
     for (var i = 0; i < this.state.data.length; i++) {
-      console.log(this.state.data[i])
       if (this.state.data[i].loan_theme === '') {
         //Remove element in place, return array with element removed
         this.setState({
@@ -58,11 +57,8 @@ class AdminThemes extends Component {
         onBlur={e => {
           const data = [...this.state.data]
           original = data[cellInfo.index][cellInfo.column.id]
-          console.log(original)
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML
           update = data[cellInfo.index][cellInfo.column.id]
-          console.log(update)
-          this.setState({ data })
 
           if (original !== update) {
             if (update && update.length != 0 && update != ' ') {
@@ -122,19 +118,17 @@ class AdminThemes extends Component {
             updated_name
           )
           .then(response => {
-            for (var j = 0; i < this.state.edited_loans.length; j++) {
-              if (
-                this.state.edited_loans[j].update ===
-                this.state.edited_loans[j].update
-              ) {
-                // Remove element in place, return array with element removed
-                this.setState({
-                  edited_loans: this.state.edited_loans
-                    .slice(0, j)
-                    .concat(this.state.data.slice(j + 1))
-                })
-              }
-            }
+            // Remove element in place, return array with element removed
+            this.setState({
+              edited_loans: this.state.edited_loans
+                .slice(0, i)
+                .concat(this.state.data.slice(i + 1))
+            })
+            i--
+
+            container.success('Saved all themes', 'SUCCESS', {
+              closeButton: true
+            })
           })
           .catch(error => {
             if (
@@ -151,7 +145,6 @@ class AdminThemes extends Component {
             }
           })
       }
-      container.success('Saved all themes', 'SUCCESS', { closeButton: true })
     }
   }
 

@@ -9,6 +9,7 @@ import axios from 'axios'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import Switch from 'react-switch'
+import { ReactTableDefaults } from 'react-table'
 
 class APRRateDisplay extends Component {
   constructor(props) {
@@ -124,6 +125,8 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
+    this.renderEditable = this.renderEditable.bind(this)
+    this.updateTable = this.updateTable.bind(this)
   }
 
   updateTable = (e, cellInfo) => {
@@ -135,6 +138,9 @@ class APRRateDisplay extends Component {
     ) {
       if (e.target.innerHTML === null || e.target.innerHTML.trim() === '') {
         formDataReducer.user_repayment_schedule[cellInfo.index][
+          cellInfo.column.id
+        ] = null
+        formDataReducer.calc_repayment_schedule[cellInfo.index][
           cellInfo.column.id
         ] = null
       } else {
@@ -295,7 +301,7 @@ class APRRateDisplay extends Component {
             'total_cashflow'
           ].toFixed(2)
         }
-        calc_matrix[0]['period_num'] = 'Disbursement Info'
+        calc_matrix[0]['period_num'] = 'Disbursement'
         changedFormData('calc_repayment_schedule', calc_matrix)
       })
       this.createChart.bind(this)
@@ -317,7 +323,7 @@ class APRRateDisplay extends Component {
       formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Total' ||
       formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
-        'Disbursement Info'
+        'Disbursement'
     return (
       <div
         style={
@@ -331,6 +337,12 @@ class APRRateDisplay extends Component {
                 ? { backgroundColor: '#bafaba' }
                 : { backgroundColor: '#eaeaea' }
         }
+        onKeyDown={e => {
+          this.ModifyEnterKeyPressAsTab
+          if (e.keyCode === 13) {
+            e.preventDefault()
+          }
+        }}
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
@@ -346,16 +358,16 @@ class APRRateDisplay extends Component {
     )
   }
   changeVisualType(changeVisual) {
-    this.setState({changeVisual})
+    this.setState({ changeVisual })
     if (changeVisual) {
-      this.setState({visualType: "Area"})
-    }else if (!changeVisual) {
-      this.setState({visualType: "Bar"})
+      this.setState({ visualType: 'Area' })
+    } else if (!changeVisual) {
+      this.setState({ visualType: 'Bar' })
     }
   }
 
   changeChartType(changeChart) {
-    this.setState({changeChart})
+    this.setState({ changeChart })
     if (changeChart) {
       this.setState({chartID: "Payment Chart"})
     }else if (!changeChart) {
@@ -385,7 +397,7 @@ class APRRateDisplay extends Component {
       'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
     csv.push(row)
     row =
-      formDataReducer.aprRate +
+      formDataReducer.nominalApr +
       ',' +
       formDataReducer.mfi[0] +
       ',' +
@@ -719,6 +731,10 @@ class APRRateDisplay extends Component {
 
   render() {
     const { formDataReducer } = this.props
+    // console.log(ReactTableDefaults.column)
+    let my_default = ReactTableDefaults.column
+    my_default.minWidth = 60
+
     return (
       <Grid fluid className="padded-element-horizontal">
         <Row>
@@ -745,48 +761,51 @@ class APRRateDisplay extends Component {
             {this.state.isHidden && (
               <div>
                 <label htmlFor="material-switch">
-                <span>{this.state.visualType}</span>
-                <Switch
-                              onChange={event => this.changeVisualType(event)}
-                  checked={this.state.changeVisual}
-                  onColor="#438b48"
-                  onHandleColor="#c4ccc6"
-                  handleDiameter={30}
-                  uncheckedIcon={false}
-                  checkedIcon={false}
-                  className="react-switch"
-                  id="material-switch"
-                />
+                  <span>{this.state.visualType}</span>
+                  <Switch
+                    onChange={event => this.changeVisualType(event)}
+                    checked={this.state.changeVisual}
+                    onColor="#438b48"
+                    onHandleColor="#c4ccc6"
+                    handleDiameter={30}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    className="react-switch"
+                    id="material-switch"
+                  />
                 </label>
                 <label htmlFor="material-switch">
-                <span>{this.state.chartID}</span>
-                <Switch
-                              onChange={event => this.changeChartType(event)}
-                  checked={this.state.changeChart}
-                  onColor="#438b48"
-                  onHandleColor="#c4ccc6"
-                  handleDiameter={30}
-                  uncheckedIcon={false}
-                  checkedIcon={false}
-                  className="react-switch"
-                  id="material-switch"
-                />
+                  <span>{this.state.chartID}</span>
+                  <Switch
+                    onChange={event => this.changeChartType(event)}
+                    checked={this.state.changeChart}
+                    onColor="#438b48"
+                    onHandleColor="#c4ccc6"
+                    handleDiameter={30}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    className="react-switch"
+                    id="material-switch"
+                  />
                 </label>
-                <KivaChart id = {this.state.chartID} visualType={this.state.visualType} data={this.state.data}></KivaChart>			
-                    </div>
-
-                        )}
-                      </Col>
-                      <Col sm={4} md={4}>
-                        <Row className="vertical-margin-item">
-                          <Col sm={6} md={6}>
+                <KivaChart
+                  id={this.state.chartID}
+                  visualType={this.state.visualType}
+                  data={this.state.data}
+                />
+              </div>
+            )}
+          </Col>
+          <Col sm={4} md={4}>
+            <Row className="vertical-margin-item">
+              <Col sm={6} md={6}>
                 {!this.state.isHidden && (
-                            <button
-                              className="button-fancy"
-                              onClick={this.createChart.bind(this)}
-                            >
-                              Generate Chart
-                            </button>
+                  <button
+                    className="button-fancy"
+                    onClick={this.createChart.bind(this)}
+                  >
+                    Generate Chart
+                  </button>
                 )}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
@@ -805,79 +824,151 @@ class APRRateDisplay extends Component {
           <Col sm={12} md={12}>
             <ReactTable
               data={formDataReducer.calc_repayment_schedule}
+              sortable={false}
+              // column={
+              //   my_default
+              // }
+
               columns={[
                 {
-                  Header: 'Period Number',
+                  minWidth: 80,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Period Number
+                    </div>
+                  ),
                   accessor: 'period_num',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Payment Due Date',
+                  minWidth: 80,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Payment Due Date
+                    </div>
+                  ),
                   accessor: 'payment_due_date',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Days',
+                  Header: <h5 style={{ color: 'red' }}>Days</h5>,
                   accessor: 'days',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Amount Due',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Amount Due
+                    </div>
+                  ),
                   accessor: 'amount_due',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Principal Payment',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Principal Payment
+                    </div>
+                  ),
                   accessor: 'principal_payment',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Balance',
+                  Header: <h5 style={{ color: 'red' }}>Balance</h5>,
                   accessor: 'balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Interest',
+                  Header: <h5 style={{ color: 'red' }}>Interest</h5>,
                   accessor: 'interest',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Fees',
+                  Header: <h5 style={{ color: 'red' }}>Fees</h5>,
                   accessor: 'fees',
                   Cell: this.renderEditable
                 },
                 {
+                  minWidth: 70,
                   Header: 'Insurance',
                   accessor: 'insurance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Taxes',
+                  Header: <h5 style={{ color: 'red' }}>Taxes</h5>,
                   accessor: 'taxes',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Security Deposit',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Security Deposit
+                    </div>
+                  ),
                   accessor: 'security_deposit',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Security Interest Paid',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Security Interest Paid
+                    </div>
+                  ),
                   accessor: 'security_interest_paid',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Deposit Withdrawal',
+                  minWidth: 70,
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Deposit Withdrawal
+                    </div>
+                  ),
                   accessor: 'deposit_withdrawal',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Deposit Balance',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Deposit Balance
+                    </div>
+                  ),
                   accessor: 'deposit_balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Total Cashflow',
+                  Header: () => (
+                    <div
+                      className="rt-resizable-header-content"
+                      style={{ 'white-space': 'pre-wrap' }}
+                    >
+                      Total Cashflow
+                    </div>
+                  ),
                   accessor: 'total_cashflow',
                   Cell: this.renderEditable
                 }

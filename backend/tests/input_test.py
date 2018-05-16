@@ -271,6 +271,7 @@ def fake_cal_apr():
     print ('\n security_deposit_interest_paid\n')
     print (security_deposit_interest_paid)
     print (schedule_matrix)
+    print (type(schedule_matrix[1][0]))
     return round_float(np.irr(result) * periods_per_year[installments_period_dict[installment_time_period]] * 100,2), schedule_matrix
 
 fake_cal_apr()
