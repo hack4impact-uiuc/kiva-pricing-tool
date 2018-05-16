@@ -63,7 +63,6 @@ def cal_apr():
     """
         calculate and send a response with APR
     """
-    print("in calc url")
     input_json = request.get_json()
     args = request.args
     payload = {}
@@ -94,11 +93,9 @@ def cal_repayment():
         for a in recal_matrix:
             matrix_list.append(list(a))
         payload = {'apr': apr, 'recal_matrix': matrix_list}
-        print(payload)
 
         return create_response(data=payload, status=200)
     except Exception as e:
-        print(str(e))
         return create_response(message=str(e), status=400)
 
 @app.route(GET_VERSION_NUM)
@@ -284,7 +281,6 @@ def save_loan():
         db.session.commit()
         return create_response(status=201)
     except Exception as ex:
-        print(str(ex))
         return create_response(status=423, message=str(ex))
 
 
@@ -694,4 +690,3 @@ def get_loan():
         return create_response(data = data, status = 200)
     except Exception as e:
         return create_response({}, status=400, message=str(e))
-

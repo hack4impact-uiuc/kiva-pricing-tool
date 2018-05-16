@@ -18,7 +18,7 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'Bar',
-      chartID: "Balance Chart",
+      chartID: 'Balance Chart',
       changeChart: false,
       changeVisual: false,
       isHidden: false,
@@ -369,11 +369,11 @@ class APRRateDisplay extends Component {
   changeChartType(changeChart) {
     this.setState({ changeChart })
     if (changeChart) {
-      this.setState({chartID: "Payment Chart"})
-    }else if (!changeChart) {
-      this.setState({chartID: "Balance Chart"})
-    }	  
-   }
+      this.setState({ chartID: 'Payment Chart' })
+    } else if (!changeChart) {
+      this.setState({ chartID: 'Balance Chart' })
+    }
+  }
 
   getCSV() {
     const { formDataReducer } = this.props
@@ -724,14 +724,11 @@ class APRRateDisplay extends Component {
       user_change_matrix: user_change,
       repay_matrix: calc_matrix
     }
-    Api.saveLoan(payload, formDataReducer).then(response => {
-      console.log(response)
-    })
+    Api.saveLoan(payload, formDataReducer).then(response => {})
   }
 
   render() {
     const { formDataReducer } = this.props
-    // console.log(ReactTableDefaults.column)
     let my_default = ReactTableDefaults.column
     my_default.minWidth = 60
 

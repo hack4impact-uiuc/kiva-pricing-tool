@@ -89,7 +89,6 @@ class TextField extends Component {
     const { formDataReducer, changedFormData } = this.props
     const nums = /^[0-9\b]+$/
     const numPeriods = e.target.value.split('.')
-    console.log(e.target.value, numPeriods)
 
     if (
       e.target.value == '' ||
