@@ -17,12 +17,13 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'Bar',
-      chartID: "Balance Chart",
-      changeChart: false,             
+      chartID: 'Balance Chart',
+      changeChart: false,
       changeVisual: false,
-      isHidden: false,                                    //boolean for conditional rendering of charts
-      data: [],                                           //repayment schedule that is passed to chart as prop
-      testData: [                                         //fake repayment schedule for testing chart generation
+      isHidden: false, //boolean for conditional rendering of charts
+      data: [], //repayment schedule that is passed to chart as prop
+      testData: [
+        //fake repayment schedule for testing chart generation
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         [
           '1-Jan-2012',
@@ -363,14 +364,15 @@ class APRRateDisplay extends Component {
       />
     )
   }
-  
+
   /**
    * onclick function for changing visual type
    * called when switch is pressed
    */
   changeVisualType(changeVisual) {
-    this.setState({ changeVisual })                                     //changes state of changeVisual boolean
-    if (changeVisual) {                                                 //change visualization based on the current boolean state
+    this.setState({ changeVisual }) //changes state of changeVisual boolean
+    if (changeVisual) {
+      //change visualization based on the current boolean state
       this.setState({ visualType: 'Area' })
     } else if (!changeVisual) {
       this.setState({ visualType: 'Bar' })
@@ -380,9 +382,10 @@ class APRRateDisplay extends Component {
   /**
    * onclick function for changing chart type
    * called from switch when it is pressed
-   */ 
+   */
+
   changeChartType(changeChart) {
-    this.setState({ changeChart })                                    //change chart type based on the current boolean state
+    this.setState({ changeChart }) //change chart type based on the current boolean state
     if (changeChart) {
       this.setState({ chartID: 'Payment Chart' })
     } else if (!changeChart) {
@@ -408,7 +411,7 @@ class APRRateDisplay extends Component {
         row += formDataReducer.new_repayment_schedule[i][j] + ','
       }
       row += '\n'
-      csv.push(row)                
+      csv.push(row)
     }
     row = '\n\n'
     csv.push(row)
@@ -507,11 +510,12 @@ class APRRateDisplay extends Component {
 
   /**
    * onclick function that conditionally renders the chart by setting the isHidden boolean to true and populates data prop for chart
-   */ 
+   */
+
   createChart() {
     const { formDataReducer } = this.props
-    this.setState({ data: formDataReducer.new_repayment_schedule })                  //set this.state.data to the redux repayment schedule so prop is passed in correctly to chart.
-    this.setState({ isHidden: true })                                                    
+    this.setState({ data: formDataReducer.new_repayment_schedule }) //set this.state.data to the redux repayment schedule so prop is passed in correctly to chart.
+    this.setState({ isHidden: true })
   }
 
   /**
@@ -746,10 +750,10 @@ class APRRateDisplay extends Component {
             {this.state.isHidden && (
               <div>
                 <label htmlFor="material-switch">
-                  <span>{this.state.visualType}</span>                                            //displays the current visualization type
+                  <span>{this.state.visualType}</span>
                   <Switch
-                    onChange={event => this.changeVisualType(event)}                              //change visualization type when pressed
-                    checked={this.state.changeVisual}                                             //changeVisual boolean changes state every time switch is pressed
+                    onChange={event => this.changeVisualType(event)} //change visualization type when pressed
+                    checked={this.state.changeVisual} //changeVisual boolean changes state every time switch is pressed
                     onColor={Variables.switchOnColor}
                     onHandleColor="#ffffff"
                     handleDiameter={30}
@@ -760,7 +764,6 @@ class APRRateDisplay extends Component {
                   />
                 </label>
                 <label htmlFor="material-switch">
-                  //displays the current chart type
                   <span>{this.state.chartID}</span>
                   <Switch
                     //change chart type when pressed
@@ -800,7 +803,6 @@ class APRRateDisplay extends Component {
             <button className="button-fancy" onClick={() => this.getCSV()}>
               Download CSV
             </button>
-
           </Col>
         </Row>
         <Row>
