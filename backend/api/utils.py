@@ -4,7 +4,7 @@ import numpy as np
 import datetime
 from calendar import monthrange
 import calendar
-# from api.util_xirr import *
+from api.util_xirr import *
 
 PERIOD_IDX = 0
 DATE_IDX = 1
