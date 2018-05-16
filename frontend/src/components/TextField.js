@@ -69,7 +69,6 @@ class TextField extends Component {
     if (nums.test(e.target.value)) {
       let tryInt = parseInt(e.target.value, 10)
       let limit = parseInt(this.props.limit, 10)
-
       if (tryInt > limit) {
         this.setState({
           error_message: 'input limit succeeded',
@@ -78,7 +77,7 @@ class TextField extends Component {
         changedFormData('error', true)
       } else {
         this.setState({ error_message: '' })
-        changedFormData('error', false)
+        changedFormData('error', true)
       }
 
       changedFormData(this.props.reduxId, e.target.value)
@@ -102,6 +101,9 @@ class TextField extends Component {
           error_message: 'input limit succeeded',
           className: this.props.className + ' required-error'
         })
+        changedFormData('error', true)
+      } else {
+        this.setState({ error_message: '' })
         changedFormData('error', true)
       }
       changedFormData(this.props.reduxId, e.target.value)
@@ -164,7 +166,7 @@ class TextField extends Component {
   render() {
     const { formDataReducer } = this.props
     return (
-      <div id="className" className={this.state.className}>
+      <div className={this.state.className}>
         <div className="input-label">{this.props.id}</div>
         <div className="textfield-component" onLoad={() => this.onLoad()}>
           <input

@@ -124,11 +124,6 @@ class AdminThemes extends Component {
                 .slice(0, i)
                 .concat(this.state.data.slice(i + 1))
             })
-            i--
-
-            container.success('Saved all themes', 'SUCCESS', {
-              closeButton: true
-            })
           })
           .catch(error => {
             if (
@@ -145,6 +140,7 @@ class AdminThemes extends Component {
             }
           })
       }
+      container.success('Saved all themes', 'SUCCESS', { closeButton: true })
     }
   }
 
