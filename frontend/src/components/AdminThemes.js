@@ -61,7 +61,7 @@ class AdminThemes extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
 
           if (original !== update) {
-            if (update && update.length != 0 && update != ' ') {
+            if (update && update.length !== 0 && update !== ' ') {
               this.setState({
                 edited_loans: this.state.edited_loans.concat({
                   original: original,
