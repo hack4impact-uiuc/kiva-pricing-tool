@@ -9,7 +9,7 @@ An open source web application that calculates an APR Nominal rate for a loan wi
 * [Figma for Mockups](https://www.figma.com/file/0jmf44vrazZ8C2vkTCwnroMF/Kiva)
 
 ## Backend Resources
-* [Database Schema](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/api_docs.md)
+* [Database Schema](https://github.com/hack4impact-uiuc/kiva-pricing-tool/tree/master/docs/api_docs.md)
 * [Repo with XIRR function that we used for our calculations](https://github.com/peliot/XIRR-and-XNPV)
 
 ## Original Excel Tool
