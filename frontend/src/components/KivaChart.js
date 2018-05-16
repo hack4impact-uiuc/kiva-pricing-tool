@@ -31,19 +31,26 @@ class KivaChart extends Component {
      }
   }
   render() {
+    //creates Payment Chart i.e. chart with Principal, Interest, Taxes, Insurance, Fees, and Security Deposit
     if (this.props.id == "Payment Chart") {
+      //empty JSON to remove unwanted data when re-rendered
       this.state.repaymentData = []
+      //converts repaymentSchedule matrix into JSON so it can be displayed as chart data
       for (let i = 0; i < this.props.data[0].length; i++) {
         this.state.repaymentData[i] = {periodNum: i, principal: this.props.data[4][i], interest: this.props.data[6][i], taxes: this.props.data[7][i], insurance: this.props.data[8][i], fees: this.props.data[9][i], security_deposit: this.props.data[10][i]}; 
       }
+    //conditional rendering of visualizations based on visualType prop passed from APRRateDisplay
       if (this.props.visualType == "Bar") {
       return (
+	//specify dimensions of chart and pass in JSON as prop
         <BarChart width={600} height={400} data={this.state.repaymentData} margin={{top: 20, right: 10, left: 5, bottom: 5}}>
 	<CartesianGrid strokeDasharray="5 5"/>
+	//period number x-axis i.e. 0 to 12
 	<XAxis dataKey="periodNum"/>
 	<YAxis/>
 	<Tooltip/>
 	<Legend />
+	//each dataKey prop is mapped to a different key in the JSON repaymentData
 	<Bar dataKey="principal" stackId="a" fill="#c94473" />
 	<Bar dataKey="interest" stackId="a" fill="#a044c9" />
 	<Bar dataKey="taxes" stackId="a" fill="#95c5dd" />
@@ -55,12 +62,15 @@ class KivaChart extends Component {
       }
       if (this.props.visualType == "Line") {
       return (
+     	//specify dimensions of chart and pass in JSON as prop
         <LineChart width={600} height={400} data={this.state.repaymentData} margin={{top: 20, right: 10, left: 5, bottom: 5}}>
+      	//period number x-axis i.e. 0 to 12
 	<XAxis dataKey="periodNum"/>
 	<YAxis/>
 	<CartesianGrid strokeDasharray="3 3"/>
 	<Tooltip/>
 	<Legend />
+      	//each dataKey prop is mapped to a different key in the JSON repaymentData
 	<Line type="monotone" dataKey="principal" stroke="#c94473" />
 	<Line type="monotone" dataKey="interest" stroke="#a044c9" activeDot={{r: 8}}/>    
 	<Line type="monotone" dataKey="taxes" stroke="#95c5dd" activeDot={{r: 8}}/>
@@ -72,12 +82,15 @@ class KivaChart extends Component {
       }
       if (this.props.visualType == "Area") {
       return(
+	//specify dimensions of chart and pass in JSON as prop 
         <AreaChart width={600} height={400} data={this.state.repaymentData} margin={{top: 20, right: 10, left: 5, bottom: 5}}>
 	<CartesianGrid strokeDasharray="3 3"/>
+      	//period number x-axis i.e. 0 to 12      
 	<XAxis dataKey="periodNum"/>
 	<YAxis/>
 	<Tooltip/>
 	<Legend/>
+       	//each dataKey prop is mapped to a different key in the JSON repaymentData
 	<Area type='monotone' dataKey="principal" stackId="1" stroke='#c94473' fill='#c94473' />
 	<Area type='monotone' dataKey='interest' stackId="1" stroke='#a044c9' fill='#a044c9' />
 	<Area type='monotone' dataKey='taxes' stackId="1" stroke='#95c5dd' fill='#95c5dd' />
@@ -89,6 +102,7 @@ class KivaChart extends Component {
       }
     }else if (this.props.id == "Balance Chart") {
       this.state.repaymentData = []
+      //create JSON for Balance Chart so will only contain data from the Balance column in repayment schedule
       for (let i = 0; i < this.props.data[0].length; i++) {
         this.state.repaymentData[i] = {periodNum: i, balance: this.props.data[5][i]}; 
       }
@@ -100,6 +114,7 @@ class KivaChart extends Component {
 	<YAxis/>
 	<Tooltip/>
 	<Legend />
+	//only one dataKey because only one column will be displayed
 	<Bar dataKey="balance" stackId="a" fill="#9ae395" />
 	</BarChart>
 	)
