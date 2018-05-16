@@ -18,7 +18,7 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'Bar',
-      chartID: 'Payment Chart',
+      chartID: "Balance Chart",
       changeChart: false,
       changeVisual: false,
       isHidden: false,
@@ -369,11 +369,11 @@ class APRRateDisplay extends Component {
   changeChartType(changeChart) {
     this.setState({ changeChart })
     if (changeChart) {
-      this.setState({ chartID: 'Balance Chart' })
-    } else if (!changeChart) {
-      this.setState({ chartID: 'Payment Chart' })
-    }
-  }
+      this.setState({chartID: "Payment Chart"})
+    }else if (!changeChart) {
+      this.setState({chartID: "Balance Chart"})
+    }	  
+   }
 
   getCSV() {
     const { formDataReducer } = this.props
@@ -383,9 +383,9 @@ class APRRateDisplay extends Component {
       ]
     ]
     let row
-    for (let j = 0; j < 13; j++) {
+    for (let j = 0; j < formDataReducer.new_repayment_schedule[0].length; j++) {
       row = ''
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < formDataReducer.new_repayment_schedule.length; i++) {
         row += formDataReducer.new_repayment_schedule[i][j] + ','
       }
       row += '\n'
@@ -837,7 +837,7 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Period Number
+                      <h5>Period Number</h5>
                     </div>
                   ),
                   accessor: 'period_num',
@@ -850,14 +850,14 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Payment Due Date
+                      <h5>Payment Due Date</h5>
                     </div>
                   ),
                   accessor: 'payment_due_date',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Days</h5>,
+                  Header: <h5>Days</h5>,
                   accessor: 'days',
                   Cell: this.renderEditable
                 },
@@ -867,7 +867,7 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Amount Due
+                      <h5>Amount Due</h5>
                     </div>
                   ),
                   accessor: 'amount_due',
@@ -879,35 +879,35 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Principal Payment
+                      <h5>Principal Payment</h5>
                     </div>
                   ),
                   accessor: 'principal_payment',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Balance</h5>,
+                  Header: <h5>Balance</h5>,
                   accessor: 'balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Interest</h5>,
+                  Header: <h5>Interest</h5>,
                   accessor: 'interest',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Fees</h5>,
+                  Header: <h5>Fees</h5>,
                   accessor: 'fees',
                   Cell: this.renderEditable
                 },
                 {
                   minWidth: 70,
-                  Header: 'Insurance',
+                  Header: <h5>Insurance</h5>,
                   accessor: 'insurance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: <h5 style={{ color: 'red' }}>Taxes</h5>,
+                  Header: <h5>Taxes</h5>,
                   accessor: 'taxes',
                   Cell: this.renderEditable
                 },
@@ -917,7 +917,7 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Security Deposit
+                      <h5> Security Deposit</h5>
                     </div>
                   ),
                   accessor: 'security_deposit',
@@ -929,7 +929,7 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Security Interest Paid
+                      <h5>Security Interest Paid</h5>
                     </div>
                   ),
                   accessor: 'security_interest_paid',
@@ -942,7 +942,7 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Deposit Withdrawal
+                      <h5>Deposit Withdrawal</h5>
                     </div>
                   ),
                   accessor: 'deposit_withdrawal',
@@ -954,7 +954,7 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Deposit Balance
+                      <h5>Deposit Balance</h5>
                     </div>
                   ),
                   accessor: 'deposit_balance',
@@ -966,7 +966,7 @@ class APRRateDisplay extends Component {
                       className="rt-resizable-header-content"
                       style={{ 'white-space': 'pre-wrap' }}
                     >
-                      Total Cashflow
+                      <h5>Total Cashflow</h5>
                     </div>
                   ),
                   accessor: 'total_cashflow',
