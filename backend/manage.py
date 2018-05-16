@@ -574,11 +574,6 @@ def recreate_db():
         data["partner_name"] = partner
         p = Partner(data)
         db.session.add(p)
-    for loan in loans:
-        loan['start_date'] = datetime.datetime.now()
-        loan['update_date'] = datetime.datetime.now()
-        l = Loan(loan)
-        db.session.add(l)
     db.session.commit()
 
 
