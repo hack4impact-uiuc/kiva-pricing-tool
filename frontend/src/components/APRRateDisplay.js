@@ -18,7 +18,7 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'Bar',
-      chartID: 'Payment Chart',
+      chartID: "Balance Chart",
       changeChart: false,
       changeVisual: false,
       isHidden: false,
@@ -369,11 +369,11 @@ class APRRateDisplay extends Component {
   changeChartType(changeChart) {
     this.setState({ changeChart })
     if (changeChart) {
-      this.setState({ chartID: 'Balance Chart' })
-    } else if (!changeChart) {
-      this.setState({ chartID: 'Payment Chart' })
-    }
-  }
+      this.setState({chartID: "Payment Chart"})
+    }else if (!changeChart) {
+      this.setState({chartID: "Balance Chart"})
+    }	  
+   }
 
   getCSV() {
     const { formDataReducer } = this.props
@@ -383,9 +383,9 @@ class APRRateDisplay extends Component {
       ]
     ]
     let row
-    for (let j = 0; j < 13; j++) {
+    for (let j = 0; j < formDataReducer.new_repayment_schedule[0].length; j++) {
       row = ''
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < formDataReducer.new_repayment_schedule.length; i++) {
         row += formDataReducer.new_repayment_schedule[i][j] + ','
       }
       row += '\n'
