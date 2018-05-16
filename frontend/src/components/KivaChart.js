@@ -22,8 +22,11 @@ class KivaChart extends Component {
     }
   }
   render() {
-    if (this.props.id === 'Payment Chart') {
+    //creates Payment Chart i.e. chart with Principal, Interest, Taxes, Insurance, Fees, and Security Deposit
+    if (this.props.id == "Payment Chart") {
+      //empty JSON to remove unwanted data when re-rendered
       this.state.repaymentData = []
+      //converts repaymentSchedule matrix into JSON so it can be displayed as chart data
       for (let i = 0; i < this.props.data[0].length; i++) {
         this.state.repaymentData[i] = {
           periodNum: i,
@@ -35,8 +38,10 @@ class KivaChart extends Component {
           security_deposit: this.props.data[Variables.sdRow][i]
         }
       }
+    //conditional rendering of visualizations based on visualType prop passed from APRRateDisplay
       if (this.props.visualType === 'Bar') {
         return (
+          //specify dimensions of chart and pass in JSON as prop
           <BarChart
             width={Variables.chartWidth}
             height={Variables.chartHeight}
@@ -139,9 +144,11 @@ class KivaChart extends Component {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="periodNum" />
+            //period number x-axis i.e. 0 to 12 
             <YAxis />
             <Tooltip />
             <Legend />
+            //each dataKey prop is mapped to a different key in the JSON repaymentData
             <Area
               type="monotone"
               dataKey="principal"
@@ -189,6 +196,7 @@ class KivaChart extends Component {
       }
     } else if (this.props.id === 'Balance Chart') {
       this.state.repaymentData = []
+      //create JSON for Balance Chart so will only contain data from the Balance column in repayment schedule
       for (let i = 0; i < this.props.data[0].length; i++) {
         this.state.repaymentData[i] = {
           periodNum: i,
@@ -213,12 +221,14 @@ class KivaChart extends Component {
             <YAxis />
             <Tooltip />
             <Legend />
+            //only one dataKey because only one column will be displayed
             <Bar dataKey="balance" stackId="a" fill="#9ae395" />
           </BarChart>
         )
       }
       if (this.props.visualType === 'Line') {
         return (
+
           <LineChart
             width={Variables.chartWidth}
             height={Variables.chartHeight}
