@@ -3,7 +3,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 
 ## Product Resources
 * [Product Requirements Document](https://docs.google.com/document/d/1Rw6Q8YMIpvYFXR3eStdTVT4iZXMpR7En3_yg677VgjE/edit?usp=sharing)
-* [Specs] (https://docs.google.com/document/d/1zMf_uEDGpe6eoqfaJvVP6mnb-Vbvo_sfcE4FaL2NWB8/edit?usp=sharing)
+* [Specs](https://docs.google.com/document/d/1zMf_uEDGpe6eoqfaJvVP6mnb-Vbvo_sfcE4FaL2NWB8/edit?usp=sharing)
 
 ## Design Resources
 * [Figma for Mockups](https://www.figma.com/file/0jmf44vrazZ8C2vkTCwnroMF/Kiva)
