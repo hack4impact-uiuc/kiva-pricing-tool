@@ -301,7 +301,7 @@ class APRRateDisplay extends Component {
       this.createChart.bind(this)
     }
   }
-  renderEditable = (event) => {
+  renderEditable = event => {
     const { formDataReducer } = this.props
     let editable =
       event.column.id !== 'period_num' &&
@@ -311,13 +311,12 @@ class APRRateDisplay extends Component {
       event.column.id !== 'security_interest_paid' &&
       event.column.id !== 'deposit_balance' &&
       event.column.id !== 'total_cashflow' &&
-      formDataReducer.calc_repayment_schedule[e.index]['period_num'] !==
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] !==
         'Total'
     let total =
-
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Total' ||
-      formDataReducer.calc_repayment_schedule[cellInfo.index]['period_num'] ===
+      formDataReducer.calc_repayment_schedule[event.index]['period_num'] ===
         'Disbursement Info'
     return (
       <div
@@ -327,7 +326,7 @@ class APRRateDisplay extends Component {
             : !editable
               ? { backgroundColor: '#fafafa' }
               : formDataReducer.user_repayment_schedule[event.index][
-                  cellInfo.column.id
+                  event.column.id
                 ] !== null
                 ? { backgroundColor: '#bafaba' }
                 : { backgroundColor: '#eaeaea' }
@@ -340,13 +339,12 @@ class APRRateDisplay extends Component {
         dangerouslySetInnerHTML={{
           __html:
             formDataReducer.calc_repayment_schedule[event.index][
-              cellInfo.column.id
+              event.column.id
             ]
         }}
       />
     )
   }
-  
   changeVisualType(changeVisual) {
     this.setState({changeVisual})
     if (changeVisual) {
@@ -462,13 +460,13 @@ class APRRateDisplay extends Component {
     createDownloadLink.href = url
     createDownloadLink.setAttribute(
       'download',
-      formDataReducer.mfi[0] +
+      formDataReducer.mfi +
         '_' +
-        formDataReducer.loanType[0] +
+        formDataReducer.loanType +
         '_' +
-        formDataReducer.productType[0] +
+        formDataReducer.productType +
         '_' +
-        formDataReducer.versionNum[0] +
+        formDataReducer.versionNum +
         '.csv'
     )
     createDownloadLink.click()
@@ -728,7 +726,8 @@ class APRRateDisplay extends Component {
             <PageHeader className="page-header-montserrat bs-center">
               <small>
                 {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
-                {formDataReducer.productType} | {formDataReducer.versionNum}
+                {formDataReducer.productType} | Version{' '}
+                {formDataReducer.versionNum}
               </small>
             </PageHeader>
           </Col>
@@ -744,50 +743,51 @@ class APRRateDisplay extends Component {
         <Row className="vertical-margin-item">
           <Col sm={8} md={8}>
             {this.state.isHidden && (
-	      <div>		
+              <div>
                 <label htmlFor="material-switch">
-		<span>{this.state.visualType}</span>
-		<Switch
-                  onChange={event => this.changeVisualType(event)}
-		  checked={this.state.changeVisual}
-		  onColor="#438b48"
-		  onHandleColor="#c4ccc6"
-		  handleDiameter={30}
-		  uncheckedIcon={false}
-		  checkedIcon={false}
-		  className="react-switch"
-		  id="material-switch"
-		/>
-		</label>
-		<label htmlFor="material-switch">
-		<span>{this.state.chartID}</span>
-		<Switch
-                  onChange={event => this.changeChartType(event)}
-		  checked={this.state.changeChart}
-		  onColor="#438b48"
-		  onHandleColor="#c4ccc6"
-		  handleDiameter={30}
-		  uncheckedIcon={false}
-		  checkedIcon={false}
-		  className="react-switch"
-		  id="material-switch"
-		/>
-		</label>
-		<KivaChart id = {this.state.chartID} visualType={this.state.visualType} data={this.state.data}></KivaChart>			
-	      </div>
-            )}
-          </Col>
-          <Col sm={4} md={4}>
-            <Row className="vertical-margin-item">
-              <Col sm={6} md={6}>
-		{!this.state.isHidden && (
-                <button
-                  className="button-fancy"
-                  onClick={this.createChart.bind(this)}
-                >
-                  Generate Chart
-                </button>
-		)}
+                <span>{this.state.visualType}</span>
+                <Switch
+                              onChange={event => this.changeVisualType(event)}
+                  checked={this.state.changeVisual}
+                  onColor="#438b48"
+                  onHandleColor="#c4ccc6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  className="react-switch"
+                  id="material-switch"
+                />
+                </label>
+                <label htmlFor="material-switch">
+                <span>{this.state.chartID}</span>
+                <Switch
+                              onChange={event => this.changeChartType(event)}
+                  checked={this.state.changeChart}
+                  onColor="#438b48"
+                  onHandleColor="#c4ccc6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  className="react-switch"
+                  id="material-switch"
+                />
+                </label>
+                <KivaChart id = {this.state.chartID} visualType={this.state.visualType} data={this.state.data}></KivaChart>			
+                    </div>
+
+                        )}
+                      </Col>
+                      <Col sm={4} md={4}>
+                        <Row className="vertical-margin-item">
+                          <Col sm={6} md={6}>
+                {!this.state.isHidden && (
+                            <button
+                              className="button-fancy"
+                              onClick={this.createChart.bind(this)}
+                            >
+                              Generate Chart
+                            </button>
+                )}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
                 <button

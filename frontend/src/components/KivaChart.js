@@ -1,7 +1,25 @@
-import React, { Component, View, StyleSheet } from 'react';
+import React, { Component, View, StyleSheet } from 'react'
 import { Link } from 'react-router-dom'
 import { extent, max } from 'd3-array'
-import { LineChart, Line, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, AreaChart, Legend} from 'recharts'
+import {
+  RadialBarChart,
+  RadialBar,
+  LineChart,
+  Line,
+  Bar,
+  BarChart,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Area,
+  AreaChart,
+  Legend,
+  Treemap,
+  PieChart,
+  Pie
+} from 'recharts'
+
 import { connect } from 'react-redux'
 import { APRRateDisplay } from './'
 
