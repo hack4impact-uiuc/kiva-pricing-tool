@@ -1,6 +1,8 @@
 # Kiva Pricing Tool
 An open source web application that calculates an APR Nominal rate for a loan with different attributes, then displays the Repayment Schedule and Loan Payment Visualization.
 
+[Installment How-Tos](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/docs/installation.md)
+
 ## Product Resources
 * [Product Requirements Document](https://docs.google.com/document/d/1Rw6Q8YMIpvYFXR3eStdTVT4iZXMpR7En3_yg677VgjE/edit?usp=sharing)
 * [Specs](https://docs.google.com/document/d/1zMf_uEDGpe6eoqfaJvVP6mnb-Vbvo_sfcE4FaL2NWB8/edit?usp=sharing)
@@ -66,3 +68,8 @@ Over the course of the 3 months we had to build out this tool, we accumulated so
 * User Information - Name
     * This is placed in the input form page
     * A better UX would be to place that at the beginning of both the New Loan and the Find Loan sequences, so that the backend can more easily differentiate an initial user and a user who is updating the loan. The UX would also be more straightforward.
+
+* URL's 
+    * All our URL's are accessible, even if no prior data has been entered
+    * Refreshing the page empties whatever is currently in our redux store, leaving some pages useless if refreshed
+    * Some sort of validation/error page would be good
