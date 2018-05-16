@@ -126,6 +126,13 @@ class APRRateDisplay extends Component {
     }
     this.renderEditable = this.renderEditable.bind(this)
     this.updateTable = this.updateTable.bind(this)
+    this.ModifyEnterKeyPressAsTab = this.ModifyEnterKeyPressAsTab.bind(this)
+  }
+
+  ModifyEnterKeyPressAsTab() {
+    if (window.event && window.event.keyCode == 13) {
+      window.event.keyCode = 9
+    }
   }
 
   updateTable(e, cellInfo) {
@@ -137,6 +144,9 @@ class APRRateDisplay extends Component {
     ) {
       if (e.target.innerHTML === null || e.target.innerHTML.trim() === '') {
         formDataReducer.user_repayment_schedule[cellInfo.index][
+          cellInfo.column.id
+        ] = null
+        formDataReducer.calc_repayment_schedule[cellInfo.index][
           cellInfo.column.id
         ] = null
       } else {
@@ -333,6 +343,21 @@ class APRRateDisplay extends Component {
                 ? { backgroundColor: '#bafaba' }
                 : { backgroundColor: '#eaeaea' }
         }
+        onKeyPress={e => {
+          if (
+            isNaN(
+              e.target.innerHTML && cellInfo.column.id !== 'payment_due_date'
+            )
+          ) {
+            console.log('gro no')
+          }
+        }}
+        onKeyDown={e => {
+          this.ModifyEnterKeyPressAsTab
+          if (e.keyCode === 13) {
+            e.preventDefault()
+          }
+        }}
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
@@ -820,77 +845,79 @@ class APRRateDisplay extends Component {
               data={formDataReducer.calc_repayment_schedule}
               columns={[
                 {
-                  Header: 'Period Number',
+                  Header: <h5 style={{ color: 'red' }}>Period Number</h5>,
                   accessor: 'period_num',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Payment Due Date',
+                  Header: <h5 style={{ color: 'red' }}>Payment Due Date</h5>,
                   accessor: 'payment_due_date',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Days',
+                  Header: <h5 style={{ color: 'red' }}>Days</h5>,
                   accessor: 'days',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Amount Due',
+                  Header: <h5 style={{ color: 'red' }}>Amount Due</h5>,
                   accessor: 'amount_due',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Principal Payment',
+                  Header: <h5 style={{ color: 'red' }}>Principal Payment</h5>,
                   accessor: 'principal_payment',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Balance',
+                  Header: <h5 style={{ color: 'red' }}>Balance</h5>,
                   accessor: 'balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Interest',
+                  Header: <h5 style={{ color: 'red' }}>Interest</h5>,
                   accessor: 'interest',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Fees',
+                  Header: <h5 style={{ color: 'red' }}>Fees</h5>,
                   accessor: 'fees',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Insurance',
+                  Header: <h5 style={{ color: 'red' }}>Insurance</h5>,
                   accessor: 'insurance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Taxes',
+                  Header: <h5 style={{ color: 'red' }}>Taxes</h5>,
                   accessor: 'taxes',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Security Deposit',
+                  Header: <h5 style={{ color: 'red' }}>Security Deposit</h5>,
                   accessor: 'security_deposit',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Security Interest Paid',
+                  Header: (
+                    <h5 style={{ color: 'red' }}>Security Interest Paid</h5>
+                  ),
                   accessor: 'security_interest_paid',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Deposit Withdrawal',
+                  Header: <h5 style={{ color: 'red' }}>Deposit Withdrawal</h5>,
                   accessor: 'deposit_withdrawal',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Deposit Balance',
+                  Header: <h5 style={{ color: 'red' }}>Deposit Balance</h5>,
                   accessor: 'deposit_balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Total Cashflow',
+                  Header: <h5 style={{ color: 'red' }}>Total Cashflow</h5>,
                   accessor: 'total_cashflow',
                   Cell: this.renderEditable
                 }
