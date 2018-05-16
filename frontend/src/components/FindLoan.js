@@ -56,7 +56,6 @@ class FindLoan extends Component {
       formDataReducer.versionNum
     )
       .then(response => {
-        console.log('RESULT', response.data.result)
         const apr = response.data.result.nominal_apr
         const orig_matrix = response.data.result.original_matrix
         const user_matrix = response.data.result.user_matrix
@@ -454,7 +453,6 @@ class FindLoan extends Component {
 
   render() {
     const { formDataReducer, changedFormData, searchLoan } = this.props
-    console.log(this.isNullOrEmpty(formDataReducer.mfi))
     return (
       <div className="page-body-grey">
         <Grid

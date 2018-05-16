@@ -11,7 +11,7 @@ class AdminMain extends Component {
           name="MFI Partner List"
           url="partnerlist"
           onClickHandler={() => {
-            console.log('going to new loan')
+            // console.log('going to new loan')
           }}
         />
 
@@ -19,7 +19,7 @@ class AdminMain extends Component {
           name="Loan Theme List"
           url="themelist"
           onClickHandler={() => {
-            console.log('going to find loan')
+            // console.log('going to find loan')
           }}
         />
       </Grid>
