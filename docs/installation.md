@@ -41,13 +41,18 @@ To stop:
 ```
 $ brew services stop postgresql
 ```
-On a separate CLI, check whether you can access the database. Your postgres server must be on in order for this to work:
+On a separate CLI, check whether you can access the database. Your postgres server must be on in order for this to work. For mac:
 ```
 $ createdb
 $ psql -h localhost
 # \q
 ```
-After installing Postgres, create a user(with name 'testusr' and password 'password') and a database called 'testdb' then grant privileges. We will do this in your CLI:
+For windows:
+```
+$ psql -p 5432 -h localhost -U postgres
+# \q
+```
+After installing Postgres, create a user(with name 'testusr' and password 'password') and a database called 'testdb' then grant privileges. We will do this in your CLI (run the `psql` command below using the command above corresponding to your OS):
 ```
 $ psql
 # create user testusr with password 'password';
