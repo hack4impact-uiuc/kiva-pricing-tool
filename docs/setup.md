@@ -80,5 +80,3 @@ To deactivate when you're using it:
 If you are using pip, your command line will have `(venv)$` in front instead of the `(flask......) bash-3.2$` Now look above for instructions to run the server.
 
 The API should be at http://127.0.0.1:3453/ 
-
-
