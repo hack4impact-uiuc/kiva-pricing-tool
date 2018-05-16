@@ -76,6 +76,9 @@ class TextField extends Component {
           className: this.props.className + ' required-error'
         })
         changedFormData('error', true)
+      } else {
+        this.setState({ error_message: '' })
+        changedFormData('error', false)
       }
 
       changedFormData(this.props.reduxId, e.target.value)
@@ -86,7 +89,6 @@ class TextField extends Component {
     const { formDataReducer, changedFormData } = this.props
     const nums = /^[0-9\b]+$/
     const numPeriods = e.target.value.split('.')
-    console.log(e.target.value, numPeriods)
 
     if (
       e.target.value == '' ||

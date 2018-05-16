@@ -38,6 +38,9 @@ class FindLoan extends Component {
     router: PropTypes.object.isRequired
   }
 
+  /**
+   * Gets existing loan and repayment schedule from backend to populate redux.
+   */
   getTables() {
     const { formDataReducer, changedFormData } = this.props
     let data = {
@@ -56,17 +59,18 @@ class FindLoan extends Component {
       formDataReducer.versionNum
     )
       .then(response => {
-        console.log('RESULT', response.data.result)
         const apr = response.data.result.nominal_apr
         const orig_matrix = response.data.result.original_matrix
         const user_matrix = response.data.result.user_matrix
         const calc_matrix = response.data.result.calc_matrix
         changedFormData('new_repayment_schedule', calc_matrix)
-        changedFormData('aprRate', apr)
+        changedFormData('nominalApr', apr)
         changedFormData(
           'installmentTimePeriod',
           response.data.result.installment_time_period
         )
+        changedFormData('startName', response.data.result.start_name)
+        changedFormData('updateName', response.data.result.update_name)
         changedFormData('repaymentType', response.data.result.repayment_type)
         changedFormData(
           'interestTimePeriod',
@@ -162,7 +166,11 @@ class FindLoan extends Component {
         let reformatted_matrix = []
         let reformatted_user_matrix = []
         let reformatted_calc_matrix = []
-        if (orig_matrix != null && user_matrix != null && calc_matrix != null) {
+        if (
+          orig_matrix !== null &&
+          user_matrix !== null &&
+          calc_matrix !== null
+        ) {
           for (let i = 0; i < orig_matrix[0].length; i++) {
             reformatted_matrix.push({
               period_num: orig_matrix[0][i],
@@ -319,8 +327,8 @@ class FindLoan extends Component {
           reformatted_calc_matrix[last][
             'total_cashflow'
           ] = reformatted_calc_matrix[last]['total_cashflow'].toFixed(2)
-          reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-          reformatted_calc_matrix[0]['period_num'] = 'Disbursement Info'
+          reformatted_matrix[0]['period_num'] = 'Disbursement'
+          reformatted_calc_matrix[0]['period_num'] = 'Disbursement'
           changedFormData('original_repayment_schedule', reformatted_matrix)
           changedFormData('user_repayment_schedule', reformatted_user_matrix)
           changedFormData('calc_repayment_schedule', reformatted_calc_matrix)
@@ -346,14 +354,17 @@ class FindLoan extends Component {
       })
   }
 
+  /**
+   * Gets all product types of data with given entries.
+   */
   getProductType() {
     const { formDataReducer, changedFormData } = this.props
 
     if (formDataReducer.mfi && formDataReducer.loanType) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) !== -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
 
       if (validPartnerName && validLoanTheme) {
         Api.getProductType(
@@ -366,6 +377,9 @@ class FindLoan extends Component {
     }
   }
 
+  /**
+   * Gets all version of loans with entered data.
+   */
   getVersionNumEntries() {
     const { formDataReducer, changedFormData } = this.props
     if (
@@ -374,11 +388,11 @@ class FindLoan extends Component {
       formDataReducer.productType
     ) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) !== -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
       let validProductType =
-        this.state.product_types.indexOf(formDataReducer.productType) != -1
+        this.state.product_types.indexOf(formDataReducer.productType) !== -1
 
       if (validPartnerName && validLoanTheme && validProductType) {
         Api.getVersionNumEntries(
@@ -403,13 +417,13 @@ class FindLoan extends Component {
       !this.isNullOrEmpty(formDataReducer.versionNum)
     ) {
       let validPartnerName =
-        this.state.partner_names.indexOf(formDataReducer.mfi) != -1
+        this.state.partner_names.indexOf(formDataReducer.mfi) !== -1
       let validLoanTheme =
-        this.state.loan_themes.indexOf(formDataReducer.loanType) != -1
+        this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
       let validProductType =
-        this.state.product_types.indexOf(formDataReducer.productType) != -1
+        this.state.product_types.indexOf(formDataReducer.productType) !== -1
       let validVersionNum =
-        this.state.versions.indexOf(formDataReducer.versionNum) != -1
+        this.state.versions.indexOf(formDataReducer.versionNum) !== -1
       return (
         validPartnerName &&
         validLoanTheme &&
@@ -423,25 +437,25 @@ class FindLoan extends Component {
   // Method to check if MFI partner exists in queried partner list
   // Entry is valid if DB has corresponding name
   isValidMFI(input) {
-    return this.state.partner_names.indexOf(input) != -1
+    return this.state.partner_names.indexOf(input) !== -1
   }
 
   // Method to check if LT exists in queried LT list
   // Entry is valid if DB has corresponding name
   isValidTheme(input) {
-    return this.state.loan_themes.indexOf(input) != -1
+    return this.state.loan_themes.indexOf(input) !== -1
   }
 
   // Method to check if PT exists in queried PT list
   // Entry is valid if DB has corresponding name
   isValidPT(input) {
-    return this.state.product_types.indexOf(input) != -1
+    return this.state.product_types.indexOf(input) !== -1
   }
 
   // Method to check if version exists in queried version list
   // Entry is valid if DB has corresponding name
   isValidVersionNum(input) {
-    return this.state.versions.indexOf(input) != -1
+    return this.state.versions.indexOf(input) !== -1
   }
 
   isNullOrEmpty(input) {

@@ -13,13 +13,38 @@ class Dropdown extends Component {
       default: this.props.title,
       value: this.props.title, // Used to check if value of dropdown is the same as the title for error messages
       className: this.props.className,
-      error_message: '',
       error_class: '' // Used to check if error message exists to conditionally assign class to error message element
     }
   }
 
   // Dropdown menu options
   dropdownItems = this.props.items
+
+  // if redux populates fields, will remove the "field required" error message
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.formDataReducer[this.props.reduxId] !=
+        this.props.formDataReducer[this.props.reduxId] &&
+      (!this.props.formDataReducer[this.props.reduxId] ||
+        this.props.formDataReducer[this.props.reduxId].length === 0)
+    ) {
+      let newData = nextProps.formDataReducer
+      if (
+        !newData[this.props.reduxId] ||
+        newData[this.props.reduxId].length === 0
+      ) {
+        this.setState({
+          className: this.props.className + ' required-dropdown',
+          error_class: 'error-message'
+        })
+      } else {
+        this.setState({
+          className: this.props.className,
+          error_class: 'hidden-error'
+        })
+      }
+    }
+  }
 
   componentDidMount() {
     const { formDataReducer } = this.props
@@ -28,7 +53,7 @@ class Dropdown extends Component {
     this.setState({
       value:
         formDataReducer[this.props.reduxId].length === 0
-          ? this.props.title
+          ? this.props.default
           : formDataReducer[this.props.reduxId]
     })
 
@@ -39,17 +64,13 @@ class Dropdown extends Component {
     ) {
       this.setState({
         className: this.props.className + ' required-dropdown',
-        error_message: 'This field is required.'
+        error_class: 'error-message'
       })
     } else {
-      this.setState({ className: this.props.className, error_message: '' })
-    }
-
-    // Check class to assign to error for styling
-    if (this.state.error_message.length !== 0) {
-      this.setState({ error_class: 'error-message' })
-    } else {
-      this.setState({ error_class: 'hidden-error' })
+      this.setState({
+        className: this.props.className,
+        error_class: 'hidden-error'
+      })
     }
   }
 
@@ -60,7 +81,7 @@ class Dropdown extends Component {
         <DropdownButton
           title={
             formDataReducer[this.props.reduxId].length === 0
-              ? this.state.value
+              ? this.state.default
               : formDataReducer[this.props.reduxId]
           }
           id="dropdown-menu"
@@ -79,7 +100,6 @@ class Dropdown extends Component {
                   // Update state if value doesn't match the title
                   this.setState({
                     className: this.props.className,
-                    error_message: '',
                     error_class: 'hidden-error'
                   })
                 }
@@ -89,7 +109,7 @@ class Dropdown extends Component {
             </MenuItem>
           ))}
         </DropdownButton>
-        <p className="error-message">{this.state.error_message}</p>
+        <p className={this.state.error_class}>This field is required.</p>
       </span>
     )
   }
