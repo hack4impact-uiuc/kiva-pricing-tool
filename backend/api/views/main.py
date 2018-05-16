@@ -588,31 +588,17 @@ def get_loan():
         user_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
         calc_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
         for row in sorted_rows:
-            print (row.payment_due_date)
-            print (row.payment_due_date.day)
-            print (row.payment_due_date.month)
-            print (row.payment_due_date.year)
-            print (row.payment_due_date_user)
-            print (row.payment_due_date_calc)
-            print (row.payment_due_date_calc.day)
-            print (row.payment_due_date_calc.month)
-            print (row.payment_due_date_calc.year)
-            print ('{0}-{1}-{2}'.format(row.payment_due_date.day, month_num_to_str_dict[row.payment_due_date.month], row.payment_due_date.year))
             orig_matrix[0].append(row.period_num)
             user_matrix[0].append(row.period_num)
             calc_matrix[0].append(row.period_num)
 
             orig_matrix[1].append('{0}-{1}-{2}'.format(row.payment_due_date.day, month_num_to_str_dict[row.payment_due_date.month], row.payment_due_date.year))
-            print ('hiiiiii')
             if row.payment_due_date_user != None:
-                print ('enter')
                 user_matrix[1].append('{0}-{1}-{2}'.format(row.payment_due_date_user.day, month_num_to_str_dict[row.payment_due_date_user.month], row.payment_due_date_user.year))
             else:
                 user_matrix[1].append(None)
-            print ('hiiiiii')
             calc_matrix[1].append('{0}-{1}-{2}'.format(row.payment_due_date_calc.day, month_num_to_str_dict[row.payment_due_date_calc.month], row.payment_due_date_calc.year))
 
-            print ('hiiiiii')
             orig_matrix[2].append(row.days)
             user_matrix[2].append(row.days_user)
             calc_matrix[2].append(row.days_calc)
@@ -673,7 +659,7 @@ def get_loan():
             'update_date' : entry.update_date,
             'start_name' : entry.start_name,
             'update_name' : entry.update_name,
-            'nominal_apr' : entry.nominal_apr,
+            'nominal_apr' : entry.nominal_apr*100,
             'installment_time_period' : entry.installment_time_period,
             'repayment_type' : entry.repayment_type,
             'interest_time_period' : entry.interest_time_period,
