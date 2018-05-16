@@ -7,9 +7,14 @@ class Dropdown extends Component {
 
   constructor(props) {
     super(props)
+    const { formDataReducer } = this.props
     this.state = {
       default: this.props.title,
-      value: this.props.title, // Used to check if value of dropdown is the same as the title for error messages
+      // value: this.props.title, // Used to check if value of dropdown is the same as the title for error messages
+      value:
+        formDataReducer[this.props.reduxId].length === 0
+          ? this.props.title
+          : formDataReducer[this.props.reduxId],
       className: this.props.className,
       error_class: '' // Used to check if error message exists to conditionally assign class to error message element
     }
@@ -28,8 +33,9 @@ class Dropdown extends Component {
     ) {
       let newData = nextProps.formDataReducer
       if (
-        !newData[this.props.reduxId] ||
-        newData[this.props.reduxId].length === 0
+        this.props.requiredField &&
+        (!newData[this.props.reduxId] ||
+          newData[this.props.reduxId].length === 0)
       ) {
         this.setState({
           className: this.props.className + ' required-dropdown',
@@ -45,14 +51,6 @@ class Dropdown extends Component {
   }
 
   componentDidMount() {
-    const { formDataReducer } = this.props
-    this.setState({
-      value:
-        formDataReducer[this.props.reduxId].length === 0
-          ? this.props.default
-          : formDataReducer[this.props.reduxId]
-    })
-
     // If value is the same as the title, mark as required
     if (
       this.props.requiredField === true &&
