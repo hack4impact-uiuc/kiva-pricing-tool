@@ -90,7 +90,6 @@ function getTable(mfi, loanType, productType, versionNum) {
         versionNum
     )
     .then(response => {
-      // console.log(response.data.result)
       let converted = adapters.convertFromApiLoan(response.data.result)
       console.log(converted)
       console.log(response.data)
