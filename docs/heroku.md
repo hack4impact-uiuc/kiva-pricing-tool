@@ -74,6 +74,7 @@ $ python manage.py db migrate
 $ python manage.py db upgrade
 $ python manage.py recreate_db
 ```
+
 ## Frontend
 Change all axios calls from http://127.0.0.1:3453 to whatever your heroku backend's url is
 

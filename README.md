@@ -1,7 +1,7 @@
 # Kiva Pricing Tool
 An open source web application that calculates an APR Nominal rate for a loan with different attributes, then displays the Repayment Schedule and Loan Payment Visualization.
 
-[How to Setup App Locally](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/docs/setup.md)
+[How to Setup App Locally](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/docs/setup.md) <br>
 [Integrating App With Heroku](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/docs/heroku.md)
 
 ## Product Resources
