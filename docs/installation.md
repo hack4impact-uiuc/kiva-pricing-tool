@@ -13,11 +13,7 @@ The site will be displayed on: http://localhost:3000
 
 ## Backend
 In your terminal, cd into the backend folder
-### Mac
-If you have a Mac, run this script and everything should be setup. 
-```
-$ ./mac_setup.sh
-```
+
 ### Running Development Server
 
 First, install virtualenv, create and activate the environment called **venv**:
