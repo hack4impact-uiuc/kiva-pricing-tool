@@ -19,7 +19,7 @@ class APRRateDisplay extends Component {
       partner_names: [],
       visualType: 'Bar',
       chartID: "Balance Chart",
-      changeChart: false,
+      changeChart: false,             
       changeVisual: false,
       isHidden: false,
       data: [],
@@ -357,8 +357,12 @@ class APRRateDisplay extends Component {
       />
     )
   }
+  
   changeVisualType(changeVisual) {
+    //onclick function for change visual toggle
+    //changes state of changeVisual boolean
     this.setState({ changeVisual })
+    //change visualization based on the current boolean state
     if (changeVisual) {
       this.setState({ visualType: 'Area' })
     } else if (!changeVisual) {
@@ -367,7 +371,10 @@ class APRRateDisplay extends Component {
   }
 
   changeChartType(changeChart) {
+    //onclick function for change chart type toggle
+    //changes state of changeChart boolean
     this.setState({ changeChart })
+    //change chart type based on the current boolean state
     if (changeChart) {
       this.setState({chartID: "Payment Chart"})
     }else if (!changeChart) {
@@ -470,6 +477,7 @@ class APRRateDisplay extends Component {
     let url = URL.createObjectURL(csvFile)
     let createDownloadLink = document.createElement('a')
     createDownloadLink.href = url
+    //create name of csv file by concatenating MFI Partner Name, Loan Type, Product Type, and Version Number
     createDownloadLink.setAttribute(
       'download',
       formDataReducer.mfi +
@@ -485,7 +493,10 @@ class APRRateDisplay extends Component {
   }
 
   createChart() {
+    //onclick function that conditionally renders the chart by setting the isHidden boolean to true
     const { formDataReducer } = this.props
+    //set this.state.data to the redux repayment schedule. 
+    //this.state.data is the variable that is passed into the chart component as a prop
     this.setState({ data: formDataReducer.new_repayment_schedule })
     this.setState({ isHidden: true })
   }
@@ -761,9 +772,12 @@ class APRRateDisplay extends Component {
             {this.state.isHidden && (
               <div>
                 <label htmlFor="material-switch">
+                  //displays the current visualization type
                   <span>{this.state.visualType}</span>
                   <Switch
+                    //change visualization type when pressed
                     onChange={event => this.changeVisualType(event)}
+                    //changeVisual boolean changes state every time switch is pressed
                     checked={this.state.changeVisual}
                     onColor="#438b48"
                     onHandleColor="#c4ccc6"
@@ -775,9 +789,12 @@ class APRRateDisplay extends Component {
                   />
                 </label>
                 <label htmlFor="material-switch">
+                  //displays the current chart type
                   <span>{this.state.chartID}</span>
                   <Switch
+                    //change chart type when pressed
                     onChange={event => this.changeChartType(event)}
+                    //changeChart boolean changes state every time switch is pressed
                     checked={this.state.changeChart}
                     onColor="#438b48"
                     onHandleColor="#c4ccc6"
