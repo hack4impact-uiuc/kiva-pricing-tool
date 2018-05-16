@@ -22,8 +22,9 @@ class TextField extends Component {
     ) {
       let newData = nextProps.formDataReducer
       if (
-        !newData[this.props.reduxId] ||
-        newData[this.props.reduxId].length === 0
+        this.props.requiredField === true &&
+        (!newData[this.props.reduxId] ||
+          newData[this.props.reduxId].length === 0)
       ) {
         this.setState({
           error_message: 'This field is required.',
@@ -42,7 +43,7 @@ class TextField extends Component {
     // Used to check required fields and highlight with error messages immediately
     const { formDataReducer, changedFormData } = this.props
     if (
-      this.props.requiredField &&
+      this.props.requiredField === true &&
       (!formDataReducer[this.props.reduxId] ||
         formDataReducer[this.props.reduxId].length === 0)
     ) {
