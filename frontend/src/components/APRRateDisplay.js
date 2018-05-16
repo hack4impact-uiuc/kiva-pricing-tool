@@ -767,7 +767,7 @@ class APRRateDisplay extends Component {
           </Col>
         </Row>
         <Row className="vertical-margin-item">
-          <Col sm={8} md={8}>
+          <Col sm={12} md={12} className="bs-center">
             {this.state.isHidden && (
               <div>
                 <label htmlFor="material-switch">
@@ -806,30 +806,24 @@ class APRRateDisplay extends Component {
               </div>
             )}
           </Col>
-          <Col sm={4} md={4}>
-            <Row className="vertical-margin-item">
-              <Col sm={6} md={6}>
-                {!this.state.isHidden && (
-                  <button
-                    className="button-fancy"
-                    onClick={this.createChart.bind(this)}
-                  >
-                    Generate Chart
-                  </button>
-                )}
-              </Col>
-              <Col sm={6} md={6} className="bs-button-right">
-                <button
-                  className="button-fancy"
-                  onClick={this.getCSV.bind(this)}
-                >
-                  Download CSV
-                </button>
-              </Col>
-            </Row>
+        </Row>
+        <Row className="vertical-margin-item">
+          <Col sm={6} md={6} className="bs-button-right">
+            {!this.state.isHidden && (
+              <button
+                className="button-fancy"
+                onClick={this.createChart.bind(this)}
+              >
+                Generate Chart
+              </button>
+            )}
+          </Col>
+          <Col sm={6} md={6}>
+            <button className="button-fancy" onClick={this.getCSV.bind(this)}>
+              Download CSV
+            </button>
           </Col>
         </Row>
-
         <Row>
           <Col sm={12} md={12}>
             <ReactTable
