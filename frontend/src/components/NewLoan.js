@@ -58,13 +58,13 @@ class NewLoan extends Component {
   // Method to check if MFI partner exists in queried partner list
   // Entry is valid if DB has corresponding name
   isValidMFI(input) {
-    return this.state.partner_names.indexOf(input) != -1
+    return this.state.partner_names.indexOf(input) !== -1
   }
 
   // Method to check if LT exists in queried LT list
   // Entry is valid if DB has corresponding name
   isValidTheme(input) {
-    return this.state.loan_themes.indexOf(input) != -1
+    return this.state.loan_themes.indexOf(input) !== -1
   }
 
   isValidPT(input) {

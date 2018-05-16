@@ -76,6 +76,9 @@ class TextField extends Component {
           className: this.props.className + ' required-error'
         })
         changedFormData('error', true)
+      } else {
+        this.setState({ error_message: '' })
+        changedFormData('error', false)
       }
 
       changedFormData(this.props.reduxId, e.target.value)
