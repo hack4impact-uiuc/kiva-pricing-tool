@@ -14,7 +14,7 @@ The site will be displayed on: http://localhost:3000
 
 
 ## Backend
-In your terminal, cd into the backend folder
+Open a new tab and in your terminal, cd into the backend folder
 
 ### Running Development Server
 
