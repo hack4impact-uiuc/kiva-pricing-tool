@@ -31,6 +31,9 @@ class APRInputs extends Component {
     changedFormData([name], value)
   }
 
+  /**
+   * Checks whether proper inputs have been entered.
+   */
   inputsEntered() {
     const { formDataReducer } = this.props
     return (
@@ -62,6 +65,10 @@ class APRInputs extends Component {
     }
   }
 
+  /**
+   * Sends inputs to backend to calculate initial APR rate and repayment
+   * schedule.
+   */
   postData() {
     const { formDataReducer, changedFormData } = this.props
     this.inputsEntered() &&
@@ -219,9 +226,8 @@ class APRInputs extends Component {
             'total_cashflow'
           ].toFixed(2)
         }
-        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-        calc_matrix[0]['period_num'] = 'Disbursement Info'
-        console.log(calc_matrix)
+        reformatted_matrix[0]['period_num'] = 'Disbursement'
+        calc_matrix[0]['period_num'] = 'Disbursement'
         changedFormData('original_repayment_schedule', reformatted_matrix)
         changedFormData('user_repayment_schedule', user_matrix)
         changedFormData('calc_repayment_schedule', calc_matrix)
@@ -232,7 +238,6 @@ class APRInputs extends Component {
 
   render() {
     const { formDataReducer } = this.props
-    // console.log(formDataReducer, this.inputsEntered())
     return (
       <div className="page-body-grey padded-element-vertical overpad-shrink">
         <Grid

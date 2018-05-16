@@ -29,7 +29,6 @@ class AdminPartners extends Component {
 
   cleanList() {
     for (var i = 0; i < this.state.data.length; i++) {
-      console.log(this.state.data[i])
       if (this.state.data[i].partner_names === '') {
         //Remove element in place, return array with element removed
         this.setState({

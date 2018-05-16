@@ -1,4 +1,4 @@
-# Localhost
+# Localhost Setup
 ## Frontend
 In your terminal, cd into the frontend folder and type in
 ```
@@ -13,11 +13,7 @@ The site will be displayed on: http://localhost:3000
 
 ## Backend
 In your terminal, cd into the backend folder
-### Mac
-If you have a Mac, run this script and everything should be setup. 
-```
-$ ./mac_setup.sh
-```
+
 ### Running Development Server
 
 First, install virtualenv, create and activate the environment called **venv**:
@@ -31,18 +27,8 @@ You will then have a ```(venv)``` before the ```$```, meaning that you are now i
 ```
 (venv)$ pip install -r requirements.txt
 ```
-To deactivate when you're using it:
-```
-(venv)$ deactivate venv
-```
-If you are using pip, your command line will have `(venv)$` in front instead of the `(flask......) bash-3.2$` Now look above for instructions to run the server.
 
-
-# Deploying to Heroku
-Separate the frontend and the backend into two different repositories
-The API should be at http://127.0.0.1:3453/ 
-
-To install Postgres with Homebrew([postgresapp](http://postgresapp.com/) also works). If you are using linux, use your linux distributon's package manager to install postgres:
+To install Postgres with Homebrew([postgresapp](http://postgresapp.com/) also works). If you are using linux, use your linux distributon's package manager to install postgres (**do this in new terminal**):
 ```
 $ brew install postgresql
 $ brew link postgresql
@@ -55,13 +41,18 @@ To stop:
 ```
 $ brew services stop postgresql
 ```
-On a separate CLI, check whether you can access the database. Your postgres server must be on in order for this to work:
+On a separate CLI, check whether you can access the database. Your postgres server must be on in order for this to work. For mac:
 ```
 $ createdb
 $ psql -h localhost
 # \q
 ```
-After installing Postgres, create a user(with name 'testusr' and password 'password') and a database called 'testdb' then grant privileges. We will do this in your CLI:
+For windows:
+```
+$ psql -p 5432 -h localhost -U postgres
+# \q
+```
+After installing Postgres, create a user(with name 'testusr' and password 'password') and a database called 'testdb' then grant privileges. We will do this in your CLI (run the `psql` command below using the command above corresponding to your OS):
 ```
 $ psql
 # create user testusr with password 'password';
@@ -69,9 +60,28 @@ $ psql
 # GRANT ALL PRIVILEGES ON DATABASE testdb TO testusr;
 ```
 Note: Please replace the user name and password and database name to what you want in your own application. You must change those configurations in ```config.py``` and in ```.env```
+<br>
+(**go back to the terminal with your virtual environment running**)
+<br>
+To populate the database type in:
+```
+(venv)$ python manage.py recreate_db
+```
+Then, to run the server type in:
+```
+(venv)$ python manage.py runserver
+```
+To deactivate when you're using it:
+```
+(venv)$ deactivate venv
+```
+If you are using pip, your command line will have `(venv)$` in front instead of the `(flask......) bash-3.2$` Now look above for instructions to run the server.
+
+The API should be at http://127.0.0.1:3453/ 
 
 
- 
+# Deploying to Heroku
+Separate the frontend and the backend into two different repositories
 
 ## Backend
 ### Heroku Deployment

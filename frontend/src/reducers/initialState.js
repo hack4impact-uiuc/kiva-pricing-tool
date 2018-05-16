@@ -37,7 +37,7 @@ const initialState = {
     securityDepositFixedOngoing: '',
     interestPaidOnDepositPercent: '',
 
-    aprRate: '',
+    nominalApr: '',
     saveData: ''
   }
 }

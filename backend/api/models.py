@@ -225,14 +225,6 @@ class RepaymentSchedule(db.Model):
                                         'fees_user','insurance_user','taxes_user','security_deposit_user','security_interest_paid_user','balance_user','deposit_balance_user','deposit_withdrawal_user','total_cashflow_user',
                                         'payment_due_date_calc','days_calc','amount_due_calc','principal_payment_calc','interest_calc',
                                         'fees_calc','insurance_calc','taxes_calc','security_deposit_calc','security_interest_paid_calc','balance_calc','deposit_balance_calc','deposit_withdrawal_calc','total_cashflow_calc']):
-            for x in ['id','period_num','payment_due_date','days','amount_due','principal_payment','interest',
-                    'fees','insurance','taxes','security_deposit','security_interest_paid','balance','deposit_balance','deposit_withdrawal','total_cashflow',
-                    'payment_due_date_user','days_user','amount_due_user','principal_payment_user','interest_user',
-                    'fees_user','insurance_user','taxes_user','security_deposit_user','security_interest_paid_user','balance_user','deposit_balance_user','deposit_withdrawal_user','total_cashflow_user',
-                    'payment_due_date_calc','days_calc','amount_due_calc','principal_payment_calc','interest_calc',
-                    'fees_calc','insurance_calc','taxes_calc','security_deposit_calc','security_interest_paid_calc','balance_calc','deposit_balance_calc','deposit_withdrawal_calc','total_cashflow_calc']:
-                if x not in data:
-                    print(x)
             return #handle error
         self.id = data['id']
         self.period_num = data['period_num']

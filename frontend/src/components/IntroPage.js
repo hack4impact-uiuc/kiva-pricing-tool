@@ -49,7 +49,7 @@ class IntroPage extends Component {
                 name="New Loan"
                 url="newloan"
                 onClickHandler={() => {
-                  console.log('going to new loan')
+                  // console.log('going to new loan')
                 }}
               />
             </div>
@@ -72,7 +72,7 @@ class IntroPage extends Component {
                 name="Find Loan"
                 url="findloan"
                 onClickHandler={() => {
-                  console.log('going to find loan')
+                  // console.log('going to find loan')
                 }}
               />
             </div>
@@ -95,7 +95,7 @@ class IntroPage extends Component {
                 name="Admin Tools"
                 url="partnerlist"
                 onClickHandler={() => {
-                  console.log('going to admin tools')
+                  // console.log('going to admin tools')
                 }}
               />
             </div>
