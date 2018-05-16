@@ -113,11 +113,11 @@ class AdminThemes extends Component {
     } else {
       for (var i = 0; i < this.state.edited_loans.length; i++) {
         updated_name = {
-          updated_partner_name: this.state.edited_loans[i].update
+          updated_loan_theme: this.state.edited_loans[i].update
         }
         axios
           .put(
-            'http://127.0.0.1:3453/editMFI/' +
+            'http://127.0.0.1:3453/editLT/' +
               this.state.edited_loans[i].original,
             updated_name
           )
@@ -137,12 +137,13 @@ class AdminThemes extends Component {
             }
           })
           .catch(error => {
-            if (error.response.status === 422) {
+            if (
+              error.response.status === 422 ||
+              error.response.status === 400
+            ) {
               container.warning(
-                "The loan theme '" +
-                  this.state.edited_loans[i].update +
-                  "' already exists.",
-                'Already Exists',
+                'Changes to loan theme were not saved.',
+                'One or more of the edited themes already exists.',
                 {
                   closeButton: true
                 }
@@ -236,7 +237,7 @@ class AdminThemes extends Component {
             </h2>
             <div>
               <input
-                className="search-input"
+                className="expand-width"
                 placeholder="Search Loan Theme"
                 onChange={event =>
                   this.setState({

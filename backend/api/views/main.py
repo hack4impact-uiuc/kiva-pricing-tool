@@ -127,8 +127,8 @@ def get_partner_theme_list():
     """
         grabbing MFI Partner and Loan Theme
     """
-    themes = Theme.query.all()
-    partners = Partner.query.all()
+    themes = Theme.query.order_by(Theme.loan_theme).all()
+    partners = Partner.query.order_by(Partner.partner_name).all()
     data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}
     return create_response(data=data, status=200)
 
@@ -146,8 +146,6 @@ def save_loan():
             'loan_theme' : request_json['loan_theme'],
             'product_type' : request_json['product_type'],
             'version_num' : int(input_form['version_num']),
-            'start_name' : input_form['start_name'],
-            'update_name' : input_form['update_name'],
             'nominal_apr' : float(input_form['nominal_apr']) / 100,
             'installment_time_period' : input_form['installment_time_period'],
             'repayment_type' : input_form['repayment_type'],
@@ -270,6 +268,17 @@ def save_loan():
             repay_schedule = RepaymentSchedule(new_repay_row)
             db.session.add(repay_schedule)
         loan = Loan(newrow)
+        old_loan = Loan.query.filter_by(id=repay_id).first()
+        if old_loan != None:
+            newrow['start_date'] = old_loan.start_date
+            newrow['update_date'] = datetime.datetime.now()
+            newrow['start_name'] = old_loan.start_name
+            newrow['update_name'] = input_form['start_name']
+        else:
+            newrow['start_date'] = datetime.datetime.now()
+            newrow['update_date'] = datetime.datetime.now()
+            newrow['start_name'] = input_form['start_name']
+            newrow['update_name'] = input_form['start_name']
         Loan.query.filter_by(id=repay_id).delete()
         db.session.add(Loan(newrow))
         db.session.commit()
@@ -554,21 +563,21 @@ def get_loan():
                 'grace_period_interest_pay' : entry.grace_period_interest_pay,
                 'grace_period_interest_calculate' : entry.grace_period_interest_calculate,
                 'grace_period_balloon' : entry.grace_period_balloon,
-                'fee_percent_upfront' : entry.fee_percent_upfront,
-                'fee_percent_ongoing' : entry.fee_percent_ongoing,
+                'fee_percent_upfront' : entry.fee_percent_upfront * 100,
+                'fee_percent_ongoing' : entry.fee_percent_ongoing * 100,
                 'fee_fixed_upfront' : entry.fee_fixed_upfront,
                 'fee_fixed_ongoing' : entry.fee_fixed_ongoing,
-                'insurance_percent_upfront' : entry.insurance_percent_upfront,
-                'insurance_percent_ongoing' : entry.insurance_percent_ongoing,
+                'insurance_percent_upfront' : entry.insurance_percent_upfront * 100,
+                'insurance_percent_ongoing' : entry.insurance_percent_ongoing * 100,
                 'insurance_fixed_upfront' : entry.insurance_fixed_upfront,
                 'insurance_fixed_ongoing' : entry.insurance_fixed_ongoing,
-                'tax_percent_fees' : entry.tax_percent_fees,
-                'tax_percent_interest' : entry.tax_percent_interest,
-                'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront,
-                'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing,
+                'tax_percent_fees' : entry.tax_percent_fees * 100,
+                'tax_percent_interest' : entry.tax_percent_interest * 100,
+                'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront * 100,
+                'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing * 100,
                 'security_deposit_fixed_upfront' : entry.security_deposit_fixed_upfront,
                 'security_deposit_fixed_ongoing' : entry.security_deposit_fixed_ongoing,
-                'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent,
+                'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent * 100,
                 'original_matrix' : None,
                 'user_matrix' : None,
                 'calc_matrix' : None
@@ -660,21 +669,21 @@ def get_loan():
             'grace_period_interest_pay' : entry.grace_period_interest_pay,
             'grace_period_interest_calculate' : entry.grace_period_interest_calculate,
             'grace_period_balloon' : entry.grace_period_balloon,
-            'fee_percent_upfront' : entry.fee_percent_upfront,
-            'fee_percent_ongoing' : entry.fee_percent_ongoing,
+            'fee_percent_upfront' : entry.fee_percent_upfront * 100,
+            'fee_percent_ongoing' : entry.fee_percent_ongoing * 100,
             'fee_fixed_upfront' : entry.fee_fixed_upfront,
             'fee_fixed_ongoing' : entry.fee_fixed_ongoing,
-            'insurance_percent_upfront' : entry.insurance_percent_upfront,
-            'insurance_percent_ongoing' : entry.insurance_percent_ongoing,
+            'insurance_percent_upfront' : entry.insurance_percent_upfront * 100,
+            'insurance_percent_ongoing' : entry.insurance_percent_ongoing * 100,
             'insurance_fixed_upfront' : entry.insurance_fixed_upfront,
             'insurance_fixed_ongoing' : entry.insurance_fixed_ongoing,
-            'tax_percent_fees' : entry.tax_percent_fees,
-            'tax_percent_interest' : entry.tax_percent_interest,
-            'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront,
-            'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing,
+            'tax_percent_fees' : entry.tax_percent_fees * 100,
+            'tax_percent_interest' : entry.tax_percent_interest * 100,
+            'security_deposit_percent_upfront' : entry.security_deposit_percent_upfront * 100,
+            'security_deposit_percent_ongoing' : entry.security_deposit_percent_ongoing * 100,
             'security_deposit_fixed_upfront' : entry.security_deposit_fixed_upfront,
             'security_deposit_fixed_ongoing' : entry.security_deposit_fixed_ongoing,
-            'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent,
+            'interest_paid_on_deposit_percent' : entry.interest_paid_on_deposit_percent * 100,
             'original_matrix' : orig_matrix,
             'user_matrix' : user_matrix,
             'calc_matrix' : calc_matrix
@@ -683,84 +692,3 @@ def get_loan():
     except:
         return create_response({}, status=400, message='missing arguments for GET')
 
-
-# @app.route(SAVE_REPAYMENT_SCHEDULE, method=['POST'])
-# def save_repayment():
-#     request_json = request.get_json()
-#     print(request_json.keys())
-
-#     partner_name : request_json['partner_name'],
-#     loan_theme : request_json['loan_theme'],
-#     product_type : request_json['product_type'],
-#     version_num : request_json['version_num']
-#     partner_id = Partner.query.filter_by(partner_name=partner_name).first().id
-#     theme_id = Theme.query.filter_by(loan_theme=loan_theme).fisrt().id
-#     repay_id = str(partner_id) + str(theme_id) + product_type + version_num
-#     try:
-#         origin_matrix = request_json['origin_matrix']
-#         user_change_matrix = request_json['user_change_matrix']
-#         recal_matrix = request_json['repay_matrix']
-#     except:
-#         return create_response(status=422, message='missing compoonents for save repyament schedule')
-
-#     # delete previous record first
-#     prev_repay = RepaymentSchedule.query.filter_by(id=repay_id).delete()
-#     for col_idx in range(len(origin_matrix[0])):
-#         cur_origin_col = origin_matrix[:,col_idx]
-#         cur_user_change_col = user_change_matrix[:, col_idx]
-#         cur_recal_col = repay_matrix[:,col_idx]
-
-#         newrow = {
-#                 'id' = repay_id
-#                 'period_num' = int(cur_origin_col[PERIOD_IDX])
-#                 'payment_due_date' = datetime.datetime.strptime(cur_origin_col[DATE_IDX], '%d-%b-%Y')
-#                 'days' = int(cur_origin_col[DAY_IDX])
-#                 'amount_due' = float(cur_origin_col[PRINCIPAL_DISBURSED_IDX])
-#                 'principal_payment' = float(cur_origin_col[PRINCIPAL_PAID_IDX])
-#                 'interest' = float(cur_origin_col[INTEREST_PAID_IDX])
-#                 'fees' = float(cur_origin_col[FEES_IDX])
-#                 'insurance' = float(cur_origin_col[INSURANCE_IDX])
-#                 'taxes' = float(cur_origin_col[TAXES_IDX])
-#                 'security_deposit' = float(cur_origin_col[SECURITY_DEPOSIT_IDX])
-#                 'security_interest_paid' = float(cur_origin_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
-#                 'balance' = float(cur_origin_col[BALANCE_IDX])
-#                 'deposit_balance' = float(cur_origin_col[SECURITY_DEPOSIT_BALANCE_IDX])
-#                 'deposit_withdrawal' = float(cur_origin_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
-#                 'total_cashflow' = float(cur_origin_col[CASH_FLOW_IDX])
-
-#                 'period_num_user' = int(cur_user_change_col[PERIOD_IDX])
-#                 'payment_due_date_user' = datetime.datetime.strptime(cur_user_change_col[DATE_IDX], '%d-%b-%Y')
-#                 'days_user' = int(cur_user_change_col[DAY_IDX])
-#                 'amount_due_user' = float(cur_user_change_col[PRINCIPAL_DISBURSED_IDX])
-#                 'principal_payment_user' = float(cur_user_change_col[PRINCIPAL_PAID_IDX])
-#                 'interest_user' = float(cur_user_change_col[INTEREST_PAID_IDX])
-#                 'fees_user' = float(cur_user_change_col[FEES_IDX])
-#                 'insurance_user' = float(cur_user_change_col[INSURANCE_IDX])
-#                 'taxes_user' = float(cur_user_change_col[TAXES_IDX])
-#                 'security_deposit_uesr' = float(cur_user_change_col[SECURITY_DEPOSIT_IDX])
-#                 'security_interest_paid_user' = float(cur_user_change_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
-#                 'balance_user' = float(cur_user_change_col[BALANCE_IDX])
-#                 'deposit_balance_user' = float(cur_user_change_col[SECURITY_DEPOSIT_BALANCE_IDX])
-#                 'deposit_withdrawal_user' = float(cur_user_change_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
-#                 'total_cashflow_user' = float(cur_user_change_col[CASH_FLOW_IDX])
-
-#                 'period_num_calc' = int(cur_recal_col[PERIOD_IDX])
-#                 'payment_due_date_calc' = datetime.datetime.strptime(cur_recal_col[DATE_IDX], '%d-%b-%Y')
-#                 'days_calc' = int(cur_recal_col[DAY_IDX])
-#                 'amount_due_calc' = float(cur_recal_col[PRINCIPAL_DISBURSED_IDX])
-#                 'principal_payment_calc' = float(cur_recal_col[PRINCIPAL_PAID_IDX])
-#                 'interest_calc' = float(cur_recal_col[INTEREST_PAID_IDX])
-#                 'fees_calc' = float(cur_recal_col[FEES_IDX])
-#                 'insurance_calc' = float(cur_recal_col[INSURANCE_IDX])
-#                 'taxes_calc' = float(cur_recal_col[TAXES_IDX])
-#                 'security_deposit_calc' = float(cur_recal_col[SECURITY_DEPOSIT_IDX])
-#                 'security_interest_paid_calc' = float(cur_recal_col[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
-#                 'balance_calc' = float(cur_recal_col[BALANCE_IDX])
-#                 'deposit_balance_calc' = float(cur_recal_col[SECURITY_DEPOSIT_BALANCE_IDX])
-#                 'deposit_withdrawal_calc' = float(cur_recal_col[SECURITY_DEPOSIT_WITHDRAW_IDX])
-#                 'total_cashflow_calc' = float(cur_recal_col[CASH_FLOW_IDX])
-#             }
-#         repay_schedule = RepaymentSchedule(newrow)
-#         db.session.add(repay_schedule)
-#     db.session.commit()
-#     return create_response(status=201)

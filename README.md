@@ -18,7 +18,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 
 **React Router**
 * What is React Router
-    * Different parts that make up react router that we will probably be using: 
+   * Different parts that make up react router that we will probably be using: 
         * Route: IMPORTANT! renders a specific UI when a location matches the route’s path.
         * Link: helps us navigate within our application
         * Router: The common low-level interface for all router components
@@ -34,7 +34,7 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 
 **Redux Resources**
 * What is Redux
-    * Redux is a tool for managing application state.
+   * Redux is a tool for managing application state.
 * [Basic Intro Video to Redux Components](https://www.youtube.com/watch?v=DiLVAXlVYR0)
 * [More on the Different Parts of Redux](https://redux.js.org/#the-gist)
 * [When is Redux Useful](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
@@ -76,6 +76,9 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
 **JSON to SQL**
 * [Article on JSON extensions for SQLAlchemy](https://www.compose.com/articles/using-json-extensions-in-postgresql-from-python-2/)
 
+**XIRR Function**
+* [Repo with XIRR function that we used for our calculations](https://github.com/peliot/XIRR-and-XNPV)
+
 **Converting Info from Server to JSON**
 * What is Serialization?
     * Serialization is the process of converting the state information of an object instance into a binary or textual form to persist into storage medium or transported over a network.
@@ -101,25 +104,45 @@ An open source web application that outputs APR Nominal rate, Repayment Schedule
     return jsonify(json_list=[i.serialize for i in qryresult.all()])
 ```
 
-**How to Download CSV from Database**
-```python
-    import csv
-
-    outfile = open('mydump.csv', 'wb')
-    outcsv = csv.writer(outfile)
-    records = session.query(MyModel).all()
-    [outcsv.writerow([getattr(curr, column.name) for column in MyTable.__mapper__.columns]) for curr in records]
-    # or maybe use outcsv.writerows(records)
-    outfile.close()
-```
-
-## Excel Sheet Differences
+## Excel Sheet Calculation Differences
 Our calculator functions differently, and more accurately, than the original excel tool that we based our implementation off of.
 
-* [Excel Tool] (link here)
+You can download the original APR tool we based our calculator off of [here](/docs/APR_Excel_Tool.xlsm). The functionality our tool replicates is all under the "Pricing - Advanced" and "Rep Schedule - Advanced" sheets. We use the exact same inputs, but a few of our calculations are different. They are as following. 
 
-* Security Deposit Differences
-   * 
+* Repayment Schedule Editing
+    * On the excel sheet, a user must enter manual mode and make changes on parallel columns
+    * Our implementation allows a user to edit the table directly, which changes indicated by highlights
 
+* Period 0
+    * On the excel sheet, the initial period is labeled period 0
+    * Our implementation instead labels the initial period "Disbursement Date"
 
+* Security Deposit Interest Paid
+    * On the excel sheet, if a balloon payment exists, the security deposit continues to accumulate interest, even though the loan has been paid off
+    * Our calculations prevent interest from accumulating on the security deposit once the entire loan has been paid off
+   
+* Security Deposit Override
+    * On the excel sheet, overriding the security deposit overrides both the security deposit and interest paid for that period
+    * Our calculations will only override the security deposit column, and not affect the interest paid column
+   
+* Security Deposit Withdrawals
+    * On the excel sheet, security deposit withdrawals are allocated to the last cashflow, even if a balloon payment occurs
+    * Our calculations will lump the security deposit withdrawal with the final payment if a balloon payment occurs
+   
+* Cash Flows
+    * On the excel sheet, there are cashflow indicators after each expense (interest, fees, taxes, security deposit)
+    * Our implementation instead displays the overall final cash flows in each period once
 
+## Our Workarounds
+Over the course of the 3 months we had to build out this tool, we accumulated some technical debt which, with some additional resources and time, can be re-implemented with better practices.
+
+* Endpoints
+    * Admin Tools
+        *
+
+* Database entries
+    * saving loans is not saving loans
+
+* Repayment schedule matricies
+    * 
+  

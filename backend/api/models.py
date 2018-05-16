@@ -118,8 +118,8 @@ class Loan(db.Model):
         self.id = str(self.partner_id) + "_" + str(self.theme_id) + "_" + data['product_type'] + "_" + str(data['version_num'])
         self.product_type = data['product_type']
         self.version_num = data['version_num']
-        self.start_date = datetime.datetime.now()
-        self.update_date = datetime.datetime.now()
+        self.start_date = data['start_date']
+        self.update_date = data['update_date']
         self.start_name = data['start_name']
         self.update_name = data['update_name']
         self.nominal_apr = data['nominal_apr']

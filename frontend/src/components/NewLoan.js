@@ -17,7 +17,15 @@ class NewLoan extends Component {
       loan_themes: [],
       selectedPartnerName: formDataReducer.mfi,
       selectedLoanTheme: formDataReducer.loanType,
-      selectedLoanProduct: formDataReducer.productType
+      selectedLoanProduct: formDataReducer.productType,
+
+      // Error class handling for typeahead
+      partnerClass: 'vertical-margin-item',
+      loanClass: 'vertical-margin-item',
+
+      // Error message class handling
+      partnerErrorClass: 'typeahead-message-hidden',
+      loanErrorClass: 'typeahead-message-hidden'
     }
   }
 
@@ -30,22 +38,36 @@ class NewLoan extends Component {
     changedFormData('back', 'newloan')
     changedFormData('error', false)
     axios.get('http://127.0.0.1:3453/partnerThemeLists').then(response => {
-      this.setState({ partner_names: response.data.result.partners })
-      this.setState({ loan_themes: response.data.result.themes })
+      this.setState({
+        partner_names: response.data.result.partners,
+        loan_themes: response.data.result.themes
+      })
     })
   }
 
   inputsEntered() {
     const { formDataReducer } = this.props
     return (
-      !this.isNullOrEmpty(formDataReducer.mfi) &&
-      !this.isNullOrEmpty(formDataReducer.loanType) &&
-      !this.isNullOrEmpty(formDataReducer.productType) &&
+      this.isValidMFI(formDataReducer.mfi) &&
+      this.isValidTheme(formDataReducer.loanType) &&
+      !this.isValidPT(formDataReducer.productType) &&
       !formDataReducer.error // no error
     )
   }
 
-  isNullOrEmpty(input) {
+  // Method to check if MFI partner exists in queried partner list
+  // Entry is valid if DB has corresponding name
+  isValidMFI(input) {
+    return this.state.partner_names.indexOf(input) != -1
+  }
+
+  // Method to check if LT exists in queried LT list
+  // Entry is valid if DB has corresponding name
+  isValidTheme(input) {
+    return this.state.loan_themes.indexOf(input) != -1
+  }
+
+  isValidPT(input) {
     return !input || !input.length
   }
 
@@ -67,7 +89,7 @@ class NewLoan extends Component {
           <Row>
             <Form>
               <Typeahead
-                className="vertical-margin-item"
+                className={this.state.partnerClass}
                 label="mfi"
                 options={this.state.partner_names}
                 placeholder="Select MFI Partner"
@@ -77,11 +99,27 @@ class NewLoan extends Component {
                 }
                 onInputChange={e => {
                   changedFormData('mfi', e)
+
+                  // Check if entered value is valid and switch classes
+                  if (!this.isValidMFI(e)) {
+                    this.setState({
+                      partnerClass: 'vertical-margin-item typeahead-error',
+                      partnerErrorClass: 'typeahead-message-show'
+                    })
+                  } else if (this.isValidMFI(e)) {
+                    this.setState({
+                      partnerClass: 'vertical-margin-item',
+                      partnerErrorClass: 'typeahead-message-hidden'
+                    })
+                  }
                 }}
               />
+              <p className={this.state.partnerErrorClass}>
+                MFI Partner does not exist.
+              </p>
 
               <Typeahead
-                className="vertical-margin-item"
+                className={this.state.loanClass}
                 label="loan"
                 options={this.state.loan_themes}
                 placeholder="Select Loan Type"
@@ -92,13 +130,29 @@ class NewLoan extends Component {
                 }
                 onInputChange={e => {
                   changedFormData('loanType', e)
+
+                  // Check if entered value is valid and switch classes
+                  if (!this.isValidTheme(e)) {
+                    this.setState({
+                      loanClass: 'vertical-margin-item typeahead-error',
+                      loanErrorClass: 'typeahead-message-show'
+                    })
+                  } else if (this.isValidTheme(e)) {
+                    this.setState({
+                      loanClass: 'vertical-margin-item',
+                      loanErrorClass: 'typeahead-message-hidden'
+                    })
+                  }
                 }}
               />
+              <p className={this.state.loanErrorClass}>
+                Loan Theme does not exist.
+              </p>
 
               <TextField
                 className="vertical-margin-item"
                 reduxId="productType"
-                hint="Loan Product (i.e. small loan)"
+                hint="Loan Product"
                 typeVal="String"
                 limit={100}
                 onInputChange={e => {

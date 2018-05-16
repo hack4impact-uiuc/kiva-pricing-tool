@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import './../styles/textfield.css'
 
 class TextField extends Component {
@@ -6,7 +7,6 @@ class TextField extends Component {
     super(props)
     const { formDataReducer } = this.props
     this.state = {
-      valid: true,
       id: this.props.text,
       error_message: '',
       type: this.props.typeVal,
@@ -14,35 +14,112 @@ class TextField extends Component {
     }
   }
 
+  // if redux populates fields, will remove the "field required" error message
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.formDataReducer[this.props.reduxId] !=
+        this.props.formDataReducer[this.props.reduxId] &&
+      (!this.props.formDataReducer[this.props.reduxId] ||
+        this.props.formDataReducer[this.props.reduxId].length === 0)
+    ) {
+      let newData = nextProps.formDataReducer
+      if (
+        !newData[this.props.reduxId] ||
+        newData[this.props.reduxId].length === 0
+      ) {
+        this.setState({
+          error_message: 'This field is required.',
+          className: this.props.className + ' required-error'
+        })
+      } else {
+        this.setState({
+          error_message: '',
+          className: this.props.className
+        })
+      }
+    }
+  }
+
   componentDidMount() {
     // Used to check required fields and highlight with error messages immediately
-    // console.log(this.props)
     const { formDataReducer, changedFormData } = this.props
-    // console.log("banana",(this.props.requiredField && (this.props.textBody === null || this.props.textBody.valueOf() === "".valueOf())))
     if (
       this.props.requiredField &&
       (!formDataReducer[this.props.reduxId] ||
         formDataReducer[this.props.reduxId].length === 0)
     ) {
-      this.setState(
-        {
-          error_message: 'This field is required.',
-          className: this.props.className + ' required-error'
-        },
-        () => console.log('fuck', this.props.id, this.state)
-      )
+      this.setState({
+        error_message: 'This field is required.',
+        className: this.props.className + ' required-error'
+      })
       changedFormData('error', true)
     } else {
-      this.setState(
-        {
-          error_message: '',
-          className: this.props.className
-        },
-        () => console.log('not fuck', this.props.id, this.state)
-      )
+      this.setState({
+        error_message: '',
+        className: this.props.className
+      })
       changedFormData('error', false)
     }
-    // console.log(this.state)
+  }
+
+  handleChangeInteger(e) {
+    const { formDataReducer, changedFormData } = this.props
+    const nums = /^[0-9\b]+$/
+
+    if (nums.test(e.target.value)) {
+      let tryInt = parseInt(e.target.value, 10)
+      let limit = parseInt(this.props.limit, 10)
+      // console.log(tryInt, limit)
+      if (tryInt > limit) {
+        this.setState({
+          error_message: 'input limit succeeded',
+          className: this.props.className + ' required-error'
+        })
+        changedFormData('error', true)
+      }
+
+      changedFormData(this.props.reduxId, e.target.value)
+    }
+  }
+
+  handleChangeFloat(e) {
+    const { formDataReducer, changedFormData } = this.props
+    const nums = /^[0-9\b]+$/
+    const numPeriods = e.target.value.split('.')
+    console.log(e.target.value, numPeriods)
+
+    if (
+      e.target.value == '' ||
+      (numPeriods.length <= 2 && nums.test(e.target.value.replace('.', '')))
+    ) {
+      let tryFloat = parseFloat(e.target.value)
+      let limit = parseInt(this.props.limit, 10)
+
+      if (tryFloat > limit) {
+        this.setState({
+          error_message: 'input limit succeeded',
+          className: this.props.className + ' required-error'
+        })
+        changedFormData('error', true)
+      }
+      changedFormData(this.props.reduxId, e.target.value)
+    }
+  }
+
+  handleChangeString(e) {
+    const { formDataReducer, changedFormData } = this.props
+    changedFormData(this.props.reduxId, e.target.value)
+    let tryString = /^[a-zA-Z ]+$/.test(e.target.value)
+    if (!tryString) {
+      this.setState({
+        error_message: 'Error in input: should only have letters',
+        className: this.props.className + ' required-error'
+      })
+      changedFormData('error', true)
+    } else {
+      this.setState({ error_message: '' })
+      changedFormData('error', false)
+    }
   }
 
   handleChange(e) {
@@ -51,94 +128,44 @@ class TextField extends Component {
     let value = e.target.value
 
     if (this.props.typeVal.toLowerCase() === 'int') {
-      let tryInt = parseInt(value, 10)
-      let limit = parseInt(this.props.limit, 10)
-      if (isNaN(tryInt)) {
-        this.setState({
-          error_message: 'Error in input: should be an integer',
-          className: this.props.className + ' required-error'
-        })
-        changedFormData('error', true)
-      } else {
-        if (tryInt > limit) {
-          this.setState({
-            error_message: 'input limit succeeded',
-            className: this.props.className + ' required-error'
-          })
-          changedFormData('error', true)
-        } else {
-          this.setState({ error_message: '' })
-          changedFormData('error', false)
-        }
-      }
+      this.handleChangeInteger(e)
     }
 
     if (this.props.typeVal.toLowerCase() === 'float') {
-      let tryFloat = parseFloat(value)
-      // console.log(value.matches("[0-9.]*"))
-      console.log(/^[a-zA-Z ]+$/.test(value))
-      let limit = parseInt(this.props.limit, 10)
-      console.log(tryFloat)
-      if (isNaN(tryFloat)) {
-        this.setState({
-          error_message: 'Error in input: should be a decimal',
-          className: this.props.className + ' required-error'
-        })
-        changedFormData('error', true)
-      } else {
-        if (tryFloat > limit) {
-          this.setState({
-            error_message: 'input limit succeeded',
-            className: this.props.className + ' required-error'
-          })
-          changedFormData('error', true)
-        } else {
-          this.setState({ error_message: '' })
-          changedFormData('error', false)
-        }
-      }
+      this.handleChangeFloat(e)
     }
 
     if (this.props.typeVal.toLowerCase() === 'string') {
-      let tryString = /^[a-zA-Z ]+$/.test(value)
-      if (!tryString) {
-        this.setState({
-          error_message: 'Error in input: should only have letters',
-          className: this.props.className + ' required-error'
-        })
-        changedFormData('error', true)
-      } else {
-        this.setState({ error_message: '' })
-        changedFormData('error', false)
-      }
+      this.handleChangeString(e)
     }
 
-    if (value === '' && this.props.requiredField === true) {
+    // console.log("HI", value.replace(/\s/g, "").length === 0)
+    if (
+      value.replace(/\s/g, '').length === 0 &&
+      // formDataReducer[this.props.reduxId].length === 0 &&
+      this.props.requiredField === true
+    ) {
       // Check if required field is empty
       this.setState({
         error_message: 'This field is required.',
         className: this.props.className + ' required-error'
       })
       changedFormData('error', true)
-    } else if (value === '') {
-      // Else if to prevent error message resetting (both conditions check for value)
-      this.setState({ error_message: '', className: this.props.className }) // Reset classname since it's not an error (remove required-error)
-      changedFormData('error', false)
+      changedFormData(this.props.reduxId, value)
     }
-
-    // this.setState({ textBody: value })
-    changedFormData(this.props.reduxId, value)
+    // else if (value === '') {
+    //   // Else if to prevent error message resetting (both conditions check for value)
+    //   this.setState({ error_message: '', className: this.props.className }) // Reset classname since it's not an error (remove required-error)
+    //   changedFormData('error', false)
+    // }
   }
 
   render() {
     const { formDataReducer } = this.props
-    if (!this.state.valid) {
-      let error = this.state.error_message
-    }
     return (
       <div id="className" className={this.state.className}>
         <div className="input-label">{this.props.id}</div>
-        <div className="textfield-component">
+        <div className="textfield-component" onLoad={() => this.onLoad()}>
           <input
             className="form-control input-sm"
             type={this.props.input_type}
@@ -147,7 +174,7 @@ class TextField extends Component {
             onChange={event => this.handleChange(event)}
             value={formDataReducer[this.props.reduxId]}
             required
-            //autofocus
+            autofocus
           />
         </div>
         <p className="error-message">{this.state.error_message}</p>

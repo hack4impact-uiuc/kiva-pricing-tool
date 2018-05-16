@@ -34,7 +34,7 @@ insurance_fixed_upfront = 50
 insurance_fixed_ongoing = 10
 tax_percent_interest = 0.1
 tax_percent_fees = 0.1
-grace_period_principal = 0
+grace_period_principal = 3
 grace_period_interest_pay = 0
 grace_period_interest_calculate = 0
 grace_period_balloon = 0
@@ -44,8 +44,8 @@ security_deposit_fixed_upfront = 10
 security_deposit_fixed_ongoing = 10
 interest_paid_on_deposit_percent = 0.1
 interest_calculation_type = 'initial amount or flat'
-repayment_type = 'single end-term principal payment'
-interest_payment_type = 'single end-term payment'
+repayment_type = 'equal installments (amortized)'
+interest_payment_type = 'multiple installments'
 
 periods_per_year = np.array([365, 52, 26, 24, 13, 12, 4, 2, 1])
 installment_time_period = '4 weeks'
@@ -357,8 +357,8 @@ user_change = np.zeros((len(origin_matrix), len(origin_matrix[0]))).astype(objec
 #         user_change[i][j] = None
 user_change[:] = None
 
-user_change[PRINCIPAL_PAID_IDX][1] = 100
-user_change[PRINCIPAL_PAID_IDX][-1] = 100
+# user_change[PRINCIPAL_PAID_IDX][4] = 100
+# user_change[PRINCIPAL_PAID_IDX][-1] = 100
 # user_change[PRINCIPAL_PAID_IDX][4] = 100
 # user_change[PRINCIPAL_PAID_IDX][5] = 100
 # user_change[PRINCIPAL_PAID_IDX][6] = 100
@@ -372,12 +372,14 @@ user_change[PRINCIPAL_PAID_IDX][-1] = 100
 # user_change[TAXES_IDX][8] = 10
 # user_change[SECURITY_DEPOSIT_IDX][6] = 10
 # user_change[SECURITY_DEPOSIT_IDX][8] = 10
-# user_change[DAY_IDX][4] = 60
-# user_change[DAY_IDX][5] = 60
-# user_change[DATE_IDX][0] = '10-Mar-2012'
+# user_change[DAY_IDX][3] = 20
+# user_change[DAY_IDX][4] = 20
+# user_change[DAY_IDX][-1] = 20
+user_change[DATE_IDX][0] = '10-Mar-2012'
 # user_change[DATE_IDX][6] = '18-Aug-2012'
 print (user_change)
-print (type(origin_matrix))
+
+print (origin_matrix[INTEREST_PAID_IDX])
 # print (origin_matrix)
 # temp = origin_matrix
 #####
@@ -394,14 +396,12 @@ origin_matrix[INSURANCE_IDX] = update_insurance(origin_matrix, insurance_percent
 origin_matrix[INSURANCE_IDX] = on_insurance_change(origin_matrix, user_change[INSURANCE_IDX])
 # CHANGE
 origin_matrix[INTEREST_PAID_IDX] = update_interest(origin_matrix, interest_calculation_type, interest_payment_type, scaled_interest, grace_period_interest_calculate, grace_period_interest_pay, grace_period_balloon)
+print ('*'*10)
+print (origin_matrix[INTEREST_PAID_IDX])
 origin_matrix[INTEREST_PAID_IDX] = on_interest_change(origin_matrix, user_change[INTEREST_PAID_IDX], interest_payment_type, grace_period_balloon)
 origin_matrix[TAXES_IDX] = update_taxes(origin_matrix, tax_percent_fees, tax_percent_interest)
 origin_matrix[TAXES_IDX] = on_taxes_change(origin_matrix, user_change[TAXES_IDX])
 origin_matrix[SECURITY_DEPOSIT_WITHDRAW_IDX] = update_security_deposit_withdraw(origin_matrix, grace_period_balloon)
-print ('*'*10)
-print (origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX])
-print (origin_matrix[SECURITY_DEPOSIT_INTEREST_PAID_IDX])
-print (origin_matrix[SECURITY_DEPOSIT_IDX])
 origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX] = update_security_deposit_balance(origin_matrix, grace_period_balloon)
 print (origin_matrix[SECURITY_DEPOSIT_BALANCE_IDX])
 origin_matrix[CASH_FLOW_IDX] = update_cash_flow(origin_matrix)
