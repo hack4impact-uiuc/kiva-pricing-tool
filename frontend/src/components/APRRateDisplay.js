@@ -347,23 +347,23 @@ class APRRateDisplay extends Component {
     )
   }
   
-  changeVisualType = event =>{
-  	this.setState({event})
-	if (event) {
-		this.setState({visualType: "Area"})
-	}else{
-		this.setState({visualType: "Bar"})
-	}	  
+  changeVisualType(changeVisual) {
+    this.setState({changeVisual})
+    if (changeVisual) {
+      this.setState({visualType: "Area"})
+    }else if (!changeVisual) {
+      this.setState({visualType: "Bar"})
+    }
   }
-  
-  changeChartType = event =>{
-  	this.setState({event})
-	if (event) {
-		this.setState({chartID: "Balance Chart"})
-	}else{
-		this.setState({chartID: "Payment Chart"})
-	}	  
-  }
+
+  changeChartType(changeChart) {
+    this.setState({changeChart})
+    if (changeChart) {
+      this.setState({chartID: "Balance Chart"})
+    }else if (!changeChart) {
+      this.setState({chartID: "Payment Chart"})
+    }	  
+   }
 
   getCSV() {
     const { formDataReducer } = this.props
