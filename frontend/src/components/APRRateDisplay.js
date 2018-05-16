@@ -736,7 +736,10 @@ class APRRateDisplay extends Component {
     }
     Api.saveLoan(payload, formDataReducer).then(response => {})
   }
-
+  /**
+   * Render for display page. Contains repayment schedule as a ReactTable, and
+   * charts for visualization.
+   */
   render() {
     const { formDataReducer } = this.props
     let my_default = ReactTableDefaults.column
@@ -829,7 +832,6 @@ class APRRateDisplay extends Component {
 
         <Row>
           <Col sm={12} md={12}>
-            /** * React Table used to contain repayment schedule. */
             <ReactTable
               data={formDataReducer.calc_repayment_schedule}
               sortable={false}
