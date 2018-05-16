@@ -62,7 +62,7 @@ class FindLoan extends Component {
         const user_matrix = response.data.result.user_matrix
         const calc_matrix = response.data.result.calc_matrix
         changedFormData('new_repayment_schedule', calc_matrix)
-        changedFormData('aprRate', apr)
+        changedFormData('nominalApr', apr)
         changedFormData(
           'installmentTimePeriod',
           response.data.result.installment_time_period
