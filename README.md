@@ -52,13 +52,16 @@ Over the course of the 3 months we had to build out this tool, we accumulated so
 * Admin Tools
     * Field Partners and Loan Themes are never deleted from the database, only marked "active" or "inactive"
     * This way we can still query the database for previously entered loans even if the Field Partners or Loan Themes are no longer active
+    * Editing a Field Partner and changing its name to another Field Partner is not allowed and will be rejected. I.e. having Microsoft and Google as Field Partners, then editing Microsoft and changing it to Google as well.
+    * However, the frontend will still display that there are two Google's. Refreshing the page will pull the correct info from the database and display Microsoft and Google.
 
 * Save Loan Endpoint
     * Our endpoint for saving a loan is the same regardless of whether or not we are editing an existing loan or creating a new one
     * We query the database with the identification parameters, then delete any existing loan with the same data and post the current loan into the database
     * This way we are effectively "editing" a loan, and if no existing loan is found, we can save a new loan to the database with one endpoint
 
-* Input Page Styling
+* Input Page
+    * If any of the inputs are not valid, you will not be able to progress onto the output page. You are still able to click "Next", but nothing would happen. Should grey out buttons and not allow any clicking.
     * In order to align the textfields in the Input Page, we created hidden textfields to better realign/format the page
     
 * Loan Repayment Visualization
