@@ -48,7 +48,6 @@ class Dropdown extends Component {
 
   componentDidMount() {
     const { formDataReducer } = this.props
-    // console.log('hi')
     let val = this.props.reduxId
     this.setState({
       value:
