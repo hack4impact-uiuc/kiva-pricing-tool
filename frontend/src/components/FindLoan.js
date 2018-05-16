@@ -58,7 +58,6 @@ class FindLoan extends Component {
       formDataReducer.versionNum
     )
       .then(response => {
-        console.log(response)
         const apr = response.nominalApr
         const orig_matrix = response.originalMatrix
         const user_matrix = response.userMatrix
