@@ -31,7 +31,7 @@ All `POST` and `PUT` request parameters should be body parameters.
 
 ## Repayment Schedule Matrix Format in Endpoints
 
-All matrices used as inputs and outputs in the endpoints below are 2D arrays of the following form. Any matrix will have 15 rows. Each of these rows' length will be the number of periods plus one.
+All matrices used as inputs and outputs in the endpoints below are 2D arrays of the following form. Any matrix will have 15 rows. Each of these rows' length will be the number of periods plus one. There are three copies of the repayment schedules matrices. The first is the `original` schedule, which is calculated solely based on the input form. All entries in this table are non-null. The second is the `user` schedule. This represents the changes a user has made to the entries in the schedule. Any unchanged values will be represented as null. Finally the `calculated` schedule is the schedule calculated both from the inputs, and the user updates. Similar to the first matrix, this has all non-null entries. Each matrix is represented in the following form.
 
 * Row 1: Array of period numbers from 0 to # of periods
 * Row 2: Array of dates represented as strings
@@ -140,47 +140,47 @@ Puts a new loan in the database.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   partner_name | string | **Required** | description 
-|   loan_theme  | string | **Required** | description
-|   product_type | string | **Required** | description
-|   version_num  | number | **Required** | description
+|   partner_name | string | **Required** | - 
+|   loan_theme  | string | **Required** | -
+|   product_type | string | **Required** | -
+|   version_num  | number | **Required** | -
 |   inputs | JSON | **Required** | See contents for Input JSON below 
-|   origin_matrix  | Matrix | **Required** | description
-|   user_change_matrix | Matrix | **Required** | description 
-|   repay_matrix  | Matrix | **Required** | description
+|   origin_matrix  | Matrix | **Required** | -
+|   user_change_matrix | Matrix | **Required** | - 
+|   repay_matrix  | Matrix | **Required** | -
 
 **Input Form Parameters**
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   installment_time_period | string | **Required** | description 
-|   repayment_type  | string | **Required** | description 
-|   interest_time_period    | string | **Required** | description 
-|   interest_payment    | string | **Required** | description 
-|   interest_calculation_type   | string | **Required** | description 
-|   loan_amount | number | **Required** | description 
-|   installment | number | **Required** | description 
-|   nominal_interest_rate   | number | **Required** | description
-|   nominal_apr   | number | **Required** | description
-|   grace_period_principal  | number | **Required** | description 
-|   grace_period_interest_pay   | number | **Required** | description 
-|   grace_period_interest_calculate | number | **Required** | description 
-|   grace_period_balloon    | number | **Required** | description 
-|   fee_percent_upfront | number | **Required** | description 
-|   fee_percent_ongoing | number | **Required** | description 
-|   fee_fixed_upfront   | number | **Required** | description 
-|   fee_fixed_ongoing   | number | **Required** | description 
-|   insurance_percent_upfront   | number | **Required** | description 
-|   insurance_percent_ongoing   | number | **Required** | description 
-|   insurance_fixed_upfront | number | **Required** | description 
-|   insurance_fixed_ongoing | number | **Required** | description 
-|   tax_percent_fees    | number | **Required** | description 
-|   tax_percent_interest    | number | **Required** | description 
-|   security_deposit_percent_upfront    | number | **Required** | description 
-|   security_deposit_percent_ongoing    | number | **Required** | description 
-|   security_deposit_fixed_upfront  | number | **Required** | description 
-|   security_deposit_fixed_ongoing  | number | **Required** | description 
-|   interest_paid_on_deposit_percent    | number | **Required** | description 
+|   installment_time_period | string | **Required** | - 
+|   repayment_type  | string | **Required** | - 
+|   interest_time_period    | string | **Required** | - 
+|   interest_payment    | string | **Required** | - 
+|   interest_calculation_type   | string | **Required** | - 
+|   loan_amount | number | **Required** | - 
+|   installment | number | **Required** | - 
+|   nominal_interest_rate   | number | **Required** | -
+|   nominal_apr   | number | **Required** | -
+|   grace_period_principal  | number | **Required** | - 
+|   grace_period_interest_pay   | number | **Required** | - 
+|   grace_period_interest_calculate | number | **Required** | - 
+|   grace_period_balloon    | number | **Required** | - 
+|   fee_percent_upfront | number | **Required** | - 
+|   fee_percent_ongoing | number | **Required** | - 
+|   fee_fixed_upfront   | number | **Required** | - 
+|   fee_fixed_ongoing   | number | **Required** | - 
+|   insurance_percent_upfront   | number | **Required** | - 
+|   insurance_percent_ongoing   | number | **Required** | - 
+|   insurance_fixed_upfront | number | **Required** | - 
+|   insurance_fixed_ongoing | number | **Required** | - 
+|   tax_percent_fees    | number | **Required** | - 
+|   tax_percent_interest    | number | **Required** | - 
+|   security_deposit_percent_upfront    | number | **Required** | - 
+|   security_deposit_percent_ongoing    | number | **Required** | - 
+|   security_deposit_fixed_upfront  | number | **Required** | - 
+|   security_deposit_fixed_ongoing  | number | **Required** | - 
+|   interest_paid_on_deposit_percent    | number | **Required** | - 
 
 **Response**
     
@@ -222,7 +222,7 @@ Get all loan theme entries corresponding to the correct partner saved in the dat
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   partner_name    | string | **Required** | description 
+|   partner_name    | string | **Required** | - 
 
 **Response**
 
@@ -248,8 +248,8 @@ Get all product type entries corresponding to the correct partner and loan theme
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   partner_name    | string | **Required** | description 
-|   loan_theme  | string | **Required** | description 
+|   partner_name    | string | **Required** | - 
+|   loan_theme  | string | **Required** | - 
 
 **Response**
 
@@ -274,9 +274,9 @@ Get all version number entries corresponding to the correct partner, loan theme,
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   partner_name    | string | **Required** | description 
-|   loan_theme  | string | **Required** | description 
-|   product_type    | string | **Required** | description 
+|   partner_name    | string | **Required** | - 
+|   loan_theme  | string | **Required** | - 
+|   product_type    | string | **Required** | - 
 
 **Response**
 
@@ -301,10 +301,10 @@ Get all version number entries corresponding to the correct partner, loan theme,
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   partner_name    | string | **Required** | description 
-|   loan_theme  | string | **Required** | description 
-|   product_type    | string | **Required** | description 
-|   version_num | number | **Required** | description 
+|   partner_name    | string | **Required** | - 
+|   loan_theme  | string | **Required** | - 
+|   product_type    | string | **Required** | - 
+|   version_num | number | **Required** | - 
 
 **Response**
 
@@ -367,33 +367,33 @@ Calculate APR rate based on given entries.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   installment_time_period | string | **Required** | description 
-|   repayment_type  | string | **Required** | description 
-|   interest_time_period    | string | **Required** | description 
-|   interest_payment    | string | **Required** | description 
-|   interest_calculation_type   | string | **Required** | description 
-|   loan_amount | number | **Required** | description 
-|   installment | number | **Required** | description 
-|   nominal_interest_rate   | number | **Required** | description 
-|   grace_period_principal  | number | **Required** | description 
-|   grace_period_interest_pay   | number | **Required** | description 
-|   grace_period_interest_calculate | number | **Required** | description 
-|   grace_period_balloon    | number | **Required** | description 
-|   fee_percent_upfront | number | **Required** | description 
-|   fee_percent_ongoing | number | **Required** | description 
-|   fee_fixed_upfront   | number | **Required** | description 
-|   fee_fixed_ongoing   | number | **Required** | description 
-|   insurance_percent_upfront   | number | **Required** | description 
-|   insurance_percent_ongoing   | number | **Required** | description 
-|   insurance_fixed_upfront | number | **Required** | description 
-|   insurance_fixed_ongoing | number | **Required** | description 
-|   tax_percent_fees    | number | **Required** | description 
-|   tax_percent_interest    | number | **Required** | description 
-|   security_deposit_percent_upfront    | number | **Required** | description 
-|   security_deposit_percent_ongoing    | number | **Required** | description 
-|   security_deposit_fixed_upfront  | number | **Required** | description 
-|   security_deposit_fixed_ongoing  | number | **Required** | description 
-|   interest_paid_on_deposit_percent    | number | **Required** | description 
+|   installment_time_period | string | **Required** | - 
+|   repayment_type  | string | **Required** | - 
+|   interest_time_period    | string | **Required** | - 
+|   interest_payment    | string | **Required** | - 
+|   interest_calculation_type   | string | **Required** | - 
+|   loan_amount | number | **Required** | - 
+|   installment | number | **Required** | - 
+|   nominal_interest_rate   | number | **Required** | - 
+|   grace_period_principal  | number | **Required** | - 
+|   grace_period_interest_pay   | number | **Required** | - 
+|   grace_period_interest_calculate | number | **Required** | - 
+|   grace_period_balloon    | number | **Required** | - 
+|   fee_percent_upfront | number | **Required** | - 
+|   fee_percent_ongoing | number | **Required** | - 
+|   fee_fixed_upfront   | number | **Required** | - 
+|   fee_fixed_ongoing   | number | **Required** | - 
+|   insurance_percent_upfront   | number | **Required** | - 
+|   insurance_percent_ongoing   | number | **Required** | - 
+|   insurance_fixed_upfront | number | **Required** | - 
+|   insurance_fixed_ongoing | number | **Required** | - 
+|   tax_percent_fees    | number | **Required** | - 
+|   tax_percent_interest    | number | **Required** | - 
+|   security_deposit_percent_upfront    | number | **Required** | - 
+|   security_deposit_percent_ongoing    | number | **Required** | - 
+|   security_deposit_fixed_upfront  | number | **Required** | - 
+|   security_deposit_fixed_ongoing  | number | **Required** | - 
+|   interest_paid_on_deposit_percent    | number | **Required** | - 
 
 **Response**
     
@@ -420,39 +420,39 @@ Recalculate repayment schedule based on user inputs.
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
 |   input_form | JSON | **Required** | See contents for Input JSON below 
-|   user_change  | Matrix | **Required** | description
+|   user_change  | Matrix | **Required** | -
 
 **Input Form Parameters**
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   installment_time_period | string | **Required** | description 
-|   repayment_type  | string | **Required** | description 
-|   interest_time_period    | string | **Required** | description 
-|   interest_payment    | string | **Required** | description 
-|   interest_calculation_type   | string | **Required** | description 
-|   loan_amount | number | **Required** | description 
-|   installment | number | **Required** | description 
-|   nominal_interest_rate   | number | **Required** | description 
-|   grace_period_principal  | number | **Required** | description 
-|   grace_period_interest_pay   | number | **Required** | description 
-|   grace_period_interest_calculate | number | **Required** | description 
-|   grace_period_balloon    | number | **Required** | description 
-|   fee_percent_upfront | number | **Required** | description 
-|   fee_percent_ongoing | number | **Required** | description 
-|   fee_fixed_upfront   | number | **Required** | description 
-|   fee_fixed_ongoing   | number | **Required** | description 
-|   insurance_percent_upfront   | number | **Required** | description 
-|   insurance_percent_ongoing   | number | **Required** | description 
-|   insurance_fixed_upfront | number | **Required** | description 
-|   insurance_fixed_ongoing | number | **Required** | description 
-|   tax_percent_fees    | number | **Required** | description 
-|   tax_percent_interest    | number | **Required** | description 
-|   security_deposit_percent_upfront    | number | **Required** | description 
-|   security_deposit_percent_ongoing    | number | **Required** | description 
-|   security_deposit_fixed_upfront  | number | **Required** | description 
-|   security_deposit_fixed_ongoing  | number | **Required** | description 
-|   interest_paid_on_deposit_percent    | number | **Required** | description 
+|   installment_time_period | string | **Required** | - 
+|   repayment_type  | string | **Required** | - 
+|   interest_time_period    | string | **Required** | - 
+|   interest_payment    | string | **Required** | - 
+|   interest_calculation_type   | string | **Required** | - 
+|   loan_amount | number | **Required** | - 
+|   installment | number | **Required** | - 
+|   nominal_interest_rate   | number | **Required** | - 
+|   grace_period_principal  | number | **Required** | - 
+|   grace_period_interest_pay   | number | **Required** | - 
+|   grace_period_interest_calculate | number | **Required** | - 
+|   grace_period_balloon    | number | **Required** | - 
+|   fee_percent_upfront | number | **Required** | - 
+|   fee_percent_ongoing | number | **Required** | - 
+|   fee_fixed_upfront   | number | **Required** | - 
+|   fee_fixed_ongoing   | number | **Required** | - 
+|   insurance_percent_upfront   | number | **Required** | - 
+|   insurance_percent_ongoing   | number | **Required** | - 
+|   insurance_fixed_upfront | number | **Required** | - 
+|   insurance_fixed_ongoing | number | **Required** | - 
+|   tax_percent_fees    | number | **Required** | - 
+|   tax_percent_interest    | number | **Required** | - 
+|   security_deposit_percent_upfront    | number | **Required** | - 
+|   security_deposit_percent_ongoing    | number | **Required** | - 
+|   security_deposit_fixed_upfront  | number | **Required** | - 
+|   security_deposit_fixed_ongoing  | number | **Required** | - 
+|   interest_paid_on_deposit_percent    | number | **Required** | - 
 
 **Response**
     
@@ -497,7 +497,7 @@ Edit a current partner.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   updated_partner_name | string | **Required** | description 
+|   updated_partner_name | string | **Required** | - 
 
 **Response**
 
@@ -520,7 +520,7 @@ Add a partner to the list.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   partner_name | string | **Required** | description 
+|   partner_name | string | **Required** | - 
 
 **Response**
 
@@ -579,7 +579,7 @@ Edit a current loan theme.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   updated_loan_theme | string | **Required** | description 
+|   updated_loan_theme | string | **Required** | - 
 
 **Response**
 
@@ -602,7 +602,7 @@ Add a loan theme to the list.
 
 |   Name    |  Type  | Required                      | Description               |
 |:---------:|:------:|:-----------------------------:|:-------------------------:|
-|   updated_loan_theme | string | **Required** | description 
+|   updated_loan_theme | string | **Required** | - 
 
 **Response**
 

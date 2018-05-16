@@ -9,10 +9,13 @@ An open source web application that calculates an APR Nominal rate for a loan wi
 * [Figma for Mockups](https://www.figma.com/file/0jmf44vrazZ8C2vkTCwnroMF/Kiva)
 
 ## Backend Resources
-* [Database Schema](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/api_docs.md)
+* [Database Schema](https://github.com/hack4impact-uiuc/kiva-pricing-tool/tree/master/docs/api_docs.md)
 * [Repo with XIRR function that we used for our calculations](https://github.com/peliot/XIRR-and-XNPV)
 
-## Excel Sheet Calculation Differences
+## Original Excel Tool
+
+
+## Excel Tool Calculation Differences
 Our calculator functions differently, and more accurately, than the original excel tool that we based our implementation off of.
 
 You can download the original APR tool we based our calculator off of [here](/docs/APR_Excel_Tool.xlsm). The functionality our tool replicates is all under the "Pricing - Advanced" and "Rep Schedule - Advanced" sheets. We use the exact same inputs, but a few of our calculations are different. They are as following. 
@@ -44,13 +47,13 @@ You can download the original APR tool we based our calculator off of [here](/do
 ## Our Workarounds
 Over the course of the 3 months we had to build out this tool, we accumulated some technical debt which, with some additional resources and time, can be re-implemented with better practices.
 
-* Endpoints
-    * Admin Tools
-        *
+* Admin Tools
+    * Field Partners and Loan Themes are never deleted from the database, only marked "active" or "inactive"
+    * This way we can still query the database for previously entered loans even if the Field Partners or Loan Themes are no longer active
 
-* Database entries
-    * saving loans is not saving loans
+* Save Loan Endpoint
+    * Our endpoint for saving a loan is the same regardless of whether or not we are editing an existing loan or creating a new one
+    * We query the database with the identification parameters, then delete any existing loan with the same data and post the current loan into the database
+    * This way we are effectively "editing" a loan, and if no existing loan is found, we can save a new loan to the database with one endpoint
 
-* Repayment schedule matricies
-    * 
   
