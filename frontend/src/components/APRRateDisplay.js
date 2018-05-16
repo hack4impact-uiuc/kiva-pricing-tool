@@ -1,9 +1,8 @@
 // @flow
-import React, { Component, View, StyleSheet } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
 import { Button, KivaChart } from './'
-import { Api } from '../utils'
+import { Api, Variables } from '../utils'
 import './../styles/app.css'
 import axios from 'axios'
 import ReactTable from 'react-table'
@@ -18,12 +17,12 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'Bar',
-      chartID: 'Balance Chart',
-      changeChart: false,
+      chartID: "Balance Chart",
+      changeChart: false,             
       changeVisual: false,
-      isHidden: false,
-      data: [],
-      testData: [
+      isHidden: false,                                    //boolean for conditional rendering of charts
+      data: [],                                           //repayment schedule that is passed to chart as prop
+      testData: [                                         //fake repayment schedule for testing chart generation
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         [
           '1-Jan-2012',
@@ -125,8 +124,8 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
-    this.renderEditable = this.renderEditable.bind(this)
-    this.updateTable = this.updateTable.bind(this)
+    // this.renderEditable = this.renderEditable.bind(this)
+    // this.updateTable = this.updateTable.bind(this)
   }
 
   /**
@@ -218,7 +217,7 @@ class APRRateDisplay extends Component {
         user_change: user_change
       }
       Api.recalculate(data, formDataReducer)
-      axios.post('http://127.0.0.1:3453/recalculate', data).then(response => {
+      axios.post(Variables.flaskURL + 'recalculate', data).then(response => {
         const apr = response.data.result.apr
         const recal_matrix = response.data.result.recal_matrix
         changedFormData('nominalApr', apr)
@@ -364,17 +363,26 @@ class APRRateDisplay extends Component {
       />
     )
   }
+  
+  /**
+   * onclick function for changing visual type
+   * called when switch is pressed
+   */
   changeVisualType(changeVisual) {
-    this.setState({ changeVisual })
-    if (changeVisual) {
+    this.setState({ changeVisual })                                     //changes state of changeVisual boolean
+    if (changeVisual) {                                                 //change visualization based on the current boolean state
       this.setState({ visualType: 'Area' })
     } else if (!changeVisual) {
       this.setState({ visualType: 'Bar' })
     }
   }
 
+  /**
+   * onclick function for changing chart type
+   * called from switch when it is pressed
+   */ 
   changeChartType(changeChart) {
-    this.setState({ changeChart })
+    this.setState({ changeChart })                                    //change chart type based on the current boolean state
     if (changeChart) {
       this.setState({ chartID: 'Payment Chart' })
     } else if (!changeChart) {
@@ -382,6 +390,9 @@ class APRRateDisplay extends Component {
     }
   }
 
+  /*
+   * generates and downloads CSV file containing repayment schedule and user inputs from APRInputs.js
+   */
   getCSV() {
     const { formDataReducer } = this.props
     let csv = [
@@ -390,19 +401,21 @@ class APRRateDisplay extends Component {
       ]
     ]
     let row
+    //loop through repayment schedule and concatenate all values into a single string
     for (let j = 0; j < formDataReducer.new_repayment_schedule[0].length; j++) {
       row = ''
       for (let i = 0; i < formDataReducer.new_repayment_schedule.length; i++) {
         row += formDataReducer.new_repayment_schedule[i][j] + ','
       }
       row += '\n'
-      csv.push(row)
+      csv.push(row)                
     }
     row = '\n\n'
     csv.push(row)
     row =
       'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
     csv.push(row)
+    //concatenate user inputs from APRInputs into a single string
     row =
       formDataReducer.nominalApr +
       ',' +
@@ -477,6 +490,7 @@ class APRRateDisplay extends Component {
     let url = URL.createObjectURL(csvFile)
     let createDownloadLink = document.createElement('a')
     createDownloadLink.href = url
+    //create name of csv file by concatenating MFI Partner Name, Loan Type, Product Type, and Version Number
     createDownloadLink.setAttribute(
       'download',
       formDataReducer.mfi +
@@ -491,10 +505,13 @@ class APRRateDisplay extends Component {
     createDownloadLink.click()
   }
 
+  /**
+   * onclick function that conditionally renders the chart by setting the isHidden boolean to true and populates data prop for chart
+   */ 
   createChart() {
     const { formDataReducer } = this.props
-    this.setState({ data: formDataReducer.new_repayment_schedule })
-    this.setState({ isHidden: true })
+    this.setState({ data: formDataReducer.new_repayment_schedule })                  //set this.state.data to the redux repayment schedule so prop is passed in correctly to chart.
+    this.setState({ isHidden: true })                                                    
   }
 
   /**
@@ -683,48 +700,6 @@ class APRRateDisplay extends Component {
     }
     orig_matrix[0][0] = 0
     calc_matrix[0][0] = 0
-    let data = {
-      partner_name: formDataReducer.mfi,
-      loan_theme: formDataReducer.loanType,
-      product_type: formDataReducer.productType,
-      version_num: '1',
-      update_name: formDataReducer.startName,
-      start_name: formDataReducer.startName,
-      nominal_apr: formDataReducer.nominalApr,
-      installment_time_period: formDataReducer.installmentTimePeriod,
-      repayment_type: formDataReducer.repaymentType,
-      interest_time_period: formDataReducer.interestTimePeriod,
-      interest_payment_type: formDataReducer.interestPaymentType,
-      interest_calculation_type: formDataReducer.interestCalculationType,
-      loan_amount: formDataReducer.loanAmount,
-      installment: formDataReducer.installment,
-      nominal_interest_rate: formDataReducer.nominalInterestRate,
-      grace_period_principal: formDataReducer.gracePeriodPrincipal,
-      grace_period_interest_pay: formDataReducer.gracePeriodInterestPay,
-      grace_period_interest_calculate:
-        formDataReducer.gracePeriodInterestCalculate,
-      grace_period_balloon: formDataReducer.gracePeriodBalloon,
-      fee_percent_upfront: formDataReducer.feePercentUpfront,
-      fee_percent_ongoing: formDataReducer.feePercentOngoing,
-      fee_fixed_upfront: formDataReducer.feeFixedUpfront,
-      fee_fixed_ongoing: formDataReducer.feeFixedOngoing,
-      tax_percent_fees: formDataReducer.taxPercentFees,
-      tax_percent_interest: formDataReducer.taxPercentInterest,
-      insurance_percent_upfront: formDataReducer.insurancePercentUpfront,
-      insurance_percent_ongoing: formDataReducer.insurancePercentOngoing,
-      insurance_fixed_upfront: formDataReducer.insuranceFixedUpfront,
-      insurance_fixed_ongoing: formDataReducer.insuranceFixedOngoing,
-      security_deposit_percent_upfront:
-        formDataReducer.securityDepositPercentUpfront,
-      security_deposit_percent_ongoing:
-        formDataReducer.securityDepositPercentOngoing,
-      security_deposit_fixed_upfront:
-        formDataReducer.securityDepositFixedUpfront,
-      security_deposit_fixed_ongoing:
-        formDataReducer.securityDepositFixedOngoing,
-      interest_paid_on_deposit_percent:
-        formDataReducer.interestPaidOnDepositPercent
-    }
     let payload = {
       partner_name: formDataReducer.mfi,
       loan_theme: formDataReducer.loanType,
@@ -771,12 +746,12 @@ class APRRateDisplay extends Component {
             {this.state.isHidden && (
               <div>
                 <label htmlFor="material-switch">
-                  <span>{this.state.visualType}</span>
+                  <span>{this.state.visualType}</span>                                            //displays the current visualization type
                   <Switch
-                    onChange={event => this.changeVisualType(event)}
-                    checked={this.state.changeVisual}
-                    onColor="#438b48"
-                    onHandleColor="#c4ccc6"
+                    onChange={event => this.changeVisualType(event)}                              //change visualization type when pressed
+                    checked={this.state.changeVisual}                                             //changeVisual boolean changes state every time switch is pressed
+                    onColor={Variables.switchOnColor}
+                    onHandleColor="#ffffff"
                     handleDiameter={30}
                     uncheckedIcon={false}
                     checkedIcon={false}
@@ -785,12 +760,15 @@ class APRRateDisplay extends Component {
                   />
                 </label>
                 <label htmlFor="material-switch">
+                  //displays the current chart type
                   <span>{this.state.chartID}</span>
                   <Switch
+                    //change chart type when pressed
                     onChange={event => this.changeChartType(event)}
+                    //changeChart boolean changes state every time switch is pressed
                     checked={this.state.changeChart}
-                    onColor="#438b48"
-                    onHandleColor="#c4ccc6"
+                    onColor={Variables.switchOnColor}
+                    onHandleColor="#ffffff"
                     handleDiameter={30}
                     uncheckedIcon={false}
                     checkedIcon={false}
@@ -819,9 +797,10 @@ class APRRateDisplay extends Component {
             )}
           </Col>
           <Col sm={6} md={6}>
-            <button className="button-fancy" onClick={this.getCSV.bind(this)}>
+            <button className="button-fancy" onClick={() => this.getCSV()}>
               Download CSV
             </button>
+
           </Col>
         </Row>
         <Row>
@@ -839,7 +818,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Period Number</h5>
                     </div>
@@ -852,7 +831,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Payment Due Date</h5>
                     </div>
@@ -869,7 +848,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Amount Due</h5>
                     </div>
@@ -881,7 +860,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Principal Payment</h5>
                     </div>
@@ -919,7 +898,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5> Security Deposit</h5>
                     </div>
@@ -931,7 +910,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Security Interest Paid</h5>
                     </div>
@@ -944,7 +923,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Deposit Withdrawal</h5>
                     </div>
@@ -956,7 +935,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Deposit Balance</h5>
                     </div>
@@ -968,7 +947,7 @@ class APRRateDisplay extends Component {
                   Header: () => (
                     <div
                       className="rt-resizable-header-content"
-                      style={{ 'white-space': 'pre-wrap' }}
+                      style={{ whiteSpace: 'pre-wrap' }}
                     >
                       <h5>Total Cashflow</h5>
                     </div>

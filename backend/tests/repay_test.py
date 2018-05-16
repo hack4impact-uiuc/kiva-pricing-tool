@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, '../api')
 from utils import *
-from repayment_schedule_test import update_security_deposit as update_security_deposit_1
+from repayment_schedule_offline import update_security_deposit as update_security_deposit_1
 import copy
 
 def round_arr(arr):

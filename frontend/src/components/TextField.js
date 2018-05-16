@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import './../styles/textfield.css'
 
 class TextField extends Component {
   constructor(props) {
     super(props)
-    const { formDataReducer } = this.props
     this.state = {
       id: this.props.text,
       error_message: '',
@@ -17,15 +15,16 @@ class TextField extends Component {
   // if redux populates fields, will remove the "field required" error message
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.formDataReducer[this.props.reduxId] !=
+      nextProps.formDataReducer[this.props.reduxId] !==
         this.props.formDataReducer[this.props.reduxId] &&
       (!this.props.formDataReducer[this.props.reduxId] ||
         this.props.formDataReducer[this.props.reduxId].length === 0)
     ) {
       let newData = nextProps.formDataReducer
       if (
-        !newData[this.props.reduxId] ||
-        newData[this.props.reduxId].length === 0
+        this.props.requiredField === true &&
+        (!newData[this.props.reduxId] ||
+          newData[this.props.reduxId].length === 0)
       ) {
         this.setState({
           error_message: 'This field is required.',
@@ -44,7 +43,7 @@ class TextField extends Component {
     // Used to check required fields and highlight with error messages immediately
     const { formDataReducer, changedFormData } = this.props
     if (
-      this.props.requiredField &&
+      this.props.requiredField === true &&
       (!formDataReducer[this.props.reduxId] ||
         formDataReducer[this.props.reduxId].length === 0)
     ) {
@@ -62,8 +61,13 @@ class TextField extends Component {
     }
   }
 
+  /**
+   * Handles the change for a TextField accepting Integer values. Checks that input is an integer 
+   * and has not exceeded specified limit.
+   * @param {String} e, the modified value in a TextField
+   */
   handleChangeInteger(e) {
-    const { formDataReducer, changedFormData } = this.props
+    const { changedFormData } = this.props
     const nums = /^[0-9\b]+$/
 
     if (nums.test(e.target.value)) {
@@ -77,20 +81,25 @@ class TextField extends Component {
         changedFormData('error', true)
       } else {
         this.setState({ error_message: '' })
-        changedFormData('error', true)
+        changedFormData('error', false)
       }
 
       changedFormData(this.props.reduxId, e.target.value)
     }
   }
 
+  /**
+   * Handles the change for a TextField accepting Float values. Checks that input is an integer or a decimal 
+   * and has not exceeded the specified limit.
+   * @param {String} e, the modified value in a TextField
+   */
   handleChangeFloat(e) {
-    const { formDataReducer, changedFormData } = this.props
+    const { changedFormData } = this.props
     const nums = /^[0-9\b]+$/
     const numPeriods = e.target.value.split('.')
 
     if (
-      e.target.value == '' ||
+      e.target.value === '' ||
       (numPeriods.length <= 2 && nums.test(e.target.value.replace('.', '')))
     ) {
       let tryFloat = parseFloat(e.target.value)
@@ -104,14 +113,18 @@ class TextField extends Component {
         changedFormData('error', true)
       } else {
         this.setState({ error_message: '' })
-        changedFormData('error', true)
+        changedFormData('error', false)
       }
       changedFormData(this.props.reduxId, e.target.value)
     }
   }
 
+  /**
+   * Handles the change for a TextField accepting Integer values. Checks that input only contains letter characters 
+   * @param {String} e, the modified value in a TextField
+   */
   handleChangeString(e) {
-    const { formDataReducer, changedFormData } = this.props
+    const { changedFormData } = this.props
     changedFormData(this.props.reduxId, e.target.value)
     let tryString = /^[a-zA-Z ]+$/.test(e.target.value)
     if (!tryString) {
@@ -128,7 +141,7 @@ class TextField extends Component {
 
   handleChange(e) {
     this.setState({ className: this.props.className }) // Reset classname before checks, especially for required fields (removes required-error className)
-    const { formDataReducer, changedFormData } = this.props
+    const { changedFormData } = this.props
     let value = e.target.value
 
     if (this.props.typeVal.toLowerCase() === 'int') {
@@ -145,7 +158,6 @@ class TextField extends Component {
 
     if (
       value.replace(/\s/g, '').length === 0 &&
-      // formDataReducer[this.props.reduxId].length === 0 &&
       this.props.requiredField === true
     ) {
       // Check if required field is empty
@@ -156,11 +168,6 @@ class TextField extends Component {
       changedFormData('error', true)
       changedFormData(this.props.reduxId, value)
     }
-    // else if (value === '') {
-    //   // Else if to prevent error message resetting (both conditions check for value)
-    //   this.setState({ error_message: '', className: this.props.className }) // Reset classname since it's not an error (remove required-error)
-    //   changedFormData('error', false)
-    // }
   }
 
   render() {
@@ -177,7 +184,7 @@ class TextField extends Component {
             onChange={event => this.handleChange(event)}
             value={formDataReducer[this.props.reduxId]}
             required
-            autofocus
+            autoFocus
           />
         </div>
         <p className="error-message">{this.state.error_message}</p>

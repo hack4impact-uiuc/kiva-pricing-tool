@@ -2,13 +2,8 @@
 import React, { Component } from 'react'
 import { Dropdown, Button, TextField } from './'
 import { Grid, PageHeader, Row, Col } from 'react-bootstrap'
-import axios from 'axios'
 import './../styles/app.scss'
 import { Api } from '../utils'
-import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
-require('./../styles/react-toastr.css')
-
-let container
 
 class APRInputs extends Component {
   constructor(props) {

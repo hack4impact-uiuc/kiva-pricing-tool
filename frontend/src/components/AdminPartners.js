@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Grid, PageHeader, Alert, Row, Col, Modal } from 'react-bootstrap'
+import { Grid, PageHeader, Row, Col, Modal } from 'react-bootstrap'
 import './../styles/app.css'
 import Button from './Button'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import axios from 'axios'
-import ReactDOM from 'react-dom'
-import { ToastContainer, ToastMessageAnimated } from 'react-toastr'
+import { Variables } from './../utils'
+import { ToastContainer } from 'react-toastr'
 require('./../styles/react-toastr.css')
 let container
 
@@ -39,7 +39,7 @@ class AdminPartners extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:3453/getAllMFI').then(response => {
+    axios.get(Variables.flaskURL + 'getAllMFI').then(response => {
       this.setState({ partner_names: response.data.result.partners })
       for (let partner of this.state.partner_names) {
         this.setState({
@@ -103,7 +103,6 @@ class AdminPartners extends Component {
 
   saveAllPartners() {
     var updated_name = null
-    var partners = []
     if (this.state.edited_partners.length === 0) {
       container.warning(
         'There are no changes to save',
@@ -117,7 +116,8 @@ class AdminPartners extends Component {
         }
         axios
           .put(
-            'http://127.0.0.1:3453/editMFI/' +
+            Variables.flaskURL +
+              'editMFI/' +
               this.state.edited_partners[i].original,
             updated_name
           )
@@ -159,7 +159,7 @@ class AdminPartners extends Component {
     if (partner_name && partner_name.length) {
       let data = { partner_name: partner_name }
       axios
-        .post('http://127.0.0.1:3453/addMFI', data)
+        .post(Variables.flaskURL + 'addMFI', data)
         .then(response => {
           this.setState({
             data: this.state.data.concat({ partner_names: partner_name })
@@ -190,7 +190,7 @@ class AdminPartners extends Component {
     this.setState({ remove_warning: false })
     // Remove partner from being visible from table, remove from state.data array if successful response from db
     axios
-      .delete('http://127.0.0.1:3453/removeMFI/' + partner_name)
+      .delete(Variables.flaskURL + 'removeMFI/' + partner_name)
       .then(response => {
         for (var i = 0; i < this.state.data.length; i++) {
           if (this.state.data[i].partner_names === partner_name) {
@@ -243,7 +243,8 @@ class AdminPartners extends Component {
                     filtered: [
                       { id: 'partner_names', value: event.target.value }
                     ]
-                  })}
+                  })
+                }
                 // onChange specifies the id of the column that is being filtered and gives string value to use for filtering
               />
             </div>
@@ -332,7 +333,8 @@ class AdminPartners extends Component {
                         name="Remove"
                         url="partnerlist"
                         onClickHandler={() =>
-                          this.handleRemoveClick(original.partner_names)} // Send text value to remove loan function
+                          this.handleRemoveClick(original.partner_names)
+                        } // Send text value to remove loan function
                       />
                     )
                   }
@@ -368,7 +370,8 @@ class AdminPartners extends Component {
                   name="Cancel"
                   url="partnerlist"
                   onClickHandler={() =>
-                    this.setState({ remove_warning: false })}
+                    this.setState({ remove_warning: false })
+                  }
                 />
               </Col>
               <Col sm={6} md={6}>
@@ -377,7 +380,8 @@ class AdminPartners extends Component {
                   name="Remove"
                   url="partnerlist"
                   onClickHandler={() =>
-                    this.removePartner(this.state.selected_remove)}
+                    this.removePartner(this.state.selected_remove)
+                  }
                 />
               </Col>
             </Row>

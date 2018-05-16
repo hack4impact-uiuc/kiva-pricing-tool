@@ -5,13 +5,12 @@ import './../styles/app.css'
 import Button from './Button'
 import axios from 'axios'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import { Api } from './../utils'
+import { Api, Variables } from './../utils'
 import PropTypes from 'prop-types'
 
 class FindLoan extends Component {
   constructor(props) {
     super(props)
-    const { formDataReducer } = this.props
     this.state = {
       partner_names: [],
       loan_themes: [],
@@ -42,7 +41,7 @@ class FindLoan extends Component {
    * Gets existing loan and repayment schedule from backend to populate redux.
    */
   getTables() {
-    const { formDataReducer, changedFormData } = this.props
+    const { formDataReducer, changedFormData, searchLoan } = this.props
     let data = {
       params: {
         partner_name: formDataReducer.mfi,
@@ -59,110 +58,14 @@ class FindLoan extends Component {
       formDataReducer.versionNum
     )
       .then(response => {
-        const apr = response.data.result.nominal_apr
-        const orig_matrix = response.data.result.original_matrix
-        const user_matrix = response.data.result.user_matrix
-        const calc_matrix = response.data.result.calc_matrix
+        const apr = response.nominalApr
+        const orig_matrix = response.originalMatrix
+        const user_matrix = response.userMatrix
+        const calc_matrix = response.calcMatrix
+
+        searchLoan(response)
+
         changedFormData('new_repayment_schedule', calc_matrix)
-        changedFormData('nominalApr', apr)
-        changedFormData(
-          'installmentTimePeriod',
-          response.data.result.installment_time_period
-        )
-        changedFormData('startName', response.data.result.start_name)
-        changedFormData('updateName', response.data.result.update_name)
-        changedFormData('repaymentType', response.data.result.repayment_type)
-        changedFormData(
-          'interestTimePeriod',
-          response.data.result.interest_time_period
-        )
-        changedFormData(
-          'interestPaymentType',
-          response.data.result.interest_payment_type
-        )
-        changedFormData(
-          'interestCalculationType',
-          response.data.result.interest_calculation_type
-        )
-        changedFormData('loanAmount', response.data.result.loan_amount)
-        changedFormData('installment', response.data.result.installment)
-        changedFormData(
-          'nominalInterestRate',
-          response.data.result.nominal_interest_rate
-        )
-        changedFormData(
-          'gracePeriodPrincipal',
-          response.data.result.grace_period_principal
-        )
-        changedFormData(
-          'gracePeriodInterestPay',
-          response.data.result.grace_period_interest_pay
-        )
-        changedFormData(
-          'gracePeriodInterestCalculate',
-          response.data.result.grace_period_interest_calculate
-        )
-        changedFormData(
-          'gracePeriodBalloon',
-          response.data.result.grace_period_balloon
-        )
-        changedFormData(
-          'feePercentUpfront',
-          response.data.result.fee_percent_upfront
-        )
-        changedFormData(
-          'feePercentOngoing',
-          response.data.result.fee_percent_ongoing
-        )
-        changedFormData(
-          'feeFixedUpfront',
-          response.data.result.fee_fixed_upfront
-        )
-        changedFormData(
-          'feeFixedOngoing',
-          response.data.result.fee_fixed_ongoing
-        )
-        changedFormData('taxPercentFees', response.data.result.tax_percent_fees)
-        changedFormData(
-          'taxPercentInterest',
-          response.data.result.tax_percent_interest
-        )
-        changedFormData(
-          'insurancePercentUpfront',
-          response.data.result.insurance_fixed_upfront
-        )
-        changedFormData(
-          'insurancePercentOngoing',
-          response.data.result.insurance_fixed_ongoing
-        )
-        changedFormData(
-          'insuranceFixedUpfront',
-          response.data.result.insurance_fixed_upfront
-        )
-        changedFormData(
-          'insuranceFixedOngoing',
-          response.data.result.insurance_fixed_ongoing
-        )
-        changedFormData(
-          'securityDepositPercentUpfront',
-          response.data.result.security_deposit_percent_upfront
-        )
-        changedFormData(
-          'securityDepositPercentOngoing',
-          response.data.result.security_deposit_percent_ongoing
-        )
-        changedFormData(
-          'securityDepositFixedUpfront',
-          response.data.result.security_deposit_fixed_upfront
-        )
-        changedFormData(
-          'securityDepositFixedOngoing',
-          response.data.result.security_deposit_fixed_ongoing
-        )
-        changedFormData(
-          'interestPaidOnDepositPercent',
-          response.data.result.interest_paid_on_deposit_percent
-        )
         let reformatted_matrix = []
         let reformatted_user_matrix = []
         let reformatted_calc_matrix = []
@@ -342,10 +245,8 @@ class FindLoan extends Component {
   }
 
   componentDidMount() {
-    const { changedFormData } = this.props
-    changedFormData('back', '')
     axios
-      .get('http://127.0.0.1:3453/getMFIEntry')
+      .get(Variables.flaskURL + 'getMFIEntry')
       .then(response => {
         this.setState({ partner_names: response.data.result.partners })
       })
@@ -408,6 +309,9 @@ class FindLoan extends Component {
     }
   }
 
+  /**
+   * Checks that all inputs on page have correct entries
+   */
   inputsEntered() {
     const { formDataReducer } = this.props
     if (
@@ -463,13 +367,7 @@ class FindLoan extends Component {
   }
 
   render() {
-    const { formDataReducer, changedFormData, searchLoan } = this.props
-    console.log(this.isNullOrEmpty(formDataReducer.mfi))
-    console.log('Loan Type:', formDataReducer.loanType)
-    console.log(
-      'Is this true or not',
-      formDataReducer.loanType != null && formDataReducer.loanType.length > 0
-    )
+    const { formDataReducer, changedFormData } = this.props
     return (
       <div className="page-body-grey">
         <Grid
@@ -490,11 +388,11 @@ class FindLoan extends Component {
                   className={this.state.partnerClass}
                   placeholder="Select Field Partner"
                   options={this.state.partner_names}
-                  selected={formDataReducer.mfi ? [formDataReducer.mfi] : ''}
+                  selected={formDataReducer.mfi ? [formDataReducer.mfi] : []}
                   onInputChange={e => {
                     this.getProductType()
                     axios
-                      .get('http://127.0.0.1:3453/getLTEntry', {
+                      .get(Variables.flaskURL + 'getLTEntry', {
                         params: {
                           partner_name: e
                         }
@@ -537,7 +435,7 @@ class FindLoan extends Component {
                   options={this.state.loan_themes}
                   placeholder="Select Loan Theme"
                   selected={
-                    formDataReducer.loanType ? [formDataReducer.loanType] : ''
+                    formDataReducer.loanType ? [formDataReducer.loanType] : []
                   }
                   onInputChange={e => {
                     changedFormData('loanType', e)
@@ -578,7 +476,7 @@ class FindLoan extends Component {
                   selected={
                     formDataReducer.productType
                       ? [formDataReducer.productType]
-                      : ''
+                      : []
                   }
                   onInputChange={e => {
                     changedFormData('productType', e)
@@ -616,7 +514,7 @@ class FindLoan extends Component {
                   selected={
                     formDataReducer.versionNum
                       ? [formDataReducer.versionNum]
-                      : ''
+                      : []
                   }
                   onInputChange={e => {
                     changedFormData('versionNum', e)
@@ -661,6 +559,7 @@ class FindLoan extends Component {
                 disable={!this.inputsEntered()}
                 url="form1"
                 onClickHandler={() => {
+                  this.getTables()
                   Api.getVersionNum(
                     formDataReducer.mfi,
                     formDataReducer.loanType,
@@ -668,7 +567,6 @@ class FindLoan extends Component {
                   ).then(response => {
                     changedFormData('versionNum', response.version)
                   })
-                  this.getTables()
                 }}
               />
             </Col>

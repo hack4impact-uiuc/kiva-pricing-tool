@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import './../styles/dropdown.css'
 
@@ -8,7 +7,6 @@ class Dropdown extends Component {
 
   constructor(props) {
     super(props)
-    const { formDataReducer } = this.props
     this.state = {
       default: this.props.title,
       value: this.props.title, // Used to check if value of dropdown is the same as the title for error messages
@@ -23,7 +21,7 @@ class Dropdown extends Component {
   // if redux populates fields, will remove the "field required" error message
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.formDataReducer[this.props.reduxId] !=
+      nextProps.formDataReducer[this.props.reduxId] !==
         this.props.formDataReducer[this.props.reduxId] &&
       (!this.props.formDataReducer[this.props.reduxId] ||
         this.props.formDataReducer[this.props.reduxId].length === 0)
@@ -48,7 +46,6 @@ class Dropdown extends Component {
 
   componentDidMount() {
     const { formDataReducer } = this.props
-    let val = this.props.reduxId
     this.setState({
       value:
         formDataReducer[this.props.reduxId].length === 0
@@ -91,8 +88,6 @@ class Dropdown extends Component {
               key={item.id}
               // Get value of selected item, change state and update title
               onSelect={() => {
-                // if (this.props.onTextInputChange)
-                // this.props.onTextInputChange(this.props.reduxId, item.value)
                 changedFormData(this.props.reduxId, item.value)
                 this.setState({ value: item.value })
                 if (item.value !== this.state.default) {
