@@ -64,7 +64,7 @@ class AdminPartners extends Component {
           update = data[cellInfo.index][cellInfo.column.id]
           this.setState({ data })
           if (original !== update) {
-            if (update && update.length != 0 && update != ' ') {
+            if (update && update.length !== 0 && update !== ' ') {
               this.setState({
                 edited_partners: this.state.edited_partners.concat({
                   original: original,

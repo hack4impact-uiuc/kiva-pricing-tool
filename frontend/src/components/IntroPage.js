@@ -44,14 +44,7 @@ class IntroPage extends Component {
               taxes, interest rate, etc.
             </p>
             <div className="bs-center padded-element-vertical">
-              <Button
-                className="button-fancy"
-                name="New Loan"
-                url="newloan"
-                onClickHandler={() => {
-                  // console.log('going to new loan')
-                }}
-              />
+              <Button className="button-fancy" name="New Loan" url="newloan" />
             </div>
           </Col>
 
@@ -71,9 +64,6 @@ class IntroPage extends Component {
                 className="button-fancy"
                 name="Find Loan"
                 url="findloan"
-                onClickHandler={() => {
-                  // console.log('going to find loan')
-                }}
               />
             </div>
           </Col>
@@ -94,9 +84,6 @@ class IntroPage extends Component {
                 className="button-fancy"
                 name="Admin Tools"
                 url="partnerlist"
-                onClickHandler={() => {
-                  // console.log('going to admin tools')
-                }}
               />
             </div>
           </Col>
