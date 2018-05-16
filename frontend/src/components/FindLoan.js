@@ -319,8 +319,8 @@ class FindLoan extends Component {
           reformatted_calc_matrix[last][
             'total_cashflow'
           ] = reformatted_calc_matrix[last]['total_cashflow'].toFixed(2)
-          reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-          reformatted_calc_matrix[0]['period_num'] = 'Disbursement Info'
+          reformatted_matrix[0]['period_num'] = 'Disbursement'
+          reformatted_calc_matrix[0]['period_num'] = 'Disbursement'
           changedFormData('original_repayment_schedule', reformatted_matrix)
           changedFormData('user_repayment_schedule', reformatted_user_matrix)
           changedFormData('calc_repayment_schedule', reformatted_calc_matrix)
