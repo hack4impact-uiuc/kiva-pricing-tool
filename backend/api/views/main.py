@@ -2,7 +2,7 @@ from api import app, db
 from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
-from api.utils import create_response, InvalidUsage, cal_apr_helper, update_repayment_schedule, round_matrix
+from api.utils import create_response, InvalidUsage, cal_apr_helper, update_repayment_schedule, round_matrix, month_num_to_str_dict
 import numpy as np
 import datetime
 
@@ -588,14 +588,31 @@ def get_loan():
         user_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
         calc_matrix = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
         for row in sorted_rows:
+            print (row.payment_due_date)
+            print (row.payment_due_date.day)
+            print (row.payment_due_date.month)
+            print (row.payment_due_date.year)
+            print (row.payment_due_date_user)
+            print (row.payment_due_date_calc)
+            print (row.payment_due_date_calc.day)
+            print (row.payment_due_date_calc.month)
+            print (row.payment_due_date_calc.year)
+            print ('{0}-{1}-{2}'.format(row.payment_due_date.day, month_num_to_str_dict[row.payment_due_date.month], row.payment_due_date.year))
             orig_matrix[0].append(row.period_num)
             user_matrix[0].append(row.period_num)
             calc_matrix[0].append(row.period_num)
 
-            orig_matrix[1].append(row.payment_due_date)
-            user_matrix[1].append(row.payment_due_date_user)
-            calc_matrix[1].append(row.payment_due_date_calc)
+            orig_matrix[1].append('{0}-{1}-{2}'.format(row.payment_due_date.day, month_num_to_str_dict[row.payment_due_date.month], row.payment_due_date.year))
+            print ('hiiiiii')
+            if row.payment_due_date_user != None:
+                print ('enter')
+                user_matrix[1].append('{0}-{1}-{2}'.format(row.payment_due_date_user.day, month_num_to_str_dict[row.payment_due_date_user.month], row.payment_due_date_user.year))
+            else:
+                user_matrix[1].append(None)
+            print ('hiiiiii')
+            calc_matrix[1].append('{0}-{1}-{2}'.format(row.payment_due_date_calc.day, month_num_to_str_dict[row.payment_due_date_calc.month], row.payment_due_date_calc.year))
 
+            print ('hiiiiii')
             orig_matrix[2].append(row.days)
             user_matrix[2].append(row.days_user)
             calc_matrix[2].append(row.days_calc)
@@ -689,6 +706,6 @@ def get_loan():
             'calc_matrix' : calc_matrix
         }
         return create_response(data = data, status = 200)
-    except:
-        return create_response({}, status=400, message='missing arguments for GET')
+    except Exception as e:
+        return create_response({}, status=400, message=str(e))
 
