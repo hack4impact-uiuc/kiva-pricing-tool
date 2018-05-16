@@ -12,7 +12,10 @@ An open source web application that calculates an APR Nominal rate for a loan wi
 * [Database Schema](https://github.com/hack4impact-uiuc/kiva-pricing-tool/blob/master/api_docs.md)
 * [Repo with XIRR function that we used for our calculations](https://github.com/peliot/XIRR-and-XNPV)
 
-## Excel Sheet Calculation Differences
+## Original Excel Tool
+
+
+## Excel Tool Calculation Differences
 Our calculator functions differently, and more accurately, than the original excel tool that we based our implementation off of.
 
 You can download the original APR tool we based our calculator off of [here](/docs/APR_Excel_Tool.xlsm). The functionality our tool replicates is all under the "Pricing - Advanced" and "Rep Schedule - Advanced" sheets. We use the exact same inputs, but a few of our calculations are different. They are as following. 
