@@ -129,6 +129,9 @@ class APRRateDisplay extends Component {
     this.updateTable = this.updateTable.bind(this)
   }
 
+  /**
+   * Call recalculate endpoint to receive updated values upon user change.
+   */
   updateTable = (e, cellInfo) => {
     const { formDataReducer, changedFormData } = this.props
     if (
@@ -307,6 +310,10 @@ class APRRateDisplay extends Component {
       this.createChart.bind(this)
     }
   }
+
+  /**
+   * Div element for each cell entry, conditionally allowing user edits
+   */
   renderEditable = event => {
     const { formDataReducer } = this.props
     let editable =
@@ -490,6 +497,9 @@ class APRRateDisplay extends Component {
     this.setState({ isHidden: true })
   }
 
+  /**
+   * Call save loan endpoint to save loan and repayment schedule in database.
+   */
   saveData() {
     const { formDataReducer } = this.props
     let orig_matrix = [
@@ -819,6 +829,7 @@ class APRRateDisplay extends Component {
 
         <Row>
           <Col sm={12} md={12}>
+            /** * React Table used to contain repayment schedule. */
             <ReactTable
               data={formDataReducer.calc_repayment_schedule}
               sortable={false}

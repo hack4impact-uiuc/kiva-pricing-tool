@@ -38,6 +38,9 @@ class FindLoan extends Component {
     router: PropTypes.object.isRequired
   }
 
+  /**
+   * Gets existing loan and repayment schedule from backend to populate redux.
+   */
   getTables() {
     const { formDataReducer, changedFormData } = this.props
     let data = {
@@ -349,6 +352,9 @@ class FindLoan extends Component {
       })
   }
 
+  /**
+   * Gets all product types of data with given entries.
+   */
   getProductType() {
     const { formDataReducer, changedFormData } = this.props
 
@@ -369,6 +375,9 @@ class FindLoan extends Component {
     }
   }
 
+  /**
+   * Gets all version of loans with entered data.
+   */
   getVersionNumEntries() {
     const { formDataReducer, changedFormData } = this.props
     if (
