@@ -31,6 +31,9 @@ class APRInputs extends Component {
     changedFormData([name], value)
   }
 
+  /**
+   * Checks whether proper inputs have been entered.
+   */
   inputsEntered() {
     const { formDataReducer } = this.props
     return (
@@ -62,6 +65,10 @@ class APRInputs extends Component {
     }
   }
 
+  /**
+   * Sends inputs to backend to calculate initial APR rate and repayment
+   * schedule.
+   */
   postData() {
     const { formDataReducer, changedFormData } = this.props
     this.inputsEntered() &&

@@ -2,7 +2,7 @@ from api import app, db
 from flask import Blueprint, request, jsonify, Response
 from api.models import Partner, Theme, Loan, RepaymentSchedule
 import json
-from api.utils import create_response, InvalidUsage, cal_apr_helper, update_repayment_schedule, round_matrix, month_num_to_str_dict
+from api.utils import create_response, InvalidUsage, cal_apr_helper, update_repayment_schedule, round_matrix, month_num_to_str_dict, round_float
 import numpy as np
 import datetime
 
@@ -655,7 +655,7 @@ def get_loan():
             'update_date' : entry.update_date,
             'start_name' : entry.start_name,
             'update_name' : entry.update_name,
-            'nominal_apr' : entry.nominal_apr*100,
+            'nominal_apr' : round_float(entry.nominal_apr*100, 2),
             'installment_time_period' : entry.installment_time_period,
             'repayment_type' : entry.repayment_type,
             'interest_time_period' : entry.interest_time_period,

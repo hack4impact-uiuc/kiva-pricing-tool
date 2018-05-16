@@ -129,6 +129,9 @@ class APRRateDisplay extends Component {
     this.updateTable = this.updateTable.bind(this)
   }
 
+  /**
+   * Call recalculate endpoint to receive updated values upon user change.
+   */
   updateTable = (e, cellInfo) => {
     const { formDataReducer, changedFormData } = this.props
     if (
@@ -307,6 +310,10 @@ class APRRateDisplay extends Component {
       this.createChart.bind(this)
     }
   }
+
+  /**
+   * Div element for each cell entry, conditionally allowing user edits
+   */
   renderEditable = event => {
     const { formDataReducer } = this.props
     let editable =
@@ -399,71 +406,71 @@ class APRRateDisplay extends Component {
     row =
       formDataReducer.nominalApr +
       ',' +
-      formDataReducer.mfi[0] +
+      formDataReducer.mfi +
       ',' +
-      formDataReducer.loanType[0] +
+      formDataReducer.loanType +
       ',' +
-      formDataReducer.productType[0] +
+      formDataReducer.productType +
       ',' +
-      formDataReducer.versionNum[0] +
+      formDataReducer.versionNum +
       ',' +
       formDataReducer.updateName +
       ',' +
-      formDataReducer.startName[0] +
+      formDataReducer.startName +
       ',' +
-      formDataReducer.installmentTimePeriod[0] +
+      formDataReducer.installmentTimePeriod +
       ',' +
-      formDataReducer.repaymentType[0] +
+      formDataReducer.repaymentType +
       ',' +
-      formDataReducer.interestTimePeriod[0] +
+      formDataReducer.interestTimePeriod +
       ',' +
-      formDataReducer.interestPaymentType[0] +
+      formDataReducer.interestPaymentType +
       ',' +
-      formDataReducer.interestCalculationType[0] +
+      formDataReducer.interestCalculationType +
       ',' +
-      formDataReducer.loanAmount[0] +
+      formDataReducer.loanAmount +
       ',' +
-      formDataReducer.installment[0] +
+      formDataReducer.installment +
       ',' +
-      formDataReducer.nominalInterestRate[0] +
+      formDataReducer.nominalInterestRate +
       ',' +
-      formDataReducer.gracePeriodPrincipal[0] +
+      formDataReducer.gracePeriodPrincipal +
       ',' +
-      formDataReducer.gracePeriodInterestPay[0] +
+      formDataReducer.gracePeriodInterestPay +
       ',' +
-      formDataReducer.gracePeriodInterestCalculate[0] +
+      formDataReducer.gracePeriodInterestCalculate +
       ',' +
-      formDataReducer.gracePeriodBalloon[0] +
+      formDataReducer.gracePeriodBalloon +
       ',' +
-      formDataReducer.feePercentUpfront[0] +
+      formDataReducer.feePercentUpfront +
       ',' +
-      formDataReducer.feePercentOngoing[0] +
+      formDataReducer.feePercentOngoing +
       ',' +
-      formDataReducer.feeFixedUpfront[0] +
+      formDataReducer.feeFixedUpfront +
       ',' +
-      formDataReducer.feeFixedOngoing[0] +
+      formDataReducer.feeFixedOngoing +
       ',' +
-      formDataReducer.taxPercentFees[0] +
+      formDataReducer.taxPercentFees +
       ',' +
-      formDataReducer.taxPercentInterest[0] +
+      formDataReducer.taxPercentInterest +
       ',' +
-      formDataReducer.insurancePercentUpfront[0] +
+      formDataReducer.insurancePercentUpfront +
       ',' +
-      formDataReducer.insurancePercentOngoing[0] +
+      formDataReducer.insurancePercentOngoing +
       ',' +
-      formDataReducer.insuranceFixedUpfront[0] +
+      formDataReducer.insuranceFixedUpfront +
       ',' +
-      formDataReducer.insuranceFixedOngoing[0] +
+      formDataReducer.insuranceFixedOngoing +
       ',' +
-      formDataReducer.securityDepositPercentUpfront[0] +
+      formDataReducer.securityDepositPercentUpfront +
       ',' +
-      formDataReducer.securityDepositPercentOngoing[0] +
+      formDataReducer.securityDepositPercentOngoing +
       ',' +
-      formDataReducer.securityDepositFixedUpfront[0] +
+      formDataReducer.securityDepositFixedUpfront +
       ',' +
-      formDataReducer.securityDepositFixedOngoing[0] +
+      formDataReducer.securityDepositFixedOngoing +
       ',' +
-      formDataReducer.interestPaidOnDepositPercent[0]
+      formDataReducer.interestPaidOnDepositPercent
     csv.push(row)
 
     let csvFile = new Blob(csv, { type: 'text/csv;charset=utf-8;' })
@@ -490,6 +497,9 @@ class APRRateDisplay extends Component {
     this.setState({ isHidden: true })
   }
 
+  /**
+   * Call save loan endpoint to save loan and repayment schedule in database.
+   */
   saveData() {
     const { formDataReducer } = this.props
     let orig_matrix = [
@@ -726,7 +736,10 @@ class APRRateDisplay extends Component {
     }
     Api.saveLoan(payload, formDataReducer).then(response => {})
   }
-
+  /**
+   * Render for display page. Contains repayment schedule as a ReactTable, and
+   * charts for visualization.
+   */
   render() {
     const { formDataReducer } = this.props
     let my_default = ReactTableDefaults.column
