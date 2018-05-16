@@ -17,12 +17,12 @@ class APRRateDisplay extends Component {
       id: null,
       partner_names: [],
       visualType: 'Bar',
-      chartID: 'Balance Chart',
-      changeChart: false,
+      chartID: "Balance Chart",
+      changeChart: false,             
       changeVisual: false,
-      isHidden: false,
-      data: [],
-      testData: [
+      isHidden: false,                                    //boolean for conditional rendering of charts
+      data: [],                                           //repayment schedule that is passed to chart as prop
+      testData: [                                         //fake repayment schedule for testing chart generation
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         [
           '1-Jan-2012',
@@ -363,17 +363,26 @@ class APRRateDisplay extends Component {
       />
     )
   }
+  
+  /**
+   * onclick function for changing visual type
+   * called when switch is pressed
+   */
   changeVisualType(changeVisual) {
-    this.setState({ changeVisual })
-    if (changeVisual) {
+    this.setState({ changeVisual })                                     //changes state of changeVisual boolean
+    if (changeVisual) {                                                 //change visualization based on the current boolean state
       this.setState({ visualType: 'Area' })
     } else if (!changeVisual) {
       this.setState({ visualType: 'Bar' })
     }
   }
 
+  /**
+   * onclick function for changing chart type
+   * called from switch when it is pressed
+   */ 
   changeChartType(changeChart) {
-    this.setState({ changeChart })
+    this.setState({ changeChart })                                    //change chart type based on the current boolean state
     if (changeChart) {
       this.setState({ chartID: 'Payment Chart' })
     } else if (!changeChart) {
@@ -381,6 +390,9 @@ class APRRateDisplay extends Component {
     }
   }
 
+  /*
+   * generates and downloads CSV file containing repayment schedule and user inputs from APRInputs.js
+   */
   getCSV() {
     const { formDataReducer } = this.props
     let csv = [
@@ -389,19 +401,21 @@ class APRRateDisplay extends Component {
       ]
     ]
     let row
+    //loop through repayment schedule and concatenate all values into a single string
     for (let j = 0; j < formDataReducer.new_repayment_schedule[0].length; j++) {
       row = ''
       for (let i = 0; i < formDataReducer.new_repayment_schedule.length; i++) {
         row += formDataReducer.new_repayment_schedule[i][j] + ','
       }
       row += '\n'
-      csv.push(row)
+      csv.push(row)                
     }
     row = '\n\n'
     csv.push(row)
     row =
       'APR Rate,Partner Name,Loan Theme,Product Type, Version Num, Update Name, Start Name, Installment Time Period, Repayment Type, Interest Time Period,Interest Payment Type,Interest Calculation Type,Loan Amount,Installment,Nominal Interest Rate,grace period principal,grace period interest payment,grace period interest calculate,grace period balloon,fee percent upfront,fee percent ongoing,fee fixed upfront,fee fixed ongoing,tax percent fees,tax percent interest,insurance percent upfront,insurance percent ongoing,insurance fixed upfront,insurance fixed ongoing,security deposit percent upfront,security deposit percent ongoing,security deposit fixed upfront,security deposit fixed ongoing,interest paid on deposit percent \n'
     csv.push(row)
+    //concatenate user inputs from APRInputs into a single string
     row =
       formDataReducer.nominalApr +
       ',' +
@@ -476,6 +490,7 @@ class APRRateDisplay extends Component {
     let url = URL.createObjectURL(csvFile)
     let createDownloadLink = document.createElement('a')
     createDownloadLink.href = url
+    //create name of csv file by concatenating MFI Partner Name, Loan Type, Product Type, and Version Number
     createDownloadLink.setAttribute(
       'download',
       formDataReducer.mfi +
@@ -490,10 +505,13 @@ class APRRateDisplay extends Component {
     createDownloadLink.click()
   }
 
+  /**
+   * onclick function that conditionally renders the chart by setting the isHidden boolean to true and populates data prop for chart
+   */ 
   createChart() {
     const { formDataReducer } = this.props
-    this.setState({ data: formDataReducer.new_repayment_schedule })
-    this.setState({ isHidden: true })
+    this.setState({ data: formDataReducer.new_repayment_schedule })                  //set this.state.data to the redux repayment schedule so prop is passed in correctly to chart.
+    this.setState({ isHidden: true })                                                    
   }
 
   /**
@@ -728,10 +746,10 @@ class APRRateDisplay extends Component {
             {this.state.isHidden && (
               <div>
                 <label htmlFor="material-switch">
-                  <span>{this.state.visualType}</span>
+                  <span>{this.state.visualType}</span>                                            //displays the current visualization type
                   <Switch
-                    onChange={event => this.changeVisualType(event)}
-                    checked={this.state.changeVisual}
+                    onChange={event => this.changeVisualType(event)}                              //change visualization type when pressed
+                    checked={this.state.changeVisual}                                             //changeVisual boolean changes state every time switch is pressed
                     onColor={Variables.switchOnColor}
                     onHandleColor="#ffffff"
                     handleDiameter={30}
@@ -742,9 +760,12 @@ class APRRateDisplay extends Component {
                   />
                 </label>
                 <label htmlFor="material-switch">
+                  //displays the current chart type
                   <span>{this.state.chartID}</span>
                   <Switch
+                    //change chart type when pressed
                     onChange={event => this.changeChartType(event)}
+                    //changeChart boolean changes state every time switch is pressed
                     checked={this.state.changeChart}
                     onColor={Variables.switchOnColor}
                     onHandleColor="#ffffff"
