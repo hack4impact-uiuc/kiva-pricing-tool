@@ -27,21 +27,26 @@ class KivaChart extends Component {
       for (let i = 0; i < this.props.data[0].length; i++) {
         this.state.repaymentData[i] = {
           periodNum: i,
-          principal: this.props.data[4][i],
-          interest: this.props.data[6][i],
-          taxes: this.props.data[7][i],
-          insurance: this.props.data[8][i],
-          fees: this.props.data[9][i],
-          security_deposit: this.props.data[10][i]
+          principal: this.props.data[Variables.principalRow][i],
+          interest: this.props.data[Variables.interestRow][i],
+          taxes: this.props.data[Variables.taxesRow][i],
+          insurance: this.props.data[Variables.insuranceRow][i],
+          fees: this.props.data[Variables.feesRow][i],
+          security_deposit: this.props.data[Variables.sdRow][i]
         }
       }
       if (this.props.visualType === 'Bar') {
         return (
           <BarChart
-            width={600}
-            height={400}
+            width={Variables.chartWidth}
+            height={Variables.chartHeight}
             data={this.state.repaymentData}
-            margin={{ top: 20, right: 10, left: 5, bottom: 5 }}
+            margin={{
+              top: Variables.marginTopChart,
+              right: Variables.marginRightChart,
+              left: Variables.marginLeftChart,
+              bottom: Variables.marginBottomChart
+            }}
           >
             <CartesianGrid strokeDasharray="5 5" />
             <XAxis dataKey="periodNum" />
@@ -62,7 +67,7 @@ class KivaChart extends Component {
             <Bar
               dataKey="insurance"
               stackId="a"
-              fill={Variables.taxesChartColor}
+              fill={Variables.insuranceChartColor}
             />
             <Bar dataKey="fees" stackId="a" fill={Variables.feesChartColor} />
             <Bar
@@ -76,10 +81,15 @@ class KivaChart extends Component {
       if (this.props.visualType === 'Line') {
         return (
           <LineChart
-            width={600}
-            height={400}
+            width={Variables.chartWidth}
+            height={Variables.chartHeight}
             data={this.state.repaymentData}
-            margin={{ top: 20, right: 10, left: 5, bottom: 5 }}
+            margin={{
+              top: Variables.marginTopChart,
+              right: Variables.marginRightChart,
+              left: Variables.marginLeftChart,
+              bottom: Variables.marginBottomChart
+            }}
           >
             <XAxis dataKey="periodNum" />
             <YAxis />
@@ -117,10 +127,15 @@ class KivaChart extends Component {
       if (this.props.visualType === 'Area') {
         return (
           <AreaChart
-            width={600}
-            height={400}
+            width={Variables.chartWidth}
+            height={Variables.chartHeight}
             data={this.state.repaymentData}
-            margin={{ top: 20, right: 10, left: 5, bottom: 5 }}
+            margin={{
+              top: Variables.marginTopChart,
+              right: Variables.marginRightChart,
+              left: Variables.marginLeftChart,
+              bottom: Variables.marginBottomChart
+            }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="periodNum" />
@@ -183,10 +198,15 @@ class KivaChart extends Component {
       if (this.props.visualType === 'Bar') {
         return (
           <BarChart
-            width={600}
-            height={400}
+            width={Variables.chartWidth}
+            height={Variables.chartHeight}
             data={this.state.repaymentData}
-            margin={{ top: 20, right: 10, left: 5, bottom: 5 }}
+            margin={{
+              top: Variables.marginTopChart,
+              right: Variables.marginRightChart,
+              left: Variables.marginLeftChart,
+              bottom: Variables.marginBottomChart
+            }}
           >
             <CartesianGrid strokeDasharray="1 1" />
             <XAxis dataKey="periodNum" />
@@ -200,10 +220,15 @@ class KivaChart extends Component {
       if (this.props.visualType === 'Line') {
         return (
           <LineChart
-            width={600}
-            height={400}
+            width={Variables.chartWidth}
+            height={Variables.chartHeight}
             data={this.state.repaymentData}
-            margin={{ top: 20, right: 10, left: 5, bottom: 5 }}
+            margin={{
+              top: Variables.marginTopChart,
+              right: Variables.marginRightChart,
+              left: Variables.marginLeftChart,
+              bottom: Variables.marginBottomChart
+            }}
           >
             <XAxis dataKey="periodNum" />
             <YAxis />
@@ -217,10 +242,15 @@ class KivaChart extends Component {
       if (this.props.visualType === 'Area') {
         return (
           <AreaChart
-            width={600}
-            height={400}
+            width={Variables.chartWidth}
+            height={Variables.chartHeight}
             data={this.state.repaymentData}
-            margin={{ top: 20, right: 10, left: 5, bottom: 5 }}
+            margin={{
+              top: Variables.marginTopChart,
+              right: Variables.marginRightChart,
+              left: Variables.marginLeftChart,
+              bottom: Variables.marginBottomChart
+            }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="periodNum" />
