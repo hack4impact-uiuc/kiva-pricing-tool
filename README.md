@@ -1,5 +1,5 @@
 # Kiva Pricing Tool
-An open source web application that outputs APR Nominal rate, Repayment Schedule, and Loan Payment Visualization.
+An open source web application that calculates an APR Nominal rate for a loan with different attributes, then displays the Repayment Schedule and Loan Payment Visualization.
 
 ## Product Resources
 * [Product Requirements Document](https://docs.google.com/document/d/1Rw6Q8YMIpvYFXR3eStdTVT4iZXMpR7En3_yg677VgjE/edit?usp=sharing)
