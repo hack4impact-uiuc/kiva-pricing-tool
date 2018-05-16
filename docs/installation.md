@@ -1,8 +1,13 @@
 # Localhost
 ## Frontend
-In your terminal, cd into the frontend folder
-Type in npm install
-Then type in npm start
+In your terminal, cd into the frontend folder.
+```
+ npm install
+``` 
+To run your program, type in 
+```
+npm start
+```
 The site will be displayed on: http://localhost:3000
 
 
