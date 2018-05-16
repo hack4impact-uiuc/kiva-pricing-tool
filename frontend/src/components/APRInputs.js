@@ -219,8 +219,8 @@ class APRInputs extends Component {
             'total_cashflow'
           ].toFixed(2)
         }
-        reformatted_matrix[0]['period_num'] = 'Disbursement Info'
-        calc_matrix[0]['period_num'] = 'Disbursement Info'
+        reformatted_matrix[0]['period_num'] = 'Disbursement'
+        calc_matrix[0]['period_num'] = 'Disbursement'
         console.log(calc_matrix)
         changedFormData('original_repayment_schedule', reformatted_matrix)
         changedFormData('user_repayment_schedule', user_matrix)
@@ -244,7 +244,8 @@ class APRInputs extends Component {
               <PageHeader className="page-header-montserrat bs-center">
                 <small>
                   {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
-                  {formDataReducer.productType} | {formDataReducer.versionNum}
+                  {formDataReducer.productType} | Version{' '}
+                  {formDataReducer.versionNum}
                 </small>
               </PageHeader>
             </Col>
@@ -257,7 +258,7 @@ class APRInputs extends Component {
             </Row>
             <Row>
               <Col sm={12} md={12}>
-                <PageHeader>User Information</PageHeader>
+                <PageHeader>Reporter Information</PageHeader>
               </Col>
             </Row>
             <Row>

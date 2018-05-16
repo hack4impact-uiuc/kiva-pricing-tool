@@ -17,7 +17,7 @@ class APRRateDisplay extends Component {
     this.state = {
       id: null,
       partner_names: [],
-      visualType: 'bar',
+      visualType: 'Bar',
       chartID: 'Payment Chart',
       changeChart: false,
       changeVisual: false,
@@ -125,6 +125,8 @@ class APRRateDisplay extends Component {
         ]
       ]
     }
+    this.renderEditable = this.renderEditable.bind(this)
+    this.updateTable = this.updateTable.bind(this)
   }
 
   updateTable = (e, cellInfo) => {
@@ -136,6 +138,9 @@ class APRRateDisplay extends Component {
     ) {
       if (e.target.innerHTML === null || e.target.innerHTML.trim() === '') {
         formDataReducer.user_repayment_schedule[cellInfo.index][
+          cellInfo.column.id
+        ] = null
+        formDataReducer.calc_repayment_schedule[cellInfo.index][
           cellInfo.column.id
         ] = null
       } else {
@@ -332,6 +337,12 @@ class APRRateDisplay extends Component {
                 ? { backgroundColor: '#bafaba' }
                 : { backgroundColor: '#eaeaea' }
         }
+        onKeyDown={e => {
+          this.ModifyEnterKeyPressAsTab
+          if (e.keyCode === 13) {
+            e.preventDefault()
+          }
+        }}
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={e => {
@@ -346,21 +357,20 @@ class APRRateDisplay extends Component {
       />
     )
   }
-
-  changeVisualType = event => {
-    this.setState({ event })
-    if (event) {
-      this.setState({ visualType: 'area' })
-    } else if (!event) {
-      this.setState({ visualType: 'bar' })
+  changeVisualType(changeVisual) {
+    this.setState({ changeVisual })
+    if (changeVisual) {
+      this.setState({ visualType: 'Area' })
+    } else if (!changeVisual) {
+      this.setState({ visualType: 'Bar' })
     }
   }
 
-  changeChartType = event => {
-    this.setState({ event })
-    if (event) {
+  changeChartType(changeChart) {
+    this.setState({ changeChart })
+    if (changeChart) {
       this.setState({ chartID: 'Balance Chart' })
-    } else if (!event) {
+    } else if (!changeChart) {
       this.setState({ chartID: 'Payment Chart' })
     }
   }
@@ -462,13 +472,13 @@ class APRRateDisplay extends Component {
     createDownloadLink.href = url
     createDownloadLink.setAttribute(
       'download',
-      formDataReducer.mfi[0] +
+      formDataReducer.mfi +
         '_' +
-        formDataReducer.loanType[0] +
+        formDataReducer.loanType +
         '_' +
-        formDataReducer.productType[0] +
+        formDataReducer.productType +
         '_' +
-        formDataReducer.versionNum[0] +
+        formDataReducer.versionNum +
         '.csv'
     )
     createDownloadLink.click()
@@ -732,7 +742,8 @@ class APRRateDisplay extends Component {
             <PageHeader className="page-header-montserrat bs-center">
               <small>
                 {formDataReducer.mfi} | {formDataReducer.loanType} |{' '}
-                {formDataReducer.productType} | {formDataReducer.versionNum}
+                {formDataReducer.productType} | Version{' '}
+                {formDataReducer.versionNum}
               </small>
             </PageHeader>
           </Col>
@@ -752,7 +763,7 @@ class APRRateDisplay extends Component {
                 <label htmlFor="material-switch">
                   <span>{this.state.visualType}</span>
                   <Switch
-                    onChange={this.changeVisualType}
+                    onChange={event => this.changeVisualType(event)}
                     checked={this.state.changeVisual}
                     onColor="#438b48"
                     onHandleColor="#c4ccc6"
@@ -766,7 +777,7 @@ class APRRateDisplay extends Component {
                 <label htmlFor="material-switch">
                   <span>{this.state.chartID}</span>
                   <Switch
-                    onChange={this.changeChartType}
+                    onChange={event => this.changeChartType(event)}
                     checked={this.state.changeChart}
                     onColor="#438b48"
                     onHandleColor="#c4ccc6"
@@ -788,12 +799,14 @@ class APRRateDisplay extends Component {
           <Col sm={4} md={4}>
             <Row className="vertical-margin-item">
               <Col sm={6} md={6}>
-                <button
-                  className="button-fancy"
-                  onClick={this.createChart.bind(this)}
-                >
-                  Generate Chart
-                </button>
+                {!this.state.isHidden && (
+                  <button
+                    className="button-fancy"
+                    onClick={this.createChart.bind(this)}
+                  >
+                    Generate Chart
+                  </button>
+                )}
               </Col>
               <Col sm={6} md={6} className="bs-button-right">
                 <button
@@ -844,7 +857,7 @@ class APRRateDisplay extends Component {
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Days',
+                  Header: <h5 style={{ color: 'red' }}>Days</h5>,
                   accessor: 'days',
                   Cell: this.renderEditable
                 },
@@ -873,17 +886,17 @@ class APRRateDisplay extends Component {
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Balance',
+                  Header: <h5 style={{ color: 'red' }}>Balance</h5>,
                   accessor: 'balance',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Interest',
+                  Header: <h5 style={{ color: 'red' }}>Interest</h5>,
                   accessor: 'interest',
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Fees',
+                  Header: <h5 style={{ color: 'red' }}>Fees</h5>,
                   accessor: 'fees',
                   Cell: this.renderEditable
                 },
@@ -894,7 +907,7 @@ class APRRateDisplay extends Component {
                   Cell: this.renderEditable
                 },
                 {
-                  Header: 'Taxes',
+                  Header: <h5 style={{ color: 'red' }}>Taxes</h5>,
                   accessor: 'taxes',
                   Cell: this.renderEditable
                 },
