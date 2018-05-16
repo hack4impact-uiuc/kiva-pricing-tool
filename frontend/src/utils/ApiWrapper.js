@@ -69,7 +69,9 @@ function searchLoan(mfi, loanType, productType, versionNum) {
         versionNum
     )
     .then(response => {
-      return response
+      console.log(response.data.result)
+      return adapters.convertFromApiLoan(response.data.result)
+      // return response
     })
     .catch(function(error) {
       console.log('ERROR: ', error)
