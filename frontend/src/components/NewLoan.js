@@ -39,8 +39,8 @@ class NewLoan extends Component {
     changedFormData('error', false)
     axios.get(Variables.flaskURL + 'partnerThemeLists').then(response => {
       this.setState({
-        partner_names: response.data.result.partners,
-        loan_themes: response.data.result.themes
+        partner_names: response.data.result.partners.sort(),
+        loan_themes: response.data.result.themes.sort()
       })
     })
   }
