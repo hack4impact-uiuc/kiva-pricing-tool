@@ -347,6 +347,7 @@ class APRRateDisplay extends Component {
         onKeyDown={e => {
           if (e.keyCode === 13) {
             e.preventDefault()
+            e.target.blur()
             let idx = Array.from(
               e.target.parentNode.parentNode.children
             ).indexOf(e.target.parentNode)
