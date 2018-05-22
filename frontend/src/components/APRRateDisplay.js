@@ -345,9 +345,15 @@ class APRRateDisplay extends Component {
                 : { backgroundColor: '#eaeaea' }
         }
         onKeyDown={e => {
-          this.ModifyEnterKeyPressAsTab
           if (e.keyCode === 13) {
             e.preventDefault()
+            e.target.blur()
+            let idx = Array.from(
+              e.target.parentNode.parentNode.children
+            ).indexOf(e.target.parentNode)
+            e.target.parentNode.parentNode.parentNode.nextSibling.childNodes[0].childNodes[
+              idx
+            ].childNodes[0].focus()
           }
         }}
         contentEditable={editable}
