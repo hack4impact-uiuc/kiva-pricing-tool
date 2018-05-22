@@ -1,4 +1,6 @@
 # Localhost Setup
+Clone the kiva-pricing-tool repository onto your computer.
+
 ## Frontend
 In your terminal, cd into the frontend folder and type in
 ```
@@ -12,7 +14,7 @@ The site will be displayed on: http://localhost:3000
 
 
 ## Backend
-In your terminal, cd into the backend folder
+Open a new tab and in your terminal, cd into the backend folder
 
 ### Running Development Server
 
@@ -78,5 +80,3 @@ To deactivate when you're using it:
 If you are using pip, your command line will have `(venv)$` in front instead of the `(flask......) bash-3.2$` Now look above for instructions to run the server.
 
 The API should be at http://127.0.0.1:3453/ 
-
-

@@ -167,9 +167,14 @@
 	color: $error-message;
 }
 /********************************************************************** SWITCHES ***************************************************************/
-.react-switch-handle{
+.react-switch-handle {
 	border: 2px solid black !important;
 }
+
+.react-switch {
+	text-align: left;
+}
+
 /************************************************************************** MISC ***************************************************************/
 /* Add rounded borders to elements */
 .round-corners-large {
