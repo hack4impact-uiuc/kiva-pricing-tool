@@ -124,8 +124,8 @@ def get_partner_theme_list():
     """
         grabbing MFI Partner and Loan Theme
     """
-    themes = Theme.query.order_by(Theme.loan_theme).all()
-    partners = Partner.query.order_by(Partner.partner_name).all()
+    themes = Theme.query.filter_by(active=True).all()
+    partners = Partner.query.filter_by(active=True).all()
     data = {'themes':[x.loan_theme for x in themes], 'partners':[x.partner_name for x in partners]}
     return create_response(data=data, status=200)
 
