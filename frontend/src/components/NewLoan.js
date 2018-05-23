@@ -96,7 +96,7 @@ class NewLoan extends Component {
                 className={this.state.partnerClass}
                 label="mfi"
                 options={this.state.partner_names}
-                placeholder="Select MFI Partner"
+                placeholder="Select Field Partner"
                 limit={100}
                 selected={
                   formDataReducer.mfi === '' ? [] : [formDataReducer.mfi]
@@ -119,14 +119,14 @@ class NewLoan extends Component {
                 }}
               />
               <p className={this.state.partnerErrorClass}>
-                MFI Partner does not exist.
+                Field Partner does not exist.
               </p>
 
               <Typeahead
                 className={this.state.loanClass}
                 label="loan"
                 options={this.state.loan_themes}
-                placeholder="Select Loan Type"
+                placeholder="Select Loan Theme"
                 selected={
                   formDataReducer.loanType === ''
                     ? []

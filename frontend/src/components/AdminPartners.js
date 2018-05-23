@@ -164,14 +164,14 @@ class AdminPartners extends Component {
           this.setState({
             data: this.state.data.concat({ partner_names: partner_name })
           })
-          container.success('', 'Partner successfully added', {
+          container.success('', 'Field Partner successfully added', {
             closeButton: true
           })
         })
         .catch(error => {
           if (error.response.status === 422) {
             container.warning(
-              "The MFI partner '" + partner_name + "' already exists.",
+              "The Field partner '" + partner_name + "' already exists.",
               'Already Exists',
               {
                 closeButton: true
@@ -203,9 +203,13 @@ class AdminPartners extends Component {
           }
         }
       })
-    container.error('You have removed ' + partner_name, 'Partner Removed', {
-      closeButton: true
-    })
+    container.error(
+      'You have removed ' + partner_name,
+      'Field Partner Removed',
+      {
+        closeButton: true
+      }
+    )
   }
 
   handleRemoveClick(partner_name) {
@@ -223,7 +227,7 @@ class AdminPartners extends Component {
         <Row>
           <Col sm={12} md={12}>
             <PageHeader className="page-header-montserrat bs-center">
-              Admin Partners List
+              Admin Field Partners List
             </PageHeader>
           </Col>
         </Row>
@@ -232,12 +236,12 @@ class AdminPartners extends Component {
           <Col sm={6} md={6}>
             <h2>
               {' '}
-              <small> Search Partners: </small>{' '}
+              <small> Search Field Partners: </small>{' '}
             </h2>
             <div>
               <input
                 className="expand-width"
-                placeholder="Search MFI Partner"
+                placeholder="Search Field Partner"
                 onChange={event =>
                   this.setState({
                     filtered: [
@@ -258,7 +262,7 @@ class AdminPartners extends Component {
               className="expand-width"
               type="text"
               label="Text"
-              placeholder="Add MFI Partner"
+              placeholder="Add Field Partner"
               ref="addpartnername"
             />
           </Col>
@@ -305,7 +309,7 @@ class AdminPartners extends Component {
               data={this.state.data}
               columns={[
                 {
-                  Header: 'MFI Partner',
+                  Header: 'Field Partner',
                   accessor: 'partner_names',
                   Cell: this.state.editing
                     ? this.renderEditable
