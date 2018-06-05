@@ -268,10 +268,9 @@ class FindLoan extends Component {
         this.state.loan_themes.indexOf(formDataReducer.loanType) !== -1
 
       if (validPartnerName && validLoanTheme) {
-        Api.getProductType(
-          formDataReducer.mfi,
-          formDataReducer.loanType
-        ).then(response => this.setState({ product_types: response }))
+        Api.getProductType(formDataReducer.mfi, formDataReducer.loanType).then(
+          response => this.setState({ product_types: response })
+        )
       } else if (!validPartnerName) {
         changedFormData('loanType', '')
       }
@@ -425,7 +424,7 @@ class FindLoan extends Component {
                   }}
                 />
                 <p className={this.state.partnerErrorClass}>
-                  MFI Partner not found.
+                  Field Partner not found.
                 </p>
 
                 <Typeahead

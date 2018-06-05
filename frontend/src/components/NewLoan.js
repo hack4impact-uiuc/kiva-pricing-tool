@@ -37,10 +37,14 @@ class NewLoan extends Component {
     const { changedFormData } = this.props
     changedFormData('back', 'newloan')
     changedFormData('error', false)
-    axios.get(Variables.flaskURL + 'partnerThemeLists').then(response => {
+    axios.get(Variables.flaskURL + 'getAllMFI').then(response => {
       this.setState({
-        partner_names: response.data.result.partners,
-        loan_themes: response.data.result.themes
+        partner_names: response.data.result.partners
+      })
+    })
+    axios.get(Variables.flaskURL + 'getAllLT').then(response => {
+      this.setState({
+        loan_themes: response.data.result.loan_theme
       })
     })
   }
@@ -92,7 +96,7 @@ class NewLoan extends Component {
                 className={this.state.partnerClass}
                 label="mfi"
                 options={this.state.partner_names}
-                placeholder="Select MFI Partner"
+                placeholder="Select Field Partner"
                 limit={100}
                 selected={
                   formDataReducer.mfi === '' ? [] : [formDataReducer.mfi]
@@ -115,14 +119,14 @@ class NewLoan extends Component {
                 }}
               />
               <p className={this.state.partnerErrorClass}>
-                MFI Partner does not exist.
+                Field Partner does not exist.
               </p>
 
               <Typeahead
                 className={this.state.loanClass}
                 label="loan"
                 options={this.state.loan_themes}
-                placeholder="Select Loan Type"
+                placeholder="Select Loan Theme"
                 selected={
                   formDataReducer.loanType === ''
                     ? []

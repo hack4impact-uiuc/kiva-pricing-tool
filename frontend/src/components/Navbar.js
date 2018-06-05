@@ -38,7 +38,7 @@ class Navbar extends Component {
 
               <NavDropdown id="adminToolNav" title="Admin Tools">
                 <LinkContainer to="/partnerlist">
-                  <MenuItem>Partner List</MenuItem>
+                  <MenuItem>Field Partner List</MenuItem>
                 </LinkContainer>
 
                 <LinkContainer to="/themelist">
